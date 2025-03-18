@@ -1,0 +1,37 @@
+{
+    "cs2_executable": "D:\\SteamLibrary\\steamapps\\common\\Counter-Strike Global Offensive\\game\\bin\\win64\\cs2.exe",
+    "steam_executable": "C:\\Program Files (x86)\\Steam\\steam.exe",
+    "server_cycle_delay": 5,
+    "match_timeout": 180,
+    "match_start_wait": 30,
+    "play_button_x": 960,
+    "play_button_y": 540,
+    "mode_selection_x": 960,
+    "mode_selection_y": 600,
+    "find_match_x": 960,
+    "find_match_y": 700,
+    "accept_match_x": 960,
+    "accept_match_y": 580,
+    "game_resolution": {
+        "width": 1920,
+        "height": 1080
+    },
+    "ui_coordinates": {
+        "play_button": [
+            960,
+            540
+        ],
+        "mode_selection": [
+            960,
+            600
+        ],
+        "find_match": [
+            960,
+            700
+        ],
+        "accept_match": [
+            960,
+            580
+        ]
+    }
+}
