@@ -3,35 +3,33 @@
     "steam_executable": "C:\\Program Files (x86)\\Steam\\steam.exe",
     "server_cycle_delay": 5,
     "match_timeout": 180,
-    "match_start_wait": 30,
-    "play_button_x": 960,
-    "play_button_y": 540,
-    "mode_selection_x": 960,
-    "mode_selection_y": 600,
-    "find_match_x": 960,
-    "find_match_y": 700,
-    "accept_match_x": 960,
-    "accept_match_y": 580,
-    "game_resolution": {
-        "width": 1920,
-        "height": 1080
-    },
-    "ui_coordinates": {
-        "play_button": [
-            960,
-            540
-        ],
-        "mode_selection": [
-            960,
-            600
-        ],
-        "find_match": [
-            960,
-            700
-        ],
-        "accept_match": [
-            960,
-            580
-        ]
-    }
+    "wait_between_clicks": 1500,
+    "max_wait_for_match": 120,
+    "color_tolerance": 20,
+    "play_button_x": 985,
+    "play_button_y": 30,
+    "mode_selection_x": 813,
+    "mode_selection_y": 85,
+    "league_selection_x": 906,
+    "league_selection_y": 130,
+    "accept_match_x": 1690,
+    "accept_match_y": 1030,
+    "spectator_button_x": 1592,
+    "spectator_button_y": 1031,
+    "spectator_button_color": "E9E8E4",
+    "error_popup_x": 990,
+    "error_popup_y": 460,
+    "error_popup_ok_x": 1154,
+    "error_popup_ok_y": 603,
+    "map_sigma_x": 380,
+    "map_sigma_y": 430,
+    "map_delta_x": 650,
+    "map_delta_y": 430,
+    "map_dust2_x": 920,
+    "map_dust2_y": 430,
+    "map_hostage_x": 1200,
+    "map_hostage_y": 430,
+    "select_sigma_x": 504,
+    "select_sigma_y": 578,
+    "error_popup_color": "262626"
 }

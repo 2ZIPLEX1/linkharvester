@@ -1,224 +1,143 @@
 ; CS2 Automation Script for AutoHotkey v2
-; This script launches CS2 if not running, joins a match, and views the player list
-
+; Main script file - handles game startup and map selection
 #Requires AutoHotkey v2.0
 
-; Set up logging to OneDrive Documents folder
-LogDir := A_MyDocuments "\AutoHotkey"
-if !DirExist(LogDir)
-    DirCreate LogDir
-LOG_FILE := LogDir "\cs2_automation.log"
+; Include helper and module files
+#Include "CS2_Helpers.ahk"
+#Include "CS2_Matchmaking.ahk"
+#Include "CS2_InGame.ahk"
+#Include "CS2_Hotkeys.ahk"
 
-; Load configuration from simple text file instead of JSON
-ConfigFile := LogDir "\data\config.txt"
-Config := Map()
+; Initialize globals and setup
+Global CS2_CONFIG := LoadConfiguration()
+Global LOG_FILE := A_MyDocuments "\AutoHotkey\cs2_automation.log"
 
-; Attempt to load configuration
-if FileExist(ConfigFile) {
-    try {
-        FileContent := FileRead(ConfigFile)
-        Loop Parse, FileContent, "`n", "`r"
-        {
-            if InStr(A_LoopField, "=") {
-                parts := StrSplit(A_LoopField, "=", , 2)
-                if parts.Length = 2
-                    Config[Trim(parts[1])] := Trim(parts[2])
-            }
-        }
-        LogMessage("Configuration loaded successfully")
-    } catch Error as e {
-        LogMessage("Error loading configuration: " e.Message)
-    }
-} else {
-    LogMessage("Configuration file not found: " ConfigFile)
-}
+; Make sure log directory exists
+If !DirExist(A_MyDocuments "\AutoHotkey")
+    DirCreate A_MyDocuments "\AutoHotkey"
 
-; Configuration - use values from config file or defaults
-CS2_EXECUTABLE := Config.Has("cs2_executable") ? Config["cs2_executable"] : "D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe"
+LogMessage("=== CS2 Automation Script Started ===")
+LogMessage("AHK Version: " A_AhkVersion)
+LogMessage("Script Path: " A_ScriptFullPath)
+LogMessage("Log File: " LOG_FILE)
 
-; Check common Steam installation paths
-if Config.Has("steam_executable")
-    STEAM_EXECUTABLE := Config["steam_executable"]
-else if FileExist("D:\SteamLibrary\Steam.exe")
-    STEAM_EXECUTABLE := "D:\SteamLibrary\Steam.exe"
-else if FileExist("C:\Program Files (x86)\Steam\steam.exe")
-    STEAM_EXECUTABLE := "C:\Program Files (x86)\Steam\steam.exe"
-else if FileExist("C:\Program Files\Steam\steam.exe")
-    STEAM_EXECUTABLE := "C:\Program Files\Steam\steam.exe"
-else
-    STEAM_EXECUTABLE := "steam.exe"  ; Rely on PATH if we can't find it
+; Map selection coordinates
+; These are the center points of each map card in the selection screen
+Global MAP_COORDINATES := Map(
+    "Sigma", {x: 380, y: 430},
+    "Delta", {x: 650, y: 430},
+    "Dust2", {x: 920, y: 430},
+    "Hostage", {x: 1200, y: 430}
+)
 
-; UI Coordinates - use values from config file or defaults
-PlayButtonX := Config.Has("play_button_x") ? Config["play_button_x"] : 960
-PlayButtonY := Config.Has("play_button_y") ? Config["play_button_y"] : 540
-ModeSelectionX := Config.Has("mode_selection_x") ? Config["mode_selection_x"] : 960
-ModeSelectionY := Config.Has("mode_selection_y") ? Config["mode_selection_y"] : 600
-FindMatchX := Config.Has("find_match_x") ? Config["find_match_x"] : 960
-FindMatchY := Config.Has("find_match_y") ? Config["find_match_y"] : 700
-AcceptMatchX := Config.Has("accept_match_x") ? Config["accept_match_x"] : 960
-AcceptMatchY := Config.Has("accept_match_y") ? Config["accept_match_y"] : 580
+; Maps to cycle through
+Global MAP_CYCLE := ["Sigma", "Delta", "Dust2", "Hostage"]
+Global CURRENT_MAP_INDEX := 1
 
-; Timing settings
-MatchTimeout := Config.Has("match_timeout") ? Config["match_timeout"] : 180
-MatchStartWait := Config.Has("match_start_wait") ? Config["match_start_wait"] : 30
+; Main function
+Main()
 
-; Log function
-LogMessage(message) {
-    timestamp := FormatTime(, "yyyy-MM-dd HH:mm:ss")
-    FileAppend timestamp " - " message "`n", LOG_FILE
-}
-
-; Check if a process is running
-IsProcessRunning(processName) {
-    return ProcessExist(processName)
-}
-
-; Launch CS2
-LaunchCS2() {
-    LogMessage("Attempting to launch CS2...")
-    LogMessage("CS2 Executable: " CS2_EXECUTABLE)
+; Main function
+Main() {
+    Global CS2_CONFIG
     
-    ; Check if CS2 executable exists
-    if !FileExist(CS2_EXECUTABLE) {
-        LogMessage("Error: CS2 executable not found at: " CS2_EXECUTABLE)
-        MsgBox("CS2 executable not found at: " CS2_EXECUTABLE "`n`nPlease update the configuration file.", "Error", "Icon!")
-        return false
+    ; Display important settings
+    LogMessage("CS2 Path: " CS2_CONFIG["cs2_executable"])
+    LogMessage("Steam Path: " CS2_CONFIG["steam_executable"])
+    
+    ; Display minimal startup message
+    MsgBox("CS2 Automation Starting`n`nHotkeys: Ctrl+Alt+X = Emergency Exit, Ctrl+Alt+P = Pause/Resume`n`nClick OK to begin.", "CS2 Automation", "OK")
+    
+    ; Check if CS2 is running
+    if (!EnsureCS2Running()) {
+        LogMessage("Failed to ensure CS2 is running. Exiting script.")
+        return
     }
     
-    ; Check if Steam is running
-    If !IsProcessRunning("steam.exe") {
-        LogMessage("Steam not running. Launching Steam...")
-        LogMessage("Steam Executable: " STEAM_EXECUTABLE)
-        Run STEAM_EXECUTABLE
-        Sleep 10000  ; Wait for Steam to initialize
-    }
-    
-    ; Launch CS2
-    LogMessage("Launching CS2...")
-    Run CS2_EXECUTABLE
-    
-    ; Wait for CS2 to launch
-    try {
-        WinWait "Counter-Strike", , 60
-    } catch {
-        LogMessage("Error: Timed out waiting for CS2 to launch")
-        return false
-    }
-    
-    ; Activate CS2 window
-    WinActivate "Counter-Strike"
-    LogMessage("CS2 launched and activated")
-    Sleep 5000  ; Wait for the game to fully load
-    return true
+    ; Begin map cycle
+    RunMapCycle()
 }
 
-; Navigate to find a match
-FindMatch() {
-    LogMessage("Finding a match...")
+; Function to run through the map cycle
+RunMapCycle() {
+    Global CURRENT_MAP_INDEX, MAP_CYCLE
+    
+    ; For the initial testing, just use the first map (Sigma)
+    currentMap := MAP_CYCLE[CURRENT_MAP_INDEX]
+    LogMessage("Processing map: " currentMap)
+    
+    ; Navigate to matchmaking and select the current map
+    if (!SelectMap(currentMap)) {
+        LogMessage("Failed to select map: " currentMap)
+        return
+    }
+    
+    ; Wait for match outcome
+    matchOutcome := WaitForMatchOutcome()
+    LogMessage("Match outcome for " currentMap ": " matchOutcome)
+    
+    if (matchOutcome = "success") {
+        ; Handle successful match
+        LogMessage("Successfully joined " currentMap " match!")
+        
+        ; Process the match (view players, etc.)
+        ProcessMatch()
+        
+        ; After match is done
+        LogMessage("Finished with " currentMap " match")
+    }
+    else if (matchOutcome = "failure" || matchOutcome = "timeout") {
+        LogMessage("Failed to join " currentMap " match.")
+    }
+    
+    LogMessage("Map cycle completed")
+    MsgBox("CS2 Automation completed", "Done", "OK")
+}
+
+; Function to select a specific map
+SelectMap(mapName) {
+    Global CS2_CONFIG, MAP_COORDINATES
+    
+    LogMessage("Selecting map: " mapName)
     
     ; Make sure CS2 is the active window
     WinActivate "Counter-Strike"
     Sleep 2000
     
-    ; Press Play button (assuming we're at the main menu)
-    LogMessage("Pressing Play button at coordinates: " PlayButtonX "," PlayButtonY)
-    Click PlayButtonX, PlayButtonY
-    Sleep 2000
+    ; 1. Press Play button
+    LogMessage("Clicking Play button at coordinates: " CS2_CONFIG["play_button_x"] "," CS2_CONFIG["play_button_y"])
+    Click CS2_CONFIG["play_button_x"], CS2_CONFIG["play_button_y"]
+    Sleep CS2_CONFIG["wait_between_clicks"]
     
-    ; Select Competitive mode
-    LogMessage("Selecting game mode at coordinates: " ModeSelectionX "," ModeSelectionY)
-    Click ModeSelectionX, ModeSelectionY
-    Sleep 1000
+    ; 2. Select Matchmaking mode
+    LogMessage("Selecting matchmaking mode at coordinates: " CS2_CONFIG["mode_selection_x"] "," CS2_CONFIG["mode_selection_y"])
+    Click CS2_CONFIG["mode_selection_x"], CS2_CONFIG["mode_selection_y"]
+    Sleep CS2_CONFIG["wait_between_clicks"]
     
-    ; Click Find Match
-    LogMessage("Clicking Find Match at coordinates: " FindMatchX "," FindMatchY)
-    Click FindMatchX, FindMatchY
-    Sleep 1000
+    ; 3. Select League (Casual)
+    LogMessage("Selecting casual league at coordinates: " CS2_CONFIG["league_selection_x"] "," CS2_CONFIG["league_selection_y"])
+    Click CS2_CONFIG["league_selection_x"], CS2_CONFIG["league_selection_y"]
+    Sleep CS2_CONFIG["wait_between_clicks"]
+    
+    ; 4. Select the specific map
+    if (!MAP_COORDINATES.Has(mapName)) {
+        LogMessage("Error: Unknown map name: " mapName)
+        return false
+    }
+    
+    mapCoordinates := MAP_COORDINATES[mapName]
+    LogMessage("Selecting " mapName " map at coordinates: " mapCoordinates.x "," mapCoordinates.y)
+    Click mapCoordinates.x, mapCoordinates.y
+    Sleep CS2_CONFIG["wait_between_clicks"]
+    
+    ; 5. Accept/Start Match
+    LogMessage("Clicking Accept Match at coordinates: " CS2_CONFIG["accept_match_x"] "," CS2_CONFIG["accept_match_y"])
+    Click CS2_CONFIG["accept_match_x"], CS2_CONFIG["accept_match_y"]
+    Sleep CS2_CONFIG["wait_between_clicks"]
     
     ; For debugging, take a screenshot of current state
-    LogMessage("Taking screenshot of current state...")
-    Send "{PrintScreen}"
+    CaptureScreenshot()
     
-    ; We'll use a simplified approach for demo purposes
-    ; Instead of waiting for a specific color, wait briefly and simulate finding a match
-    LogMessage("Waiting for match (simulated for demo)...")
-    Sleep 5000  ; Wait for 5 seconds
-    
-    MsgBox("The script would normally wait for a match.`n`nFor demonstration, click OK to simulate finding a match.", "CS2 Automation", "OK")
-    
-    LogMessage("Match found (simulated). Moving to player list view...")
+    LogMessage("Map selection sequence completed for: " mapName)
     return true
 }
-
-; View player list
-ViewPlayerList() {
-    LogMessage("Viewing player list...")
-    
-    ; Press Tab to view scoreboard (player list)
-    LogMessage("Pressing Tab to view scoreboard...")
-    Send "{Tab down}"
-    Sleep 2000
-    
-    ; Take screenshot of player list
-    LogMessage("Taking screenshot of player list...")
-    Send "{PrintScreen}"
-    LogMessage("Screenshot taken of player list")
-    
-    ; Release Tab
-    Send "{Tab up}"
-    Sleep 500
-    
-    return true
-}
-
-; Main function
-Main() {
-    LogMessage("=== Script Started ===")
-    LogMessage("AHK Version: " A_AhkVersion)
-    LogMessage("Script Path: " A_ScriptFullPath)
-    LogMessage("Log File: " LOG_FILE)
-    
-    ; Display important settings
-    LogMessage("CS2 Path: " CS2_EXECUTABLE)
-    LogMessage("Steam Path: " STEAM_EXECUTABLE)
-    
-    MsgBox("CS2 Automation Script Starting`n`nCS2 Path: " CS2_EXECUTABLE "`nLog File: " LOG_FILE, "CS2 Automation", "OK")
-    
-    ; Check if CS2 is running
-    LogMessage("Checking if CS2 is running...")
-    try {
-        if WinExist("Counter-Strike") {
-            LogMessage("CS2 is already running. Window activated.")
-            WinActivate "Counter-Strike"
-            Sleep 2000
-        } else {
-            LogMessage("CS2 is not running, launching it...")
-            if (!LaunchCS2()) {
-                LogMessage("Failed to launch CS2. Exiting script.")
-                return
-            }
-        }
-    } catch Error as e {
-        LogMessage("Error checking CS2 status: " e.Message)
-        ; CS2 is not running, launch it
-        if (!LaunchCS2()) {
-            LogMessage("Failed to launch CS2. Exiting script.")
-            return
-        }
-    }
-    
-    ; Try to find a match
-    if (!FindMatch()) {
-        LogMessage("Failed to find a match. Exiting script.")
-        return
-    }
-    
-    ; View player list
-    ViewPlayerList()
-    
-    LogMessage("Script completed successfully")
-    MsgBox("CS2 Automation completed successfully", "Done", "OK")
-}
-
-; Run the main function
-Main()

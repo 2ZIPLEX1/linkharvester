@@ -7,21 +7,57 @@ config = {
     "steam_executable": "C:\\Program Files (x86)\\Steam\\steam.exe",
     "server_cycle_delay": 5,  # seconds between server cycles
     "match_timeout": 180,  # seconds to wait for a match
-    "match_start_wait": 30,  # seconds to wait for match to start
-    "play_button_x": 960,
-    "play_button_y": 540,
-    "mode_selection_x": 960,
-    "mode_selection_y": 600,
-    "find_match_x": 960,
-    "find_match_y": 700,
-    "accept_match_x": 960,
-    "accept_match_y": 580
+    "wait_between_clicks": 1500,  # milliseconds to wait between UI interactions
+    "max_wait_for_match": 120,  # seconds to wait for match to start
+    "color_tolerance": 20,  # tolerance for color matching
+    
+    # Updated UI coordinates for the CS2 interface
+    "play_button_x": 985,
+    "play_button_y": 30,
+    "mode_selection_x": 813,
+    "mode_selection_y": 85,
+    "league_selection_x": 906,
+    "league_selection_y": 130,
+    "accept_match_x": 1690,
+    "accept_match_y": 1030,
+    
+    # Success scenario - Spectator button
+    "spectator_button_x": 1592,
+    "spectator_button_y": 1031,
+    "spectator_button_color": "E9E8E4",  # without 0x prefix for compatibility
+    
+    # Failure scenario - Error popup
+    "error_popup_x": 990,
+    "error_popup_y": 460,
+    "error_popup_ok_x": 1154,
+    "error_popup_ok_y": 603,
+    
+    # Map selection coordinates
+    "map_sigma_x": 380,
+    "map_sigma_y": 430,
+    "map_delta_x": 650,
+    "map_delta_y": 430,
+    "map_dust2_x": 920,
+    "map_dust2_y": 430,
+    "map_hostage_x": 1200,
+    "map_hostage_y": 430
 }
 
 # Path for configuration files
 home_dir = os.path.expanduser("~")
 config_dir = os.path.join(home_dir, "OneDrive", "Документы", "AutoHotkey", "data")
-os.makedirs(config_dir, exist_ok=True)
+
+# Try to create config directory if it doesn't exist
+try:
+    os.makedirs(config_dir, exist_ok=True)
+    print(f"Config directory: {config_dir}")
+except Exception as e:
+    print(f"Error creating config directory: {e}")
+    # Fallback to script directory
+    config_dir = os.path.dirname(os.path.abspath(__file__))
+    os.makedirs(os.path.join(config_dir, "data"), exist_ok=True)
+    config_dir = os.path.join(config_dir, "data")
+    print(f"Using fallback config directory: {config_dir}")
 
 # JSON config file (for Python)
 json_config_file = os.path.join(config_dir, "config.json")
