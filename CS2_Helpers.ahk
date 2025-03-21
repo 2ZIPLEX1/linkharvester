@@ -302,3 +302,66 @@ IsSimilarColor(color1, color2, tolerance := 30) {
         return false
     }
 }
+
+; Take screenshots based on game's display mode
+
+; Enhanced screenshot function that handles both fullscreen and windowed modes
+CaptureFullscreenScreenshot(fileName := "") {
+    try {
+        ; First, try using Steam's F12 screenshot functionality (works in fullscreen)
+        LogMessage("Taking Steam screenshot with F12")
+        Send "{F12}"
+        Sleep 500
+        
+        ; As a backup, also try Windows screenshot methods
+        LogMessage("Also trying Windows screenshot methods")
+        
+        ; Method 1: Windows PrintScreen (copies to clipboard)
+        Send "{PrintScreen}"
+        Sleep 300
+        
+        ; Method 2: Win+Shift+S (opens snipping tool)
+        ; Only use this as a fallback if we have a specific file to save to
+        if (fileName != "") {
+            LogMessage("Using Win+Shift+S for explicit screenshot capture")
+            Send "#+s"  ; Win+Shift+S
+            Sleep 1000
+            
+            ; Click fullscreen option
+            Click 993, 109  ; Position of fullscreen option
+            Sleep 1000
+        }
+    } catch Error as e {
+        LogMessage("Error capturing screenshot: " e.Message)
+    }
+}
+
+; Check if a file exists in Steam screenshot folder
+CheckForSteamScreenshot() {
+    ; Steam screenshot default location 
+    steamUserID := "1067368752"  ; Your Steam User ID from the screenshot path
+    screenshotDir := "C:\Program Files (x86)\Steam\userdata\" steamUserID "\760\remote\730\screenshots"
+    
+    try {
+        if (DirExist(screenshotDir)) {
+            ; Get the newest file in the directory
+            Loop Files, screenshotDir "\*.jpg" {
+                LogMessage("Found Steam screenshot: " A_LoopFileName)
+                LogMessage("Last modified: " A_LoopFileTimeModified)
+                
+                ; Check if the file was created in the last minute
+                fileAge := A_Now
+                fileAge -= A_LoopFileTimeModified, "Seconds"  ; Correct syntax for AHK v2
+                
+                if (fileAge < 60) {
+                    LogMessage("Recent screenshot found")
+                    return A_LoopFileFullPath
+                }
+            }
+        }
+    } catch Error as e {
+        LogMessage("Error checking Steam screenshots: " e.Message)
+    }
+    
+    return ""
+}

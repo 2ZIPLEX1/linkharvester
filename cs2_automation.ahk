@@ -58,9 +58,10 @@ Main() {
     RunMapCycle()
 }
 
-; Function to run through the map cycle
+; Update the RunMapCycle function in cs2_automation.ahk
+
 RunMapCycle() {
-    Global CURRENT_MAP_INDEX, MAP_CYCLE
+    Global CURRENT_MAP_INDEX, MAP_CYCLE, CS2_CONFIG
     
     ; For the initial testing, just use the first map (Sigma)
     currentMap := MAP_CYCLE[CURRENT_MAP_INDEX]
@@ -72,8 +73,24 @@ RunMapCycle() {
         return
     }
     
+    ; Log that we're waiting for match
+    LogMessage("Map selected, now waiting for match to be found and joined...")
+    
+    ; Increase timeout for waiting - use a much longer timeout
+    ; This needs to be very long since we need to wait through:
+    ; 1. Initial matchmaking search
+    ; 2. "YOUR MATCH IS READY!" screen display
+    ; 3. Loading into server (can take quite a while)
+    ; 4. Finally spectate button appears
+    originalTimeout := CS2_CONFIG["max_wait_for_match"]
+    CS2_CONFIG["max_wait_for_match"] := 600  ; 10 minutes
+    
     ; Wait for match outcome
     matchOutcome := WaitForMatchOutcome()
+    
+    ; Reset timeout
+    CS2_CONFIG["max_wait_for_match"] := originalTimeout
+    
     LogMessage("Match outcome for " currentMap ": " matchOutcome)
     
     if (matchOutcome = "success") {
@@ -87,11 +104,20 @@ RunMapCycle() {
         LogMessage("Finished with " currentMap " match")
     }
     else if (matchOutcome = "failure" || matchOutcome = "timeout") {
-        LogMessage("Failed to join " currentMap " match.")
+        LogMessage("Failed to join " currentMap " match: " matchOutcome)
+        
+        ; Take a final screenshot to help debug
+        CaptureFullscreenScreenshot()
+        
+        ; Try to return to main menu to recover
+        Send "{Escape}"
+        Sleep 2000
+        Send "{Escape}"
+        Sleep 2000
     }
     
     LogMessage("Map cycle completed")
-    MsgBox("CS2 Automation completed", "Done", "OK")
+    MsgBox("CS2 Automation completed`n`nOutcome: " matchOutcome, "Done", "OK")
 }
 
 ; Function to select a specific map

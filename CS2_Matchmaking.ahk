@@ -93,48 +93,62 @@ CheckForMatchmakingFailure() {
     return false
 }
 
-; Check for spectator button (success case)
+; Check for spectator button with improved detection
 CheckForSpectateButton() {
     Global CS2_CONFIG
     
     try {
-        ; Get coordinates from config
-        spectateX := CS2_CONFIG["spectator_button_x"]
-        spectateY := CS2_CONFIG["spectator_button_y"]
+        ; Get coordinates for the spectate button area you provided
+        spectateLeftX := 1577  ; upper-left X
+        spectateLeftY := 1008  ; upper-left Y
+        spectateRightX := 1699 ; lower-right X
+        spectateRightY := 1055 ; lower-right Y
         
-        spectateColor := PixelGetColor(spectateX, spectateY)
-        LogMessage("Spectate button color: " spectateColor)
+        ; Camera icon starts at 1586,1025
+        cameraIconX := 1586
+        cameraIconY := 1025
         
-        ; Check if color matches expected color for the SPECTATE button
-        if (IsColorSimilar(spectateX, spectateY, CS2_CONFIG["spectator_button_color"], CS2_CONFIG["color_tolerance"])) {
-            LogMessage("Detected SPECTATE button based on color match")
+        ; Center of the SPECTATE text (for clicking)
+        spectateX := 1640
+        spectateY := 1031
+        
+        ; Sample multiple points in the spectate button area for more reliable detection
+        cameraColor := PixelGetColor(cameraIconX, cameraIconY)
+        spectateTextColor := PixelGetColor(spectateX, spectateY)
+        
+        ; Log the detected colors for debugging
+        LogMessage("Camera icon color: " cameraColor)
+        LogMessage("SPECTATE text color: " spectateTextColor)
+        
+        ; Take a screenshot for debugging
+        CaptureFullscreenScreenshot()
+        
+        ; Check for contrast between icon/text and surrounding area
+        ; Sample points above and below the button
+        aboveColor := PixelGetColor(spectateX, spectateLeftY - 10)
+        belowColor := PixelGetColor(spectateX, spectateRightY + 10)
+        
+        ; Check if we have light text on dark background (common in CS2 UI)
+        if (IsLightColor(spectateTextColor) && IsDarkColor(aboveColor)) {
+            LogMessage("Detected potential SPECTATE button (light text)")
             
-            ; Check surrounding pixels to confirm with contrast check
-            aboveColor := PixelGetColor(spectateX, spectateY - 10)
-            belowColor := PixelGetColor(spectateX, spectateY + 10)
-            
-            ; Check for contrast with surrounding pixels
-            if (!IsSimilarColor(spectateColor, aboveColor, 30) || 
-                !IsSimilarColor(spectateColor, belowColor, 30)) {
-                
-                LogMessage("Confirmed SPECTATE button with contrast check")
+            ; Additional check to confirm it's really the spectate button
+            ; Check if camera icon area has a different color than the text
+            if (!IsSimilarColor(cameraColor, spectateTextColor, 40)) {
+                LogMessage("Confirmed SPECTATE button with camera icon check")
                 return true
             }
         }
         
-        ; Alternative detection using light color check
-        if (IsLightColor(spectateColor)) {
-            LogMessage("Detected possible SPECTATE button using brightness check")
-            
-            ; Check surrounding pixels to confirm
-            aboveColor := PixelGetColor(spectateX, spectateY - 10)
-            belowColor := PixelGetColor(spectateX, spectateY + 10)
-            
-            ; If there's contrast between the button text and surroundings
-            if (IsDarkColor(aboveColor) || IsDarkColor(belowColor)) {
-                LogMessage("Confirmed SPECTATE button with contrast check")
-                return true
-            }
+        ; Alternative detection - check for specific color patterns
+        ; If the button has a consistent background like a rectangle
+        leftSideColor := PixelGetColor(spectateLeftX + 5, spectateY)
+        rightSideColor := PixelGetColor(spectateRightX - 5, spectateY)
+        
+        if (IsSimilarColor(leftSideColor, rightSideColor, 30) && 
+            !IsSimilarColor(leftSideColor, aboveColor, 50)) {
+            LogMessage("Detected SPECTATE button by button shape")
+            return true
         }
     } catch Error as e {
         LogMessage("Error checking for spectate button: " e.Message)
@@ -143,7 +157,7 @@ CheckForSpectateButton() {
     return false
 }
 
-; Main function to wait for match outcome (success or failure)
+; Improved match outcome detection
 WaitForMatchOutcome() {
     Global CS2_CONFIG
     
@@ -153,6 +167,12 @@ WaitForMatchOutcome() {
     startTime := A_TickCount
     timeout := CS2_CONFIG["max_wait_for_match"] * 1000  ; Convert to milliseconds
     
+    ; Increase timeout for more reliable detection
+    if (timeout < 180000)  ; If less than 3 minutes
+        timeout := 180000  ; Set to 3 minutes minimum
+    
+    LogMessage("Match detection timeout set to " timeout / 1000 " seconds")
+    
     loop {
         ; Check if user requested exit
         if (ShouldExit()) {
@@ -161,9 +181,17 @@ WaitForMatchOutcome() {
         }
         
         ; Check if we've exceeded the timeout
-        if (A_TickCount - startTime > timeout) {
-            LogMessage("Timed out waiting for match outcome")
+        currentTime := A_TickCount
+        elapsedTime := currentTime - startTime
+        
+        if (elapsedTime > timeout) {
+            LogMessage("Timed out waiting for match outcome after " elapsedTime / 1000 " seconds")
             return "timeout"
+        }
+        
+        ; Log progress periodically
+        if (Mod(A_Index, 5) = 0) {
+            LogMessage("Still waiting for match outcome... " elapsedTime / 1000 " seconds elapsed")
         }
         
         ; Make sure CS2 window is active
@@ -176,7 +204,7 @@ WaitForMatchOutcome() {
         ; Take periodic screenshots
         if (Mod(A_Index, 10) = 0) {
             LogMessage("Taking detection screenshot...")
-            CaptureScreenshot()
+            CaptureFullscreenScreenshot()
         }
         
         ; First check if we're in searching state
@@ -186,16 +214,33 @@ WaitForMatchOutcome() {
             continue
         }
         
-        ; Check for success (Spectate button)
+        ; Check for match ready screen (the green "YOUR MATCH IS READY!" popup)
+        if (IsMatchReadyScreen()) {
+            LogMessage("Match is ready! Waiting for it to transition to the actual match...")
+            
+            ; We're now in a transition state - wait longer between checks
+            ; since we know we need to wait for the match to fully load
+            Sleep 8000  ; Wait longer when we see the ready screen
+            
+            ; Take another screenshot after waiting to see if we've transitioned
+            CaptureFullscreenScreenshot()
+            continue    ; Continue waiting for spectate button
+        }
+        
+        ; Check for success (Spectate button) - using our improved detection
         if (CheckForSpectateButton()) {
             LogMessage("Successfully joined match!")
             
-            ; Click the spectator button
-            LogMessage("Clicking spectator button")
-            Click CS2_CONFIG["spectator_button_x"], CS2_CONFIG["spectator_button_y"]
+            ; Click the spectator button (using the center of the button area)
+            buttonX := 1640  ; Center X of SPECTATE text
+            buttonY := 1031  ; Center Y of SPECTATE text
+            
+            LogMessage("Clicking spectator button at " buttonX ", " buttonY)
+            Click buttonX, buttonY
             Sleep 1000
             
-            CaptureScreenshot()
+            ; Take another screenshot after clicking
+            CaptureFullscreenScreenshot()
             
             return "success"
         }
@@ -206,22 +251,74 @@ WaitForMatchOutcome() {
             return "failure"
         }
         
-        ; Additional check using Tab key as fallback for success detection
-        if (A_Index > 15) {  ; After several checks
-            LogMessage("Trying Tab key to check if match started...")
-            Send "{Tab down}"
-            Sleep 1000
-            CaptureScreenshot()
-            Send "{Tab up}"
-            Sleep 500
-            
-            ; Note: We don't return success here, just continue checking
-            ; to be more certain with visual detection
-        }
-        
-        ; Wait before next check
+        ; Wait before next check - shorter interval for more responsive detection
         Sleep 2000
     }
     
     return "unknown"  ; Should never reach here
+}
+
+; Detect "YOUR MATCH IS READY!" screen
+IsMatchReadyScreen() {
+    try {
+        ; Based on your screenshot, check for the green highlight and text
+        ; Sample points around the "YOUR MATCH IS READY!" text
+        readyTextX := 727    ; Center X of "YOUR MATCH IS READY!"
+        readyTextY := 300    ; Center Y of text
+        
+        ; Check for bright green border
+        greenBorderTopX := 727
+        greenBorderTopY := 211   ; Top of green border
+        greenBorderBottomY := 390 ; Bottom of green border
+        
+        ; Get colors at these points
+        textColor := PixelGetColor(readyTextX, readyTextY)
+        topBorderColor := PixelGetColor(greenBorderTopX, greenBorderTopY)
+        bottomBorderColor := PixelGetColor(greenBorderTopX, greenBorderBottomY)
+        
+        LogMessage("Match ready text color: " textColor)
+        LogMessage("Top border color: " topBorderColor)
+        LogMessage("Bottom border color: " bottomBorderColor)
+        
+        ; Check if we detect bright green (looking for color like #00FF00 or similar)
+        if (IsGreenColor(topBorderColor) && IsGreenColor(bottomBorderColor)) {
+            LogMessage("Detected green border of match ready screen")
+            
+            ; Take a screenshot for verification
+            CaptureFullscreenScreenshot()
+            
+            ; Just log that we saw it, no need to click
+            LogMessage("Match ready screen detected - waiting for it to transition to the match")
+            
+            return true
+        }
+    } catch Error as e {
+        LogMessage("Error checking for match ready screen: " e.Message)
+    }
+    
+    return false
+}
+
+; Helper function to detect green colors
+IsGreenColor(colorHex) {
+    try {
+        ; Convert hex string to number if needed
+        if (Type(colorHex) = "String" && SubStr(colorHex, 1, 2) = "0x")
+            color := Integer("0x" . SubStr(colorHex, 3))
+        else if (Type(colorHex) = "String")
+            color := Integer("0x" . colorHex)
+        else
+            color := colorHex
+            
+        ; Extract RGB values
+        r := (color >> 16) & 0xFF
+        g := (color >> 8) & 0xFF
+        b := color & 0xFF
+        
+        ; Check if green component is significantly higher than others (bright green)
+        return (g > 180) && (g > r * 1.5) && (g > b * 1.5)
+    } catch Error as e {
+        LogMessage("Error in IsGreenColor: " e.Message)
+        return false
+    }
 }

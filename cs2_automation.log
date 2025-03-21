@@ -1,473 +1,1253 @@
-2025-03-19 10:11:49 - === CS2 Automation Script Started ===
-2025-03-19 10:11:49 - AHK Version: 2.0.19
-2025-03-19 10:11:49 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
-2025-03-19 10:11:49 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
-2025-03-19 10:11:49 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
-2025-03-19 10:11:49 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
-2025-03-19 10:11:55 - Checking if CS2 is running...
-2025-03-19 10:11:55 - CS2 is already running. Window activated.
-2025-03-19 10:11:57 - Processing map: Sigma
-2025-03-19 10:11:57 - Selecting map: Sigma
-2025-03-19 10:11:59 - Clicking Play button at coordinates: 985,30
-2025-03-19 10:12:01 - Selecting matchmaking mode at coordinates: 813,85
-2025-03-19 10:12:02 - Selecting casual league at coordinates: 906,130
-2025-03-19 10:12:04 - Selecting Sigma map at coordinates: 380,430
-2025-03-19 10:12:05 - Screenshot captured to clipboard
-2025-03-19 10:12:23 - Clicking Accept Match at coordinates: 1690,1030
-2025-03-19 10:12:24 - Map selection sequence completed for: Sigma
-2025-03-19 10:12:24 - Waiting for match outcome (success or failure)...
-2025-03-19 10:12:24 - CS2 window is no longer active
-2025-03-19 10:12:26 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:26 - Spectate button color: 0x0F5710
-2025-03-19 10:12:26 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:26 - Dialog center color: 0x3A434E
-2025-03-19 10:12:26 - OK button color: 0x1D536C
-2025-03-19 10:12:26 - Left border color: 0x343D49
-2025-03-19 10:12:26 - Right border color: 0x422C1B
-2025-03-19 10:12:28 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:28 - Spectate button color: 0x0E530F
-2025-03-19 10:12:28 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:28 - Dialog center color: 0x3A434E
-2025-03-19 10:12:28 - OK button color: 0x1D536C
-2025-03-19 10:12:28 - Left border color: 0x343D49
-2025-03-19 10:12:28 - Right border color: 0x3B4E5C
-2025-03-19 10:12:28 - Title area color: 0x1A1E21
-2025-03-19 10:12:30 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:30 - Spectate button color: 0x0E530F
-2025-03-19 10:12:30 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:30 - Dialog center color: 0x3A434E
-2025-03-19 10:12:30 - OK button color: 0x1D536C
-2025-03-19 10:12:30 - Left border color: 0x343D49
-2025-03-19 10:12:30 - Right border color: 0x3A5365
-2025-03-19 10:12:30 - Title area color: 0x1A1E21
-2025-03-19 10:12:32 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:32 - Spectate button color: 0x0E530F
-2025-03-19 10:12:32 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:32 - Dialog center color: 0x3A434E
-2025-03-19 10:12:32 - OK button color: 0x1D536C
-2025-03-19 10:12:32 - Left border color: 0x343D49
-2025-03-19 10:12:32 - Right border color: 0x3A5365
-2025-03-19 10:12:32 - Title area color: 0x1A1E21
-2025-03-19 10:12:34 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:34 - Spectate button color: 0x0E530F
-2025-03-19 10:12:34 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:34 - Dialog center color: 0x3A434E
-2025-03-19 10:12:34 - OK button color: 0x1D536C
-2025-03-19 10:12:34 - Left border color: 0x343D49
-2025-03-19 10:12:34 - Right border color: 0x39576B
-2025-03-19 10:12:36 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:36 - Spectate button color: 0x0E540F
-2025-03-19 10:12:36 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:36 - Dialog center color: 0x3A434E
-2025-03-19 10:12:36 - OK button color: 0x1D536C
-2025-03-19 10:12:36 - Left border color: 0x343D49
-2025-03-19 10:12:36 - Right border color: 0x375D74
-2025-03-19 10:12:38 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:38 - Spectate button color: 0x0E530F
-2025-03-19 10:12:38 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:38 - Dialog center color: 0x3A434E
-2025-03-19 10:12:38 - OK button color: 0x1D536C
-2025-03-19 10:12:38 - Left border color: 0x343D49
-2025-03-19 10:12:38 - Right border color: 0x375D74
-2025-03-19 10:12:40 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:40 - Spectate button color: 0x0F550F
-2025-03-19 10:12:40 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:40 - Dialog center color: 0x3A434E
-2025-03-19 10:12:40 - OK button color: 0x1D536C
-2025-03-19 10:12:40 - Left border color: 0x343D49
-2025-03-19 10:12:40 - Right border color: 0x456073
-2025-03-19 10:12:43 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:43 - Spectate button color: 0x0F560F
-2025-03-19 10:12:43 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:43 - Dialog center color: 0x3A434E
-2025-03-19 10:12:43 - OK button color: 0x1D536C
-2025-03-19 10:12:43 - Left border color: 0x343D49
-2025-03-19 10:12:43 - Right border color: 0x5D646A
-2025-03-19 10:12:45 - Taking detection screenshot...
-2025-03-19 10:12:45 - Screenshot captured to clipboard
-2025-03-19 10:12:45 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:45 - Spectate button color: 0x0E530F
-2025-03-19 10:12:45 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:45 - Dialog center color: 0x3A434E
-2025-03-19 10:12:45 - OK button color: 0x1D536C
-2025-03-19 10:12:45 - Left border color: 0x343D49
-2025-03-19 10:12:45 - Right border color: 0x423B3C
-2025-03-19 10:12:45 - Title area color: 0x1A1E21
-2025-03-19 10:12:47 - CS2 window is no longer active
-2025-03-19 10:12:48 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:48 - Spectate button color: 0x0E530F
-2025-03-19 10:12:48 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:48 - Dialog center color: 0x3A434E
-2025-03-19 10:12:48 - OK button color: 0x1D536C
-2025-03-19 10:12:48 - Left border color: 0x343D49
-2025-03-19 10:12:48 - Right border color: 0x443F40
-2025-03-19 10:12:48 - Title area color: 0x1A1E21
-2025-03-19 10:12:50 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:50 - Spectate button color: 0x0E540F
-2025-03-19 10:12:50 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:50 - Dialog center color: 0x3A434E
-2025-03-19 10:12:50 - OK button color: 0x1D536C
-2025-03-19 10:12:50 - Left border color: 0x343D49
-2025-03-19 10:12:50 - Right border color: 0x422C1B
-2025-03-19 10:12:52 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:52 - Spectate button color: 0x0E530F
-2025-03-19 10:12:52 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:52 - Dialog center color: 0x3A434E
-2025-03-19 10:12:52 - OK button color: 0x1D536C
-2025-03-19 10:12:52 - Left border color: 0x343D49
-2025-03-19 10:12:52 - Right border color: 0x422C1B
-2025-03-19 10:12:54 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:54 - Spectate button color: 0x0E530F
-2025-03-19 10:12:54 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:54 - Dialog center color: 0x3A434E
-2025-03-19 10:12:54 - OK button color: 0x1D536C
-2025-03-19 10:12:54 - Left border color: 0x343D49
-2025-03-19 10:12:54 - Right border color: 0x422C1B
-2025-03-19 10:12:56 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:56 - Spectate button color: 0x0E530F
-2025-03-19 10:12:56 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:56 - Dialog center color: 0x3A434E
-2025-03-19 10:12:56 - OK button color: 0x1D536C
-2025-03-19 10:12:57 - Left border color: 0x343D49
-2025-03-19 10:12:57 - Right border color: 0x3A5365
-2025-03-19 10:12:57 - Title area color: 0x1A1E21
-2025-03-19 10:12:59 - Cancel search button area color: 0x796B5E
-2025-03-19 10:12:59 - Spectate button color: 0x0E540F
-2025-03-19 10:12:59 - Checking for matchmaking failure dialog...
-2025-03-19 10:12:59 - Dialog center color: 0x3A434E
-2025-03-19 10:12:59 - OK button color: 0x1D536C
-2025-03-19 10:12:59 - Left border color: 0x343D49
-2025-03-19 10:12:59 - Right border color: 0x3A5365
-2025-03-19 10:12:59 - Title area color: 0x1A1E21
-2025-03-19 10:12:59 - Trying Tab key to check if match started...
-2025-03-19 10:13:00 - Screenshot captured to clipboard
-2025-03-19 10:13:02 - CS2 window is no longer active
-2025-03-19 10:13:04 - Cancel search button area color: 0x796B5E
-2025-03-19 10:13:04 - Spectate button color: 0x0F550F
-2025-03-19 10:13:04 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:04 - Dialog center color: 0x3A434E
-2025-03-19 10:13:04 - OK button color: 0x1D536C
-2025-03-19 10:13:04 - Left border color: 0x343D49
-2025-03-19 10:13:04 - Right border color: 0x375D74
-2025-03-19 10:13:04 - Trying Tab key to check if match started...
-2025-03-19 10:13:05 - Screenshot captured to clipboard
-2025-03-19 10:13:07 - CS2 window is no longer active
-2025-03-19 10:13:09 - Cancel search button area color: 0x4E373C
-2025-03-19 10:13:09 - Spectate button color: 0x0D0D15
-2025-03-19 10:13:09 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:09 - Dialog center color: 0x2B3338
-2025-03-19 10:13:09 - OK button color: 0x0C0C0C
-2025-03-19 10:13:09 - Left border color: 0x626262
-2025-03-19 10:13:09 - Right border color: 0x535353
-2025-03-19 10:13:09 - Title area color: 0x1C2125
-2025-03-19 10:13:09 - Trying Tab key to check if match started...
-2025-03-19 10:13:10 - Screenshot captured to clipboard
-2025-03-19 10:13:12 - CS2 window is no longer active
-2025-03-19 10:13:14 - Cancel search button area color: 0x47383B
-2025-03-19 10:13:14 - Spectate button color: 0x0D0D15
-2025-03-19 10:13:14 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:14 - Dialog center color: 0x0C0C0C
-2025-03-19 10:13:14 - OK button color: 0x0C0C0C
-2025-03-19 10:13:14 - Left border color: 0x0C0C0C
-2025-03-19 10:13:14 - Right border color: 0x0C0C0C
-2025-03-19 10:13:14 - Title area color: 0x0C0C0C
-2025-03-19 10:13:14 - Trying Tab key to check if match started...
-2025-03-19 10:13:15 - Screenshot captured to clipboard
-2025-03-19 10:13:17 - CS2 window is no longer active
-2025-03-19 10:13:19 - Taking detection screenshot...
-2025-03-19 10:13:19 - Screenshot captured to clipboard
-2025-03-19 10:13:19 - Cancel search button area color: 0x796B5E
-2025-03-19 10:13:19 - Spectate button color: 0x0F570F
-2025-03-19 10:13:19 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:19 - Dialog center color: 0x3A434E
-2025-03-19 10:13:19 - OK button color: 0x1D536C
-2025-03-19 10:13:19 - Left border color: 0x343D49
-2025-03-19 10:13:19 - Right border color: 0x3A5364
-2025-03-19 10:13:19 - Title area color: 0x1A1E21
-2025-03-19 10:13:19 - Trying Tab key to check if match started...
-2025-03-19 10:13:20 - Screenshot captured to clipboard
-2025-03-19 10:13:23 - CS2 window is no longer active
-2025-03-19 10:13:24 - Cancel search button area color: 0x796B5E
-2025-03-19 10:13:24 - Spectate button color: 0x0E530F
-2025-03-19 10:13:24 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:24 - Dialog center color: 0x3A434E
-2025-03-19 10:13:24 - OK button color: 0x1D536C
-2025-03-19 10:13:24 - Left border color: 0x343D49
-2025-03-19 10:13:24 - Right border color: 0x375D74
-2025-03-19 10:13:24 - Trying Tab key to check if match started...
-2025-03-19 10:13:25 - Screenshot captured to clipboard
-2025-03-19 10:13:28 - CS2 window is no longer active
-2025-03-19 10:13:29 - Cancel search button area color: 0xFFFFFF
-2025-03-19 10:13:29 - Spectate button color: 0xFFFFFF
-2025-03-19 10:13:29 - Detected possible SPECTATE button using brightness check
-2025-03-19 10:13:29 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:29 - Dialog center color: 0xFFFFFF
-2025-03-19 10:13:29 - OK button color: 0xFFFFFF
-2025-03-19 10:13:29 - Left border color: 0xFFFFFF
-2025-03-19 10:13:29 - Right border color: 0xFFFFFF
-2025-03-19 10:13:29 - Trying Tab key to check if match started...
-2025-03-19 10:13:30 - Screenshot captured to clipboard
-2025-03-19 10:13:33 - CS2 window is no longer active
-2025-03-19 10:13:34 - Cancel search button area color: 0x796B5E
-2025-03-19 10:13:34 - Spectate button color: 0x0F570F
-2025-03-19 10:13:34 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:34 - Dialog center color: 0x3A434E
-2025-03-19 10:13:34 - OK button color: 0x1D536C
-2025-03-19 10:13:34 - Left border color: 0x343D49
-2025-03-19 10:13:34 - Right border color: 0x423B3C
-2025-03-19 10:13:34 - Title area color: 0x1A1E21
-2025-03-19 10:13:34 - Trying Tab key to check if match started...
-2025-03-19 10:13:35 - Screenshot captured to clipboard
-2025-03-19 10:13:38 - CS2 window is no longer active
-2025-03-19 10:13:39 - Cancel search button area color: 0x690925
-2025-03-19 10:13:39 - Spectate button color: 0xFFFFFF
-2025-03-19 10:13:39 - Detected possible SPECTATE button using brightness check
-2025-03-19 10:13:39 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:39 - Dialog center color: 0x0C0C0C
-2025-03-19 10:13:39 - OK button color: 0x0C0C0C
-2025-03-19 10:13:39 - Left border color: 0x0C0C0C
-2025-03-19 10:13:39 - Right border color: 0x0C0C0C
-2025-03-19 10:13:39 - Title area color: 0x0C0C0C
-2025-03-19 10:13:39 - Trying Tab key to check if match started...
-2025-03-19 10:13:40 - Screenshot captured to clipboard
-2025-03-19 10:13:43 - CS2 window is no longer active
-2025-03-19 10:13:44 - Cancel search button area color: 0x796B5E
-2025-03-19 10:13:44 - Spectate button color: 0x115F11
-2025-03-19 10:13:44 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:44 - Dialog center color: 0x3A434E
-2025-03-19 10:13:44 - OK button color: 0x1D536C
-2025-03-19 10:13:44 - Left border color: 0x343D49
-2025-03-19 10:13:44 - Right border color: 0x3A5365
-2025-03-19 10:13:44 - Title area color: 0x1A1E21
-2025-03-19 10:13:44 - Trying Tab key to check if match started...
-2025-03-19 10:13:45 - Screenshot captured to clipboard
-2025-03-19 10:13:48 - CS2 window is no longer active
-2025-03-19 10:13:49 - Cancel search button area color: 0x14080A
-2025-03-19 10:13:49 - Spectate button color: 0x0D0D15
-2025-03-19 10:13:49 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:49 - Dialog center color: 0x253B52
-2025-03-19 10:13:49 - OK button color: 0x070001
-2025-03-19 10:13:49 - Left border color: 0x07050A
-2025-03-19 10:13:49 - Right border color: 0x2A6786
-2025-03-19 10:13:49 - Trying Tab key to check if match started...
-2025-03-19 10:13:50 - Screenshot captured to clipboard
-2025-03-19 10:13:53 - CS2 window is no longer active
-2025-03-19 10:13:55 - Cancel search button area color: 0x796B5E
-2025-03-19 10:13:55 - Spectate button color: 0x0E530F
-2025-03-19 10:13:55 - Checking for matchmaking failure dialog...
-2025-03-19 10:13:55 - Dialog center color: 0x3A434E
-2025-03-19 10:13:55 - OK button color: 0x1D536C
-2025-03-19 10:13:55 - Left border color: 0x343D49
-2025-03-19 10:13:55 - Right border color: 0x423B3C
-2025-03-19 10:13:55 - Title area color: 0x1A1E21
-2025-03-19 10:13:55 - Trying Tab key to check if match started...
-2025-03-19 10:13:56 - Screenshot captured to clipboard
-2025-03-19 10:13:58 - CS2 window is no longer active
-2025-03-19 10:14:00 - Cancel search button area color: 0x796B5E
-2025-03-19 10:14:00 - Spectate button color: 0x115F11
-2025-03-19 10:14:00 - Checking for matchmaking failure dialog...
-2025-03-19 10:14:00 - Dialog center color: 0x3A434E
-2025-03-19 10:14:00 - OK button color: 0x1D536C
-2025-03-19 10:14:00 - Left border color: 0x343D49
-2025-03-19 10:14:00 - Right border color: 0x422C1B
-2025-03-19 10:14:00 - Trying Tab key to check if match started...
-2025-03-19 10:14:01 - Screenshot captured to clipboard
-2025-03-19 10:14:03 - CS2 window is no longer active
-2025-03-19 10:14:05 - Cancel search button area color: 0x796B5E
-2025-03-19 10:14:05 - Spectate button color: 0x0F540F
-2025-03-19 10:14:05 - Checking for matchmaking failure dialog...
-2025-03-19 10:14:05 - Dialog center color: 0x3A434E
-2025-03-19 10:14:05 - OK button color: 0x1D536C
-2025-03-19 10:14:05 - Left border color: 0x343D49
-2025-03-19 10:14:05 - Right border color: 0x3A5365
-2025-03-19 10:14:05 - Title area color: 0x1A1E21
-2025-03-19 10:14:05 - Trying Tab key to check if match started...
-2025-03-19 10:14:06 - Screenshot captured to clipboard
-2025-03-19 10:14:08 - CS2 window is no longer active
-2025-03-19 10:14:10 - Taking detection screenshot...
-2025-03-19 10:14:10 - Screenshot captured to clipboard
-2025-03-19 10:14:10 - Cancel search button area color: 0x796B5E
-2025-03-19 10:14:10 - Spectate button color: 0x0E530F
-2025-03-19 10:14:10 - Checking for matchmaking failure dialog...
-2025-03-19 10:14:10 - Dialog center color: 0x3A434E
-2025-03-19 10:14:10 - OK button color: 0x1D536C
-2025-03-19 10:14:10 - Left border color: 0x343D49
-2025-03-19 10:14:10 - Right border color: 0x536471
-2025-03-19 10:14:10 - Trying Tab key to check if match started...
-2025-03-19 10:14:11 - Screenshot captured to clipboard
-2025-03-19 10:14:13 - CS2 window is no longer active
-2025-03-19 10:14:15 - Cancel search button area color: 0x796B5E
-2025-03-19 10:14:15 - Spectate button color: 0x105C11
-2025-03-19 10:14:15 - Checking for matchmaking failure dialog...
-2025-03-19 10:14:15 - Dialog center color: 0x3A434E
-2025-03-19 10:14:15 - OK button color: 0x1D536C
-2025-03-19 10:14:15 - Left border color: 0x343D49
-2025-03-19 10:14:15 - Right border color: 0x5E656D
-2025-03-19 10:14:15 - Trying Tab key to check if match started...
-2025-03-19 10:14:16 - Screenshot captured to clipboard
-2025-03-19 10:14:18 - CS2 window is no longer active
-2025-03-19 10:14:20 - Cancel search button area color: 0x796B5E
-2025-03-19 10:14:20 - Spectate button color: 0x0E530F
-2025-03-19 10:14:20 - Checking for matchmaking failure dialog...
-2025-03-19 10:14:20 - Dialog center color: 0x3A434E
-2025-03-19 10:14:20 - OK button color: 0x1D536C
-2025-03-19 10:14:20 - Left border color: 0x343D49
-2025-03-19 10:14:20 - Right border color: 0x443F40
-2025-03-19 10:14:20 - Title area color: 0x1A1E21
-2025-03-19 10:14:20 - Trying Tab key to check if match started...
-2025-03-19 10:14:21 - Screenshot captured to clipboard
-2025-03-19 10:14:23 - CS2 window is no longer active
-2025-03-19 10:14:26 - Cancel search button area color: 0x730727
-2025-03-19 10:14:26 - Spectate button color: 0xFFFFFF
-2025-03-19 10:14:26 - Detected possible SPECTATE button using brightness check
-2025-03-19 10:14:26 - Checking for matchmaking failure dialog...
-2025-03-19 10:14:26 - Dialog center color: 0x311D3A
-2025-03-19 10:14:26 - OK button color: 0x1D0207
-2025-03-19 10:14:26 - Left border color: 0x191919
-2025-03-19 10:14:26 - Right border color: 0x311D3A
-2025-03-19 10:14:26 - Trying Tab key to check if match started...
-2025-03-19 10:14:27 - Screenshot captured to clipboard
-2025-03-19 10:14:30 - Timed out waiting for match outcome
-2025-03-19 10:14:30 - Match outcome for Sigma: timeout
-2025-03-19 10:14:30 - Failed to join Sigma match.
-2025-03-19 10:14:30 - Map cycle completed
-2025-03-19 11:22:20 - === CS2 Automation Script Started ===
-2025-03-19 11:22:20 - AHK Version: 2.0.19
-2025-03-19 11:22:20 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
-2025-03-19 11:22:20 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
-2025-03-19 11:22:20 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
-2025-03-19 11:22:20 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
-2025-03-19 11:22:23 - Checking if CS2 is running...
-2025-03-19 11:22:23 - CS2 is already running. Window activated.
-2025-03-19 11:22:25 - Processing map: Sigma
-2025-03-19 11:22:25 - Selecting map: Sigma
-2025-03-19 11:22:27 - Clicking Play button at coordinates: 985,30
-2025-03-19 11:22:29 - Selecting matchmaking mode at coordinates: 813,85
-2025-03-19 11:22:30 - Selecting casual league at coordinates: 906,130
-2025-03-19 11:22:32 - Selecting Sigma map at coordinates: 380,430
-2025-03-19 11:22:33 - Clicking Accept Match at coordinates: 1690,1030
-2025-03-19 11:22:35 - Screenshot captured to clipboard
-2025-03-19 11:22:35 - Map selection sequence completed for: Sigma
-2025-03-19 11:22:35 - Waiting for match outcome (success or failure)...
-2025-03-19 11:22:35 - Cancel search button area color: 0x363230
-2025-03-19 11:22:35 - Spectate button color: 0x71220D
-2025-03-19 11:22:35 - Checking for matchmaking failure dialog...
-2025-03-19 11:22:35 - Dialog center color: 0x406F89
-2025-03-19 11:22:35 - OK button color: 0x1F2931
-2025-03-19 11:22:35 - Left border color: 0x502F2F
-2025-03-19 11:22:35 - Right border color: 0x261E1A
-2025-03-19 11:22:37 - CS2 window is no longer active
-2025-03-19 11:22:38 - Cancel search button area color: 0x363230
-2025-03-19 11:22:38 - Spectate button color: 0x77230F
-2025-03-19 11:22:38 - Checking for matchmaking failure dialog...
-2025-03-19 11:22:38 - Dialog center color: 0x406F89
-2025-03-19 11:22:38 - OK button color: 0x222A31
-2025-03-19 11:22:39 - Left border color: 0x502F2F
-2025-03-19 11:22:39 - Right border color: 0x271E1A
-2025-03-19 11:22:41 - Cancel search button area color: 0x363230
-2025-03-19 11:22:41 - Spectate button color: 0x70210D
-2025-03-19 11:22:41 - Checking for matchmaking failure dialog...
-2025-03-19 11:22:41 - Dialog center color: 0x406F89
-2025-03-19 11:22:41 - OK button color: 0x252C33
-2025-03-19 11:22:41 - Left border color: 0x502F2F
-2025-03-19 11:22:41 - Right border color: 0x271E1A
-2025-03-19 11:22:43 - Cancel search button area color: 0x363230
-2025-03-19 11:22:43 - Spectate button color: 0x70210D
-2025-03-19 11:22:43 - Checking for matchmaking failure dialog...
-2025-03-19 11:22:43 - Dialog center color: 0x406F89
-2025-03-19 11:22:43 - OK button color: 0x232B32
-2025-03-19 11:22:43 - Left border color: 0x502F2F
-2025-03-19 11:22:43 - Right border color: 0x271E1A
-2025-03-19 11:22:45 - Cancel search button area color: 0x181615
-2025-03-19 11:22:45 - Spectate button color: 0x3C0D04
-2025-03-19 11:22:45 - Checking for matchmaking failure dialog...
-2025-03-19 11:22:45 - Dialog center color: 0x114114
-2025-03-19 11:22:45 - OK button color: 0xC7AE90
-2025-03-19 11:22:45 - Left border color: 0x271414
-2025-03-19 11:22:45 - Right border color: 0x0C2D0C
-2025-03-19 11:22:45 - Title area color: 0x114517
-2025-03-19 11:22:45 - Detected matchmaking failure dialog with high confidence
-2025-03-19 11:22:45 - Clicking OK button at 877,458
-2025-03-19 11:22:46 - Screenshot captured to clipboard
-2025-03-19 11:22:46 - Matchmaking failure detected and handled
-2025-03-19 11:22:46 - Match outcome for Sigma: failure
-2025-03-19 11:22:46 - Failed to join Sigma match.
-2025-03-19 11:22:46 - Map cycle completed
-2025-03-19 11:23:09 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
-2025-03-19 11:34:47 - === CS2 Automation Script Started ===
-2025-03-19 11:34:47 - AHK Version: 2.0.19
-2025-03-19 11:34:47 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
-2025-03-19 11:34:48 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
-2025-03-19 11:34:48 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
-2025-03-19 11:34:48 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
-2025-03-19 11:34:54 - Checking if CS2 is running...
-2025-03-19 11:34:54 - CS2 is already running. Window activated.
-2025-03-19 11:34:56 - Processing map: Sigma
-2025-03-19 11:34:56 - Selecting map: Sigma
-2025-03-19 11:34:59 - Clicking Play button at coordinates: 985,30
-2025-03-19 11:35:00 - Selecting matchmaking mode at coordinates: 813,85
-2025-03-19 11:35:02 - Selecting casual league at coordinates: 906,130
-2025-03-19 11:35:03 - Selecting Sigma map at coordinates: 380,430
-2025-03-19 11:35:05 - Clicking Accept Match at coordinates: 1690,1030
-2025-03-19 11:35:06 - Screenshot captured to clipboard
-2025-03-19 11:35:06 - Map selection sequence completed for: Sigma
-2025-03-19 11:35:06 - Waiting for match outcome (success or failure)...
-2025-03-19 11:35:06 - Cancel search button area color: 0x363230
-2025-03-19 11:35:06 - Spectate button color: 0x71220D
-2025-03-19 11:35:06 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:06 - Dialog center color: 0x406F89
-2025-03-19 11:35:06 - OK button color: 0x262F36
-2025-03-19 11:35:06 - Left border color: 0x502F2F
-2025-03-19 11:35:06 - Right border color: 0x282E35
-2025-03-19 11:35:08 - CS2 window is no longer active
-2025-03-19 11:35:10 - Cancel search button area color: 0x363230
-2025-03-19 11:35:10 - Spectate button color: 0x77230F
-2025-03-19 11:35:10 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:10 - Dialog center color: 0x406F89
-2025-03-19 11:35:10 - OK button color: 0x252E35
-2025-03-19 11:35:10 - Left border color: 0x502F2F
-2025-03-19 11:35:10 - Right border color: 0x20282F
-2025-03-19 11:35:12 - Cancel search button area color: 0x363230
-2025-03-19 11:35:12 - Spectate button color: 0x71220D
-2025-03-19 11:35:12 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:12 - Dialog center color: 0x406F89
-2025-03-19 11:35:12 - OK button color: 0x1F2931
-2025-03-19 11:35:12 - Left border color: 0x502F2F
-2025-03-19 11:35:12 - Right border color: 0x25292F
-2025-03-19 11:35:14 - Cancel search button area color: 0x363230
-2025-03-19 11:35:14 - Spectate button color: 0x70210D
-2025-03-19 11:35:14 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:14 - Dialog center color: 0x406F89
-2025-03-19 11:35:14 - OK button color: 0x202931
-2025-03-19 11:35:14 - Left border color: 0x502F2F
-2025-03-19 11:35:14 - Right border color: 0x24282F
-2025-03-19 11:35:16 - Cancel search button area color: 0x363230
-2025-03-19 11:35:16 - Spectate button color: 0x77230F
-2025-03-19 11:35:16 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:16 - Dialog center color: 0x406F89
-2025-03-19 11:35:16 - OK button color: 0x242B32
-2025-03-19 11:35:16 - Left border color: 0x502F2F
-2025-03-19 11:35:16 - Right border color: 0x25292F
-2025-03-19 11:35:18 - Cancel search button area color: 0x363230
-2025-03-19 11:35:18 - Spectate button color: 0x70210D
-2025-03-19 11:35:18 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:18 - Dialog center color: 0x406F89
-2025-03-19 11:35:18 - OK button color: 0x2B2E34
-2025-03-19 11:35:18 - Left border color: 0x502F2F
-2025-03-19 11:35:18 - Right border color: 0x27292F
-2025-03-19 11:35:20 - Cancel search button area color: 0x181615
-2025-03-19 11:35:20 - Spectate button color: 0x390C03
-2025-03-19 11:35:20 - Checking for matchmaking failure dialog...
-2025-03-19 11:35:20 - Dialog center color: 0x114314
-2025-03-19 11:35:20 - OK button color: 0xC7AE90
-2025-03-19 11:35:20 - Left border color: 0x271414
-2025-03-19 11:35:20 - Right border color: 0x0C2D0D
-2025-03-19 11:35:20 - Title area color: 0x104617
-2025-03-19 11:35:20 - Detected matchmaking failure dialog with high confidence
-2025-03-19 11:35:20 - Clicking OK button at 877,458
-2025-03-19 11:35:21 - Screenshot captured to clipboard
-2025-03-19 11:35:21 - Matchmaking failure detected and handled
-2025-03-19 11:35:21 - Match outcome for Sigma: failure
-2025-03-19 11:35:21 - Failed to join Sigma match.
-2025-03-19 11:35:21 - Map cycle completed
-2025-03-19 11:36:12 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-19 12:12:07 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-19 12:13:40 - === CS2 Automation Script Started ===
+2025-03-19 12:13:40 - AHK Version: 2.0.19
+2025-03-19 12:13:40 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-19 12:13:40 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-19 12:13:40 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-19 12:13:40 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-19 12:13:42 - Checking if CS2 is running...
+2025-03-19 12:13:42 - CS2 is already running. Window activated.
+2025-03-19 12:13:44 - Processing map: Sigma
+2025-03-19 12:13:44 - Selecting map: Sigma
+2025-03-19 12:13:47 - Clicking Play button at coordinates: 985,30
+2025-03-19 12:13:48 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-19 12:13:50 - Selecting casual league at coordinates: 906,130
+2025-03-19 12:13:51 - Selecting Sigma map at coordinates: 380,430
+2025-03-19 12:13:53 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-19 12:13:54 - Screenshot captured to clipboard
+2025-03-19 12:13:54 - Map selection sequence completed for: Sigma
+2025-03-19 12:13:54 - Waiting briefly after map selection...
+2025-03-19 12:13:59 - Starting match outcome detection for: Sigma
+2025-03-19 12:13:59 - Maximum wait time: 180 seconds
+2025-03-19 12:13:59 - Waiting for match outcome (success or failure)...
+2025-03-19 12:13:59 - CS2 window is no longer active
+2025-03-19 12:14:01 - Taking detection screenshot (check #1)...
+2025-03-19 12:14:01 - Screenshot captured to clipboard
+2025-03-19 12:14:01 - Cancel search button area color: 0x363230
+2025-03-19 12:14:01 - No longer searching - waiting for transition...
+2025-03-19 12:14:03 - Checking for spectate button...
+2025-03-19 12:14:03 - Spectate button color at (1636,1027): 0x878785
+2025-03-19 12:14:03 - Performing wider scan for SPECTATE button...
+2025-03-19 12:14:03 - Checking bottom-right area of screen...
+2025-03-19 12:14:03 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:14:04 - Screen area analysis results: 10.743801652892563% light, 89.256198347107443% dark, 0.0% red, from 121 samples
+2025-03-19 12:14:04 - Checking for matchmaking failure dialog...
+2025-03-19 12:14:04 - Dialog center color: 0x0C0C0C
+2025-03-19 12:14:04 - OK button color: 0x0C0C0C
+2025-03-19 12:14:04 - Left border color: 0x0C0C0C
+2025-03-19 12:14:04 - Right border color: 0x0C0C0C
+2025-03-19 12:14:04 - Title area color: 0x0C0C0C
+2025-03-19 12:14:05 - CS2 window is no longer active
+2025-03-19 12:14:06 - Taking detection screenshot (check #2)...
+2025-03-19 12:14:06 - Screenshot captured to clipboard
+2025-03-19 12:14:06 - Cancel search button area color: 0x363230
+2025-03-19 12:14:06 - No longer searching - waiting for transition...
+2025-03-19 12:14:08 - Checking for spectate button...
+2025-03-19 12:14:08 - Spectate button color at (1636,1027): 0x752119
+2025-03-19 12:14:08 - Performing wider scan for SPECTATE button...
+2025-03-19 12:14:09 - Checking bottom-right area of screen...
+2025-03-19 12:14:09 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:14:09 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:14:09 - Checking for matchmaking failure dialog...
+2025-03-19 12:14:09 - Dialog center color: 0x114211
+2025-03-19 12:14:09 - OK button color: 0x28397E
+2025-03-19 12:14:09 - Left border color: 0x171C23
+2025-03-19 12:14:09 - Right border color: 0x072D08
+2025-03-19 12:14:09 - Title area color: 0x0F3C0E
+2025-03-19 12:14:10 - Taking detection screenshot (check #3)...
+2025-03-19 12:14:10 - Screenshot captured to clipboard
+2025-03-19 12:14:10 - Cancel search button area color: 0x181615
+2025-03-19 12:14:10 - No longer searching - waiting for transition...
+2025-03-19 12:14:12 - Checking for spectate button...
+2025-03-19 12:14:12 - Spectate button color at (1636,1027): 0x3D2B19
+2025-03-19 12:14:12 - Performing wider scan for SPECTATE button...
+2025-03-19 12:14:13 - Found light-colored pixel at offset (0,-20): 0xCCCCCC
+2025-03-19 12:14:13 - Detected SPECTATE button with good contrast at: 1636,1007
+2025-03-19 12:14:13 - Screenshot captured to clipboard
+2025-03-19 12:14:13 - Successfully joined match!
+2025-03-19 12:14:13 - Clicking spectator button at 1636,1027
+2025-03-19 12:14:14 - Screenshot captured to clipboard
+2025-03-19 12:14:14 - Match outcome for Sigma: success
+2025-03-19 12:14:14 - Successfully joined Sigma match!
+2025-03-19 12:14:14 - Processing match...
+2025-03-19 12:14:19 - Viewing player list...
+2025-03-19 12:14:19 - Pressing Tab to view scoreboard...
+2025-03-19 12:14:21 - Taking screenshot of player list...
+2025-03-19 12:14:21 - Screenshot captured to clipboard
+2025-03-19 12:14:21 - Returning to main menu...
+2025-03-19 12:14:24 - Screenshot captured to clipboard
+2025-03-19 12:14:27 - Match processing completed
+2025-03-19 12:14:27 - Finished with Sigma match
+2025-03-19 12:14:27 - Map cycle completed
+2025-03-19 12:14:37 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-19 12:15:15 - === CS2 Automation Script Started ===
+2025-03-19 12:15:15 - AHK Version: 2.0.19
+2025-03-19 12:15:15 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-19 12:15:15 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-19 12:15:15 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-19 12:15:15 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-19 12:15:17 - Checking if CS2 is running...
+2025-03-19 12:15:17 - CS2 is already running. Window activated.
+2025-03-19 12:15:19 - Processing map: Sigma
+2025-03-19 12:15:19 - Selecting map: Sigma
+2025-03-19 12:15:21 - Clicking Play button at coordinates: 985,30
+2025-03-19 12:15:23 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-19 12:15:24 - Selecting casual league at coordinates: 906,130
+2025-03-19 12:15:26 - Selecting Sigma map at coordinates: 380,430
+2025-03-19 12:15:27 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-19 12:15:29 - Screenshot captured to clipboard
+2025-03-19 12:15:29 - Map selection sequence completed for: Sigma
+2025-03-19 12:15:29 - Waiting briefly after map selection...
+2025-03-19 12:15:33 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-19 12:16:09 - === CS2 Automation Script Started ===
+2025-03-19 12:16:09 - AHK Version: 2.0.19
+2025-03-19 12:16:09 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-19 12:16:09 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-19 12:16:09 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-19 12:16:09 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-19 12:16:10 - Checking if CS2 is running...
+2025-03-19 12:16:10 - CS2 is already running. Window activated.
+2025-03-19 12:16:12 - Processing map: Sigma
+2025-03-19 12:16:12 - Selecting map: Sigma
+2025-03-19 12:16:15 - Clicking Play button at coordinates: 985,30
+2025-03-19 12:16:16 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-19 12:16:18 - Selecting casual league at coordinates: 906,130
+2025-03-19 12:16:19 - Selecting Sigma map at coordinates: 380,430
+2025-03-19 12:16:21 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-19 12:16:22 - Screenshot captured to clipboard
+2025-03-19 12:16:22 - Map selection sequence completed for: Sigma
+2025-03-19 12:16:22 - Waiting briefly after map selection...
+2025-03-19 12:16:27 - Starting match outcome detection for: Sigma
+2025-03-19 12:16:27 - Maximum wait time: 180 seconds
+2025-03-19 12:16:27 - Waiting for match outcome (success or failure)...
+2025-03-19 12:16:27 - CS2 window is no longer active
+2025-03-19 12:16:29 - Taking detection screenshot (check #1)...
+2025-03-19 12:16:29 - Screenshot captured to clipboard
+2025-03-19 12:16:29 - Cancel search button area color: 0x363230
+2025-03-19 12:16:29 - No longer searching - waiting for transition...
+2025-03-19 12:16:31 - Checking for spectate button...
+2025-03-19 12:16:31 - Spectate button color at (1636,1027): 0xFFFFFF
+2025-03-19 12:16:31 - Detected possible SPECTATE text with light color
+2025-03-19 12:16:31 - Camera icon color at (1596,1033): 0xFFFFFF
+2025-03-19 12:16:31 - CONFIRMED: Detected both SPECTATE text and camera icon
+2025-03-19 12:16:31 - Screenshot captured to clipboard
+2025-03-19 12:16:31 - Successfully joined match!
+2025-03-19 12:16:31 - Clicking spectator button at 1636,1027
+2025-03-19 12:16:32 - Screenshot captured to clipboard
+2025-03-19 12:16:32 - Match outcome for Sigma: success
+2025-03-19 12:16:32 - Successfully joined Sigma match!
+2025-03-19 12:16:32 - Processing match...
+2025-03-19 12:16:37 - Viewing player list...
+2025-03-19 12:16:38 - Pressing Tab to view scoreboard...
+2025-03-19 12:16:40 - Taking screenshot of player list...
+2025-03-19 12:16:40 - Screenshot captured to clipboard
+2025-03-19 12:16:41 - Returning to main menu...
+2025-03-19 12:16:44 - Screenshot captured to clipboard
+2025-03-19 12:16:47 - Match processing completed
+2025-03-19 12:16:47 - Finished with Sigma match
+2025-03-19 12:16:47 - Map cycle completed
+2025-03-19 12:17:39 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-19 12:55:11 - === CS2 Automation Script Started ===
+2025-03-19 12:55:11 - AHK Version: 2.0.19
+2025-03-19 12:55:11 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-19 12:55:11 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-19 12:55:11 - Screenshots Directory: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots
+2025-03-19 12:55:11 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-19 12:55:11 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-19 12:55:11 - Spectator Button Coordinates: 1636,1027
+2025-03-19 12:55:11 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:11 - PowerShell fallback also failed
+2025-03-19 12:55:11 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125511_startup_1.png
+2025-03-19 12:55:11 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125511_startup_1.png
+2025-03-19 12:55:20 - Checking if CS2 is running...
+2025-03-19 12:55:20 - CS2 is already running. Window activated.
+2025-03-19 12:55:22 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:22 - PowerShell fallback also failed
+2025-03-19 12:55:22 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125522_cs2_running_2.png
+2025-03-19 12:55:22 - CS2 running screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125522_cs2_running_2.png
+2025-03-19 12:55:22 - Processing map: Sigma
+2025-03-19 12:55:22 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:22 - PowerShell fallback also failed
+2025-03-19 12:55:22 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125522_before_map_selection_3.png
+2025-03-19 12:55:22 - Before map selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125522_before_map_selection_3.png
+2025-03-19 12:55:22 - Selecting map: Sigma
+2025-03-19 12:55:22 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:22 - PowerShell fallback also failed
+2025-03-19 12:55:22 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125522_map_select_start_4.png
+2025-03-19 12:55:22 - Map selection start screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125522_map_select_start_4.png
+2025-03-19 12:55:24 - Clicking Play button at coordinates: 985,30
+2025-03-19 12:55:26 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:26 - PowerShell fallback also failed
+2025-03-19 12:55:26 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125526_play_button_click_5.png
+2025-03-19 12:55:26 - Play button click screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125526_play_button_click_5.png
+2025-03-19 12:55:26 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-19 12:55:27 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:27 - PowerShell fallback also failed
+2025-03-19 12:55:27 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125527_mode_selection_6.png
+2025-03-19 12:55:27 - Mode selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125527_mode_selection_6.png
+2025-03-19 12:55:27 - Selecting casual league at coordinates: 906,130
+2025-03-19 12:55:29 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:29 - PowerShell fallback also failed
+2025-03-19 12:55:29 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125529_league_selection_7.png
+2025-03-19 12:55:29 - League selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125529_league_selection_7.png
+2025-03-19 12:55:29 - Selecting Sigma map at coordinates: 380,430
+2025-03-19 12:55:31 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:31 - PowerShell fallback also failed
+2025-03-19 12:55:31 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125531_map_click_8.png
+2025-03-19 12:55:31 - Map click screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125531_map_click_8.png
+2025-03-19 12:55:31 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-19 12:55:32 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:32 - PowerShell fallback also failed
+2025-03-19 12:55:32 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125532_accept_match_9.png
+2025-03-19 12:55:32 - Accept match screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125532_accept_match_9.png
+2025-03-19 12:55:32 - Map selection sequence completed for: Sigma
+2025-03-19 12:55:32 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:32 - PowerShell fallback also failed
+2025-03-19 12:55:32 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125532_after_map_selection_10.png
+2025-03-19 12:55:32 - After map selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125532_after_map_selection_10.png
+2025-03-19 12:55:32 - Waiting briefly after map selection...
+2025-03-19 12:55:37 - Starting match outcome detection for: Sigma
+2025-03-19 12:55:37 - Maximum wait time: 180 seconds
+2025-03-19 12:55:37 - Using spectator button coordinates: 1636,1027
+2025-03-19 12:55:37 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:37 - PowerShell fallback also failed
+2025-03-19 12:55:37 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125537_waiting_for_match_11.png
+2025-03-19 12:55:37 - Waiting for match screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125537_waiting_for_match_11.png
+2025-03-19 12:55:37 - Waiting for match outcome (success or failure)...
+2025-03-19 12:55:37 - CS2 window is no longer active
+2025-03-19 12:55:38 - Taking detection screenshot (check #1)...
+2025-03-19 12:55:38 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:38 - PowerShell fallback also failed
+2025-03-19 12:55:38 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125538_generic_12.png
+2025-03-19 12:55:38 - Cancel search button area color: 0x222025
+2025-03-19 12:55:38 - No longer searching - waiting for transition...
+2025-03-19 12:55:40 - Checking for spectate button...
+2025-03-19 12:55:40 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:40 - PowerShell fallback also failed
+2025-03-19 12:55:40 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125540_spectate_check_start_13.png
+2025-03-19 12:55:40 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125540_spectate_check_start_13.png
+2025-03-19 12:55:41 - Spectate button color: Pixel at (1636,1027) = 0x131316
+2025-03-19 12:55:41 - Performing wider scan for SPECTATE button...
+2025-03-19 12:55:41 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:41 - PowerShell fallback also failed
+2025-03-19 12:55:41 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125541_spectate_wider_scan_14.png
+2025-03-19 12:55:41 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125541_spectate_wider_scan_14.png
+2025-03-19 12:55:41 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x141519
+2025-03-19 12:55:41 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x141418
+2025-03-19 12:55:41 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x121316
+2025-03-19 12:55:41 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x111216
+2025-03-19 12:55:41 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x0F1012
+2025-03-19 12:55:41 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x111317
+2025-03-19 12:55:41 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x101216
+2025-03-19 12:55:41 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x121216
+2025-03-19 12:55:41 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x131417
+2025-03-19 12:55:41 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x101013
+2025-03-19 12:55:41 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x15161A
+2025-03-19 12:55:41 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x151518
+2025-03-19 12:55:41 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x131316
+2025-03-19 12:55:41 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x121215
+2025-03-19 12:55:41 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x0E0E10
+2025-03-19 12:55:41 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x141619
+2025-03-19 12:55:41 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x18181C
+2025-03-19 12:55:41 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x131519
+2025-03-19 12:55:41 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x111214
+2025-03-19 12:55:41 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x0D0E11
+2025-03-19 12:55:41 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x15171B
+2025-03-19 12:55:41 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x121418
+2025-03-19 12:55:41 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x101216
+2025-03-19 12:55:41 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x0E0F12
+2025-03-19 12:55:41 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x101114
+2025-03-19 12:55:41 - Checking bottom-right area of screen...
+2025-03-19 12:55:41 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:55:42 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:55:42 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 12:55:42 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:42 - PowerShell fallback also failed
+2025-03-19 12:55:42 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125542_spectate_check_failed_15.png
+2025-03-19 12:55:42 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125542_spectate_check_failed_15.png
+2025-03-19 12:55:42 - Checking for matchmaking failure dialog...
+2025-03-19 12:55:42 - Dialog center color: 0x16181D
+2025-03-19 12:55:42 - OK button color: 0x171416
+2025-03-19 12:55:42 - Left border color: 0x20242A
+2025-03-19 12:55:42 - Right border color: 0x141417
+2025-03-19 12:55:42 - Title area color: 0x18181A
+2025-03-19 12:55:43 - CS2 window is no longer active
+2025-03-19 12:55:44 - Taking detection screenshot (check #2)...
+2025-03-19 12:55:44 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:44 - PowerShell fallback also failed
+2025-03-19 12:55:44 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125544_generic_16.png
+2025-03-19 12:55:44 - Cancel search button area color: 0x54515E
+2025-03-19 12:55:44 - No longer searching - waiting for transition...
+2025-03-19 12:55:46 - Checking for spectate button...
+2025-03-19 12:55:46 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:46 - PowerShell fallback also failed
+2025-03-19 12:55:46 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125546_spectate_check_start_17.png
+2025-03-19 12:55:46 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125546_spectate_check_start_17.png
+2025-03-19 12:55:46 - Spectate button color: Pixel at (1636,1027) = 0x131316
+2025-03-19 12:55:46 - Performing wider scan for SPECTATE button...
+2025-03-19 12:55:46 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:46 - PowerShell fallback also failed
+2025-03-19 12:55:46 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125546_spectate_wider_scan_18.png
+2025-03-19 12:55:46 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125546_spectate_wider_scan_18.png
+2025-03-19 12:55:46 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x141519
+2025-03-19 12:55:46 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x141418
+2025-03-19 12:55:46 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x121316
+2025-03-19 12:55:46 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x111216
+2025-03-19 12:55:46 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x0F1012
+2025-03-19 12:55:46 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x111317
+2025-03-19 12:55:46 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x101216
+2025-03-19 12:55:46 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x121216
+2025-03-19 12:55:46 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x131417
+2025-03-19 12:55:46 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x101013
+2025-03-19 12:55:46 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x15161A
+2025-03-19 12:55:46 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x151518
+2025-03-19 12:55:46 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x131316
+2025-03-19 12:55:46 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x121215
+2025-03-19 12:55:46 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x0E0E10
+2025-03-19 12:55:46 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x141619
+2025-03-19 12:55:46 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x18181C
+2025-03-19 12:55:46 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x131519
+2025-03-19 12:55:46 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x111214
+2025-03-19 12:55:46 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x0D0E11
+2025-03-19 12:55:46 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x15171B
+2025-03-19 12:55:46 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x121418
+2025-03-19 12:55:46 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x101216
+2025-03-19 12:55:46 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x0E0F12
+2025-03-19 12:55:46 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x101114
+2025-03-19 12:55:46 - Checking bottom-right area of screen...
+2025-03-19 12:55:46 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:55:47 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:55:47 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 12:55:47 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:47 - PowerShell fallback also failed
+2025-03-19 12:55:47 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125547_spectate_check_failed_19.png
+2025-03-19 12:55:47 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125547_spectate_check_failed_19.png
+2025-03-19 12:55:47 - Checking for matchmaking failure dialog...
+2025-03-19 12:55:47 - Dialog center color: 0x16181D
+2025-03-19 12:55:47 - OK button color: 0x0B0C0C
+2025-03-19 12:55:47 - Left border color: 0x20242A
+2025-03-19 12:55:47 - Right border color: 0x141418
+2025-03-19 12:55:47 - Title area color: 0x16171B
+2025-03-19 12:55:48 - CS2 window is no longer active
+2025-03-19 12:55:49 - Taking detection screenshot (check #3)...
+2025-03-19 12:55:49 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:49 - PowerShell fallback also failed
+2025-03-19 12:55:49 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125549_generic_20.png
+2025-03-19 12:55:49 - Cancel search button area color: 0x5D5862
+2025-03-19 12:55:49 - No longer searching - waiting for transition...
+2025-03-19 12:55:51 - Checking for spectate button...
+2025-03-19 12:55:51 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:51 - PowerShell fallback also failed
+2025-03-19 12:55:52 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125551_spectate_check_start_21.png
+2025-03-19 12:55:52 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125551_spectate_check_start_21.png
+2025-03-19 12:55:52 - Spectate button color: Pixel at (1636,1027) = 0x141517
+2025-03-19 12:55:52 - Performing wider scan for SPECTATE button...
+2025-03-19 12:55:52 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:52 - PowerShell fallback also failed
+2025-03-19 12:55:52 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125552_spectate_wider_scan_22.png
+2025-03-19 12:55:52 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125552_spectate_wider_scan_22.png
+2025-03-19 12:55:52 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x141519
+2025-03-19 12:55:52 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x141418
+2025-03-19 12:55:52 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x121316
+2025-03-19 12:55:52 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x111216
+2025-03-19 12:55:52 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x0F1012
+2025-03-19 12:55:52 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x111317
+2025-03-19 12:55:52 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x101216
+2025-03-19 12:55:52 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x121216
+2025-03-19 12:55:52 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x131417
+2025-03-19 12:55:52 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x101013
+2025-03-19 12:55:52 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x15161A
+2025-03-19 12:55:52 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x151518
+2025-03-19 12:55:52 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x141517
+2025-03-19 12:55:52 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x111215
+2025-03-19 12:55:52 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x0E0E10
+2025-03-19 12:55:52 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x141619
+2025-03-19 12:55:52 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x18181C
+2025-03-19 12:55:52 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x131519
+2025-03-19 12:55:52 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x131316
+2025-03-19 12:55:52 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x0D0E11
+2025-03-19 12:55:52 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x15171B
+2025-03-19 12:55:52 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x121418
+2025-03-19 12:55:52 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x101216
+2025-03-19 12:55:52 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x0E0F12
+2025-03-19 12:55:52 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x101114
+2025-03-19 12:55:52 - Checking bottom-right area of screen...
+2025-03-19 12:55:52 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:55:53 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:55:53 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 12:55:53 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:53 - PowerShell fallback also failed
+2025-03-19 12:55:53 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125553_spectate_check_failed_23.png
+2025-03-19 12:55:53 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125553_spectate_check_failed_23.png
+2025-03-19 12:55:53 - Checking for matchmaking failure dialog...
+2025-03-19 12:55:53 - Dialog center color: 0x16181D
+2025-03-19 12:55:53 - OK button color: 0x0F1112
+2025-03-19 12:55:53 - Left border color: 0x20242A
+2025-03-19 12:55:53 - Right border color: 0x141418
+2025-03-19 12:55:53 - Title area color: 0x16171B
+2025-03-19 12:55:54 - CS2 window is no longer active
+2025-03-19 12:55:55 - Taking detection screenshot (check #4)...
+2025-03-19 12:55:55 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:55 - PowerShell fallback also failed
+2025-03-19 12:55:55 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125555_generic_24.png
+2025-03-19 12:55:55 - Cancel search button area color: 0x54505C
+2025-03-19 12:55:55 - No longer searching - waiting for transition...
+2025-03-19 12:55:57 - Checking for spectate button...
+2025-03-19 12:55:57 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:57 - PowerShell fallback also failed
+2025-03-19 12:55:57 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125557_spectate_check_start_25.png
+2025-03-19 12:55:57 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125557_spectate_check_start_25.png
+2025-03-19 12:55:57 - Spectate button color: Pixel at (1636,1027) = 0x131316
+2025-03-19 12:55:57 - Performing wider scan for SPECTATE button...
+2025-03-19 12:55:57 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:57 - PowerShell fallback also failed
+2025-03-19 12:55:57 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125557_spectate_wider_scan_26.png
+2025-03-19 12:55:57 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125557_spectate_wider_scan_26.png
+2025-03-19 12:55:57 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x141519
+2025-03-19 12:55:57 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x141418
+2025-03-19 12:55:57 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x121316
+2025-03-19 12:55:57 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x111216
+2025-03-19 12:55:57 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x0F1012
+2025-03-19 12:55:57 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x111317
+2025-03-19 12:55:57 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x101216
+2025-03-19 12:55:57 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x121216
+2025-03-19 12:55:57 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x131417
+2025-03-19 12:55:57 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x101013
+2025-03-19 12:55:57 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x15161A
+2025-03-19 12:55:57 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x151518
+2025-03-19 12:55:57 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x131316
+2025-03-19 12:55:57 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x111215
+2025-03-19 12:55:57 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x0E0E10
+2025-03-19 12:55:57 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x141619
+2025-03-19 12:55:57 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x18181C
+2025-03-19 12:55:57 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x131519
+2025-03-19 12:55:57 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x111214
+2025-03-19 12:55:57 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x0D0E11
+2025-03-19 12:55:57 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x15171B
+2025-03-19 12:55:57 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x121418
+2025-03-19 12:55:57 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x101216
+2025-03-19 12:55:57 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x0E0F12
+2025-03-19 12:55:57 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x101114
+2025-03-19 12:55:57 - Checking bottom-right area of screen...
+2025-03-19 12:55:57 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:55:58 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:55:58 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 12:55:58 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:55:58 - PowerShell fallback also failed
+2025-03-19 12:55:58 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125558_spectate_check_failed_27.png
+2025-03-19 12:55:58 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125558_spectate_check_failed_27.png
+2025-03-19 12:55:58 - Checking for matchmaking failure dialog...
+2025-03-19 12:55:58 - Dialog center color: 0x16181D
+2025-03-19 12:55:58 - OK button color: 0x090A09
+2025-03-19 12:55:58 - Left border color: 0x20242A
+2025-03-19 12:55:58 - Right border color: 0x2C3441
+2025-03-19 12:55:58 - Title area color: 0x302F31
+2025-03-19 12:55:59 - CS2 window is no longer active
+2025-03-19 12:56:00 - Taking detection screenshot (check #5)...
+2025-03-19 12:56:00 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:00 - PowerShell fallback also failed
+2025-03-19 12:56:00 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125600_generic_28.png
+2025-03-19 12:56:00 - Cancel search button area color: 0x57535F
+2025-03-19 12:56:01 - Checking for spectate button...
+2025-03-19 12:56:01 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:01 - PowerShell fallback also failed
+2025-03-19 12:56:01 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125601_spectate_check_start_29.png
+2025-03-19 12:56:01 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125601_spectate_check_start_29.png
+2025-03-19 12:56:01 - Spectate button color: Pixel at (1636,1027) = 0x2F3037
+2025-03-19 12:56:01 - Performing wider scan for SPECTATE button...
+2025-03-19 12:56:01 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:01 - PowerShell fallback also failed
+2025-03-19 12:56:01 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125601_spectate_wider_scan_30.png
+2025-03-19 12:56:01 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125601_spectate_wider_scan_30.png
+2025-03-19 12:56:01 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x32353E
+2025-03-19 12:56:01 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x33323C
+2025-03-19 12:56:01 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x2C3037
+2025-03-19 12:56:01 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x2B2E37
+2025-03-19 12:56:01 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x26282E
+2025-03-19 12:56:01 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x2B303A
+2025-03-19 12:56:01 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x292D36
+2025-03-19 12:56:01 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x2C2E36
+2025-03-19 12:56:01 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x2F3139
+2025-03-19 12:56:01 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x28292F
+2025-03-19 12:56:01 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x343841
+2025-03-19 12:56:01 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x34353D
+2025-03-19 12:56:01 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x2F3037
+2025-03-19 12:56:01 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x2B2D35
+2025-03-19 12:56:01 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x222429
+2025-03-19 12:56:01 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x33373F
+2025-03-19 12:56:01 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x3C3D47
+2025-03-19 12:56:01 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x30343E
+2025-03-19 12:56:01 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x2B2C31
+2025-03-19 12:56:01 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x21232A
+2025-03-19 12:56:01 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x353A44
+2025-03-19 12:56:01 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x2C303A
+2025-03-19 12:56:01 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x282C34
+2025-03-19 12:56:01 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x202229
+2025-03-19 12:56:01 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x21242A
+2025-03-19 12:56:01 - Checking bottom-right area of screen...
+2025-03-19 12:56:01 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:56:02 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:56:02 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 12:56:02 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:02 - PowerShell fallback also failed
+2025-03-19 12:56:02 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125602_spectate_check_failed_31.png
+2025-03-19 12:56:02 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125602_spectate_check_failed_31.png
+2025-03-19 12:56:02 - Checking for matchmaking failure dialog...
+2025-03-19 12:56:02 - Dialog center color: 0x16181D
+2025-03-19 12:56:02 - OK button color: 0x0E0F0E
+2025-03-19 12:56:02 - Left border color: 0x20242A
+2025-03-19 12:56:02 - Right border color: 0x1E1F24
+2025-03-19 12:56:02 - Title area color: 0x1D2126
+2025-03-19 12:56:03 - CS2 window is no longer active
+2025-03-19 12:56:04 - Cancel search button area color: 0x575462
+2025-03-19 12:56:04 - Checking for spectate button...
+2025-03-19 12:56:04 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:04 - PowerShell fallback also failed
+2025-03-19 12:56:04 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125604_spectate_check_start_32.png
+2025-03-19 12:56:04 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125604_spectate_check_start_32.png
+2025-03-19 12:56:04 - Spectate button color: Pixel at (1636,1027) = 0x2F3036
+2025-03-19 12:56:04 - Performing wider scan for SPECTATE button...
+2025-03-19 12:56:04 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:04 - PowerShell fallback also failed
+2025-03-19 12:56:04 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125604_spectate_wider_scan_33.png
+2025-03-19 12:56:04 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125604_spectate_wider_scan_33.png
+2025-03-19 12:56:04 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x32353E
+2025-03-19 12:56:04 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x33323C
+2025-03-19 12:56:04 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x2C3037
+2025-03-19 12:56:04 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x2B2E37
+2025-03-19 12:56:04 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x26282E
+2025-03-19 12:56:04 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x2B303A
+2025-03-19 12:56:04 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x292D36
+2025-03-19 12:56:04 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x2C2E36
+2025-03-19 12:56:04 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x2F3139
+2025-03-19 12:56:04 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x28292F
+2025-03-19 12:56:04 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x343841
+2025-03-19 12:56:04 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x34353D
+2025-03-19 12:56:04 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x2F3037
+2025-03-19 12:56:04 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x2C2D35
+2025-03-19 12:56:04 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x222429
+2025-03-19 12:56:04 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x33373F
+2025-03-19 12:56:04 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x3C3D47
+2025-03-19 12:56:04 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x30343E
+2025-03-19 12:56:04 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x2B2C31
+2025-03-19 12:56:04 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x21232A
+2025-03-19 12:56:04 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x353A44
+2025-03-19 12:56:04 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x2E323C
+2025-03-19 12:56:04 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x292E36
+2025-03-19 12:56:04 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x23262D
+2025-03-19 12:56:04 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x272A31
+2025-03-19 12:56:04 - Checking bottom-right area of screen...
+2025-03-19 12:56:04 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 12:56:05 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 12:56:05 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 12:56:05 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 12:56:05 - PowerShell fallback also failed
+2025-03-19 12:56:05 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125605_spectate_check_failed_34.png
+2025-03-19 12:56:05 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_125605_spectate_check_failed_34.png
+2025-03-19 12:56:05 - Checking for matchmaking failure dialog...
+2025-03-19 12:56:05 - Dialog center color: 0x16181D
+2025-03-19 12:56:05 - OK button color: 0x242325
+2025-03-19 12:56:05 - Left border color: 0x20242A
+2025-03-19 12:56:05 - Right border color: 0x202126
+2025-03-19 12:56:05 - Title area color: 0x303035
+2025-03-19 12:56:06 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-19 15:06:31 - === CS2 Automation Script Started ===
+2025-03-19 15:06:31 - AHK Version: 2.0.19
+2025-03-19 15:06:31 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-19 15:06:31 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-19 15:06:31 - Screenshots Directory: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots
+2025-03-19 15:06:31 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-19 15:06:31 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-19 15:06:32 - Spectator Button Coordinates: 1636,1027
+2025-03-19 15:06:32 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:32 - PowerShell fallback also failed
+2025-03-19 15:06:32 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150632_startup_1.png
+2025-03-19 15:06:32 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150632_startup_1.png
+2025-03-19 15:06:33 - Checking if CS2 is running...
+2025-03-19 15:06:33 - CS2 is already running. Window activated.
+2025-03-19 15:06:35 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:35 - PowerShell fallback also failed
+2025-03-19 15:06:35 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150635_cs2_running_2.png
+2025-03-19 15:06:35 - CS2 running screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150635_cs2_running_2.png
+2025-03-19 15:06:35 - Processing map: Sigma
+2025-03-19 15:06:35 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:35 - PowerShell fallback also failed
+2025-03-19 15:06:36 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150635_before_map_selection_3.png
+2025-03-19 15:06:36 - Before map selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150635_before_map_selection_3.png
+2025-03-19 15:06:36 - Selecting map: Sigma
+2025-03-19 15:06:36 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:36 - PowerShell fallback also failed
+2025-03-19 15:06:36 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150636_map_select_start_4.png
+2025-03-19 15:06:36 - Map selection start screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150636_map_select_start_4.png
+2025-03-19 15:06:38 - Clicking Play button at coordinates: 985,30
+2025-03-19 15:06:39 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:39 - PowerShell fallback also failed
+2025-03-19 15:06:39 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150639_play_button_click_5.png
+2025-03-19 15:06:39 - Play button click screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150639_play_button_click_5.png
+2025-03-19 15:06:39 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-19 15:06:41 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:41 - PowerShell fallback also failed
+2025-03-19 15:06:41 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150641_mode_selection_6.png
+2025-03-19 15:06:41 - Mode selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150641_mode_selection_6.png
+2025-03-19 15:06:41 - Selecting casual league at coordinates: 906,130
+2025-03-19 15:06:42 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:42 - PowerShell fallback also failed
+2025-03-19 15:06:42 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150642_league_selection_7.png
+2025-03-19 15:06:42 - League selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150642_league_selection_7.png
+2025-03-19 15:06:42 - Selecting Sigma map at coordinates: 380,430
+2025-03-19 15:06:44 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:44 - PowerShell fallback also failed
+2025-03-19 15:06:44 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150644_map_click_8.png
+2025-03-19 15:06:44 - Map click screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150644_map_click_8.png
+2025-03-19 15:06:44 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-19 15:06:45 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:45 - PowerShell fallback also failed
+2025-03-19 15:06:45 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150645_accept_match_9.png
+2025-03-19 15:06:45 - Accept match screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150645_accept_match_9.png
+2025-03-19 15:06:45 - Map selection sequence completed for: Sigma
+2025-03-19 15:06:45 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:45 - PowerShell fallback also failed
+2025-03-19 15:06:45 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150645_after_map_selection_10.png
+2025-03-19 15:06:45 - After map selection screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150645_after_map_selection_10.png
+2025-03-19 15:06:45 - Waiting briefly after map selection...
+2025-03-19 15:06:51 - Starting match outcome detection for: Sigma
+2025-03-19 15:06:51 - Maximum wait time: 180 seconds
+2025-03-19 15:06:51 - Using spectator button coordinates: 1636,1027
+2025-03-19 15:06:51 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:51 - PowerShell fallback also failed
+2025-03-19 15:06:51 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150651_waiting_for_match_11.png
+2025-03-19 15:06:51 - Waiting for match screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150651_waiting_for_match_11.png
+2025-03-19 15:06:51 - Waiting for match outcome (success or failure)...
+2025-03-19 15:06:51 - CS2 window is no longer active
+2025-03-19 15:06:52 - Taking detection screenshot (check #1)...
+2025-03-19 15:06:52 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:52 - PowerShell fallback also failed
+2025-03-19 15:06:52 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150652_generic_12.png
+2025-03-19 15:06:52 - Cancel search button area color: 0x22242C
+2025-03-19 15:06:52 - No longer searching - waiting for transition...
+2025-03-19 15:06:54 - Checking for spectate button...
+2025-03-19 15:06:54 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:54 - PowerShell fallback also failed
+2025-03-19 15:06:54 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150654_spectate_check_start_13.png
+2025-03-19 15:06:54 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150654_spectate_check_start_13.png
+2025-03-19 15:06:54 - Spectate button color: Pixel at (1636,1027) = 0x1C202B
+2025-03-19 15:06:54 - Performing wider scan for SPECTATE button...
+2025-03-19 15:06:54 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:54 - PowerShell fallback also failed
+2025-03-19 15:06:54 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150654_spectate_wider_scan_14.png
+2025-03-19 15:06:54 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150654_spectate_wider_scan_14.png
+2025-03-19 15:06:54 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x1C202B
+2025-03-19 15:06:54 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x1D2026
+2025-03-19 15:06:55 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x1F2228
+2025-03-19 15:06:55 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x212025
+2025-03-19 15:06:55 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x212025
+2025-03-19 15:06:55 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x242025
+2025-03-19 15:06:55 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x252126
+2025-03-19 15:06:55 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x221F25
+2025-03-19 15:06:55 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x1B181D
+2025-03-19 15:06:55 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x1C202B
+2025-03-19 15:06:55 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x3E3C40
+2025-03-19 15:06:55 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x1C1920
+2025-03-19 15:06:55 - Checking bottom-right area of screen...
+2025-03-19 15:06:55 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 15:06:56 - Screen area analysis results: 0.0% light, 99.173553719008268% dark, 0.0% red, from 121 samples
+2025-03-19 15:06:56 - Bottom-right area analysis: Light: 0.0%, Dark: 99.173553719008268%, Red: 0.0%
+2025-03-19 15:06:56 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:56 - PowerShell fallback also failed
+2025-03-19 15:06:56 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150656_spectate_check_failed_15.png
+2025-03-19 15:06:56 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150656_spectate_check_failed_15.png
+2025-03-19 15:06:56 - Checking for matchmaking failure dialog...
+2025-03-19 15:06:56 - Dialog center color: 0x000000
+2025-03-19 15:06:56 - OK button color: 0x636262
+2025-03-19 15:06:56 - Left border color: 0x090A0E
+2025-03-19 15:06:56 - Right border color: 0x000000
+2025-03-19 15:06:56 - Title area color: 0x000000
+2025-03-19 15:06:57 - CS2 window is no longer active
+2025-03-19 15:06:59 - Taking detection screenshot (check #2)...
+2025-03-19 15:06:59 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:06:59 - PowerShell fallback also failed
+2025-03-19 15:06:59 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150659_generic_16.png
+2025-03-19 15:06:59 - Cancel search button area color: 0x22242C
+2025-03-19 15:06:59 - No longer searching - waiting for transition...
+2025-03-19 15:07:01 - Checking for spectate button...
+2025-03-19 15:07:01 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:01 - PowerShell fallback also failed
+2025-03-19 15:07:01 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150701_spectate_check_start_17.png
+2025-03-19 15:07:01 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150701_spectate_check_start_17.png
+2025-03-19 15:07:01 - Spectate button color: Pixel at (1636,1027) = 0x1C202B
+2025-03-19 15:07:01 - Performing wider scan for SPECTATE button...
+2025-03-19 15:07:01 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:01 - PowerShell fallback also failed
+2025-03-19 15:07:01 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150701_spectate_wider_scan_18.png
+2025-03-19 15:07:01 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150701_spectate_wider_scan_18.png
+2025-03-19 15:07:01 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x1D2026
+2025-03-19 15:07:01 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x1F2228
+2025-03-19 15:07:01 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x212025
+2025-03-19 15:07:01 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x212025
+2025-03-19 15:07:01 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x242025
+2025-03-19 15:07:01 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x252126
+2025-03-19 15:07:01 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x3E3C3F
+2025-03-19 15:07:01 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x1B181D
+2025-03-19 15:07:01 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x1C202B
+2025-03-19 15:07:01 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x3E3C40
+2025-03-19 15:07:01 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x1C1920
+2025-03-19 15:07:01 - Checking bottom-right area of screen...
+2025-03-19 15:07:01 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 15:07:02 - Screen area analysis results: 0.0% light, 99.173553719008268% dark, 0.0% red, from 121 samples
+2025-03-19 15:07:02 - Bottom-right area analysis: Light: 0.0%, Dark: 99.173553719008268%, Red: 0.0%
+2025-03-19 15:07:02 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:02 - PowerShell fallback also failed
+2025-03-19 15:07:02 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150702_spectate_check_failed_19.png
+2025-03-19 15:07:02 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150702_spectate_check_failed_19.png
+2025-03-19 15:07:02 - Checking for matchmaking failure dialog...
+2025-03-19 15:07:02 - Dialog center color: 0x000000
+2025-03-19 15:07:02 - OK button color: 0x636262
+2025-03-19 15:07:02 - Left border color: 0x090A0E
+2025-03-19 15:07:02 - Right border color: 0x000000
+2025-03-19 15:07:02 - Title area color: 0x000000
+2025-03-19 15:07:03 - CS2 window is no longer active
+2025-03-19 15:07:05 - Taking detection screenshot (check #3)...
+2025-03-19 15:07:05 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:05 - PowerShell fallback also failed
+2025-03-19 15:07:05 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150705_generic_20.png
+2025-03-19 15:07:05 - Cancel search button area color: 0x22232C
+2025-03-19 15:07:05 - No longer searching - waiting for transition...
+2025-03-19 15:07:07 - Checking for spectate button...
+2025-03-19 15:07:07 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:07 - PowerShell fallback also failed
+2025-03-19 15:07:07 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150707_spectate_check_start_21.png
+2025-03-19 15:07:07 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150707_spectate_check_start_21.png
+2025-03-19 15:07:07 - Spectate button color: Pixel at (1636,1027) = 0x1C202B
+2025-03-19 15:07:07 - Performing wider scan for SPECTATE button...
+2025-03-19 15:07:07 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:07 - PowerShell fallback also failed
+2025-03-19 15:07:07 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150707_spectate_wider_scan_22.png
+2025-03-19 15:07:07 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150707_spectate_wider_scan_22.png
+2025-03-19 15:07:07 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x1D2026
+2025-03-19 15:07:07 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x1F2228
+2025-03-19 15:07:07 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x212025
+2025-03-19 15:07:07 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x212025
+2025-03-19 15:07:07 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x242025
+2025-03-19 15:07:07 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x252126
+2025-03-19 15:07:07 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x221F25
+2025-03-19 15:07:07 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x1B181D
+2025-03-19 15:07:07 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x1C202B
+2025-03-19 15:07:07 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x3E3C40
+2025-03-19 15:07:07 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x1C1920
+2025-03-19 15:07:07 - Checking bottom-right area of screen...
+2025-03-19 15:07:07 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 15:07:08 - Screen area analysis results: 0.0% light, 99.173553719008268% dark, 0.0% red, from 121 samples
+2025-03-19 15:07:08 - Bottom-right area analysis: Light: 0.0%, Dark: 99.173553719008268%, Red: 0.0%
+2025-03-19 15:07:08 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:08 - PowerShell fallback also failed
+2025-03-19 15:07:08 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150708_spectate_check_failed_23.png
+2025-03-19 15:07:08 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150708_spectate_check_failed_23.png
+2025-03-19 15:07:08 - Checking for matchmaking failure dialog...
+2025-03-19 15:07:08 - Dialog center color: 0x000000
+2025-03-19 15:07:08 - OK button color: 0x636262
+2025-03-19 15:07:08 - Left border color: 0x090A0E
+2025-03-19 15:07:08 - Right border color: 0x000000
+2025-03-19 15:07:08 - Title area color: 0x000000
+2025-03-19 15:07:09 - CS2 window is no longer active
+2025-03-19 15:07:11 - Taking detection screenshot (check #4)...
+2025-03-19 15:07:11 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:11 - PowerShell fallback also failed
+2025-03-19 15:07:11 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150711_generic_24.png
+2025-03-19 15:07:11 - Cancel search button area color: 0x22232C
+2025-03-19 15:07:11 - No longer searching - waiting for transition...
+2025-03-19 15:07:13 - Checking for spectate button...
+2025-03-19 15:07:13 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:13 - PowerShell fallback also failed
+2025-03-19 15:07:13 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150713_spectate_check_start_25.png
+2025-03-19 15:07:13 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150713_spectate_check_start_25.png
+2025-03-19 15:07:13 - Spectate button color: Pixel at (1636,1027) = 0x2D152B
+2025-03-19 15:07:13 - Performing wider scan for SPECTATE button...
+2025-03-19 15:07:13 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:13 - PowerShell fallback also failed
+2025-03-19 15:07:13 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150713_spectate_wider_scan_26.png
+2025-03-19 15:07:13 - Wider scan screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150713_spectate_wider_scan_26.png
+2025-03-19 15:07:13 - Scan point at offset (-50,-20): Pixel at (1586,1007) = 0x0D0D15
+2025-03-19 15:07:13 - Scan point at offset (-50,-10): Pixel at (1586,1017) = 0x0B0B13
+2025-03-19 15:07:13 - Scan point at offset (-50,0): Pixel at (1586,1027) = 0x0C0C14
+2025-03-19 15:07:13 - Scan point at offset (-50,10): Pixel at (1586,1037) = 0x1C2028
+2025-03-19 15:07:13 - Scan point at offset (-50,20): Pixel at (1586,1047) = 0x1E222A
+2025-03-19 15:07:13 - Scan point at offset (-25,-20): Pixel at (1611,1007) = 0x160E1B
+2025-03-19 15:07:13 - Scan point at offset (-25,-10): Pixel at (1611,1017) = 0x120C16
+2025-03-19 15:07:13 - Scan point at offset (-25,0): Pixel at (1611,1027) = 0x0C0B11
+2025-03-19 15:07:13 - Scan point at offset (-25,10): Pixel at (1611,1037) = 0x212026
+2025-03-19 15:07:13 - Scan point at offset (-25,20): Pixel at (1611,1047) = 0x212026
+2025-03-19 15:07:13 - Scan point at offset (0,-20): Pixel at (1636,1007) = 0x2F1B34
+2025-03-19 15:07:13 - Scan point at offset (0,-10): Pixel at (1636,1017) = 0x29182B
+2025-03-19 15:07:13 - Scan point at offset (0,0): Pixel at (1636,1027) = 0x2D152B
+2025-03-19 15:07:13 - Scan point at offset (0,10): Pixel at (1636,1037) = 0x242026
+2025-03-19 15:07:13 - Scan point at offset (0,20): Pixel at (1636,1047) = 0x262127
+2025-03-19 15:07:13 - Scan point at offset (25,-20): Pixel at (1661,1007) = 0x26172A
+2025-03-19 15:07:13 - Scan point at offset (25,-10): Pixel at (1661,1017) = 0x201324
+2025-03-19 15:07:13 - Scan point at offset (25,0): Pixel at (1661,1027) = 0x170F1C
+2025-03-19 15:07:13 - Scan point at offset (25,10): Pixel at (1661,1037) = 0x231F26
+2025-03-19 15:07:13 - Scan point at offset (25,20): Pixel at (1661,1047) = 0x231F26
+2025-03-19 15:07:13 - Scan point at offset (50,-20): Pixel at (1686,1007) = 0x291D35
+2025-03-19 15:07:13 - Scan point at offset (50,-10): Pixel at (1686,1017) = 0x2B233B
+2025-03-19 15:07:13 - Scan point at offset (50,0): Pixel at (1686,1027) = 0x1F1A30
+2025-03-19 15:07:13 - Scan point at offset (50,10): Pixel at (1686,1037) = 0x231F28
+2025-03-19 15:07:13 - Scan point at offset (50,20): Pixel at (1686,1047) = 0x242029
+2025-03-19 15:07:13 - Checking bottom-right area of screen...
+2025-03-19 15:07:13 - Analyzing screen area from 1150,750 to 1350,800
+2025-03-19 15:07:14 - Screen area analysis results: 0.0% light, 100.0% dark, 0.0% red, from 121 samples
+2025-03-19 15:07:14 - Bottom-right area analysis: Light: 0.0%, Dark: 100.0%, Red: 0.0%
+2025-03-19 15:07:14 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:14 - PowerShell fallback also failed
+2025-03-19 15:07:14 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150714_spectate_check_failed_27.png
+2025-03-19 15:07:14 - Not found screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150714_spectate_check_failed_27.png
+2025-03-19 15:07:14 - Checking for matchmaking failure dialog...
+2025-03-19 15:07:14 - Dialog center color: 0x1F3245
+2025-03-19 15:07:14 - OK button color: 0x060001
+2025-03-19 15:07:14 - Left border color: 0x060509
+2025-03-19 15:07:14 - Right border color: 0x265E7A
+2025-03-19 15:07:15 - CS2 window is no longer active
+2025-03-19 15:07:17 - Taking detection screenshot (check #5)...
+2025-03-19 15:07:17 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:17 - PowerShell fallback also failed
+2025-03-19 15:07:17 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150717_generic_28.png
+2025-03-19 15:07:17 - Cancel search button area color: 0x22242D
+2025-03-19 15:07:17 - Checking for spectate button...
+2025-03-19 15:07:17 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:17 - PowerShell fallback also failed
+2025-03-19 15:07:17 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150717_spectate_check_start_29.png
+2025-03-19 15:07:17 - Initial screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150717_spectate_check_start_29.png
+2025-03-19 15:07:17 - Spectate button color: Pixel at (1636,1027) = 0xFFFFFF
+2025-03-19 15:07:17 - Detected possible SPECTATE text with light color
+2025-03-19 15:07:17 - Camera icon color: Pixel at (1596,1033) = 0xFFFFFF
+2025-03-19 15:07:17 - CONFIRMED: Detected both SPECTATE text and camera icon
+2025-03-19 15:07:17 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:17 - PowerShell fallback also failed
+2025-03-19 15:07:17 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150717_spectate_confirmed_30.png
+2025-03-19 15:07:17 - Confirmation screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150717_spectate_confirmed_30.png
+2025-03-19 15:07:17 - Successfully joined match!
+2025-03-19 15:07:17 - Clicking spectator button at 1636,1027
+2025-03-19 15:07:18 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:18 - PowerShell fallback also failed
+2025-03-19 15:07:18 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150718_generic_31.png
+2025-03-19 15:07:18 - Match outcome for Sigma: success
+2025-03-19 15:07:18 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:18 - PowerShell fallback also failed
+2025-03-19 15:07:18 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150718_match_outcome_success_32.png
+2025-03-19 15:07:18 - Match outcome screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150718_match_outcome_success_32.png
+2025-03-19 15:07:18 - Successfully joined Sigma match!
+2025-03-19 15:07:18 - Processing match...
+2025-03-19 15:07:23 - Viewing player list...
+2025-03-19 15:07:25 - Pressing Tab to view scoreboard...
+2025-03-19 15:07:27 - Taking screenshot of player list...
+2025-03-19 15:07:27 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:27 - PowerShell fallback also failed
+2025-03-19 15:07:27 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150727_generic_33.png
+2025-03-19 15:07:28 - Returning to main menu...
+2025-03-19 15:07:31 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:31 - PowerShell fallback also failed
+2025-03-19 15:07:31 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150731_generic_34.png
+2025-03-19 15:07:34 - Match processing completed
+2025-03-19 15:07:34 - Finished with Sigma match
+2025-03-19 15:07:34 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:34 - PowerShell fallback also failed
+2025-03-19 15:07:34 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150734_match_completed_35.png
+2025-03-19 15:07:34 - Match completed screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150734_match_completed_35.png
+2025-03-19 15:07:34 - Map cycle completed
+2025-03-19 15:07:34 - Error saving screenshot to file: This local variable has not been assigned a value.
+2025-03-19 15:07:34 - PowerShell fallback also failed
+2025-03-19 15:07:34 - Screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150734_cycle_completed_36.png
+2025-03-19 15:07:34 - Cycle completion screenshot saved: C:\Users\vania\OneDrive\Документы\AutoHotkey\screenshots\20250319_150734_cycle_completed_36.png
+2025-03-20 16:35:55 - === CS2 Automation Script Started ===
+2025-03-20 16:35:55 - AHK Version: 2.0.19
+2025-03-20 16:35:55 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-20 16:35:55 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-20 16:35:55 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-20 16:35:55 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-20 16:35:57 - Checking if CS2 is running...
+2025-03-20 16:35:57 - CS2 is already running. Window activated.
+2025-03-20 16:36:00 - Processing map: Sigma
+2025-03-20 16:36:00 - Selecting map: Sigma
+2025-03-20 16:36:02 - Clicking Play button at coordinates: 985,30
+2025-03-20 16:36:03 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-20 16:36:05 - Selecting casual league at coordinates: 906,130
+2025-03-20 16:36:06 - Selecting Sigma map at coordinates: 380,430
+2025-03-20 16:36:08 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-20 16:36:09 - Screenshot captured to clipboard
+2025-03-20 16:36:09 - Map selection sequence completed for: Sigma
+2025-03-20 16:36:09 - Waiting for match outcome (success or failure)...
+2025-03-20 16:36:10 - Cancel search button area color: 0x363230
+2025-03-20 16:36:10 - Spectate button color: 0xDB4538
+2025-03-20 16:36:10 - Checking for matchmaking failure dialog...
+2025-03-20 16:36:10 - Dialog center color: 0x3A434E
+2025-03-20 16:36:10 - OK button color: 0x222A32
+2025-03-20 16:36:10 - Left border color: 0x343D49
+2025-03-20 16:36:10 - Right border color: 0x261E1A
+2025-03-20 16:36:12 - CS2 window is no longer active
+2025-03-20 16:36:13 - Cancel search button area color: 0x363230
+2025-03-20 16:36:13 - Spectate button color: 0xDB4538
+2025-03-20 16:36:13 - Checking for matchmaking failure dialog...
+2025-03-20 16:36:13 - Dialog center color: 0x3A434E
+2025-03-20 16:36:13 - OK button color: 0x222A31
+2025-03-20 16:36:13 - Left border color: 0x343D49
+2025-03-20 16:36:13 - Right border color: 0x261E1A
+2025-03-20 16:36:15 - Cancel search button area color: 0x363230
+2025-03-20 16:36:15 - Spectate button color: 0xDB4538
+2025-03-20 16:36:15 - Checking for matchmaking failure dialog...
+2025-03-20 16:36:15 - Dialog center color: 0x3A434E
+2025-03-20 16:36:15 - OK button color: 0x222A31
+2025-03-20 16:36:15 - Left border color: 0x343D49
+2025-03-20 16:36:15 - Right border color: 0x292424
+2025-03-20 16:36:17 - Cancel search button area color: 0x363230
+2025-03-20 16:36:17 - Spectate button color: 0xDB4538
+2025-03-20 16:36:17 - Checking for matchmaking failure dialog...
+2025-03-20 16:36:17 - Dialog center color: 0x3A434E
+2025-03-20 16:36:17 - OK button color: 0x1B2831
+2025-03-20 16:36:17 - Left border color: 0x343D49
+2025-03-20 16:36:17 - Right border color: 0x292423
+2025-03-20 16:36:19 - Cancel search button area color: 0x363230
+2025-03-20 16:36:19 - Spectate button color: 0xDB4538
+2025-03-20 16:36:19 - Checking for matchmaking failure dialog...
+2025-03-20 16:36:19 - Dialog center color: 0x3A434E
+2025-03-20 16:36:19 - OK button color: 0x35383E
+2025-03-20 16:36:19 - Left border color: 0x343D49
+2025-03-20 16:36:19 - Right border color: 0x2D2826
+2025-03-20 16:36:21 - Cancel search button area color: 0x181615
+2025-03-20 16:36:21 - Spectate button color: 0x752119
+2025-03-20 16:36:21 - Checking for matchmaking failure dialog...
+2025-03-20 16:36:21 - Dialog center color: 0x2E5C34
+2025-03-20 16:36:21 - OK button color: 0xF2EFEF
+2025-03-20 16:36:21 - Left border color: 0x171C23
+2025-03-20 16:36:21 - Right border color: 0x2A3015
+2025-03-20 16:36:21 - Title area color: 0x1D5831
+2025-03-20 16:36:21 - Detected matchmaking failure dialog with high confidence
+2025-03-20 16:36:21 - Clicking OK button at 877,458
+2025-03-20 16:36:22 - Screenshot captured to clipboard
+2025-03-20 16:36:22 - Matchmaking failure detected and handled
+2025-03-20 16:36:22 - Match outcome for Sigma: failure
+2025-03-20 16:36:22 - Failed to join Sigma match.
+2025-03-20 16:36:23 - Map cycle completed
+2025-03-20 16:37:09 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-21 08:58:14 - === CS2 Automation Script Started ===
+2025-03-21 08:58:14 - AHK Version: 2.0.19
+2025-03-21 08:58:14 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-21 08:58:14 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-21 08:58:14 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-21 08:58:14 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-21 08:58:16 - Checking if CS2 is running...
+2025-03-21 08:58:16 - CS2 is already running. Window activated.
+2025-03-21 08:58:18 - Processing map: Sigma
+2025-03-21 08:58:18 - Selecting map: Sigma
+2025-03-21 08:58:20 - Clicking Play button at coordinates: 985,30
+2025-03-21 08:58:22 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-21 08:58:23 - Selecting casual league at coordinates: 906,130
+2025-03-21 08:58:25 - Selecting Sigma map at coordinates: 380,430
+2025-03-21 08:58:26 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-21 08:58:28 - Screenshot captured to clipboard
+2025-03-21 08:58:28 - Map selection sequence completed for: Sigma
+2025-03-21 08:58:28 - Waiting for match outcome (success or failure)...
+2025-03-21 08:58:28 - Match detection timeout set to 180.0 seconds
+2025-03-21 08:58:28 - Cancel search button area color: 0x363230
+2025-03-21 08:58:28 - Camera icon color: 0xDB4538
+2025-03-21 08:58:28 - SPECTATE text color: 0x521F0F
+2025-03-21 08:58:28 - Taking Steam screenshot with F12
+2025-03-21 08:58:28 - Also trying Windows screenshot methods
+2025-03-21 08:58:29 - Checking for matchmaking failure dialog...
+2025-03-21 08:58:29 - Dialog center color: 0x3A434E
+2025-03-21 08:58:29 - OK button color: 0x1F2A32
+2025-03-21 08:58:29 - Left border color: 0x323B46
+2025-03-21 08:58:29 - Right border color: 0x272221
+2025-03-21 08:58:31 - CS2 window is no longer active
+2025-03-21 08:58:32 - Cancel search button area color: 0x363230
+2025-03-21 08:58:32 - Camera icon color: 0xDB4538
+2025-03-21 08:58:32 - SPECTATE text color: 0x531F0F
+2025-03-21 08:58:32 - Taking Steam screenshot with F12
+2025-03-21 08:58:32 - Also trying Windows screenshot methods
+2025-03-21 08:58:33 - Checking for matchmaking failure dialog...
+2025-03-21 08:58:33 - Dialog center color: 0x3A434E
+2025-03-21 08:58:33 - OK button color: 0x1B2830
+2025-03-21 08:58:33 - Left border color: 0x343D49
+2025-03-21 08:58:33 - Right border color: 0x251D1A
+2025-03-21 08:58:35 - Cancel search button area color: 0x161413
+2025-03-21 08:58:35 - Camera icon color: 0x581C16
+2025-03-21 08:58:35 - SPECTATE text color: 0x200C06
+2025-03-21 08:58:35 - Taking Steam screenshot with F12
+2025-03-21 08:58:35 - Also trying Windows screenshot methods
+2025-03-21 08:58:36 - Checking for matchmaking failure dialog...
+2025-03-21 08:58:36 - Dialog center color: 0x171B1F
+2025-03-21 08:58:36 - OK button color: 0x0B1013
+2025-03-21 08:58:36 - Left border color: 0x15181D
+2025-03-21 08:58:36 - Right border color: 0x0F0C0A
+2025-03-21 08:58:36 - Title area color: 0x0A0C0D
+2025-03-21 08:58:38 - CS2 window is no longer active
+2025-03-21 08:58:39 - Cancel search button area color: 0x363230
+2025-03-21 08:58:39 - Camera icon color: 0xDB4538
+2025-03-21 08:58:39 - SPECTATE text color: 0x511F0E
+2025-03-21 08:58:39 - Taking Steam screenshot with F12
+2025-03-21 08:58:39 - Also trying Windows screenshot methods
+2025-03-21 08:58:40 - Checking for matchmaking failure dialog...
+2025-03-21 08:58:40 - Dialog center color: 0x3A434E
+2025-03-21 08:58:40 - OK button color: 0x2B2F34
+2025-03-21 08:58:40 - Left border color: 0x343D49
+2025-03-21 08:58:40 - Right border color: 0x291F1A
+2025-03-21 08:58:42 - Still waiting for match outcome... 13.936999999999999 seconds elapsed
+2025-03-21 08:58:42 - Cancel search button area color: 0x161413
+2025-03-21 08:58:42 - Camera icon color: 0x581C16
+2025-03-21 08:58:42 - SPECTATE text color: 0x250D07
+2025-03-21 08:58:42 - Taking Steam screenshot with F12
+2025-03-21 08:58:42 - Also trying Windows screenshot methods
+2025-03-21 08:58:42 - Checking for matchmaking failure dialog...
+2025-03-21 08:58:43 - Dialog center color: 0x171B1F
+2025-03-21 08:58:43 - OK button color: 0x111315
+2025-03-21 08:58:43 - Left border color: 0x15181D
+2025-03-21 08:58:43 - Right border color: 0x100C0A
+2025-03-21 08:58:43 - Title area color: 0x0A0C0D
+2025-03-21 08:58:45 - CS2 window is no longer active
+2025-03-21 08:58:46 - Cancel search button area color: 0x181615
+2025-03-21 08:58:46 - Camera icon color: 0x752119
+2025-03-21 08:58:46 - SPECTATE text color: 0x2D0C04
+2025-03-21 08:58:46 - Taking Steam screenshot with F12
+2025-03-21 08:58:46 - Also trying Windows screenshot methods
+2025-03-21 08:58:47 - Checking for matchmaking failure dialog...
+2025-03-21 08:58:47 - Dialog center color: 0x2B5031
+2025-03-21 08:58:47 - OK button color: 0xF2EFEF
+2025-03-21 08:58:47 - Left border color: 0x171C23
+2025-03-21 08:58:47 - Right border color: 0x2B3516
+2025-03-21 08:58:47 - Title area color: 0x18442D
+2025-03-21 08:58:47 - Detected matchmaking failure dialog with high confidence
+2025-03-21 08:58:47 - Clicking OK button at 877,458
+2025-03-21 08:58:48 - Screenshot captured to clipboard
+2025-03-21 08:58:48 - Matchmaking failure detected and handled
+2025-03-21 08:58:48 - Match outcome for Sigma: failure
+2025-03-21 08:58:48 - Failed to join Sigma match.
+2025-03-21 08:58:48 - Map cycle completed
+2025-03-21 08:59:28 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-21 10:12:25 - === CS2 Automation Script Started ===
+2025-03-21 10:12:25 - AHK Version: 2.0.19
+2025-03-21 10:12:25 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-21 10:12:25 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-21 10:12:25 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-21 10:12:25 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-21 10:12:29 - Checking if CS2 is running...
+2025-03-21 10:12:29 - CS2 is already running. Window activated.
+2025-03-21 10:12:31 - Processing map: Sigma
+2025-03-21 10:12:31 - Selecting map: Sigma
+2025-03-21 10:12:33 - Clicking Play button at coordinates: 985,30
+2025-03-21 10:12:35 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-21 10:12:36 - Selecting casual league at coordinates: 906,130
+2025-03-21 10:12:38 - Selecting Sigma map at coordinates: 380,430
+2025-03-21 10:12:39 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-21 10:12:41 - Screenshot captured to clipboard
+2025-03-21 10:12:41 - Map selection sequence completed for: Sigma
+2025-03-21 10:12:41 - Waiting for match outcome (success or failure)...
+2025-03-21 10:12:41 - Match detection timeout set to 180.0 seconds
+2025-03-21 10:12:41 - Cancel search button area color: 0x363230
+2025-03-21 10:12:41 - Camera icon color: 0xDB4538
+2025-03-21 10:12:41 - SPECTATE text color: 0x511F0E
+2025-03-21 10:12:41 - Taking Steam screenshot with F12
+2025-03-21 10:12:41 - Also trying Windows screenshot methods
+2025-03-21 10:12:42 - Checking for matchmaking failure dialog...
+2025-03-21 10:12:42 - Dialog center color: 0x272B2A
+2025-03-21 10:12:42 - OK button color: 0x0C1114
+2025-03-21 10:12:42 - Left border color: 0x202424
+2025-03-21 10:12:42 - Right border color: 0x0F1214
+2025-03-21 10:12:42 - Title area color: 0x1F2422
+2025-03-21 10:12:44 - CS2 window is no longer active
+2025-03-21 10:12:45 - Cancel search button area color: 0x363230
+2025-03-21 10:12:45 - Camera icon color: 0xDB4538
+2025-03-21 10:12:45 - SPECTATE text color: 0x511F0E
+2025-03-21 10:12:45 - Taking Steam screenshot with F12
+2025-03-21 10:12:45 - Also trying Windows screenshot methods
+2025-03-21 10:12:46 - Checking for matchmaking failure dialog...
+2025-03-21 10:12:46 - Dialog center color: 0x626B69
+2025-03-21 10:12:46 - OK button color: 0x222A31
+2025-03-21 10:12:46 - Left border color: 0x4F5B59
+2025-03-21 10:12:46 - Right border color: 0x24292F
+2025-03-21 10:12:48 - Cancel search button area color: 0x161413
+2025-03-21 10:12:48 - Camera icon color: 0x581C16
+2025-03-21 10:12:48 - SPECTATE text color: 0x200C06
+2025-03-21 10:12:48 - Taking Steam screenshot with F12
+2025-03-21 10:12:48 - Also trying Windows screenshot methods
+2025-03-21 10:12:49 - Checking for matchmaking failure dialog...
+2025-03-21 10:12:49 - Dialog center color: 0x272B2A
+2025-03-21 10:12:49 - OK button color: 0x0E1114
+2025-03-21 10:12:49 - Left border color: 0x202424
+2025-03-21 10:12:49 - Right border color: 0x0F1013
+2025-03-21 10:12:49 - Title area color: 0x1F2422
+2025-03-21 10:12:51 - CS2 window is no longer active
+2025-03-21 10:12:52 - Cancel search button area color: 0x181615
+2025-03-21 10:12:52 - Camera icon color: 0x752119
+2025-03-21 10:12:52 - SPECTATE text color: 0x270B04
+2025-03-21 10:12:52 - Taking Steam screenshot with F12
+2025-03-21 10:12:52 - Also trying Windows screenshot methods
+2025-03-21 10:12:53 - Checking for matchmaking failure dialog...
+2025-03-21 10:12:53 - Dialog center color: 0x134211
+2025-03-21 10:12:53 - OK button color: 0xF2EFEF
+2025-03-21 10:12:53 - Left border color: 0x262D2C
+2025-03-21 10:12:53 - Right border color: 0x28391B
+2025-03-21 10:12:53 - Title area color: 0x264618
+2025-03-21 10:12:53 - Detected matchmaking failure dialog with high confidence
+2025-03-21 10:12:53 - Clicking OK button at 877,458
+2025-03-21 10:12:54 - Screenshot captured to clipboard
+2025-03-21 10:12:54 - Matchmaking failure detected and handled
+2025-03-21 10:12:54 - Match outcome for Sigma: failure
+2025-03-21 10:12:54 - Failed to join Sigma match.
+2025-03-21 10:12:54 - Map cycle completed
+2025-03-21 10:13:28 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***
+2025-03-21 10:34:34 - === CS2 Automation Script Started ===
+2025-03-21 10:34:34 - AHK Version: 2.0.19
+2025-03-21 10:34:34 - Script Path: C:\Program Files\AutoHotkey\v2\LinkHarvester\cs2_automation.ahk
+2025-03-21 10:34:34 - Log File: C:\Users\vania\OneDrive\Документы\AutoHotkey\cs2_automation.log
+2025-03-21 10:34:34 - CS2 Path: D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+2025-03-21 10:34:34 - Steam Path: C:\Program Files (x86)\Steam\steam.exe
+2025-03-21 10:34:36 - Checking if CS2 is running...
+2025-03-21 10:34:36 - CS2 is already running. Window activated.
+2025-03-21 10:34:38 - Processing map: Sigma
+2025-03-21 10:34:38 - Selecting map: Sigma
+2025-03-21 10:34:40 - Clicking Play button at coordinates: 985,30
+2025-03-21 10:34:42 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-21 10:34:43 - Selecting casual league at coordinates: 906,130
+2025-03-21 10:34:45 - Selecting Sigma map at coordinates: 380,430
+2025-03-21 10:34:46 - Clicking Accept Match at coordinates: 1690,1030
+2025-03-21 10:34:48 - Screenshot captured to clipboard
+2025-03-21 10:34:48 - Map selection sequence completed for: Sigma
+2025-03-21 10:34:48 - Map selected, now waiting for match to be found and joined...
+2025-03-21 10:34:48 - Waiting for match outcome (success or failure)...
+2025-03-21 10:34:48 - Match detection timeout set to 600.0 seconds
+2025-03-21 10:34:48 - Cancel search button area color: 0x363230
+2025-03-21 10:34:48 - Match ready text color: 0x2C3137
+2025-03-21 10:34:48 - Top border color: 0x2F353B
+2025-03-21 10:34:48 - Bottom border color: 0x2C2F33
+2025-03-21 10:34:48 - Camera icon color: 0xDB4538
+2025-03-21 10:34:48 - SPECTATE text color: 0x531F0F
+2025-03-21 10:34:48 - Taking Steam screenshot with F12
+2025-03-21 10:34:48 - Also trying Windows screenshot methods
+2025-03-21 10:34:49 - Checking for matchmaking failure dialog...
+2025-03-21 10:34:49 - Dialog center color: 0x201D18
+2025-03-21 10:34:49 - OK button color: 0x0A1014
+2025-03-21 10:34:49 - Left border color: 0x182024
+2025-03-21 10:34:49 - Right border color: 0x111214
+2025-03-21 10:34:49 - Title area color: 0x36291D
+2025-03-21 10:34:51 - CS2 window is no longer active
+2025-03-21 10:34:52 - Cancel search button area color: 0x363230
+2025-03-21 10:34:52 - Match ready text color: 0x303337
+2025-03-21 10:34:52 - Top border color: 0x2F353B
+2025-03-21 10:34:52 - Bottom border color: 0x323134
+2025-03-21 10:34:52 - Camera icon color: 0xDB4538
+2025-03-21 10:34:52 - SPECTATE text color: 0x521F0F
+2025-03-21 10:34:52 - Taking Steam screenshot with F12
+2025-03-21 10:34:53 - Also trying Windows screenshot methods
+2025-03-21 10:34:53 - Checking for matchmaking failure dialog...
+2025-03-21 10:34:53 - Dialog center color: 0x50483D
+2025-03-21 10:34:53 - OK button color: 0x262C33
+2025-03-21 10:34:53 - Left border color: 0x3B505B
+2025-03-21 10:34:53 - Right border color: 0x313033
+2025-03-21 10:34:55 - Cancel search button area color: 0x161413
+2025-03-21 10:34:55 - Match ready text color: 0x131416
+2025-03-21 10:34:55 - Top border color: 0x131518
+2025-03-21 10:34:55 - Bottom border color: 0x141415
+2025-03-21 10:34:55 - Camera icon color: 0x581C16
+2025-03-21 10:34:55 - SPECTATE text color: 0x200C06
+2025-03-21 10:34:55 - Taking Steam screenshot with F12
+2025-03-21 10:34:56 - Also trying Windows screenshot methods
+2025-03-21 10:34:56 - Checking for matchmaking failure dialog...
+2025-03-21 10:34:56 - Dialog center color: 0x201D18
+2025-03-21 10:34:56 - OK button color: 0x0F1214
+2025-03-21 10:34:56 - Left border color: 0x182024
+2025-03-21 10:34:56 - Right border color: 0x131314
+2025-03-21 10:34:56 - Title area color: 0x36291D
+2025-03-21 10:34:58 - CS2 window is no longer active
+2025-03-21 10:34:59 - Cancel search button area color: 0x181615
+2025-03-21 10:34:59 - Match ready text color: 0x0D270B
+2025-03-21 10:34:59 - Top border color: 0x14181B
+2025-03-21 10:34:59 - Bottom border color: 0x052C06
+2025-03-21 10:34:59 - Camera icon color: 0x752119
+2025-03-21 10:34:59 - SPECTATE text color: 0x270B04
+2025-03-21 10:34:59 - Taking Steam screenshot with F12
+2025-03-21 10:35:00 - Also trying Windows screenshot methods
+2025-03-21 10:35:00 - Checking for matchmaking failure dialog...
+2025-03-21 10:35:00 - Dialog center color: 0x50483D
+2025-03-21 10:35:00 - OK button color: 0x14232D
+2025-03-21 10:35:00 - Left border color: 0x3A4F5A
+2025-03-21 10:35:00 - Right border color: 0x26292B
+2025-03-21 10:35:02 - Still waiting for match outcome... 14.093 seconds elapsed
+2025-03-21 10:35:02 - Cancel search button area color: 0x141210
+2025-03-21 10:35:02 - Match ready text color: 0x0E1012
+2025-03-21 10:35:02 - Top border color: 0x0F1012
+2025-03-21 10:35:02 - Bottom border color: 0x101213
+2025-03-21 10:35:02 - Camera icon color: 0x581C16
+2025-03-21 10:35:02 - SPECTATE text color: 0x240D06
+2025-03-21 10:35:02 - Taking Steam screenshot with F12
+2025-03-21 10:35:03 - Also trying Windows screenshot methods
+2025-03-21 10:35:03 - Checking for matchmaking failure dialog...
+2025-03-21 10:35:03 - Dialog center color: 0x201D18
+2025-03-21 10:35:03 - OK button color: 0x080E12
+2025-03-21 10:35:03 - Left border color: 0x182024
+2025-03-21 10:35:03 - Right border color: 0x101112
+2025-03-21 10:35:03 - Title area color: 0x36291D
+2025-03-21 10:35:05 - CS2 window is no longer active
+2025-03-21 10:35:06 - Cancel search button area color: 0x817C4C
+2025-03-21 10:35:06 - Match ready text color: 0xB3A89C
+2025-03-21 10:35:06 - Top border color: 0x7DB3DD
+2025-03-21 10:35:06 - Bottom border color: 0xEBDAC8
+2025-03-21 10:35:06 - Camera icon color: 0x977A51
+2025-03-21 10:35:06 - SPECTATE text color: 0x7B6C50
+2025-03-21 10:35:06 - Taking Steam screenshot with F12
+2025-03-21 10:35:07 - Also trying Windows screenshot methods
+2025-03-21 10:35:07 - Detected SPECTATE button by button shape
+2025-03-21 10:35:07 - Successfully joined match!
+2025-03-21 10:35:07 - Clicking spectator button at 1640, 1031
+2025-03-21 10:35:08 - Taking Steam screenshot with F12
+2025-03-21 10:35:08 - Also trying Windows screenshot methods
+2025-03-21 10:35:09 - Match outcome for Sigma: success
+2025-03-21 10:35:09 - Successfully joined Sigma match!
+2025-03-21 10:35:09 - Processing match...
+2025-03-21 10:35:14 - Viewing player list...
+2025-03-21 10:35:15 - Pressing Tab to view scoreboard...
+2025-03-21 10:35:17 - Taking screenshot of player list...
+2025-03-21 10:35:17 - Screenshot captured to clipboard
+2025-03-21 10:35:17 - Returning to main menu...
+2025-03-21 10:35:20 - Screenshot captured to clipboard
+2025-03-21 10:35:23 - Match processing completed
+2025-03-21 10:35:23 - Finished with Sigma match
+2025-03-21 10:35:23 - Map cycle completed
+2025-03-21 10:35:53 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***

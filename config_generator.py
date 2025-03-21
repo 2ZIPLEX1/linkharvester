@@ -25,6 +25,25 @@ config = {
     "spectator_button_x": 1592,
     "spectator_button_y": 1031,
     "spectator_button_color": "E9E8E4",  # without 0x prefix for compatibility
+
+    # Updated spectator button configuration
+    "spectator_button_left_x": 1577,  # Upper-left X
+    "spectator_button_left_y": 1008,  # Upper-left Y
+    "spectator_button_right_x": 1699, # Lower-right X
+    "spectator_button_right_y": 1055, # Lower-right Y
+    "spectator_icon_x": 1586,         # Camera icon X
+    "spectator_icon_y": 1025,         # Camera icon Y
+    "spectator_text_x": 1640,         # Center of SPECTATE text X
+    "spectator_text_y": 1031,         # Center of SPECTATE text Y
+
+    # Screenshot configuration
+    "use_steam_screenshots": True,     # Whether to try F12 Steam screenshots
+    "steam_user_id": "1067368752",     # Your Steam user ID for screenshot path
+    "game_display_mode": "Fullscreen", # Game display mode - "Fullscreen" or "Windowed"
+
+    # Extended timeouts
+    "max_wait_for_match": 180,  # Increased to 3 minutes minimum
+    "spectate_button_check_interval": 2, # Seconds between spectate button checks
     
     # Failure scenario - Error popup
     "error_popup_x": 990,
