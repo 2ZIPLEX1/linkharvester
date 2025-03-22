@@ -101,27 +101,40 @@ EnsureCS2Running() {
 
 ; Launch CS2
 LaunchCS2() {
+    Global CONFIG
+    
+    ; Set default paths if CONFIG doesn't have them
+    cs2_path := "D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe"
+    steam_path := "C:\Program Files (x86)\Steam\steam.exe"
+    
+    ; Use CONFIG values if they exist
+    if (IsObject(CONFIG) && CONFIG.HasOwnProp("cs2_executable"))
+        cs2_path := CONFIG.cs2_executable
+        
+    if (IsObject(CONFIG) && CONFIG.HasOwnProp("steam_executable"))
+        steam_path := CONFIG.steam_executable
+    
     LogMessage("Attempting to launch CS2...")
-    LogMessage("CS2 Executable: " CS2_CONFIG["cs2_executable"])
+    LogMessage("CS2 Executable: " cs2_path)
     
     ; Check if CS2 executable exists
-    if !FileExist(CS2_CONFIG["cs2_executable"]) {
-        LogMessage("Error: CS2 executable not found at: " CS2_CONFIG["cs2_executable"])
-        MsgBox("CS2 executable not found at: " CS2_CONFIG["cs2_executable"] "`n`nPlease update the configuration file.", "Error", "Icon!")
+    if !FileExist(cs2_path) {
+        LogMessage("Error: CS2 executable not found at: " cs2_path)
+        MsgBox("CS2 executable not found at: " cs2_path "`n`nPlease update the configuration file.", "Error", "Icon!")
         return false
     }
     
     ; Check if Steam is running
     If !ProcessExist("steam.exe") {
         LogMessage("Steam not running. Launching Steam...")
-        LogMessage("Steam Executable: " CS2_CONFIG["steam_executable"])
-        Run CS2_CONFIG["steam_executable"]
+        LogMessage("Steam Executable: " steam_path)
+        Run steam_path
         Sleep 10000  ; Wait for Steam to initialize
     }
     
     ; Launch CS2
     LogMessage("Launching CS2...")
-    Run CS2_CONFIG["cs2_executable"]
+    Run cs2_path
     
     ; Wait for CS2 to launch
     try {
@@ -138,20 +151,16 @@ LaunchCS2() {
     return true
 }
 
-; Function to take screenshots without disrupting focus
-CaptureScreenshot(fileName := "") {
+; Simplified screenshot function that only uses Steam's F12
+CaptureScreenshot() {
     try {
-        if (fileName = "") {
-            ; Just use PrintScreen but don't save file
-            Send "{PrintScreen}"
-            LogMessage("Screenshot captured to clipboard")
-        } else {
-            ; TODO: Implement actual file saving if needed
-            LogMessage("Would save screenshot to: " fileName)
-            Send "{PrintScreen}"
-        }
+        LogMessage("Taking Steam screenshot with F12")
+        Send "{F12}"
+        Sleep 500
+        return true
     } catch Error as e {
         LogMessage("Error capturing screenshot: " e.Message)
+        return false
     }
 }
 
@@ -301,67 +310,4 @@ IsSimilarColor(color1, color2, tolerance := 30) {
         LogMessage("Error in IsSimilarColor: " e.Message)
         return false
     }
-}
-
-; Take screenshots based on game's display mode
-
-; Enhanced screenshot function that handles both fullscreen and windowed modes
-CaptureFullscreenScreenshot(fileName := "") {
-    try {
-        ; First, try using Steam's F12 screenshot functionality (works in fullscreen)
-        LogMessage("Taking Steam screenshot with F12")
-        Send "{F12}"
-        Sleep 500
-        
-        ; As a backup, also try Windows screenshot methods
-        LogMessage("Also trying Windows screenshot methods")
-        
-        ; Method 1: Windows PrintScreen (copies to clipboard)
-        Send "{PrintScreen}"
-        Sleep 300
-        
-        ; Method 2: Win+Shift+S (opens snipping tool)
-        ; Only use this as a fallback if we have a specific file to save to
-        if (fileName != "") {
-            LogMessage("Using Win+Shift+S for explicit screenshot capture")
-            Send "#+s"  ; Win+Shift+S
-            Sleep 1000
-            
-            ; Click fullscreen option
-            Click 993, 109  ; Position of fullscreen option
-            Sleep 1000
-        }
-    } catch Error as e {
-        LogMessage("Error capturing screenshot: " e.Message)
-    }
-}
-
-; Check if a file exists in Steam screenshot folder
-CheckForSteamScreenshot() {
-    ; Steam screenshot default location 
-    steamUserID := "1067368752"  ; Your Steam User ID from the screenshot path
-    screenshotDir := "C:\Program Files (x86)\Steam\userdata\" steamUserID "\760\remote\730\screenshots"
-    
-    try {
-        if (DirExist(screenshotDir)) {
-            ; Get the newest file in the directory
-            Loop Files, screenshotDir "\*.jpg" {
-                LogMessage("Found Steam screenshot: " A_LoopFileName)
-                LogMessage("Last modified: " A_LoopFileTimeModified)
-                
-                ; Check if the file was created in the last minute
-                fileAge := A_Now
-                fileAge -= A_LoopFileTimeModified, "Seconds"  ; Correct syntax for AHK v2
-                
-                if (fileAge < 60) {
-                    LogMessage("Recent screenshot found")
-                    return A_LoopFileFullPath
-                }
-            }
-        }
-    } catch Error as e {
-        LogMessage("Error checking Steam screenshots: " e.Message)
-    }
-    
-    return ""
 }

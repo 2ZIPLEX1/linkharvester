@@ -9,7 +9,6 @@
 #Include "CS2_Hotkeys.ahk"
 
 ; Initialize globals and setup
-Global CS2_CONFIG := LoadConfiguration()
 Global LOG_FILE := A_MyDocuments "\AutoHotkey\cs2_automation.log"
 
 ; Make sure log directory exists
@@ -21,30 +20,29 @@ LogMessage("AHK Version: " A_AhkVersion)
 LogMessage("Script Path: " A_ScriptFullPath)
 LogMessage("Log File: " LOG_FILE)
 
-; Map selection coordinates
-; These are the center points of each map card in the selection screen
-Global MAP_COORDINATES := Map(
-    "Sigma", {x: 380, y: 430},
-    "Delta", {x: 650, y: 430},
-    "Dust2", {x: 920, y: 430},
-    "Hostage", {x: 1200, y: 430}
-)
+; Configuration
+Global CONFIG := {
+    wait_between_clicks: 1500,
+    play_button_x: 985,
+    play_button_y: 30,
+    mode_selection_x: 813,
+    mode_selection_y: 85,
+    league_selection_x: 906,
+    league_selection_y: 130,
+    accept_match_x: 1690,
+    accept_match_y: 1030
+}
 
-; Maps to cycle through
-Global MAP_CYCLE := ["Sigma", "Delta", "Dust2", "Hostage"]
-Global CURRENT_MAP_INDEX := 1
+; Map coordinates
+Global MAP_COORDINATES := Map(
+    "Sigma", {x: 380, y: 430}
+)
 
 ; Main function
 Main()
 
 ; Main function
 Main() {
-    Global CS2_CONFIG
-    
-    ; Display important settings
-    LogMessage("CS2 Path: " CS2_CONFIG["cs2_executable"])
-    LogMessage("Steam Path: " CS2_CONFIG["steam_executable"])
-    
     ; Display minimal startup message
     MsgBox("CS2 Automation Starting`n`nHotkeys: Ctrl+Alt+X = Emergency Exit, Ctrl+Alt+P = Pause/Resume`n`nClick OK to begin.", "CS2 Automation", "OK")
     
@@ -54,60 +52,42 @@ Main() {
         return
     }
     
-    ; Begin map cycle
-    RunMapCycle()
+    ; Run automation
+    RunSigmaMatch()
 }
 
-; Update the RunMapCycle function in cs2_automation.ahk
-
-RunMapCycle() {
-    Global CURRENT_MAP_INDEX, MAP_CYCLE, CS2_CONFIG
+RunSigmaMatch() {
+    LogMessage("Starting Sigma match automation")
     
-    ; For the initial testing, just use the first map (Sigma)
-    currentMap := MAP_CYCLE[CURRENT_MAP_INDEX]
-    LogMessage("Processing map: " currentMap)
-    
-    ; Navigate to matchmaking and select the current map
-    if (!SelectMap(currentMap)) {
-        LogMessage("Failed to select map: " currentMap)
+    ; Navigate to matchmaking and select Sigma map
+    if (!SelectMap("Sigma")) {
+        LogMessage("Failed to select Sigma map")
         return
     }
     
     ; Log that we're waiting for match
     LogMessage("Map selected, now waiting for match to be found and joined...")
     
-    ; Increase timeout for waiting - use a much longer timeout
-    ; This needs to be very long since we need to wait through:
-    ; 1. Initial matchmaking search
-    ; 2. "YOUR MATCH IS READY!" screen display
-    ; 3. Loading into server (can take quite a while)
-    ; 4. Finally spectate button appears
-    originalTimeout := CS2_CONFIG["max_wait_for_match"]
-    CS2_CONFIG["max_wait_for_match"] := 600  ; 10 minutes
-    
     ; Wait for match outcome
     matchOutcome := WaitForMatchOutcome()
     
-    ; Reset timeout
-    CS2_CONFIG["max_wait_for_match"] := originalTimeout
-    
-    LogMessage("Match outcome for " currentMap ": " matchOutcome)
+    LogMessage("Match outcome: " matchOutcome)
     
     if (matchOutcome = "success") {
         ; Handle successful match
-        LogMessage("Successfully joined " currentMap " match!")
+        LogMessage("Successfully joined match!")
         
         ; Process the match (view players, etc.)
         ProcessMatch()
         
         ; After match is done
-        LogMessage("Finished with " currentMap " match")
+        LogMessage("Finished with match")
     }
     else if (matchOutcome = "failure" || matchOutcome = "timeout") {
-        LogMessage("Failed to join " currentMap " match: " matchOutcome)
+        LogMessage("Failed to join match: " matchOutcome)
         
         ; Take a final screenshot to help debug
-        CaptureFullscreenScreenshot()
+        CaptureScreenshot()
         
         ; Try to return to main menu to recover
         Send "{Escape}"
@@ -116,14 +96,12 @@ RunMapCycle() {
         Sleep 2000
     }
     
-    LogMessage("Map cycle completed")
+    LogMessage("Automation completed")
     MsgBox("CS2 Automation completed`n`nOutcome: " matchOutcome, "Done", "OK")
 }
 
-; Function to select a specific map
+; Function to select the Sigma map
 SelectMap(mapName) {
-    Global CS2_CONFIG, MAP_COORDINATES
-    
     LogMessage("Selecting map: " mapName)
     
     ; Make sure CS2 is the active window
@@ -131,19 +109,19 @@ SelectMap(mapName) {
     Sleep 2000
     
     ; 1. Press Play button
-    LogMessage("Clicking Play button at coordinates: " CS2_CONFIG["play_button_x"] "," CS2_CONFIG["play_button_y"])
-    Click CS2_CONFIG["play_button_x"], CS2_CONFIG["play_button_y"]
-    Sleep CS2_CONFIG["wait_between_clicks"]
+    LogMessage("Clicking Play button at coordinates: " CONFIG.play_button_x "," CONFIG.play_button_y)
+    Click CONFIG.play_button_x, CONFIG.play_button_y
+    Sleep CONFIG.wait_between_clicks
     
     ; 2. Select Matchmaking mode
-    LogMessage("Selecting matchmaking mode at coordinates: " CS2_CONFIG["mode_selection_x"] "," CS2_CONFIG["mode_selection_y"])
-    Click CS2_CONFIG["mode_selection_x"], CS2_CONFIG["mode_selection_y"]
-    Sleep CS2_CONFIG["wait_between_clicks"]
+    LogMessage("Selecting matchmaking mode at coordinates: " CONFIG.mode_selection_x "," CONFIG.mode_selection_y)
+    Click CONFIG.mode_selection_x, CONFIG.mode_selection_y
+    Sleep CONFIG.wait_between_clicks
     
     ; 3. Select League (Casual)
-    LogMessage("Selecting casual league at coordinates: " CS2_CONFIG["league_selection_x"] "," CS2_CONFIG["league_selection_y"])
-    Click CS2_CONFIG["league_selection_x"], CS2_CONFIG["league_selection_y"]
-    Sleep CS2_CONFIG["wait_between_clicks"]
+    LogMessage("Selecting casual league at coordinates: " CONFIG.league_selection_x "," CONFIG.league_selection_y)
+    Click CONFIG.league_selection_x, CONFIG.league_selection_y
+    Sleep CONFIG.wait_between_clicks
     
     ; 4. Select the specific map
     if (!MAP_COORDINATES.Has(mapName)) {
@@ -154,12 +132,12 @@ SelectMap(mapName) {
     mapCoordinates := MAP_COORDINATES[mapName]
     LogMessage("Selecting " mapName " map at coordinates: " mapCoordinates.x "," mapCoordinates.y)
     Click mapCoordinates.x, mapCoordinates.y
-    Sleep CS2_CONFIG["wait_between_clicks"]
+    Sleep CONFIG.wait_between_clicks
     
     ; 5. Accept/Start Match
-    LogMessage("Clicking Accept Match at coordinates: " CS2_CONFIG["accept_match_x"] "," CS2_CONFIG["accept_match_y"])
-    Click CS2_CONFIG["accept_match_x"], CS2_CONFIG["accept_match_y"]
-    Sleep CS2_CONFIG["wait_between_clicks"]
+    LogMessage("Clicking Accept Match at coordinates: " CONFIG.accept_match_x "," CONFIG.accept_match_y)
+    Click CONFIG.accept_match_x, CONFIG.accept_match_y
+    Sleep CONFIG.wait_between_clicks
     
     ; For debugging, take a screenshot of current state
     CaptureScreenshot()

@@ -1,4 +1,4 @@
-; CS2 Automation - In-Game Module
+; CS2 Automation - Simplified In-Game Module
 ; Handles actions once a match has been successfully joined
 
 ; Process the current match (view players, capture data, etc.)
@@ -10,8 +10,6 @@ ProcessMatch() {
     
     ; View the player list using Tab
     ViewPlayerList()
-    
-    ; Additional in-game processing can be added here
     
     ; Return to main menu using ESC
     ReturnToMainMenu()
@@ -54,8 +52,7 @@ ReturnToMainMenu() {
     Send "{Escape}"
     Sleep 1000
     
-    ; Look for "Abandon Match" or similar button if needed
-    ; For now, just press ESC again to return to main menu
+    ; Press ESC again to return to main menu
     Send "{Escape}"
     Sleep 2000
     
