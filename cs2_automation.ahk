@@ -29,7 +29,7 @@ Global CONFIG := {
     mode_selection_y: 85,
     league_selection_x: 906,
     league_selection_y: 130,
-    accept_match_x: 1690,
+    accept_match_x: 1695,
     accept_match_y: 1030
 }
 
