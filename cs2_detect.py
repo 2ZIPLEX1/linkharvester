@@ -129,25 +129,19 @@ def detect_spectate_button():
         return True, coords
     return False, None
 
-def find_scoreboard_rows():
-    """Find the starting coordinates of player rows for both teams on the scoreboard"""
+def find_ct_player_row():
+    """Find only the CT player row coordinates"""
     try:
         # Get the latest screenshot
         screenshot_path = get_latest_screenshot()
         if not screenshot_path:
-            logging.warning("No recent screenshot found for scoreboard detection")
-            print("DETECTION_RESULT=0")
+            logging.warning("No recent screenshot found for CT detection")
+            print("CT_DETECTION_RESULT=0")
             return
         
-        # Initialize result data and debug image
-        result_data = {"DETECTION_RESULT": "0"}
-        img = cv2.imread(screenshot_path)
-        debug_img = img.copy()
-        
-        # Find CT label in the entire image
+        # Find CT label in the image
         ct_found, ct_coords = detect_template(screenshot_path, "counter-terrorists", 0.80)
         
-        # Process Counter-Terrorists section if found
         if ct_found:
             ct_label_x, ct_label_y = ct_coords
             
@@ -155,89 +149,91 @@ def find_scoreboard_rows():
             ct_first_row_x = 707
             ct_first_row_y = ct_label_y - 86 - 18  # Apply correction offset
             
-            # Draw rectangles on debug image
-            cv2.rectangle(debug_img, (ct_label_x-20, ct_label_y-20), 
-                         (ct_label_x+200, ct_label_y+20), (0, 255, 0), 2)
-            cv2.rectangle(debug_img, (ct_first_row_x-20, ct_first_row_y-13), 
-                         (ct_first_row_x+200, ct_first_row_y+13), (255, 0, 0), 2)
-            
             logging.info(f"COUNTER-TERRORISTS label found at {ct_label_x}, {ct_label_y}")
             logging.info(f"CT first player row at {ct_first_row_x}, {ct_first_row_y} (with correction)")
             
-            result_data["DETECTION_RESULT"] = "1"
-            result_data["CT_LABEL_COORDS"] = f"{ct_label_x},{ct_label_y}"
-            result_data["CT_FIRST_ROW_COORDS"] = f"{ct_first_row_x},{ct_first_row_y}"
-            
-            # Only search for Terrorists label in the lower half of the image after CT label
-            # Create a region mask for the bottom half of the screen
-            height, width = img.shape[:2]
-            lower_bound = ct_label_y + 100  # At least 100px below the CT label
-            
-            # Create a new ROI (Region of Interest) image for T detection
-            if lower_bound < height:
-                # Create ROI from bottom part of the image
-                roi_img = img[lower_bound:height, 0:width]
-                
-                # Save ROI for debugging
-                TEMP_PATH = os.path.join(PROJECT_PATH, 'recognition', 'temp')
-                os.makedirs(TEMP_PATH, exist_ok=True)
-                roi_path = os.path.join(TEMP_PATH, f"t_search_roi_{time.strftime('%Y%m%d-%H%M%S')}.jpg")
-                cv2.imwrite(roi_path, roi_img)
-                
-                # Create a temporary file for the ROI
-                temp_roi_path = os.path.join(TEMP_PATH, "temp_roi.jpg")
-                cv2.imwrite(temp_roi_path, roi_img)
-                
-                # Search for Terrorists label only in the ROI
-                t_found, roi_coords = detect_template(temp_roi_path, "terrorists", 0.75)
-                
-                if t_found:
-                    # Adjust coordinates to original image space
-                    t_label_x, t_label_y = roi_coords
-                    t_label_y += lower_bound  # Add the offset for the ROI
-                    
-                    # Add correction for observed offset (-6px)
-                    t_first_row_x = 707
-                    t_first_row_y = t_label_y - 86 - 6  # Apply correction offset
-                    
-                    # Draw rectangles on debug image
-                    cv2.rectangle(debug_img, (t_label_x-20, t_label_y-20), 
-                                 (t_label_x+200, t_label_y+20), (0, 255, 255), 2)
-                    cv2.rectangle(debug_img, (t_first_row_x-20, t_first_row_y-13), 
-                                 (t_first_row_x+200, t_first_row_y+13), (255, 255, 0), 2)
-                    
-                    logging.info(f"TERRORISTS label found at {t_label_x}, {t_label_y} (after ROI adjustment)")
-                    logging.info(f"T first player row at {t_first_row_x}, {t_first_row_y} (with correction)")
-                    
-                    result_data["T_LABEL_COORDS"] = f"{t_label_x},{t_label_y}"
-                    result_data["T_FIRST_ROW_COORDS"] = f"{t_first_row_x},{t_first_row_y}"
-                else:
-                    logging.warning("Terrorists label not found in ROI")
-            else:
-                logging.warning("Not enough vertical space to search for Terrorists label")
+            # Output ONLY CT information
+            print("CT_DETECTION_RESULT=1")
+            print(f"CT_ROW_X={ct_first_row_x}")
+            print(f"CT_ROW_Y={ct_first_row_y}")
         else:
             logging.warning("Counter-Terrorists label not found")
-        
-        # Save debug image
-        TEMP_PATH = os.path.join(PROJECT_PATH, 'recognition', 'temp')
-        os.makedirs(TEMP_PATH, exist_ok=True)
-        debug_path = os.path.join(TEMP_PATH, f"scoreboard_debug_{time.strftime('%Y%m%d-%H%M%S')}.jpg")
-        cv2.imwrite(debug_path, debug_img)
-        logging.info(f"Saved debug image to {debug_path}")
-        
-        # Output results
-        for key, value in result_data.items():
-            print(f"{key}={value}")
+            print("CT_DETECTION_RESULT=0")
             
     except Exception as e:
-        logging.error(f"Error finding scoreboard rows: {str(e)}")
-        print("DETECTION_RESULT=0")
+        logging.error(f"Error finding CT player row: {str(e)}")
+        print("CT_DETECTION_RESULT=0")
+        print(f"ERROR_MESSAGE={str(e)}")
+
+def find_t_player_row():
+    """Find only the T player row coordinates"""
+    try:
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for T detection")
+            print("T_DETECTION_RESULT=0")
+            return
+        
+        # Find T label in the image - we need to find CT first to determine search area
+        ct_found, ct_coords = detect_template(screenshot_path, "counter-terrorists", 0.80)
+        
+        if not ct_found:
+            logging.warning("Counter-Terrorists label not found (needed for T region)")
+            print("T_DETECTION_RESULT=0")
+            return
+            
+        # We found CT, now search for T in the lower part of the image
+        ct_label_x, ct_label_y = ct_coords
+        img = cv2.imread(screenshot_path)
+        height, width = img.shape[:2]
+        lower_bound = ct_label_y + 100  # At least 100px below the CT label
+        
+        # Create ROI from bottom part of the image
+        if lower_bound < height:
+            roi_img = img[lower_bound:height, 0:width]
+            
+            # Create a temporary file for the ROI
+            TEMP_PATH = os.path.join(PROJECT_PATH, 'recognition', 'temp')
+            os.makedirs(TEMP_PATH, exist_ok=True)
+            temp_roi_path = os.path.join(TEMP_PATH, "temp_roi.jpg")
+            cv2.imwrite(temp_roi_path, roi_img)
+            
+            # Search for Terrorists label only in the ROI
+            t_found, roi_coords = detect_template(temp_roi_path, "terrorists", 0.75)
+            
+            if t_found:
+                # Adjust coordinates to original image space
+                t_label_x, t_label_y = roi_coords
+                t_label_y += lower_bound  # Add the offset for the ROI
+                
+                # Add correction for observed offset (-6px)
+                t_first_row_x = 707
+                t_first_row_y = t_label_y - 86 - 6  # Apply correction offset
+                
+                logging.info(f"TERRORISTS label found at {t_label_x}, {t_label_y} (after ROI adjustment)")
+                logging.info(f"T first player row at {t_first_row_x}, {t_first_row_y} (with correction)")
+                
+                # Output ONLY T information
+                print("T_DETECTION_RESULT=1")
+                print(f"T_ROW_X={t_first_row_x}")
+                print(f"T_ROW_Y={t_first_row_y}")
+            else:
+                logging.warning("Terrorists label not found in ROI")
+                print("T_DETECTION_RESULT=0")
+        else:
+            logging.warning("Not enough vertical space to search for Terrorists label")
+            print("T_DETECTION_RESULT=0")
+            
+    except Exception as e:
+        logging.error(f"Error finding T player row: {str(e)}")
+        print("T_DETECTION_RESULT=0")
         print(f"ERROR_MESSAGE={str(e)}")
 
 # Main function for command-line usage
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python cs2_detect.py [error|spectate]")
+        print("Usage: python cs2_detect.py [error|spectate|ct|t]")
         sys.exit(1)
         
     command = sys.argv[1].lower()
@@ -256,8 +252,11 @@ if __name__ == "__main__":
         if found and coords:
             print(f"SPECTATE_COORDS={coords[0]},{coords[1]}")
     
-    elif command == "scoreboard":
-        find_scoreboard_rows()
+    elif command == "ct":
+        find_ct_player_row()
+        
+    elif command == "t":
+        find_t_player_row()
 
     else:
-        print("Unknown command. Use 'error' or 'spectate'")
+        print("Unknown command. Use 'error', 'spectate', 'ct', or 't'")

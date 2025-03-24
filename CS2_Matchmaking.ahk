@@ -1,11 +1,11 @@
-; CS2 Automation - Simplified Matchmaking Module
+; CS2 Automation - Optimized Matchmaking Module
 ; Handles waiting for match to be found and loaded
 
 ; Check if we're still searching for a match (CANCEL SEARCH button visible)
 IsSearching() {
     ; Check for red CANCEL SEARCH button at bottom right
-    cancelSearchX := 1278
-    cancelSearchY := 785
+    cancelSearchX := 1695  ; Updated to your specific coordinates
+    cancelSearchY := 1030
     
     try {
         cancelColor := PixelGetColor(cancelSearchX, cancelSearchY)
@@ -16,9 +16,10 @@ IsSearching() {
         g := (cancelColor >> 8) & 0xFF
         b := cancelColor & 0xFF
         
-        ; Red button detection (high red, lower green and blue)
-        if (r > 180 && r > g * 1.5 && r > b * 1.5) {
-            LogMessage("Detected CANCEL SEARCH button - still searching for match")
+        ; Red button detection - handle both normal (#c3553c) and darkened (#662022) states
+        ; More robust reddish detection - any color with high red component and low green/blue
+        if (r > 80 && r > g * 1.5 && r > b * 1.5) {
+            LogMessage("Detected CANCEL SEARCH button (either normal or darkened) - still searching for match")
             return true
         }
     } catch Error as e {
@@ -129,15 +130,19 @@ CheckForSpectateButton() {
     return false
 }
 
-; Simplified match outcome detection
+; Optimized match outcome detection with search status check
 WaitForMatchOutcome() {
     LogMessage("Waiting for match outcome (success or failure)...")
     
     ; Store start time to enforce timeout
     startTime := A_TickCount
-    timeout := 60000  ; 1 minute in milliseconds (minimum)
+    timeout := 600000  ; 10 minutes in milliseconds (increased from 1 minute)
     
     LogMessage("Match detection timeout set to " timeout / 1000 " seconds")
+    
+    ; Phase tracking: 0 = searching, 1 = connecting/loading
+    currentPhase := 0
+    searchingEndTime := 0
     
     loop {
         ; Check if user requested exit
@@ -155,11 +160,6 @@ WaitForMatchOutcome() {
             return "timeout"
         }
         
-        ; Log progress every 10 seconds
-        if (Mod(A_Index, 5) = 0) {
-            LogMessage("Still waiting for match outcome... " elapsedTime / 1000 " seconds elapsed")
-        }
-        
         ; Make sure CS2 window is active
         if !WinActive("Counter-Strike") {
             LogMessage("CS2 window is no longer active")
@@ -167,17 +167,42 @@ WaitForMatchOutcome() {
             Sleep 1000
         }
         
-        ; Take periodic screenshots
-        if (Mod(A_Index, 10) = 0) {
-            LogMessage("Taking detection screenshot...")
+        ; Check if we're in searching state
+        if (IsSearching()) {
+            if (currentPhase != 0) {
+                LogMessage("Returned to searching state, resetting phase")
+                currentPhase := 0
+            }
+            
+            ; During search phase, we log less frequently and don't take screenshots
+            if (Mod(A_Index, 10) = 0) {
+                LogMessage("Still searching for match... " elapsedTime / 1000 " seconds elapsed")
+            }
+            
+            Sleep 2000  ; Check less frequently during search phase
+            continue
+        } else if (currentPhase = 0) {
+            ; We just transitioned from searching to connecting/loading
+            currentPhase := 1
+            searchingEndTime := A_TickCount
+            LogMessage("Search phase ended, now in connecting/loading phase after " (searchingEndTime - startTime) / 1000 " seconds")
+            
+            ; Take a screenshot at phase transition
             CaptureScreenshot()
+            Sleep 1000
         }
         
-        ; First check if we're in searching state
-        if (IsSearching()) {
-            LogMessage("Still searching for match... waiting")
-            Sleep 3000
-            continue
+        ; Log progress every 5 iterations during loading phase
+        if (Mod(A_Index, 5) = 0) {
+            timeInLoadingPhase := (A_TickCount - searchingEndTime) / 1000
+            LogMessage("In loading phase... " timeInLoadingPhase " seconds elapsed since search ended")
+        }
+        
+        ; Take periodic screenshots only during loading phase
+        if (currentPhase = 1 && Mod(A_Index, 3) = 0) {
+            LogMessage("Taking detection screenshot...")
+            CaptureScreenshot()
+            Sleep 1000
         }
         
         ; Check for success (Spectate button)
@@ -224,7 +249,7 @@ WaitForMatchOutcome() {
             return "failure"
         }
         
-        ; Wait before next check
+        ; Wait before next check during loading phase
         Sleep 2000
     }
     

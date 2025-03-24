@@ -1,4 +1,4 @@
-; CS2 Automation - Simplified In-Game Module
+; CS2 Automation - Fixed In-Game Module
 ; Handles actions once a match has been successfully joined
 
 ; Process the current match (view players, capture data, etc.)
@@ -77,45 +77,74 @@ ReturnToMainMenu() {
 AnalyzeScoreboard() {
     LogMessage("Analyzing scoreboard player rows...")
     
-    ; Take a screenshot
-    CaptureScreenshot()
-    Sleep 1000  ; Wait for screenshot to be saved
-    
-    ; Run Python detector
-    result := RunPythonDetector("scoreboard")
-    LogMessage("Scoreboard detection result: " result)
-    
-    ; Check if detection was successful
-    if !InStr(result, "DETECTION_RESULT=1") {
-        LogMessage("Failed to detect scoreboard rows")
-        return false
-    }
-    
     ; Create empty objects for the coordinates
     ct := {found: false, x: 0, y: 0}
     t := {found: false, x: 0, y: 0}
     
-    ; Parse CT coordinates
-    if InStr(result, "CT_FIRST_ROW_COORDS=") {
-        ctText := RegExMatch(result, "CT_FIRST_ROW_COORDS=(\d+),(\d+)", &ctMatch)
-        if (ctMatch) {
-            ct.found := true
-            ct.x := Integer(ctMatch[1])
-            ct.y := Integer(ctMatch[2])
-            LogMessage("Found CT first player row at " ct.x "," ct.y)
+    ; COMPLETELY SEPARATE APPROACH - Run two different Python commands
+    
+    ; 1. First get CT coordinates with a separate command
+    LogMessage("Getting CT player coordinates...")
+    CaptureScreenshot()
+    Sleep 1000
+    
+    ctResult := RunPythonDetector("ct")
+    LogMessage("CT detection result: " ctResult)
+    
+    if InStr(ctResult, "CT_DETECTION_RESULT=1") {
+        ; Extract X coordinate
+        if RegExMatch(ctResult, "CT_ROW_X=(\d+)", &ctXMatch) {
+            ctX := ctXMatch[1]
+            LogMessage("DEBUG: CT raw X value: " ctX)
+            
+            ; Extract Y coordinate
+            if RegExMatch(ctResult, "CT_ROW_Y=(\d+)", &ctYMatch) {
+                ctY := ctYMatch[1]
+                LogMessage("DEBUG: CT raw Y value: " ctY)
+                
+                ; Set CT coordinates
+                ct.x := ctX
+                ct.y := ctY
+                ct.found := true
+                LogMessage("Found CT first player row at " ct.x "," ct.y)
+            }
         }
     }
     
-    ; Parse T coordinates - completely separate from CT parsing
-    if InStr(result, "T_FIRST_ROW_COORDS=") {
-        tText := RegExMatch(result, "T_FIRST_ROW_COORDS=(\d+),(\d+)", &tMatch)
-        if (tMatch) {
-            t.found := true
-            t.x := Integer(tMatch[1])
-            t.y := Integer(tMatch[2])
-            LogMessage("Found T first player row at " t.x "," t.y)
+    ; 2. Then get T coordinates with a completely separate command
+    LogMessage("Getting T player coordinates...")
+    CaptureScreenshot() 
+    Sleep 1000
+    
+    tResult := RunPythonDetector("t")
+    LogMessage("T detection result: " tResult)
+    
+    if InStr(tResult, "T_DETECTION_RESULT=1") {
+        ; Extract X coordinate
+        if RegExMatch(tResult, "T_ROW_X=(\d+)", &tXMatch) {
+            tX := tXMatch[1]
+            LogMessage("DEBUG: T raw X value: " tX)
+            
+            ; Extract Y coordinate
+            if RegExMatch(tResult, "T_ROW_Y=(\d+)", &tYMatch) {
+                tY := tYMatch[1]
+                LogMessage("DEBUG: T raw Y value: " tY)
+                
+                ; Set T coordinates
+                t.x := tX
+                t.y := tY
+                t.found := true
+                LogMessage("Found T first player row at " t.x "," t.y)
+            }
         }
     }
+    
+    ; Add debug output
+    LogMessage("DEBUG: CT found=" ct.found ", T found=" t.found)
+    if (ct.found)
+        LogMessage("DEBUG: Final CT coordinates x=" ct.x ", y=" ct.y)
+    if (t.found)
+        LogMessage("DEBUG: Final T coordinates x=" t.x ", y=" t.y)
     
     ; Verify we found at least one team's rows
     if (!ct.found && !t.found) {
@@ -132,8 +161,7 @@ AnalyzeScoreboard() {
         LogMessage("Taking screenshot after CT player click...")
         CaptureScreenshot()
         Sleep 500
-        Send "{Escape}"
-        Sleep 500  ; Wait a bit after pressing Escape
+        Click ct.x+10, ct.y+10 ; Click to exit Profile details
     }
     
     if (t.found) {
@@ -144,8 +172,8 @@ AnalyzeScoreboard() {
         LogMessage("Taking screenshot after T player click...")
         CaptureScreenshot()
         Sleep 500
-        Send "{Escape}"
-        Sleep 500  ; Wait a bit after pressing Escape
+        Click t.x+10, t.y+10 ; Click to exit Profile details
+        Sleep 500
     }
     
     return true
