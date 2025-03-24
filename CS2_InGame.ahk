@@ -1,7 +1,100 @@
 ; CS2 Automation - Fixed In-Game Module
 ; Handles actions once a match has been successfully joined
 
-; Process the current match (view players, capture data, etc.)
+; Process players by recognizing their nicknames and viewing their profiles
+ProcessPlayers() {
+    LogMessage("Processing player nicknames...")
+    
+    ; Take screenshot to capture the scoreboard
+    CaptureScreenshot()
+    Sleep 1000  ; Wait for screenshot to be saved
+    
+    ; Run Python detector to get player nicknames
+    result := RunPythonDetector("nicknames")
+    LogMessage("Nickname detection result: " result)
+    
+    ; Parse results
+    ctNickname := ""
+    ctRowX := 0
+    ctRowY := 0
+    
+    tNickname := ""
+    tRowX := 0
+    tRowY := 0
+    
+    ; Check if detection was successful
+    if InStr(result, "NICKNAME_RESULT=1") {
+        ; Extract CT player nickname and coordinates
+        if RegExMatch(result, "CT_NICKNAME=(.+)", &ctNicknameMatch) {
+            ctNickname := ctNicknameMatch[1]
+            LogMessage("Found CT player nickname: " ctNickname)
+            
+            ; Extract coordinates
+            if RegExMatch(result, "CT_ROW_X=(\d+)", &ctXMatch) {
+                ctRowX := ctXMatch[1]
+                if RegExMatch(result, "CT_ROW_Y=(\d+)", &ctYMatch) {
+                    ctRowY := ctYMatch[1]
+                    LogMessage("CT player coordinates: " ctRowX "," ctRowY)
+                }
+            }
+        }
+        
+        ; Extract T player nickname and coordinates
+        if RegExMatch(result, "T_NICKNAME=(.+)", &tNicknameMatch) {
+            tNickname := tNicknameMatch[1]
+            LogMessage("Found T player nickname: " tNickname)
+            
+            ; Extract coordinates
+            if RegExMatch(result, "T_ROW_X=(\d+)", &tXMatch) {
+                tRowX := tXMatch[1]
+                if RegExMatch(result, "T_ROW_Y=(\d+)", &tYMatch) {
+                    tRowY := tYMatch[1]
+                    LogMessage("T player coordinates: " tRowX "," tRowY)
+                }
+            }
+        }
+        
+        ; Process CT player if found
+        if (ctNickname && ctRowX > 0 && ctRowY > 0) {
+            ProcessPlayerProfile(ctNickname, ctRowX, ctRowY, "CT")
+        }
+        
+        ; Process T player if found
+        if (tNickname && tRowX > 0 && tRowY > 0) {
+            ProcessPlayerProfile(tNickname, tRowX, tRowY, "T")
+        }
+        
+        return true
+    } else {
+        LogMessage("Failed to detect player nicknames")
+        return false
+    }
+}
+
+; Process a single player profile
+ProcessPlayerProfile(nickname, rowX, rowY, team) {
+    LogMessage("Processing " team " player profile: " nickname)
+    
+    ; Click on the player row
+    LogMessage("Clicking player row at " rowX "," rowY)
+    Click rowX + 10, rowY + 10  ; Click slightly offset to ensure we hit the row
+    Sleep 2000  ; Wait for profile to load
+    
+    ; Take screenshot of the profile
+    CaptureScreenshot()
+    Sleep 1000
+    
+    ; TODO: Add code to verify nickname in profile matches the one in the scoreboard
+    ; This would require adding another detector function
+    
+    ; Close the profile by clicking anywhere
+    LogMessage("Closing profile")
+    Click rowX + 10, rowY + 10
+    Sleep 1000
+    
+    return true
+}
+
 ProcessMatch() {
     LogMessage("Processing match...")
     
@@ -11,6 +104,10 @@ ProcessMatch() {
     ; View the player list using Tab
     ViewPlayerList()
     
+    ; Process player nicknames and profiles
+    LogMessage("Processing player nicknames and profiles...")
+    ProcessPlayers()
+    
     ; Return to main menu using ESC
     ReturnToMainMenu()
     
@@ -18,7 +115,7 @@ ProcessMatch() {
     return true
 }
 
-; View the player list using Tab
+; View the player list using Esc
 ViewPlayerList() {
     LogMessage("Viewing player list...")
     
@@ -31,7 +128,7 @@ ViewPlayerList() {
     ; Press Esc to view scoreboard
     LogMessage("Pressing Escape to view scoreboard...")
     Send "{Escape}"
-    ; Sleep 2000
+    Sleep 1000
     
     ; Take screenshot of player list
     LogMessage("Taking screenshot of player list...")
@@ -63,13 +160,13 @@ ReturnToMainMenu() {
     confirmY := 600
     LogMessage("Clicking OK to confirm at " confirmX "," confirmY)
     Click confirmX, confirmY
-    Sleep 3000
+    Sleep 500
     
     ; Take screenshot to confirm we're back at the main menu
     CaptureScreenshot()
     
     ; Wait a bit longer for the main menu to fully load
-    Sleep 2000
+    Sleep 1000
     
     return true
 }

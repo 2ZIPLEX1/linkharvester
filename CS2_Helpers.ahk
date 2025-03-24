@@ -82,7 +82,7 @@ EnsureCS2Running() {
         if WinExist("Counter-Strike") {
             LogMessage("CS2 is already running. Window activated.")
             WinActivate "Counter-Strike"
-            Sleep 2000
+            Sleep 1000
             return true
         } else {
             LogMessage("CS2 is not running. Please launch CS2 manually to avoid potential anti-cheat issues.")
@@ -147,7 +147,7 @@ LaunchCS2() {
     ; Activate CS2 window
     WinActivate "Counter-Strike"
     LogMessage("CS2 launched and activated")
-    Sleep 5000  ; Wait for the game to fully load
+    Sleep 1000  ; Wait for the game to fully load
     return true
 }
 

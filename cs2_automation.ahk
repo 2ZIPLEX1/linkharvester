@@ -91,9 +91,7 @@ RunSigmaMatch() {
         
         ; Try to return to main menu to recover
         Send "{Escape}"
-        Sleep 2000
-        Send "{Escape}"
-        Sleep 2000
+        Sleep 1000
     }
     
     LogMessage("Automation completed")
@@ -106,22 +104,22 @@ SelectMap(mapName) {
     
     ; Make sure CS2 is the active window
     WinActivate "Counter-Strike"
-    Sleep 2000
+    Sleep 1000
     
     ; 1. Press Play button
     LogMessage("Clicking Play button at coordinates: " CONFIG.play_button_x "," CONFIG.play_button_y)
     Click CONFIG.play_button_x, CONFIG.play_button_y
-    Sleep CONFIG.wait_between_clicks
+    Sleep 500
     
     ; 2. Select Matchmaking mode
     LogMessage("Selecting matchmaking mode at coordinates: " CONFIG.mode_selection_x "," CONFIG.mode_selection_y)
     Click CONFIG.mode_selection_x, CONFIG.mode_selection_y
-    Sleep CONFIG.wait_between_clicks
+    Sleep 100
     
     ; 3. Select League (Casual)
     LogMessage("Selecting casual league at coordinates: " CONFIG.league_selection_x "," CONFIG.league_selection_y)
     Click CONFIG.league_selection_x, CONFIG.league_selection_y
-    Sleep CONFIG.wait_between_clicks
+    Sleep 100
     
     ; 4. Select the specific map
     if (!MAP_COORDINATES.Has(mapName)) {
@@ -132,12 +130,12 @@ SelectMap(mapName) {
     mapCoordinates := MAP_COORDINATES[mapName]
     LogMessage("Selecting " mapName " map at coordinates: " mapCoordinates.x "," mapCoordinates.y)
     Click mapCoordinates.x, mapCoordinates.y
-    Sleep CONFIG.wait_between_clicks
+    Sleep 100
     
     ; 5. Accept/Start Match
     LogMessage("Clicking Accept Match at coordinates: " CONFIG.accept_match_x "," CONFIG.accept_match_y)
     Click CONFIG.accept_match_x, CONFIG.accept_match_y
-    Sleep CONFIG.wait_between_clicks
+    Sleep 500
     
     ; For debugging, take a screenshot of current state
     CaptureScreenshot()

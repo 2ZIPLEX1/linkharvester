@@ -29,7 +29,7 @@ IsSearching() {
     return false
 }
 
-; Check for error dialog with OK button
+; Check for error dialog with Escape key dismissal
 CheckForMatchmakingFailure() {
     LogMessage("Checking for matchmaking failure dialog...")
     
@@ -57,11 +57,21 @@ CheckForMatchmakingFailure() {
                     buttonX := Integer(coords[1])
                     buttonY := Integer(coords[2])
                     
-                    LogMessage("Clicking OK button at " buttonX "," buttonY)
-                    Click buttonX, buttonY
-                    Sleep 500
-                    ; Try a second click to be sure
-                    Click buttonX, buttonY
+                    ; Check for special coordinates (-1, -1) that indicate to use Escape key
+                    if (buttonX = -1 && buttonY = -1) {
+                        LogMessage("Using Escape key to dismiss error dialog")
+                        Send "{Escape}"
+                        Sleep 500
+                        ; Send a second Escape just to be sure
+                        Send "{Escape}"
+                    } else {
+                        ; Use the detected coordinates
+                        LogMessage("Clicking OK button at " buttonX "," buttonY)
+                        Click buttonX, buttonY
+                        Sleep 500
+                        ; Try a second click to be sure
+                        Click buttonX, buttonY
+                    }
                     
                     ; Take a verification screenshot
                     CaptureScreenshot()
@@ -70,11 +80,11 @@ CheckForMatchmakingFailure() {
                 }
             }
             
-            ; Fallback to hardcoded coordinates
-            LogMessage("Using hardcoded OK button coordinates")
-            Click 1157, 605  ; Center of OK button
+            ; Fallback to using Escape key if coordinates couldn't be parsed
+            LogMessage("Using Escape key fallback to dismiss error dialog")
+            Send "{Escape}"
             Sleep 500
-            Click 1157, 605  ; Try again
+            Send "{Escape}"  ; Try again
             
             ; Take a verification screenshot
             CaptureScreenshot()
