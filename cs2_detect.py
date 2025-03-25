@@ -39,7 +39,7 @@ def get_latest_screenshot():
         latest_screenshot = max(screenshots, key=os.path.getmtime)
         
         # Only use if it's less than 5 seconds old
-        if time.time() - os.path.getmtime(latest_screenshot) > 5:
+        if time.time() - os.path.getmtime(latest_screenshot) > 30:
             logging.warning("No recent screenshots found")
             return None
             
@@ -313,7 +313,7 @@ def find_t_player_row():
         print("T_DETECTION_RESULT=0")
         print(f"ERROR_MESSAGE={str(e)}")
 
-def extract_player_nickname(screenshot_path, x, y, width=350, height=26, team="unknown"):
+def extract_player_nickname(screenshot_path, x, y, width=200, height=26, team="unknown"):
     """
     Extract and recognize a player's nickname from a specified region in the screenshot
     Using simplified approach with fewer OCR methods for better performance
@@ -346,7 +346,7 @@ def extract_player_nickname(screenshot_path, x, y, width=350, height=26, team="u
         
         # Start from the exact row position
         nickname_x = x
-        nickname_width = min(320, img_width - nickname_x)  # Capture a wide area
+        nickname_width = min(170, img_width - nickname_x)  # Capture a wide area
         
         # Ensure region dimensions are valid
         if nickname_width <= 0 or height <= 0 or nickname_x >= img_width:
@@ -355,6 +355,11 @@ def extract_player_nickname(screenshot_path, x, y, width=350, height=26, team="u
         
         # Extract the nickname region
         nickname_region = img[y:y+height, nickname_x:nickname_x+nickname_width]
+
+        # First check if the slot is empty before attempting OCR
+        if is_empty_player_slot(nickname_region):
+            logging.info(f"Skipping OCR - empty {team} player slot detected at {x},{y}")
+            return ""
         
         # Create debug filename with team info
         timestamp = int(time.time())
@@ -551,6 +556,51 @@ def extract_t_player_nicknames(screenshot_path=None, first_row_x=None, first_row
     else:
         logging.warning("Failed to extract T player nickname")
         return []
+
+def is_empty_player_slot(img, edge_threshold=0.015, ocr_confidence=0.3):
+    """
+    Check if a player slot is empty using multiple methods
+    
+    Args:
+        img: Image region to check
+        edge_threshold: Threshold for edge detection method
+        ocr_confidence: Minimum confidence for OCR detection
+    
+    Returns:
+        bool: True if slot is empty, False otherwise
+    """
+    # Method 1: Edge detection (your current approach but with adjustable threshold)
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    edges = cv2.Canny(gray, 50, 150)
+    edge_density = cv2.countNonZero(edges) / (img.shape[0] * img.shape[1])
+    logging.info(f"Edge density: {edge_density:.4f}")
+    
+    if edge_density > edge_threshold:
+        return False  # Not empty based on edge detection
+    
+    # Method 2: Add basic OCR check using pytesseract
+    try:
+        import pytesseract
+        # Improve image for OCR
+        prepared = cv2.threshold(gray, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)[1]
+        text = pytesseract.image_to_string(prepared)
+        if text.strip():  # If any text is detected
+            logging.info(f"OCR detected text: '{text.strip()}'")
+            return False  # Not empty based on OCR
+    except ImportError:
+        logging.warning("pytesseract not available, skipping OCR check")
+    
+    # Method 3: Check for non-background pixels
+    # Assume background is dark, text is light
+    _, thresholded = cv2.threshold(gray, 100, 255, cv2.THRESH_BINARY)
+    white_pixel_ratio = cv2.countNonZero(thresholded) / (img.shape[0] * img.shape[1])
+    logging.info(f"White pixel ratio: {white_pixel_ratio:.4f}")
+    
+    if white_pixel_ratio > 0.01:  # If more than 1% of pixels are bright
+        return False
+    
+    # If we passed all checks, likely empty
+    return True
 
 def find_team_positions(screenshot_path):
     """

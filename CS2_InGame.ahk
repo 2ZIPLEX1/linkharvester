@@ -1,112 +1,224 @@
 ; CS2 Automation - Fixed In-Game Module
 ; Handles actions once a match has been successfully joined
 
-; Process players by recognizing their nicknames and viewing their profiles
-ProcessPlayers() {
-    LogMessage("Processing player nicknames...")
+; Process all players from both teams using a single screenshot
+ProcessAllPlayers() {
+    LogMessage("Starting player processing with single screenshot approach...")
     
-    ; Take screenshot to capture the scoreboard
+    ; Variables to track team positions
+    ctFound := false
+    ctBaseX := 0
+    ctBaseY := 0
+    ctPlayers := []
+    
+    tFound := false
+    tBaseX := 0
+    tBaseY := 0
+    tPlayers := []
+    
+    ; Player row height (exact 26px as specified)
+    playerRowHeight := 26
+    
+    ; Maximum players to try (generous upper limit for casual matches)
+    maxPlayersToCheck := 20
+    
+    ; ---- STEP 1: Take a SINGLE screenshot of the scoreboard ----
+    LogMessage("Taking single screenshot of scoreboard...")
     CaptureScreenshot()
     Sleep 1000  ; Wait for screenshot to be saved
     
-    ; Run Python detector to get player nicknames
-    result := RunPythonDetector("nicknames")
-    LogMessage("Nickname detection result: " result)
+    ; Get path to the saved screenshot - we need to create a mechanism to pass this to the Python detector
+    LogMessage("Using a single screenshot for all player detection")
     
-    ; Parse results
-    ctNickname := ""
-    ctRowX := 0
-    ctRowY := 0
+    ; ---- STEP 2: Find CT team base position using saved screenshot ----
+    LogMessage("Finding CT team base position...")
+    ctResult := RunPythonDetector("ct")
+    LogMessage("CT detection result: " ctResult)
     
-    tNickname := ""
-    tRowX := 0
-    tRowY := 0
-    
-    ; Check if detection was successful
-    if InStr(result, "NICKNAME_RESULT=1") {
-        ; Extract CT player nickname and coordinates
-        if RegExMatch(result, "CT_NICKNAME=(.+)", &ctNicknameMatch) {
-            ctNickname := ctNicknameMatch[1]
-            LogMessage("Found CT player nickname: " ctNickname)
+    if InStr(ctResult, "CT_DETECTION_RESULT=1") {
+        ; Extract CT coordinates
+        if RegExMatch(ctResult, "CT_ROW_X=(\d+)", &ctXMatch) {
+            ctBaseX := Integer(ctXMatch[1])
             
-            ; Extract coordinates
-            if RegExMatch(result, "CT_ROW_X=(\d+)", &ctXMatch) {
-                ctRowX := ctXMatch[1]
-                if RegExMatch(result, "CT_ROW_Y=(\d+)", &ctYMatch) {
-                    ctRowY := ctYMatch[1]
-                    LogMessage("CT player coordinates: " ctRowX "," ctRowY)
-                }
+            if RegExMatch(ctResult, "CT_ROW_Y=(\d+)", &ctYMatch) {
+                ctBaseY := Integer(ctYMatch[1])
+                ctFound := true
+                LogMessage("Found CT first player row at " ctBaseX "," ctBaseY)
             }
         }
-        
-        ; Extract T player nickname and coordinates
-        if RegExMatch(result, "T_NICKNAME=(.+)", &tNicknameMatch) {
-            tNickname := tNicknameMatch[1]
-            LogMessage("Found T player nickname: " tNickname)
-            
-            ; Extract coordinates
-            if RegExMatch(result, "T_ROW_X=(\d+)", &tXMatch) {
-                tRowX := tXMatch[1]
-                if RegExMatch(result, "T_ROW_Y=(\d+)", &tYMatch) {
-                    tRowY := tYMatch[1]
-                    LogMessage("T player coordinates: " tRowX "," tRowY)
-                }
-            }
-        }
-        
-        ; Process CT player if found
-        if (ctNickname && ctRowX > 0 && ctRowY > 0) {
-            ProcessPlayerProfile(ctNickname, ctRowX, ctRowY, "CT")
-        }
-        
-        ; Process T player if found
-        if (tNickname && tRowX > 0 && tRowY > 0) {
-            ProcessPlayerProfile(tNickname, tRowX, tRowY, "T")
-        }
-        
-        return true
     } else {
-        LogMessage("Failed to detect player nicknames")
-        return false
+        LogMessage("Failed to detect CT team position")
     }
-}
-
-; Process a single player profile
-ProcessPlayerProfile(nickname, rowX, rowY, team) {
-    LogMessage("Processing " team " player profile: " nickname)
     
-    ; Click on the player row
-    LogMessage("Clicking player row at " rowX "," rowY)
-    Click rowX + 10, rowY + 10  ; Click slightly offset to ensure we hit the row
-    Sleep 2000  ; Wait for profile to load
+    ; ---- STEP 3: Find T team base position using same screenshot ----
+    LogMessage("Finding T team base position...")
+    tResult := RunPythonDetector("t")
+    LogMessage("T detection result: " tResult)
     
-    ; Take screenshot of the profile
-    CaptureScreenshot()
-    Sleep 1000
+    if InStr(tResult, "T_DETECTION_RESULT=1") {
+        ; Extract T coordinates
+        if RegExMatch(tResult, "T_ROW_X=(\d+)", &tXMatch) {
+            tBaseX := Integer(tXMatch[1])
+            
+            if RegExMatch(tResult, "T_ROW_Y=(\d+)", &tYMatch) {
+                tBaseY := Integer(tYMatch[1])
+                tFound := true
+                LogMessage("Found T first player row at " tBaseX "," tBaseY)
+            }
+        }
+    } else {
+        LogMessage("Failed to detect T team position")
+    }
     
-    ; TODO: Add code to verify nickname in profile matches the one in the scoreboard
-    ; This would require adding another detector function
+    ; ---- STEP 4: Pre-process all player coordinates first ----
+    ; We'll first extract all nicknames from the single screenshot, then process profiles separately
     
-    ; Close the profile by clicking anywhere
-    LogMessage("Closing profile")
-    Click rowX + 10, rowY + 10
-    Sleep 1000
+    ; Process CT player coordinates and nicknames
+    ctNicknames := []
+    if (ctFound) {
+        LogMessage("Extracting CT player nicknames...")
+        
+        Loop maxPlayersToCheck {
+            playerIndex := A_Index - 1
+            currentY := ctBaseY + (playerIndex * playerRowHeight)
+            
+            ; We're using the SAME screenshot for all nickname extraction
+            ctNicknameResult := RunPythonDetector("nickname_ct " ctBaseX " " currentY)
+            
+            if InStr(ctNicknameResult, "CT_NICKNAME_RESULT=1") {
+                if RegExMatch(ctNicknameResult, "CT_NICKNAME=([^\r\n]+)", &ctMatch) {
+                    nickname := Trim(ctMatch[1])
+                    
+                    if (StrLen(nickname) > 0) {
+                        LogMessage("Found CT player " (playerIndex + 1) " nickname: " nickname)
+                        ctNicknames.Push({
+                            index: playerIndex,
+                            nickname: nickname,
+                            x: ctBaseX,
+                            y: currentY
+                        })
+                    } else {
+                        LogMessage("Empty nickname detected for CT position " (playerIndex + 1) " - stopping CT scan")
+                        break
+                    }
+                } else {
+                    LogMessage("No nickname found for CT position " (playerIndex + 1) " - stopping CT scan")
+                    break
+                }
+            } else {
+                LogMessage("Failed to detect nickname for CT position " (playerIndex + 1) " - stopping CT scan")
+                break
+            }
+        }
+        LogMessage("Extracted " ctNicknames.Length " CT player nicknames")
+    }
     
-    return true
+    ; Process T player coordinates and nicknames
+    tNicknames := []
+    if (tFound) {
+        LogMessage("Extracting T player nicknames...")
+        
+        Loop maxPlayersToCheck {
+            playerIndex := A_Index - 1
+            currentY := tBaseY + (playerIndex * playerRowHeight)
+            
+            ; We're using the SAME screenshot for all nickname extraction
+            tNicknameResult := RunPythonDetector("nickname_t " tBaseX " " currentY)
+            
+            if InStr(tNicknameResult, "T_NICKNAME_RESULT=1") {
+                if RegExMatch(tNicknameResult, "T_NICKNAME=([^\r\n]+)", &tMatch) {
+                    nickname := Trim(tMatch[1])
+                    
+                    if (StrLen(nickname) > 0) {
+                        LogMessage("Found T player " (playerIndex + 1) " nickname: " nickname)
+                        tNicknames.Push({
+                            index: playerIndex,
+                            nickname: nickname,
+                            x: tBaseX,
+                            y: currentY
+                        })
+                    } else {
+                        LogMessage("Empty nickname detected for T position " (playerIndex + 1) " - stopping T scan")
+                        break
+                    }
+                } else {
+                    LogMessage("No nickname found for T position " (playerIndex + 1) " - stopping T scan")
+                    break
+                }
+            } else {
+                LogMessage("Failed to detect nickname for T position " (playerIndex + 1) " - stopping T scan")
+                break
+            }
+        }
+        LogMessage("Extracted " tNicknames.Length " T player nicknames")
+    }
+    
+    ; ---- STEP 5: NOW process player profiles with separate screenshots ----
+    
+    ; Process CT player profiles
+    for i, player in ctNicknames {
+        LogMessage("Processing CT player profile: " player.nickname)
+        
+        ; Click to view player profile
+        Click player.x + 10, player.y + 10
+        Sleep 2000
+        
+        ; Take screenshot of profile
+        CaptureScreenshot()
+        Sleep 1000
+        
+        ; Click again to exit profile view
+        Click player.x + 10, player.y + 10
+        Sleep 1000
+        
+        ; Add to final player list
+        ctPlayers.Push(player)
+    }
+    
+    ; Process T player profiles
+    for i, player in tNicknames {
+        LogMessage("Processing T player profile: " player.nickname)
+        
+        ; Click to view player profile
+        Click player.x + 10, player.y + 10
+        Sleep 2000
+        
+        ; Take screenshot of profile
+        CaptureScreenshot()
+        Sleep 1000
+        
+        ; Click again to exit profile view
+        Click player.x + 10, player.y + 10
+        Sleep 1000
+        
+        ; Add to final player list
+        tPlayers.Push(player)
+    }
+    
+    ; Log summary
+    LogMessage("Player processing summary:")
+    LogMessage("- CT Players: " ctPlayers.Length)
+    for i, player in ctPlayers
+        LogMessage("  [" i "] " player.nickname)
+    
+    LogMessage("- T Players: " tPlayers.Length)
+    for i, player in tPlayers
+        LogMessage("  [" i "] " player.nickname)
+    
+    return (ctPlayers.Length > 0 || tPlayers.Length > 0)
 }
 
 ProcessMatch() {
     LogMessage("Processing match...")
     
     ; Wait a few seconds for the match to fully load
-    Sleep 5000
+    Sleep 500
     
     ; View the player list using Tab
     ViewPlayerList()
     
-    ; Process player nicknames and profiles
-    LogMessage("Processing player nicknames and profiles...")
-    ProcessPlayers()
+    ; Process all players from both teams
+    ProcessAllPlayers()
     
     ; Return to main menu using ESC
     ReturnToMainMenu()
@@ -115,7 +227,6 @@ ProcessMatch() {
     return true
 }
 
-; View the player list using Esc
 ViewPlayerList() {
     LogMessage("Viewing player list...")
     
@@ -133,13 +244,6 @@ ViewPlayerList() {
     ; Take screenshot of player list
     LogMessage("Taking screenshot of player list...")
     CaptureScreenshot()
-    
-    ; Analyze the scoreboard to find player rows
-    AnalyzeScoreboard()
-    
-    ; Release Tab
-    ; Send "{Tab up}"
-    ; Sleep 500
     
     return true
 }
@@ -167,111 +271,6 @@ ReturnToMainMenu() {
     
     ; Wait a bit longer for the main menu to fully load
     Sleep 1000
-    
-    return true
-}
-
-AnalyzeScoreboard() {
-    LogMessage("Analyzing scoreboard player rows...")
-    
-    ; Create empty objects for the coordinates
-    ct := {found: false, x: 0, y: 0}
-    t := {found: false, x: 0, y: 0}
-    
-    ; COMPLETELY SEPARATE APPROACH - Run two different Python commands
-    
-    ; 1. First get CT coordinates with a separate command
-    LogMessage("Getting CT player coordinates...")
-    CaptureScreenshot()
-    Sleep 1000
-    
-    ctResult := RunPythonDetector("ct")
-    LogMessage("CT detection result: " ctResult)
-    
-    if InStr(ctResult, "CT_DETECTION_RESULT=1") {
-        ; Extract X coordinate
-        if RegExMatch(ctResult, "CT_ROW_X=(\d+)", &ctXMatch) {
-            ctX := ctXMatch[1]
-            LogMessage("DEBUG: CT raw X value: " ctX)
-            
-            ; Extract Y coordinate
-            if RegExMatch(ctResult, "CT_ROW_Y=(\d+)", &ctYMatch) {
-                ctY := ctYMatch[1]
-                LogMessage("DEBUG: CT raw Y value: " ctY)
-                
-                ; Set CT coordinates
-                ct.x := ctX
-                ct.y := ctY
-                ct.found := true
-                LogMessage("Found CT first player row at " ct.x "," ct.y)
-            }
-        }
-    }
-    
-    ; 2. Then get T coordinates with a completely separate command
-    LogMessage("Getting T player coordinates...")
-    CaptureScreenshot() 
-    Sleep 1000
-    
-    tResult := RunPythonDetector("t")
-    LogMessage("T detection result: " tResult)
-    
-    if InStr(tResult, "T_DETECTION_RESULT=1") {
-        ; Extract X coordinate
-        if RegExMatch(tResult, "T_ROW_X=(\d+)", &tXMatch) {
-            tX := tXMatch[1]
-            LogMessage("DEBUG: T raw X value: " tX)
-            
-            ; Extract Y coordinate
-            if RegExMatch(tResult, "T_ROW_Y=(\d+)", &tYMatch) {
-                tY := tYMatch[1]
-                LogMessage("DEBUG: T raw Y value: " tY)
-                
-                ; Set T coordinates
-                t.x := tX
-                t.y := tY
-                t.found := true
-                LogMessage("Found T first player row at " t.x "," t.y)
-            }
-        }
-    }
-    
-    ; Add debug output
-    LogMessage("DEBUG: CT found=" ct.found ", T found=" t.found)
-    if (ct.found)
-        LogMessage("DEBUG: Final CT coordinates x=" ct.x ", y=" ct.y)
-    if (t.found)
-        LogMessage("DEBUG: Final T coordinates x=" t.x ", y=" t.y)
-    
-    ; Verify we found at least one team's rows
-    if (!ct.found && !t.found) {
-        LogMessage("Could not determine row coordinates for either team")
-        return false
-    }
-    
-    ; For testing, click the first row of each team if found
-    if (ct.found) {
-        LogMessage("Testing: Clicking first CT row at " ct.x "," ct.y)
-        Click ct.x+10, ct.y+10
-        Sleep 1000
-        ; Take screenshot after CT player click
-        LogMessage("Taking screenshot after CT player click...")
-        CaptureScreenshot()
-        Sleep 500
-        Click ct.x+10, ct.y+10 ; Click to exit Profile details
-    }
-    
-    if (t.found) {
-        LogMessage("Testing: Clicking first T row at " t.x "," t.y)
-        Click t.x+10, t.y+10
-        Sleep 1000
-        ; Take screenshot after T player click
-        LogMessage("Taking screenshot after T player click...")
-        CaptureScreenshot()
-        Sleep 500
-        Click t.x+10, t.y+10 ; Click to exit Profile details
-        Sleep 500
-    }
     
     return true
 }
