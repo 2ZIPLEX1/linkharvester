@@ -9,7 +9,6 @@ IsSearching() {
     
     try {
         cancelColor := PixelGetColor(cancelSearchX, cancelSearchY)
-        LogMessage("Cancel search button area color: " cancelColor)
         
         ; Extract RGB values
         r := (cancelColor >> 16) & 0xFF
@@ -19,7 +18,6 @@ IsSearching() {
         ; Red button detection - handle both normal (#c3553c) and darkened (#662022) states
         ; More robust reddish detection - any color with high red component and low green/blue
         if (r > 80 && r > g * 1.5 && r > b * 1.5) {
-            LogMessage("Detected CANCEL SEARCH button (either normal or darkened) - still searching for match")
             return true
         }
     } catch Error as e {
@@ -31,7 +29,6 @@ IsSearching() {
 
 ; Check for error dialog with Escape key dismissal
 CheckForMatchmakingFailure() {
-    LogMessage("Checking for matchmaking failure dialog...")
     
     try {
         ; Take a screenshot
@@ -59,14 +56,12 @@ CheckForMatchmakingFailure() {
                     
                     ; Check for special coordinates (-1, -1) that indicate to use Escape key
                     if (buttonX = -1 && buttonY = -1) {
-                        LogMessage("Using Escape key to dismiss error dialog")
                         Send "{Escape}"
                         Sleep 500
                         ; Send a second Escape just to be sure
                         Send "{Escape}"
                     } else {
                         ; Use the detected coordinates
-                        LogMessage("Clicking OK button at " buttonX "," buttonY)
                         Click buttonX, buttonY
                         Sleep 500
                         ; Try a second click to be sure
@@ -81,7 +76,6 @@ CheckForMatchmakingFailure() {
             }
             
             ; Fallback to using Escape key if coordinates couldn't be parsed
-            LogMessage("Using Escape key fallback to dismiss error dialog")
             Send "{Escape}"
             Sleep 500
             Send "{Escape}"  ; Try again
@@ -101,7 +95,6 @@ CheckForMatchmakingFailure() {
 
 ; Check for spectate button
 CheckForSpectateButton() {
-    LogMessage("Checking for spectate button...")
     
     try {
         ; Take a screenshot
@@ -110,11 +103,9 @@ CheckForSpectateButton() {
         
         ; Run Python detector
         result := RunPythonDetector("spectate")
-        LogMessage("Spectate detection result: " result)
         
         ; Enhanced parsing logic
         if InStr(result, "SPECTATE_DETECTION_RESULT=1") {
-            LogMessage("Spectate button detected positively!")
             
             ; Parse coordinates
             coordPos := InStr(result, "SPECTATE_COORDS=")

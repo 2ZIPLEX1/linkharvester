@@ -89,7 +89,33 @@ ProcessAllPlayers() {
                 if RegExMatch(ctNicknameResult, "CT_NICKNAME=([^\r\n]+)", &ctMatch) {
                     nickname := Trim(ctMatch[1])
                     
+                    ; Clean up nickname - remove leading icon characters and spaces
+                    ; First, handle known icon patterns
+                    knownPatterns := ["@", "@&", "@�", "�", "�", "&"]
+                    for pattern in knownPatterns {
+                        if (SubStr(nickname, 1, StrLen(pattern)) = pattern) {
+                            nickname := Trim(SubStr(nickname, StrLen(pattern) + 1))
+                            LogMessage("Removed icon pattern '" pattern "' from CT nickname")
+                            break
+                        }
+                    }
+                    
+                    ; Then, remove any remaining non-alphanumeric characters at the beginning
+                    while (StrLen(nickname) > 0) {
+                        firstChar := SubStr(nickname, 1, 1)
+                        if (RegExMatch(firstChar, "[A-Za-z0-9\[\]_]"))
+                            break
+                        nickname := Trim(SubStr(nickname, 2))
+                        LogMessage("Removed leading character '" firstChar "' from CT nickname")
+                    }
+                    
                     if (StrLen(nickname) > 0) {
+                        ; Skip bots (nicknames starting with "BOT ")
+                        if (SubStr(nickname, 1, 4) = "BOT ") {
+                            LogMessage("Skipping CT bot player: " nickname)
+                            continue
+                        }
+                        
                         LogMessage("Found CT player " (playerIndex + 1) " nickname: " nickname)
                         ctNicknames.Push({
                             index: playerIndex,
@@ -129,7 +155,33 @@ ProcessAllPlayers() {
                 if RegExMatch(tNicknameResult, "T_NICKNAME=([^\r\n]+)", &tMatch) {
                     nickname := Trim(tMatch[1])
                     
+                    ; Clean up nickname - remove leading icon characters and spaces
+                    ; First, handle known icon patterns
+                    knownPatterns := ["@", "@&", "@�", "�", "�", "&"]
+                    for pattern in knownPatterns {
+                        if (SubStr(nickname, 1, StrLen(pattern)) = pattern) {
+                            nickname := Trim(SubStr(nickname, StrLen(pattern) + 1))
+                            LogMessage("Removed icon pattern '" pattern "' from T nickname")
+                            break
+                        }
+                    }
+                    
+                    ; Then, remove any remaining non-alphanumeric characters at the beginning
+                    while (StrLen(nickname) > 0) {
+                        firstChar := SubStr(nickname, 1, 1)
+                        if (RegExMatch(firstChar, "[A-Za-z0-9\[\]_]"))
+                            break
+                        nickname := Trim(SubStr(nickname, 2))
+                        LogMessage("Removed leading character '" firstChar "' from T nickname")
+                    }
+                    
                     if (StrLen(nickname) > 0) {
+                        ; Skip bots (nicknames starting with "BOT ")
+                        if (SubStr(nickname, 1, 4) = "BOT ") {
+                            LogMessage("Skipping T bot player: " nickname)
+                            continue
+                        }
+                        
                         LogMessage("Found T player " (playerIndex + 1) " nickname: " nickname)
                         tNicknames.Push({
                             index: playerIndex,
@@ -159,8 +211,13 @@ ProcessAllPlayers() {
     for i, player in ctNicknames {
         LogMessage("Processing CT player profile: " player.nickname)
         
+        ; Calculate exact click coordinates
+        clickX := player.x + 10
+        clickY := player.y + 10
+        LogMessage("Clicking CT player at coordinates: " clickX "," clickY)
+        
         ; Click to view player profile
-        Click player.x + 10, player.y + 10
+        Click clickX, clickY
         Sleep 2000
         
         ; Take screenshot of profile
@@ -168,19 +225,24 @@ ProcessAllPlayers() {
         Sleep 1000
         
         ; Click again to exit profile view
-        Click player.x + 10, player.y + 10
+        Click clickX, clickY
         Sleep 1000
         
         ; Add to final player list
         ctPlayers.Push(player)
     }
-    
+
     ; Process T player profiles
     for i, player in tNicknames {
         LogMessage("Processing T player profile: " player.nickname)
         
+        ; Calculate exact click coordinates
+        clickX := player.x + 10
+        clickY := player.y + 10
+        LogMessage("Clicking T player at coordinates: " clickX "," clickY)
+        
         ; Click to view player profile
-        Click player.x + 10, player.y + 10
+        Click clickX, clickY
         Sleep 2000
         
         ; Take screenshot of profile
@@ -188,7 +250,7 @@ ProcessAllPlayers() {
         Sleep 1000
         
         ; Click again to exit profile view
-        Click player.x + 10, player.y + 10
+        Click clickX, clickY
         Sleep 1000
         
         ; Add to final player list

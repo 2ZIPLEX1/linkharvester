@@ -48,11 +48,11 @@ def get_latest_screenshot():
         logging.error(f"Error getting screenshot: {str(e)}")
         return None
 
-def detect_template(screenshot_path, template_name, threshold=None, roi=None):
-    """Detect a template in a screenshot
+def detect_template(image_input, template_name, threshold=None, roi=None):
+    """Detect a template in an image
     
     Args:
-        screenshot_path: Path to the screenshot image
+        image_input: Path to the screenshot image OR a numpy array of image data
         template_name: Name of the template to detect
         threshold: Matching threshold (0.0-1.0)
         roi: Region of interest (x, y, width, height) to restrict search
@@ -80,18 +80,21 @@ def detect_template(screenshot_path, template_name, threshold=None, roi=None):
         if roi is None:
             roi = default_rois.get(template_name, None)
         
-        # Read images
-        img = cv2.imread(screenshot_path)
+        # Read image (either from path or use directly if provided as array)
+        if isinstance(image_input, str):
+            img = cv2.imread(image_input)
+        else:
+            img = image_input
+            
         template_path = os.path.join(TEMPLATES_PATH, f"{template_name}.jpg")
         template = cv2.imread(template_path)
         
         if img is None or template is None:
-            logging.error(f"Could not read images: {screenshot_path} or {template_path}")
+            logging.error(f"Could not read images: {'image path' if isinstance(image_input, str) else 'image data'} or {template_path}")
             return False, None
         
         # Get dimensions for logging
         img_height, img_width = img.shape[:2]
-        logging.info(f"Image dimensions: {img_width}x{img_height}")
         
         # Crop image to ROI if specified
         if roi:
@@ -107,10 +110,8 @@ def detect_template(screenshot_path, template_name, threshold=None, roi=None):
                 return False, None
                 
             img_roi = img[y:y+h, x:x+w]
-            logging.info(f"Using ROI for {template_name}: {x},{y},{w},{h}")
         else:
             img_roi = img
-            logging.info(f"Searching entire image for {template_name}")
         
         # Convert to grayscale
         img_gray = cv2.cvtColor(img_roi, cv2.COLOR_BGR2GRAY)
@@ -126,8 +127,6 @@ def detect_template(screenshot_path, template_name, threshold=None, roi=None):
         # Match template
         result = cv2.matchTemplate(img_gray, template_gray, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-        
-        logging.info(f"Template match for {template_name}: {max_val} (threshold: {threshold})")
         
         # Return match result
         if max_val >= threshold:
@@ -184,7 +183,6 @@ def detect_error_dialog():
     
     # Log performance even when nothing found
     elapsed_time = time.time() - start_time
-    logging.info(f"No error dialog detected (took {elapsed_time:.4f} seconds with ROI)")
     return False, None
 
 def detect_spectate_button():
@@ -205,10 +203,7 @@ def detect_spectate_button():
     # Log result and performance
     elapsed_time = time.time() - start_time
     if found:
-        logging.info(f"SPECTATE BUTTON DETECTED! Detection took {elapsed_time:.4f} seconds with ROI")
         return True, coords
-    else:
-        logging.info(f"Spectate button not found (took {elapsed_time:.4f} seconds with ROI)")
     
     return False, None
 
@@ -231,9 +226,6 @@ def find_ct_player_row():
             # Add correction for observed offset (-18px)
             ct_first_row_x = 707
             ct_first_row_y = ct_label_y - 86 - 18  # Apply correction offset
-            
-            logging.info(f"COUNTER-TERRORISTS label found at {ct_label_x}, {ct_label_y}")
-            logging.info(f"CT first player row at {ct_first_row_x}, {ct_first_row_y} (with correction)")
             
             # Output ONLY CT information
             print("CT_DETECTION_RESULT=1")
@@ -272,18 +264,12 @@ def find_t_player_row():
         height, width = img.shape[:2]
         lower_bound = ct_label_y + 100  # At least 100px below the CT label
         
-        # Create ROI from bottom part of the image
+        # Then in find_t_player_row, replace the ROI processing code with:
         if lower_bound < height:
             roi_img = img[lower_bound:height, 0:width]
             
-            # Create a temporary file for the ROI
-            TEMP_PATH = os.path.join(PROJECT_PATH, 'recognition', 'temp')
-            os.makedirs(TEMP_PATH, exist_ok=True)
-            temp_roi_path = os.path.join(TEMP_PATH, "temp_roi.jpg")
-            cv2.imwrite(temp_roi_path, roi_img)
-            
-            # Search for Terrorists label only in the ROI
-            t_found, roi_coords = detect_template(temp_roi_path, "terrorists", 0.75)
+            # Search for Terrorists label directly in the ROI image
+            t_found, roi_coords = detect_template(roi_img, "terrorists", 0.75)
             
             if t_found:
                 # Adjust coordinates to original image space
@@ -293,9 +279,6 @@ def find_t_player_row():
                 # Add correction for observed offset (-6px)
                 t_first_row_x = 707
                 t_first_row_y = t_label_y - 86 - 6  # Apply correction offset
-                
-                logging.info(f"TERRORISTS label found at {t_label_x}, {t_label_y} (after ROI adjustment)")
-                logging.info(f"T first player row at {t_first_row_x}, {t_first_row_y} (with correction)")
                 
                 # Output ONLY T information
                 print("T_DETECTION_RESULT=1")
@@ -322,7 +305,7 @@ def extract_player_nickname(screenshot_path, x, y, width=200, height=26, team="u
         screenshot_path: Path to the screenshot image
         x: X-coordinate of the left edge of the region
         y: Y-coordinate of the top edge of the region
-        width: Width of the region (default: 350px)
+        width: Width of the region (default: 200px)
         height: Height of the region (default: 26px)
         team: Team identifier for debugging ("CT", "T", or "unknown")
         
@@ -361,26 +344,6 @@ def extract_player_nickname(screenshot_path, x, y, width=200, height=26, team="u
             logging.info(f"Skipping OCR - empty {team} player slot detected at {x},{y}")
             return ""
         
-        # Create debug filename with team info
-        timestamp = int(time.time())
-        debug_filename = f"{team}_player_{timestamp}_{x}_{y}"
-        
-        # Save the extracted region for debugging
-        debug_dir = os.path.join(PROJECT_PATH, 'recognition', 'debug')
-        os.makedirs(debug_dir, exist_ok=True)
-        debug_path = os.path.join(debug_dir, f"{debug_filename}_region.jpg")
-        
-        # Save the debug image
-        save_success = cv2.imwrite(debug_path, nickname_region)
-        if not save_success:
-            logging.error(f"Failed to save debug image to {debug_path}")
-            # Try to create directory again and retry save
-            os.makedirs(debug_dir, exist_ok=True)
-            save_success = cv2.imwrite(debug_path, nickname_region)
-            logging.info(f"Retry save result: {save_success}")
-        else:
-            logging.info(f"Saved {team} nickname region to {debug_path}")
-        
         # Preprocess for better OCR
         # 1. Resize to make it larger (helps OCR)
         nickname_region_resized = cv2.resize(nickname_region, (nickname_width * 3, height * 3))
@@ -391,32 +354,15 @@ def extract_player_nickname(screenshot_path, x, y, width=200, height=26, team="u
         # 3. Apply binary threshold
         _, binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)
         
-        # Save grayscale and binary images for debugging
-        gray_debug_path = os.path.join(debug_dir, f"{debug_filename}_gray.jpg")
-        cv2.imwrite(gray_debug_path, gray)
-        
-        binary_debug_path = os.path.join(debug_dir, f"{debug_filename}_binary.jpg")
-        cv2.imwrite(binary_debug_path, binary)
-        
-        # Perform OCR with just 2 methods instead of 6
+        # Perform OCR with just the gray_standard method (removed binary_line)
         results = []
         
-        # Method 1: Standard OCR on grayscale (preserves spaces)
+        # Standard OCR on grayscale (preserves spaces)
         try:
             text1 = pytesseract.image_to_string(gray, config="--oem 3 --psm 7").strip()
             results.append(("gray_standard", text1))
         except Exception as e:
             logging.error(f"OCR error with gray_standard: {str(e)}")
-        
-        # Method 2: Binary with character whitelist
-        try:
-            text2 = pytesseract.image_to_string(
-                binary, 
-                config="--oem 3 --psm 7 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-[](){}|. "
-            ).strip()
-            results.append(("binary_line", text2))
-        except Exception as e:
-            logging.error(f"OCR error with binary_line: {str(e)}")
         
         # Log all results
         logging.info(f"OCR results for {team} region at {x},{y}:")
@@ -457,6 +403,35 @@ def extract_player_nickname(screenshot_path, x, y, width=200, height=26, team="u
         # Take the highest scored result
         if scored_results:
             best_result = scored_results[0][0]
+            
+            # Clean up nickname - remove leading icon characters and spaces
+            original_result = best_result
+            
+            # List of known icon patterns to remove from the beginning
+            icon_patterns = ['@', '@&', '@�', '�', '�', '&']
+            
+            # First pass: remove exact icon patterns
+            for pattern in icon_patterns:
+                if best_result.startswith(pattern):
+                    best_result = best_result[len(pattern):].lstrip()
+                    logging.info(f"Removed icon pattern '{pattern}' from beginning of nickname")
+                    break
+            
+            # Second pass: iteratively remove any special character at the beginning
+            # This catches any other unusual icon patterns we haven't seen yet
+            while best_result and not (best_result[0].isalnum() or best_result[0] == '[' or best_result[0] == '_'):
+                removed_char = best_result[0]
+                best_result = best_result[1:].lstrip()
+                logging.info(f"Removed leading character '{removed_char}' from nickname")
+            
+            if original_result != best_result:
+                logging.info(f"Cleaned nickname: '{original_result}' -> '{best_result}'")
+            
+            # Check if it's a bot (case insensitive)
+            if best_result.upper().startswith("BOT "):
+                logging.info(f"Detected a bot player: '{best_result}', marking for filtering")
+                # We still return the bot name - filtering will happen at the AHK level
+            
             logging.info(f"Selected {team} nickname: '{best_result}'")
             return best_result
         
