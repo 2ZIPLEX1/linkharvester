@@ -1,4 +1,4 @@
-; CS2 Automation - Fixed In-Game Module
+; CS2 Automation - Refactored In-Game Module
 ; Handles actions once a match has been successfully joined
 
 ; Process all players from both teams using a single screenshot
@@ -27,234 +27,25 @@ ProcessAllPlayers() {
     CaptureScreenshot()
     Sleep 1000  ; Wait for screenshot to be saved
     
-    ; Get path to the saved screenshot - we need to create a mechanism to pass this to the Python detector
     LogMessage("Using a single screenshot for all player detection")
     
-    ; ---- STEP 2: Find CT team base position using saved screenshot ----
-    LogMessage("Finding CT team base position...")
-    ctResult := RunPythonDetector("ct")
-    LogMessage("CT detection result: " ctResult)
+    ; ---- STEP 2: Find team positions using saved screenshot ----
+    ctFound := FindTeamPosition("ct", &ctBaseX, &ctBaseY)
+    tFound := FindTeamPosition("t", &tBaseX, &tBaseY)
     
-    if InStr(ctResult, "CT_DETECTION_RESULT=1") {
-        ; Extract CT coordinates
-        if RegExMatch(ctResult, "CT_ROW_X=(\d+)", &ctXMatch) {
-            ctBaseX := Integer(ctXMatch[1])
-            
-            if RegExMatch(ctResult, "CT_ROW_Y=(\d+)", &ctYMatch) {
-                ctBaseY := Integer(ctYMatch[1])
-                ctFound := true
-                LogMessage("Found CT first player row at " ctBaseX "," ctBaseY)
-            }
-        }
-    } else {
-        LogMessage("Failed to detect CT team position")
-    }
+    ; ---- STEP 3: Extract player nicknames ----
+    ctNicknames := ExtractPlayerNicknames("CT", ctFound, ctBaseX, ctBaseY, playerRowHeight, maxPlayersToCheck)
+    tNicknames := ExtractPlayerNicknames("T", tFound, tBaseX, tBaseY, playerRowHeight, maxPlayersToCheck)
     
-    ; ---- STEP 3: Find T team base position using same screenshot ----
-    LogMessage("Finding T team base position...")
-    tResult := RunPythonDetector("t")
-    LogMessage("T detection result: " tResult)
-    
-    if InStr(tResult, "T_DETECTION_RESULT=1") {
-        ; Extract T coordinates
-        if RegExMatch(tResult, "T_ROW_X=(\d+)", &tXMatch) {
-            tBaseX := Integer(tXMatch[1])
-            
-            if RegExMatch(tResult, "T_ROW_Y=(\d+)", &tYMatch) {
-                tBaseY := Integer(tYMatch[1])
-                tFound := true
-                LogMessage("Found T first player row at " tBaseX "," tBaseY)
-            }
-        }
-    } else {
-        LogMessage("Failed to detect T team position")
-    }
-    
-    ; ---- STEP 4: Pre-process all player coordinates first ----
-    ; We'll first extract all nicknames from the single screenshot, then process profiles separately
-    
-    ; Process CT player coordinates and nicknames
-    ctNicknames := []
-    if (ctFound) {
-        LogMessage("Extracting CT player nicknames...")
-        
-        Loop maxPlayersToCheck {
-            playerIndex := A_Index - 1
-            currentY := ctBaseY + (playerIndex * playerRowHeight)
-            
-            ; We're using the SAME screenshot for all nickname extraction
-            ctNicknameResult := RunPythonDetector("nickname_ct " ctBaseX " " currentY)
-            
-            if InStr(ctNicknameResult, "CT_NICKNAME_RESULT=1") {
-                if RegExMatch(ctNicknameResult, "CT_NICKNAME=([^\r\n]+)", &ctMatch) {
-                    nickname := Trim(ctMatch[1])
-                    
-                    ; Clean up nickname - remove leading icon characters and spaces
-                    ; First, handle known icon patterns
-                    knownPatterns := ["@", "@&", "@�", "�", "�", "&"]
-                    for pattern in knownPatterns {
-                        if (SubStr(nickname, 1, StrLen(pattern)) = pattern) {
-                            nickname := Trim(SubStr(nickname, StrLen(pattern) + 1))
-                            LogMessage("Removed icon pattern '" pattern "' from CT nickname")
-                            break
-                        }
-                    }
-                    
-                    ; Then, remove any remaining non-alphanumeric characters at the beginning
-                    while (StrLen(nickname) > 0) {
-                        firstChar := SubStr(nickname, 1, 1)
-                        if (RegExMatch(firstChar, "[A-Za-z0-9\[\]_]"))
-                            break
-                        nickname := Trim(SubStr(nickname, 2))
-                        LogMessage("Removed leading character '" firstChar "' from CT nickname")
-                    }
-                    
-                    if (StrLen(nickname) > 0) {
-                        ; Skip bots (nicknames starting with "BOT ")
-                        if (SubStr(nickname, 1, 4) = "BOT ") {
-                            LogMessage("Skipping CT bot player: " nickname)
-                            continue
-                        }
-                        
-                        LogMessage("Found CT player " (playerIndex + 1) " nickname: " nickname)
-                        ctNicknames.Push({
-                            index: playerIndex,
-                            nickname: nickname,
-                            x: ctBaseX,
-                            y: currentY
-                        })
-                    } else {
-                        LogMessage("Empty nickname detected for CT position " (playerIndex + 1) " - stopping CT scan")
-                        break
-                    }
-                } else {
-                    LogMessage("No nickname found for CT position " (playerIndex + 1) " - stopping CT scan")
-                    break
-                }
-            } else {
-                LogMessage("Failed to detect nickname for CT position " (playerIndex + 1) " - stopping CT scan")
-                break
-            }
-        }
-        LogMessage("Extracted " ctNicknames.Length " CT player nicknames")
-    }
-    
-    ; Process T player coordinates and nicknames
-    tNicknames := []
-    if (tFound) {
-        LogMessage("Extracting T player nicknames...")
-        
-        Loop maxPlayersToCheck {
-            playerIndex := A_Index - 1
-            currentY := tBaseY + (playerIndex * playerRowHeight)
-            
-            ; We're using the SAME screenshot for all nickname extraction
-            tNicknameResult := RunPythonDetector("nickname_t " tBaseX " " currentY)
-            
-            if InStr(tNicknameResult, "T_NICKNAME_RESULT=1") {
-                if RegExMatch(tNicknameResult, "T_NICKNAME=([^\r\n]+)", &tMatch) {
-                    nickname := Trim(tMatch[1])
-                    
-                    ; Clean up nickname - remove leading icon characters and spaces
-                    ; First, handle known icon patterns
-                    knownPatterns := ["@", "@&", "@�", "�", "�", "&"]
-                    for pattern in knownPatterns {
-                        if (SubStr(nickname, 1, StrLen(pattern)) = pattern) {
-                            nickname := Trim(SubStr(nickname, StrLen(pattern) + 1))
-                            LogMessage("Removed icon pattern '" pattern "' from T nickname")
-                            break
-                        }
-                    }
-                    
-                    ; Then, remove any remaining non-alphanumeric characters at the beginning
-                    while (StrLen(nickname) > 0) {
-                        firstChar := SubStr(nickname, 1, 1)
-                        if (RegExMatch(firstChar, "[A-Za-z0-9\[\]_]"))
-                            break
-                        nickname := Trim(SubStr(nickname, 2))
-                        LogMessage("Removed leading character '" firstChar "' from T nickname")
-                    }
-                    
-                    if (StrLen(nickname) > 0) {
-                        ; Skip bots (nicknames starting with "BOT ")
-                        if (SubStr(nickname, 1, 4) = "BOT ") {
-                            LogMessage("Skipping T bot player: " nickname)
-                            continue
-                        }
-                        
-                        LogMessage("Found T player " (playerIndex + 1) " nickname: " nickname)
-                        tNicknames.Push({
-                            index: playerIndex,
-                            nickname: nickname,
-                            x: tBaseX,
-                            y: currentY
-                        })
-                    } else {
-                        LogMessage("Empty nickname detected for T position " (playerIndex + 1) " - stopping T scan")
-                        break
-                    }
-                } else {
-                    LogMessage("No nickname found for T position " (playerIndex + 1) " - stopping T scan")
-                    break
-                }
-            } else {
-                LogMessage("Failed to detect nickname for T position " (playerIndex + 1) " - stopping T scan")
-                break
-            }
-        }
-        LogMessage("Extracted " tNicknames.Length " T player nicknames")
-    }
-    
-    ; ---- STEP 5: NOW process player profiles with separate screenshots ----
-    
+    ; ---- STEP 4: Process player profiles ----
     ; Process CT player profiles
     for i, player in ctNicknames {
-        LogMessage("Processing CT player profile: " player.nickname)
-        
-        ; Calculate exact click coordinates
-        clickX := player.x + 10
-        clickY := player.y + 10
-        LogMessage("Clicking CT player at coordinates: " clickX "," clickY)
-        
-        ; Click to view player profile
-        Click clickX, clickY
-        Sleep 2000
-        
-        ; Take screenshot of profile
-        CaptureScreenshot()
-        Sleep 1000
-        
-        ; Click again to exit profile view
-        Click clickX, clickY
-        Sleep 1000
-        
-        ; Add to final player list
-        ctPlayers.Push(player)
+        ProcessPlayerProfile("CT", player, &ctPlayers)
     }
 
     ; Process T player profiles
     for i, player in tNicknames {
-        LogMessage("Processing T player profile: " player.nickname)
-        
-        ; Calculate exact click coordinates
-        clickX := player.x + 10
-        clickY := player.y + 10
-        LogMessage("Clicking T player at coordinates: " clickX "," clickY)
-        
-        ; Click to view player profile
-        Click clickX, clickY
-        Sleep 2000
-        
-        ; Take screenshot of profile
-        CaptureScreenshot()
-        Sleep 1000
-        
-        ; Click again to exit profile view
-        Click clickX, clickY
-        Sleep 1000
-        
-        ; Add to final player list
-        tPlayers.Push(player)
+        ProcessPlayerProfile("T", player, &tPlayers)
     }
     
     ; Log summary
@@ -268,6 +59,203 @@ ProcessAllPlayers() {
         LogMessage("  [" i "] " player.nickname)
     
     return (ctPlayers.Length > 0 || tPlayers.Length > 0)
+}
+
+; Find the base position for a team (CT or T)
+FindTeamPosition(team, &baseX, &baseY) {
+    LogMessage("Finding " team " team base position...")
+    result := RunPythonDetector(team)
+    LogMessage(team " detection result: " result)
+    
+    ; Convert team to uppercase for matching
+    upperTeam := Format("{:U}", team)
+    
+    if InStr(result, upperTeam "_DETECTION_RESULT=1") {
+        ; Extract coordinates
+        if RegExMatch(result, upperTeam "_ROW_X=(\d+)", &xMatch) {
+            baseX := Integer(xMatch[1])
+            
+            if RegExMatch(result, upperTeam "_ROW_Y=(\d+)", &yMatch) {
+                baseY := Integer(yMatch[1])
+                LogMessage("Found " team " first player row at " baseX "," baseY)
+                return true
+            }
+        }
+    } 
+    
+    LogMessage("Failed to detect " team " team position")
+    return false
+}
+
+; Extract player nicknames for a team
+ExtractPlayerNicknames(team, teamFound, baseX, baseY, rowHeight, maxPlayers) {
+    nicknames := []
+    
+    if (!teamFound) {
+        return nicknames
+    }
+    
+    LogMessage("Extracting " team " player nicknames...")
+    
+    ; Convert team to uppercase for matching
+    upperTeam := Format("{:U}", team)
+    
+    Loop maxPlayers {
+        playerIndex := A_Index - 1
+        currentY := baseY + (playerIndex * rowHeight)
+        
+        ; Using the SAME screenshot for all nickname extraction
+        nicknameResult := RunPythonDetector("nickname_" team " " baseX " " currentY)
+        
+        if InStr(nicknameResult, upperTeam "_NICKNAME_RESULT=1") {
+            if RegExMatch(nicknameResult, upperTeam "_NICKNAME=([^\r\n]+)", &match) {
+                nickname := Trim(match[1])
+                
+                ; Clean and validate nickname
+                nickname := CleanPlayerNickname(nickname, team)
+                
+                if (StrLen(nickname) > 0) {
+                    ; Skip bots (nicknames starting with "BOT ")
+                    if (SubStr(nickname, 1, 4) = "BOT ") {
+                        LogMessage("Skipping " team " bot player: " nickname)
+                        continue
+                    }
+                    
+                    LogMessage("Found " team " player " (playerIndex + 1) " nickname: " nickname)
+                    nicknames.Push({
+                        index: playerIndex,
+                        nickname: nickname,
+                        x: baseX,
+                        y: currentY
+                    })
+                } else {
+                    LogMessage("Empty nickname detected for " team " position " (playerIndex + 1) " - stopping scan")
+                    break
+                }
+            } else {
+                LogMessage("No nickname found for " team " position " (playerIndex + 1) " - stopping scan")
+                break
+            }
+        } else {
+            LogMessage("Failed to detect nickname for " team " position " (playerIndex + 1) " - stopping scan")
+            break
+        }
+    }
+    
+    LogMessage("Extracted " nicknames.Length " " team " player nicknames")
+    return nicknames
+}
+
+; Clean player nickname by removing known patterns and special characters
+CleanPlayerNickname(nickname, team) {
+    ; First, handle known icon patterns
+    knownPatterns := ["@", "@&", "@�", "�", "�", "&"]
+    for pattern in knownPatterns {
+        if (SubStr(nickname, 1, StrLen(pattern)) = pattern) {
+            nickname := Trim(SubStr(nickname, StrLen(pattern) + 1))
+            LogMessage("Removed icon pattern '" pattern "' from " team " nickname")
+            break
+        }
+    }
+    
+    ; Then, remove any remaining non-alphanumeric characters at the beginning
+    while (StrLen(nickname) > 0) {
+        firstChar := SubStr(nickname, 1, 1)
+        if (RegExMatch(firstChar, "[A-Za-z0-9\[\]_]"))
+            break
+        nickname := Trim(SubStr(nickname, 2))
+        LogMessage("Removed leading character '" firstChar "' from " team " nickname")
+    }
+    
+    return nickname
+}
+
+; Process an individual player's profile
+ProcessPlayerProfile(team, player, &playersArray) {
+    LogMessage("Processing " team " player profile: " player.nickname)
+    
+    ; Calculate exact click coordinates
+    clickX := player.x + 10
+    clickY := player.y + 10
+    LogMessage("Clicking " team " player at coordinates: " clickX "," clickY)
+    
+    ; First, view the player's in-game profile
+    ViewPlayerInGameProfile(clickX, clickY)
+    
+    ; Then, access their Steam profile
+    steamUrl := AccessSteamProfile(clickX, clickY, player.nickname)
+    
+    ; Save the Steam profile URL if we got one
+    if (steamUrl) {
+        player.steamUrl := steamUrl
+    }
+    
+    ; Click again to exit profile view
+    Click clickX, clickY
+    Sleep 500
+    
+    ; Add to final player list
+    playersArray.Push(player)
+}
+
+; View a player's in-game profile
+ViewPlayerInGameProfile(clickX, clickY) {
+    ; Click to view player profile
+    Click clickX, clickY
+    Sleep 1000
+    
+    ; Take screenshot of profile
+    CaptureScreenshot()
+    Sleep 1000
+    
+    return true
+}
+
+; Access and extract the Steam profile URL for a player
+AccessSteamProfile(clickX, clickY, nickname := "") {
+    try {
+        ; Calculate position of the profile button (offset from player click)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 150
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        
+        ; Click the profile button
+        Click profileButtonX, profileButtonY
+        Sleep 3000  ; Give Steam browser time to open
+        
+        ; Click the address bar
+        addressBarX := 511
+        addressBarY := 177
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 1000
+        ; Select all and copy URL
+        Send("^a")  ; Ctrl+A to select all
+        Sleep(1000)
+        Send("^c")  ; Ctrl+C to copy
+        Sleep(1000)
+        CaptureScreenshot()
+
+        ; Retrieve the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+        
+        ; Save URL to file if we have a nickname
+        if (nickname)
+            SaveProfileUrl(nickname, steamProfileUrl)
+        
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+        
+        return steamProfileUrl
+    } catch Error as e {
+        LogMessage("Error accessing Steam profile: " e.Message)
+        ; Try to close Steam browser if it's open
+        Send "{Escape}"
+        Sleep 500
+        return ""
+    }
 }
 
 ProcessMatch() {

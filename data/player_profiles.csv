@@ -1,0 +1,265 @@
+Timestamp,Nickname,ProfileURL
+2025-03-25 13:26:52,Alexou97490- -,; Save player profile URL to CSV file
+SaveProfileUrl(nickname, url) {
+    try {
+        csvPath := "C:\LinkHarvesterScript\data\player_profiles.csv"
+        
+        ; Create header if file doesn't exist
+        if !FileExist(csvPath)
+            FileAppend "Timestamp,Nickname,ProfileURL`n", csvPath
+        
+        ; Format timestamp
+        timestamp := FormatTime(, "yyyy-MM-dd HH:mm:ss")
+        
+        ; Sanitize nickname (remove commas)
+        nickname := StrReplace(nickname, ",", "")
+        
+        ; Append data
+        FileAppend timestamp "," nickname "," url "`n", csvPath
+        LogMessage("Saved profile URL for " nickname ": " url)
+        return true
+    } catch Error as e {
+        LogMessage("Error saving profile URL: " e.Message)
+        return false
+    }
+}
+2025-03-25 13:39:37,SnoBl,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:39:46,CaVaLeRa_GyN,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:39:54,LITLLE,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:42:15,badjuyce,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:42:23,HIDAN,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:42:32,Blackenbauer,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:42:40,CaVaLeRa_GyN,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
+2025-03-25 13:42:49,LITLLE,        ; Now click the profile button at offset (80, 140)
+        profileButtonX := clickX + 80
+        profileButtonY := clickY + 140
+        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+        Click profileButtonX, profileButtonY
+        Sleep 5000  ; Give Steam browser time to open
+
+        ; Click the address bar
+        addressBarX := 530
+        addressBarY := 180
+        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
+        Click addressBarX, addressBarY
+        Sleep 500
+
+        ; Select all and copy URL
+        Send "^a"  ; Ctrl+A to select all
+        Sleep 200
+        Send "^c"  ; Ctrl+C to copy
+        Sleep 200
+
+        ; Retrieve and save the URL from clipboard
+        steamProfileUrl := A_Clipboard
+        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+
+        ; Save URL to file - create a function to append to a CSV file
+        SaveProfileUrl(player.nickname, steamProfileUrl)
+
+        ; Close the Steam browser (Escape)
+        Send "{Escape}"
+        Sleep 500
