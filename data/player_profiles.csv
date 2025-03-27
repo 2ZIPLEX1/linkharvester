@@ -263,3 +263,25 @@ SaveProfileUrl(nickname, url) {
         ; Close the Steam browser (Escape)
         Send "{Escape}"
         Sleep 500
+2025-03-27 09:46:50,Snape,https://steamcommunity.com/profiles/76561198363649693/
+2025-03-27 11:13:29,player_0,https://steamcommunity.com/profiles/76561198218769429/
+2025-03-27 11:13:40,player_1,https://steamcommunity.com/id/BazajayteeBR/
+2025-03-27 11:13:52,player_2,https://steamcommunity.com/profiles/76561198004485205/
+2025-03-27 14:13:57,player_0,nttps://steamcommunity.com/profiles/76561199553477925/
+2025-03-27 14:14:09,player_1,ittps://steamcommunity.com/profiles/76561198003560232/
+2025-03-27 14:14:21,player_2,nttps://steamcommunity.com/profiles/76561199323107541/
+2025-03-27 14:24:10,player_0,https://steamcommunity.com/profiles/76561198815774457/
+2025-03-27 14:24:21,player_1,https://steamcommunity.com/profiles/76561198177231845/
+2025-03-27 14:24:33,player_2,https://steamcommunity.com/profiles/76561199134004965/
+2025-03-27 14:24:45,player_3,https://steamcommunity.com/profiles/76561199143455056/
+2025-03-27 14:24:56,player_4,https://steamcommunity.com/profiles/76561198379365809/
+2025-03-27 14:25:08,player_5,https://steamcommunity.com/id/228482003/
+2025-03-27 14:25:19,player_6,https://steamcommunity.com/id/BenCarson69/
+2025-03-27 14:25:37,player_7,https://steamcommunity.com/profiles/76561198842842833/
+2025-03-27 14:25:55,player_8,https://steamcommunity.com/profiles/76561198967756094/
+2025-03-27 14:26:06,player_9,https://steamcommunity.com/profiles/76561199198750270/
+2025-03-27 14:26:30,player_10,https://steamcommunity.com/profiles/76561199810284052/
+2025-03-27 18:17:27,player_0,ittps://steamcommunity.com/profiles/76561197966422394/
+2025-03-27 18:23:03,player_0,https://steamcommunity.com/profiles/76561198185231022/
+2025-03-27 18:23:14,player_1,https://steamcommunity.com/profiles/76561199795621612/
+2025-03-27 18:23:40,player_2,https://steamcommunity.com/profiles/76561197980241239/

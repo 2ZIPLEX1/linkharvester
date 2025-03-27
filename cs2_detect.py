@@ -699,6 +699,263 @@ def check_tesseract_available():
         logging.error(f"Error checking Tesseract availability: {str(e)}")
         print(f"ERROR: Could not check Tesseract OCR: {str(e)}")
         return False
+    
+def detect_profile_button(region_x=None, region_y=None, region_width=None, region_height=None):
+    """
+    Detect profile button in a screenshot
+    
+    Args:
+        region_x: X coordinate of the region to check
+        region_y: Y coordinate of the region to check
+        region_width: Width of the region to check
+        region_height: Height of the region to check
+    """
+    try:
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for profile button detection")
+            print("PROFILE_BUTTON_RESULT=0")
+            print("PROFILE_BUTTON_ERROR=No recent screenshot found")
+            return
+        
+        # Read the screenshot
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            logging.error(f"Could not read image: {screenshot_path}")
+            print("PROFILE_BUTTON_RESULT=0")
+            print("PROFILE_BUTTON_ERROR=Could not read screenshot")
+            return
+        
+        # Define the region of interest (ROI) if provided
+        if region_x is not None and region_y is not None and region_width is not None and region_height is not None:
+            # Get image dimensions
+            img_height, img_width = img.shape[:2]
+            
+            # Ensure coordinates are within image bounds
+            region_x = max(0, min(region_x, img_width - 1))
+            region_y = max(0, min(region_y, img_height - 1))
+            region_width = min(region_width, img_width - region_x)
+            region_height = min(region_height, img_height - region_y)
+            
+            # Check if region dimensions are valid
+            if region_width <= 0 or region_height <= 0:
+                logging.error(f"Invalid region dimensions: {region_width}x{region_height}")
+                print("PROFILE_BUTTON_RESULT=0")
+                print("PROFILE_BUTTON_ERROR=Invalid region dimensions")
+                return
+            
+            # Extract the region
+            roi = img[region_y:region_y+region_height, region_x:region_x+region_width]
+            
+            # Save the region for debugging with a unique timestamp
+            timestamp = int(time.time())
+            debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+            os.makedirs(debug_dir, exist_ok=True)
+            debug_path = os.path.join(debug_dir, f"profile_button_region_{timestamp}_{region_x}_{region_y}.png")
+            cv2.imwrite(debug_path, roi)
+            logging.info(f"Saved profile button region to: {debug_path}")
+            
+            # Use the extracted region for template matching
+            result, coords = detect_template(roi, "profile-button", threshold=0.7)
+        else:
+            # Use whole image if no region specified
+            result, coords = detect_template(img, "profile-button", threshold=0.7)
+        
+        # Output the result
+        if result:
+            logging.info(f"Profile button detected at: {coords}")
+            print("PROFILE_BUTTON_RESULT=1")
+            if coords:
+                # If using a region, these are coordinates within the region
+                if region_x is not None:
+                    # Return adjusted coordinates if region was specified
+                    adj_x = region_x + coords[0]
+                    adj_y = region_y + coords[1]
+                    print(f"PROFILE_BUTTON_COORDS={adj_x},{adj_y}")
+                else:
+                    print(f"PROFILE_BUTTON_COORDS={coords[0]},{coords[1]}")
+        else:
+            logging.info("Profile button not detected")
+            print("PROFILE_BUTTON_RESULT=0")
+        
+    except Exception as e:
+        logging.error(f"Error detecting profile button: {str(e)}")
+        import traceback
+        logging.error(traceback.format_exc())
+        print("PROFILE_BUTTON_RESULT=0")
+        print(f"PROFILE_BUTTON_ERROR={str(e)}")
+
+def extract_steam_url():
+    """Extract Steam profile URL from the Steam browser using lock icon detection and OCR"""
+    try:
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for URL extraction")
+            print("URL_EXTRACTION_RESULT=0")
+            print("URL_EXTRACTION_ERROR=No recent screenshot found")
+            return
+        
+        # Read the screenshot
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            logging.error(f"Could not read image: {screenshot_path}")
+            print("URL_EXTRACTION_RESULT=0")
+            print("URL_EXTRACTION_ERROR=Could not read screenshot")
+            return
+        
+        # Define the larger search region for the lock icon
+        search_roi_x = 300
+        search_roi_y = 150
+        search_roi_width = 550
+        search_roi_height = 300
+        
+        # Get image dimensions
+        img_height, img_width = img.shape[:2]
+        
+        # Ensure the ROI is within image bounds
+        if (search_roi_x >= img_width or search_roi_y >= img_height or 
+            search_roi_x + search_roi_width > img_width or search_roi_y + search_roi_height > img_height):
+            logging.error(f"Search ROI outside image bounds: {search_roi_x},{search_roi_y},{search_roi_width},{search_roi_height}")
+            print("URL_EXTRACTION_RESULT=0")
+            print("URL_EXTRACTION_ERROR=Search ROI outside image bounds")
+            return
+        
+        # Extract the search region
+        search_region = img[search_roi_y:search_roi_y+search_roi_height, search_roi_x:search_roi_x+search_roi_width]
+        
+        # Save the search region for debugging
+        timestamp = int(time.time())
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        search_debug_path = os.path.join(debug_dir, f"lock_search_region_{timestamp}.png")
+        cv2.imwrite(search_debug_path, search_region)
+        logging.info(f"Saved lock icon search region to: {search_debug_path}")
+        
+        # Find the lock icon within the search region
+        lock_found, lock_coords = detect_template(search_region, "lock-icon", threshold=0.7)
+        
+        if not lock_found:
+            # Try with a lower threshold if not found initially
+            logging.info("Trying lock icon detection with lower threshold (0.6)")
+            lock_found, lock_coords = detect_template(search_region, "lock-icon", threshold=0.6)
+            
+            if not lock_found:
+                logging.warning("Lock icon not found in search region")
+                print("URL_EXTRACTION_RESULT=0")
+                print("URL_EXTRACTION_ERROR=Lock icon not found")
+                return
+        
+        logging.info(f"Lock icon found at coordinates within search region: {lock_coords}")
+        
+        # Create a visualization image showing where the lock was found
+        visualization = search_region.copy()
+        cv2.rectangle(visualization, 
+                     (lock_coords[0] - 10, lock_coords[1] - 10), 
+                     (lock_coords[0] + 20, lock_coords[1] + 20), 
+                     (0, 255, 0), 2)
+        viz_debug_path = os.path.join(debug_dir, f"lock_detection_visualization_{timestamp}.png")
+        cv2.imwrite(viz_debug_path, visualization)
+        logging.info(f"Saved lock detection visualization to: {viz_debug_path}")
+        
+        # Calculate the URL region relative to the lock icon
+        # The URL starts 21px to the right of the lock icon's left edge
+        # and 7px above the lock icon's Y position
+        url_roi_x = search_roi_x + lock_coords[0] + 19
+        url_roi_y = search_roi_y + lock_coords[1] - 7
+        url_roi_width = 405
+        url_roi_height = 16
+        
+        # Ensure the URL ROI is within image bounds
+        if (url_roi_x >= img_width or url_roi_y >= img_height or 
+            url_roi_x + url_roi_width > img_width or url_roi_y + url_roi_height > img_height):
+            logging.error(f"URL ROI outside image bounds: {url_roi_x},{url_roi_y},{url_roi_width},{url_roi_height}")
+            print("URL_EXTRACTION_RESULT=0")
+            print("URL_EXTRACTION_ERROR=URL ROI outside image bounds")
+            return
+        
+        # Extract the URL region
+        url_region = img[url_roi_y:url_roi_y+url_roi_height, url_roi_x:url_roi_x+url_roi_width]
+        
+        # Resize to make it larger (helps OCR)
+        url_region_resized = cv2.resize(url_region, (url_roi_width * 3, url_roi_height * 3))
+        
+        # Convert to grayscale
+        gray = cv2.cvtColor(url_region_resized, cv2.COLOR_BGR2GRAY)
+        
+        # Apply binary thresholding
+        binary = cv2.threshold(gray, 127, 255, cv2.THRESH_BINARY)[1]
+        
+        # Store all results
+        ocr_results = []
+        
+        # Try OCR with grayscale (worked well in testing)
+        try:
+            text_gray = pytesseract.image_to_string(gray, 
+                                           config="--psm 7 -c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/.:")
+            text_gray = text_gray.strip()
+            if text_gray:
+                ocr_results.append(("gray", text_gray))
+                logging.info(f"OCR gray result: '{text_gray}'")
+        except Exception as e:
+            logging.error(f"OCR gray error: {str(e)}")
+        
+        # Try OCR with binary thresholding as backup
+        try:
+            text_binary = pytesseract.image_to_string(binary, 
+                                           config="--psm 7 -c tessedit_char_whitelist=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_/.:")
+            text_binary = text_binary.strip()
+            if text_binary:
+                ocr_results.append(("binary", text_binary))
+                logging.info(f"OCR binary result: '{text_binary}'")
+        except Exception as e:
+            logging.error(f"OCR binary error: {str(e)}")
+        
+        if not ocr_results:
+            logging.warning("No OCR results found for URL")
+            print("URL_EXTRACTION_RESULT=0")
+            print("URL_EXTRACTION_ERROR=No OCR results")
+            return
+        
+        # Validate and select the best result
+        steam_urls = []
+        
+        for method, text in ocr_results:
+            # Clean up the text to look for a valid Steam URL
+            cleaned_text = text.replace(" ", "").replace("\n", "").replace("\r", "")
+            
+            # Check if it looks like a Steam URL
+            if "steamcommunity.com" in cleaned_text.lower():
+                steam_urls.append((method, cleaned_text))
+        
+        if steam_urls:
+            # Sort by length (longer URLs are likely more complete)
+            steam_urls.sort(key=lambda x: len(x[1]), reverse=True)
+            
+            best_url = steam_urls[0][1]
+            best_method = steam_urls[0][0]
+            
+            # Ensure the URL ends with a slash
+            if not best_url.endswith('/'):
+                best_url += '/'
+                logging.info(f"Added missing slash to URL: {best_url}")
+            
+            logging.info(f"Found valid Steam URL ({best_method}): {best_url}")
+            print("URL_EXTRACTION_RESULT=1")
+            print(f"URL={best_url}")
+            return
+        
+        logging.warning("Could not find a valid Steam URL")
+        print("URL_EXTRACTION_RESULT=0")
+        print("URL_EXTRACTION_ERROR=No valid URL found")
+        
+    except Exception as e:
+        logging.error(f"Error extracting Steam URL: {str(e)}")
+        import traceback
+        logging.error(traceback.format_exc())
+        print("URL_EXTRACTION_RESULT=0")
+        print(f"URL_EXTRACTION_ERROR={str(e)}")
 
 # Main function for command-line usage
 if __name__ == "__main__":
@@ -838,6 +1095,26 @@ if __name__ == "__main__":
                 print(f"T_ROW_Y={player['row_y']}")
         else:
             print("NICKNAME_RESULT=0")
+    
+    elif command == "profile_button":
+        # Check if region parameters were provided
+        if len(sys.argv) > 5:
+            try:
+                region_x = int(sys.argv[2])
+                region_y = int(sys.argv[3])
+                region_width = int(sys.argv[4])
+                region_height = int(sys.argv[5])
+                detect_profile_button(region_x, region_y, region_width, region_height)
+            except (ValueError, IndexError) as e:
+                logging.error(f"Invalid region parameters: {e}")
+                print("PROFILE_BUTTON_RESULT=0")
+                print(f"PROFILE_BUTTON_ERROR=Invalid region parameters: {e}")
+        else:
+            # Use whole image if no region specified
+            detect_profile_button()
+    
+    elif command == "extract_url":
+        extract_steam_url()
 
     else:
         print("Unknown command. Use 'error', 'spectate', 'ct', 't', or 'benchmark'")

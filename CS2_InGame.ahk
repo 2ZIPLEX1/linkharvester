@@ -211,7 +211,7 @@ ViewPlayerInGameProfile(clickX, clickY) {
     return true
 }
 
-; Access and extract the Steam profile URL for a player
+; Access and extract the Steam profile URL for a player using OCR
 AccessSteamProfile(clickX, clickY, nickname := "") {
     try {
         ; Calculate position of the profile button (offset from player click)
@@ -223,25 +223,34 @@ AccessSteamProfile(clickX, clickY, nickname := "") {
         Click profileButtonX, profileButtonY
         Sleep 3000  ; Give Steam browser time to open
         
-        ; Click the address bar
-        addressBarX := 511
-        addressBarY := 177
-        LogMessage("Clicking address bar at: " addressBarX "," addressBarY)
-        Click addressBarX, addressBarY
-        Sleep 1000
-        ; Select all and copy URL
-        Send("^a")  ; Ctrl+A to select all
-        Sleep(1000)
-        Send("^c")  ; Ctrl+C to copy
-        Sleep(1000)
+        ; Take screenshot of the browser for OCR recognition
+        LogMessage("Taking screenshot for URL OCR recognition")
         CaptureScreenshot()
-
-        ; Retrieve the URL from clipboard
-        steamProfileUrl := A_Clipboard
-        LogMessage("Retrieved Steam profile URL: " steamProfileUrl)
+        Sleep 1500  ; Give enough time for the screenshot to be saved
         
-        ; Save URL to file if we have a nickname
-        if (nickname)
+        ; Run Python URL extractor
+        LogMessage("Running URL OCR extraction")
+        urlResult := RunPythonDetector("extract_url")
+        LogMessage("URL extraction result: " urlResult)
+        
+        ; Parse the OCR output to get the URL
+        steamProfileUrl := ""
+        if InStr(urlResult, "URL_EXTRACTION_RESULT=1") {
+            ; Try to extract the URL from the output
+            if RegExMatch(urlResult, "URL=([^\r\n]+)", &match) {
+                steamProfileUrl := Trim(match[1])
+                LogMessage("Extracted Steam profile URL via OCR: " steamProfileUrl)
+            }
+        } else {
+            ; Extract error message if available
+            errorMsg := "Unknown error"
+            if RegExMatch(urlResult, "URL_EXTRACTION_ERROR=([^\r\n]+)", &match)
+                errorMsg := Trim(match[1])
+            LogMessage("Failed to extract URL: " errorMsg)
+        }
+        
+        ; Save URL to file if we have a nickname and URL
+        if (nickname && steamProfileUrl)
             SaveProfileUrl(nickname, steamProfileUrl)
         
         ; Close the Steam browser (Escape)
@@ -258,23 +267,190 @@ AccessSteamProfile(clickX, clickY, nickname := "") {
     }
 }
 
+; Process players by clicking through a grid pattern
+ProcessPlayersGridMethod() {
+    LogMessage("Processing players using simplified grid method...")
+    
+    ; Constants for grid scanning
+    startX := 720       ; X coordinate to start scanning
+    startY := 300       ; Y coordinate to start scanning
+    endY := 820         ; Y coordinate to stop scanning
+    rowHeight := 26     ; Vertical distance between rows
+    
+    ; Profile button detection parameters
+    profileButtonOffsetX := 78    ; X offset from click point to profile button
+    profileButtonOffsetY := 157   ; Y offset from click point to profile button
+    
+    ; Counter for profiles found
+    profilesFound := 0
+    
+    ; Make sure the scoreboard is visible
+    EnsureScoreboardVisible()
+    
+    ; First take a screenshot to make sure the scoreboard is visible
+    LogMessage("Taking initial screenshot of scoreboard...")
+    CaptureScreenshot()
+    Sleep 1000  ; Wait for screenshot to be saved
+    
+    ; Iterate through the grid pattern
+    currentY := startY
+    while (currentY <= endY) {
+        LogMessage("Checking row at y-coordinate: " currentY)
+        
+        ; Click at the current position
+        Click startX, currentY
+        Sleep 1000  ; Wait for any profile window to appear
+        
+        ; Take a screenshot for profile button detection
+        CaptureScreenshot()
+        Sleep 1000  ; Wait for screenshot to be saved
+        
+        ; Check for profile button
+        if (IsProfileButtonVisible(startX + profileButtonOffsetX, currentY + profileButtonOffsetY)) {
+            LogMessage("Profile button detected at offset from " startX "," currentY)
+            
+            ; Click the profile button
+            profileButtonX := startX + profileButtonOffsetX
+            profileButtonY := currentY + profileButtonOffsetY
+            LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
+            Click profileButtonX, profileButtonY
+            Sleep 3000  ; Give Steam browser time to open
+            
+            ; Take screenshot for URL OCR
+            CaptureScreenshot()
+            Sleep 1500  ; Give enough time for screenshot to be saved
+            
+            ; Extract Steam profile URL
+            steamProfileUrl := ExtractSteamProfileUrl()
+            
+            ; If we got a URL, save it
+            if (steamProfileUrl) {
+                LogMessage("Found Steam profile URL: " steamProfileUrl)
+                SaveProfileUrl("player_" profilesFound, steamProfileUrl)
+                profilesFound++
+            }
+            
+            ; Close the Steam browser window
+            LogMessage("Closing Steam browser window...")
+            Send "{Escape}"
+            Sleep 1000
+            
+            ; Take another screenshot for the next row
+            CaptureScreenshot()
+            Sleep 1000
+        } else {
+            LogMessage("No profile button detected at this position.")
+        }
+        
+        ; Move to the next row
+        currentY += rowHeight
+    }
+    
+    LogMessage("Grid scanning completed. Found " profilesFound " player profiles.")
+    
+    ; Return to normal game view
+    Send "{Escape}"  ; Close the scoreboard
+    Sleep 500
+    
+    return profilesFound > 0
+}
+
+; Function to ensure the scoreboard is visible
+EnsureScoreboardVisible() {
+    LogMessage("Ensuring scoreboard is visible...")
+    
+    ; Make sure CS2 is the active window
+    if !WinActive("Counter-Strike") {
+        LogMessage("CS2 not active, activating now...")
+        WinActivate "Counter-Strike"
+        Sleep 1000
+    }
+    
+    ; Press Escape to open the pause menu/scoreboard
+    LogMessage("Pressing Escape to view scoreboard...")
+    Send "{Escape}"
+    Sleep 1000
+    
+    ; Take a screenshot for verification
+    CaptureScreenshot()
+    Sleep 1000
+    
+    LogMessage("Scoreboard should now be visible.")
+    return true
+}
+
+; Function to check if the profile button is visible using template matching
+IsProfileButtonVisible(x, y) {
+    LogMessage("Checking for profile button at: " x "," y)
+    
+    ; Define the region to check (31x46 around the expected button location)
+    regionX := x - 15
+    regionY := y - 30
+    regionWidth := 31
+    regionHeight := 46
+    
+    ; Run profile button detection using Python
+    result := RunPythonDetector("profile_button " regionX " " regionY " " regionWidth " " regionHeight)
+    LogMessage("Profile button detection result: " result)
+    
+    ; Check if the button was detected
+    if InStr(result, "PROFILE_BUTTON_RESULT=1") {
+        LogMessage("Profile button detected!")
+        return true
+    }
+    
+    LogMessage("No profile button detected.")
+    return false
+}
+
+; Function to extract Steam profile URL using OCR
+ExtractSteamProfileUrl() {
+    LogMessage("Extracting Steam profile URL using OCR...")
+    
+    ; Run the URL extraction
+    urlResult := RunPythonDetector("extract_url")
+    LogMessage("URL extraction result: " urlResult)
+    
+    ; Parse the OCR output to get the URL
+    steamProfileUrl := ""
+    if InStr(urlResult, "URL_EXTRACTION_RESULT=1") {
+        ; Try to extract the URL from the output
+        if RegExMatch(urlResult, "URL=([^\r\n]+)", &match) {
+            steamProfileUrl := Trim(match[1])
+            LogMessage("Successfully extracted Steam profile URL: " steamProfileUrl)
+            return steamProfileUrl
+        }
+    } else {
+        ; Extract error message if available
+        errorMsg := "Unknown error"
+        if RegExMatch(urlResult, "URL_EXTRACTION_ERROR=([^\r\n]+)", &match)
+            errorMsg := Trim(match[1])
+        LogMessage("Failed to extract URL: " errorMsg)
+    }
+    
+    return ""
+}
+
+; Replace or modify the ProcessMatch function to use the new grid method
 ProcessMatch() {
     LogMessage("Processing match...")
     
     ; Wait a few seconds for the match to fully load
     Sleep 500
     
-    ; View the player list using Tab
-    ViewPlayerList()
-    
-    ; Process all players from both teams
-    ProcessAllPlayers()
+    ; Process players using the simplified grid method
+    success := ProcessPlayersGridMethod()
     
     ; Return to main menu using ESC
     ReturnToMainMenu()
     
-    LogMessage("Match processing completed")
-    return true
+    if (success) {
+        LogMessage("Match processing completed successfully")
+        return true
+    } else {
+        LogMessage("Match processing completed but no profiles were found")
+        return false
+    }
 }
 
 ViewPlayerList() {
@@ -324,3 +500,4 @@ ReturnToMainMenu() {
     
     return true
 }
+
