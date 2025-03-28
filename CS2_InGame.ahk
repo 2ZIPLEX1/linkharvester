@@ -182,6 +182,30 @@ ProcessPlayerProfile(team, player, &playersArray) {
     ; First, view the player's in-game profile
     ViewPlayerInGameProfile(clickX, clickY)
     
+    ; Check for medals
+    medalInfo := CheckPlayerMedals(clickX, clickY)
+    
+    ; Log medal information
+    LogMessage("Medal detection results: Has 4+ medals: " (medalInfo.hasFourMedals ? "Yes" : "No") 
+              ", Medal array: " AsText(medalInfo.medals) 
+              ", Has more medals: " (medalInfo.hasMoreMedals ? "Yes" : "No"))
+    
+    ; If the player doesn't have at least 4 medals, skip further processing
+    if (!medalInfo.hasFourMedals) {
+        LogMessage("Player doesn't have enough medals, skipping profile")
+        
+        ; Close the profile view
+        Click clickX, clickY
+        Sleep 500
+        
+        ; Don't add to player array
+        return false
+    }
+    
+    ; Store medal information
+    player.medals := medalInfo.medals
+    player.hasMoreMedals := medalInfo.hasMoreMedals
+    
     ; Then, access their Steam profile
     steamUrl := AccessSteamProfile(clickX, clickY, player.nickname)
     
@@ -190,12 +214,25 @@ ProcessPlayerProfile(team, player, &playersArray) {
         player.steamUrl := steamUrl
     }
     
-    ; Click again to exit profile view
+    ; Close the profile view
     Click clickX, clickY
     Sleep 500
     
     ; Add to final player list
     playersArray.Push(player)
+    return true
+}
+
+; Helper function to convert array to text for logging
+AsText(array) {
+    result := "["
+    for i, element in array {
+        if (i > 1)
+            result .= ", "
+        result .= element
+    }
+    result .= "]"
+    return result
 }
 
 ; View a player's in-game profile
@@ -267,19 +304,15 @@ AccessSteamProfile(clickX, clickY, nickname := "") {
     }
 }
 
-; Process players by clicking through a grid pattern
+; Process players by clicking through a grid pattern with medal filtering
 ProcessPlayersGridMethod() {
-    LogMessage("Processing players using simplified grid method...")
+    LogMessage("Processing players using grid method with medal filtering...")
     
     ; Constants for grid scanning
     startX := 720       ; X coordinate to start scanning
     startY := 300       ; Y coordinate to start scanning
     endY := 820         ; Y coordinate to stop scanning
     rowHeight := 26     ; Vertical distance between rows
-    
-    ; Profile button detection parameters
-    profileButtonOffsetX := 78    ; X offset from click point to profile button
-    profileButtonOffsetY := 157   ; Y offset from click point to profile button
     
     ; Counter for profiles found
     profilesFound := 0
@@ -301,58 +334,111 @@ ProcessPlayersGridMethod() {
         Click startX, currentY
         Sleep 1000  ; Wait for any profile window to appear
         
-        ; Take a screenshot for profile button detection
+        ; Take a screenshot to check if profile details loaded
         CaptureScreenshot()
         Sleep 1000  ; Wait for screenshot to be saved
         
-        ; Check for profile button
-        if (IsProfileButtonVisible(startX + profileButtonOffsetX, currentY + profileButtonOffsetY)) {
-            LogMessage("Profile button detected at offset from " startX "," currentY)
+        ; Find the profile button (returns true/false and exact coordinates)
+        buttonFound := false
+        buttonX := 0
+        buttonY := 0
+        buttonFound := FindProfileButton(startX, currentY, &buttonX, &buttonY)
+        
+        if (buttonFound) {
+            LogMessage("Profile button detected at " buttonX "," buttonY)
             
-            ; Click the profile button
-            profileButtonX := startX + profileButtonOffsetX
-            profileButtonY := currentY + profileButtonOffsetY
-            LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
-            Click profileButtonX, profileButtonY
-            Sleep 3000  ; Give Steam browser time to open
+            ; Check for medals (particularly the fourth medal slot)
+            medalInfo := CheckPlayerMedals(startX, currentY)
             
-            ; Take screenshot for URL OCR
-            CaptureScreenshot()
-            Sleep 1500  ; Give enough time for screenshot to be saved
-            
-            ; Extract Steam profile URL
-            steamProfileUrl := ExtractSteamProfileUrl()
-            
-            ; If we got a URL, save it
-            if (steamProfileUrl) {
-                LogMessage("Found Steam profile URL: " steamProfileUrl)
-                SaveProfileUrl("player_" profilesFound, steamProfileUrl)
-                profilesFound++
+            ; If the player has medal in fourth slot, proceed with profile button click
+            if (medalInfo.hasFourMedals) {
+                LogMessage("Player has medal in fourth slot, clicking profile button")
+                
+                ; Click the profile button at its exact detected coordinates
+                LogMessage("Clicking profile button at exact coordinates: " buttonX "," buttonY)
+                Click buttonX, buttonY
+                Sleep 3000  ; Give Steam browser time to open
+                
+                ; Take screenshot for URL OCR
+                CaptureScreenshot()
+                Sleep 1500  ; Give enough time for screenshot to be saved
+                
+                ; Extract Steam profile URL
+                steamProfileUrl := ExtractSteamProfileUrl()
+                
+                ; If we got a URL, save it
+                if (steamProfileUrl) {
+                    LogMessage("Found Steam profile URL: " steamProfileUrl)
+                    
+                    ; Save with medal information
+                    medalText := ""
+                    for i, val in medalInfo.medals
+                        medalText .= val
+                    
+                    SaveProfileUrl("player_" medalText "_" (medalInfo.hasMoreMedals ? "more" : "exact"), steamProfileUrl)
+                    profilesFound++
+                }
+                
+                ; Close the Steam browser window AND profile details with Escape
+                LogMessage("Closing Steam browser window and profile details...")
+                Send "{Escape}"
+                Sleep 1000
+            } else {
+                LogMessage("Player doesn't have medal in fourth slot, skipping profile")
+                
+                ; Just click again at the same coordinates to close profile details
+                LogMessage("Clicking again to close profile details")
+                Click startX, currentY
+                Sleep 500
             }
-            
-            ; Close the Steam browser window
-            LogMessage("Closing Steam browser window...")
-            Send "{Escape}"
-            Sleep 1000
-            
-            ; Take another screenshot for the next row
-            CaptureScreenshot()
-            Sleep 1000
         } else {
-            LogMessage("No profile button detected at this position.")
+            LogMessage("No profile button detected - profile details didn't load properly")
+            ; No need for an "away" click as we're still at the scoreboard
         }
         
         ; Move to the next row
         currentY += rowHeight
     }
     
-    LogMessage("Grid scanning completed. Found " profilesFound " player profiles.")
+    LogMessage("Grid scanning completed. Found " profilesFound " qualified player profiles.")
     
     ; Return to normal game view
     Send "{Escape}"  ; Close the scoreboard
     Sleep 500
     
     return profilesFound > 0
+}
+
+; Function to find the exact coordinates of the profile button
+FindProfileButton(clickX, clickY, &outX, &outY) {
+    LogMessage("Searching for exact profile button coordinates around " clickX "," clickY)
+    
+    ; Define the search region (expanded area around click position)
+    regionX := clickX + 60  ; Start from 70px to the right of click
+    regionY := clickY + 35  ; Start from 75px above click
+    regionWidth := 30      ; Width to cover the expanded area
+    regionHeight := 155     ; Height to cover the expanded area
+    
+    ; Run profile button detection using Python
+    result := RunPythonDetector("profile_button " regionX " " regionY " " regionWidth " " regionHeight)
+    LogMessage("Profile button detection result: " result)
+    
+    ; Check if the button was detected
+    if InStr(result, "PROFILE_BUTTON_RESULT=1") {
+        ; Extract the exact coordinates
+        if RegExMatch(result, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &match) {
+            outX := Integer(match[1])
+            outY := Integer(match[2])
+            LogMessage("Found profile button at exact coordinates: " outX "," outY)
+            return true
+        } else {
+            LogMessage("Profile button detected but couldn't extract coordinates")
+            return false
+        }
+    }
+    
+    LogMessage("No profile button detected in search region")
+    return false
 }
 
 ; Function to ensure the scoreboard is visible
@@ -381,13 +467,13 @@ EnsureScoreboardVisible() {
 
 ; Function to check if the profile button is visible using template matching
 IsProfileButtonVisible(x, y) {
-    LogMessage("Checking for profile button at: " x "," y)
+    LogMessage("Checking for profile button with expanded ROI")
     
-    ; Define the region to check (31x46 around the expected button location)
-    regionX := x - 15
-    regionY := y - 30
-    regionWidth := 31
-    regionHeight := 46
+    ; Define the larger region to check (expanded as specified)
+    regionX := x - 70  ; Start from 70px to the left of provided x
+    regionY := y - 75  ; Start from 75px above provided y
+    regionWidth := 180 ; Width to cover from (x-70) to (x+110)
+    regionHeight := 295 ; Height to cover from (y-75) to (y+220)
     
     ; Run profile button detection using Python
     result := RunPythonDetector("profile_button " regionX " " regionY " " regionWidth " " regionHeight)
@@ -395,12 +481,102 @@ IsProfileButtonVisible(x, y) {
     
     ; Check if the button was detected
     if InStr(result, "PROFILE_BUTTON_RESULT=1") {
-        LogMessage("Profile button detected!")
+        LogMessage("Profile button detected in expanded ROI!")
         return true
     }
     
-    LogMessage("No profile button detected.")
+    LogMessage("No profile button detected in expanded ROI.")
     return false
+}
+
+; Function to check player medals
+CheckPlayerMedals(clickX, clickY) {
+    LogMessage("Analyzing player medals relative to click position " clickX "," clickY)
+    
+    ; Define medal slot information - relative to the original click position
+    medalSlotInfo := [
+        {offsetX: 125, offsetY: -70, width: 50, height: 50},  ; First medal
+        {offsetX: 175, offsetY: -70, width: 50, height: 50},  ; Second medal
+        {offsetX: 225, offsetY: -70, width: 50, height: 50},  ; Third medal
+        {offsetX: 275, offsetY: -70, width: 50, height: 50},  ; Fourth medal
+        {offsetX: 325, offsetY: -70, width: 50, height: 50}   ; Fifth medal
+    ]
+    
+    ; Take a screenshot for analysis
+    CaptureScreenshot()
+    Sleep 1000  ; Wait for screenshot to be saved
+    
+    ; Check the fourth medal slot first (index 3 in zero-based array)
+    fourthMedalX := clickX + medalSlotInfo[4].offsetX
+    fourthMedalY := clickY + medalSlotInfo[4].offsetY
+    fourthSlotWidth := medalSlotInfo[4].width
+    fourthSlotHeight := medalSlotInfo[4].height
+    
+    ; Run analysis on fourth medal slot
+    result := RunPythonDetector("analyze_medal_region " fourthMedalX " " fourthMedalY " " 
+                               fourthSlotWidth " " fourthSlotHeight " 4")
+    LogMessage("Fourth medal slot analysis result: " result)
+    
+    ; Check if fourth medal slot is empty
+    if !InStr(result, "MEDAL_PRESENT=1") {
+        LogMessage("Fourth medal slot is empty - player doesn't have enough medals")
+        return {hasFourMedals: false, medals: [0, 0, 0, 0, 0], hasMoreMedals: false}
+    }
+    
+    ; If we reach here, the fourth medal slot has a medal
+    LogMessage("Fourth medal slot has a medal - checking all medal slots")
+    
+    ; Array to store results (1=medal present, 0=empty)
+    medalResults := [0, 0, 0, 0, 1]  ; Fourth medal (index 3) is already 1
+    
+    ; Check the remaining medal slots
+    Loop 4 {
+        if (A_Index == 4) {
+            ; Skip the fourth slot as we already checked it
+            continue
+        }
+        
+        slotX := clickX + medalSlotInfo[A_Index].offsetX
+        slotY := clickY + medalSlotInfo[A_Index].offsetY
+        slotWidth := medalSlotInfo[A_Index].width
+        slotHeight := medalSlotInfo[A_Index].height
+        
+        ; Run analysis on this medal slot
+        result := RunPythonDetector("analyze_medal_region " slotX " " slotY " " 
+                                   slotWidth " " slotHeight " " A_Index)
+        LogMessage("Medal slot " A_Index " analysis result: " result)
+        
+        ; Parse the result to determine if medal is present
+        if InStr(result, "MEDAL_PRESENT=1") {
+            medalResults[A_Index] := 1
+            LogMessage("Medal detected in slot " A_Index)
+        } else {
+            LogMessage("No medal detected in slot " A_Index)
+        }
+    }
+    
+    ; Check if the fifth medal slot is occupied
+    if medalResults[5] == 1 {
+        ; Check for the right-arrow that loads more medals
+        arrowResult := RunPythonDetector("detect_medal_arrow")
+        LogMessage("Medal arrow detection result: " arrowResult)
+        
+        hasMoreMedals := InStr(arrowResult, "MEDAL_ARROW_PRESENT=1")
+        if hasMoreMedals {
+            LogMessage("Medal right-arrow detected - player has more medals")
+        } else {
+            LogMessage("No medal right-arrow detected")
+        }
+    } else {
+        hasMoreMedals := false
+    }
+    
+    ; Return the medal information
+    return {
+        hasFourMedals: true,
+        medals: medalResults,
+        hasMoreMedals: hasMoreMedals
+    }
 }
 
 ; Function to extract Steam profile URL using OCR

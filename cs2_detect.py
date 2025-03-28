@@ -957,6 +957,178 @@ def extract_steam_url():
         print("URL_EXTRACTION_RESULT=0")
         print(f"URL_EXTRACTION_ERROR={str(e)}")
 
+def analyze_medal_region(region_x, region_y, width, height, slot_index):
+    """
+    Analyze a region of the screenshot to determine if it contains a medal
+    
+    Args:
+        region_x: X coordinate of the region
+        region_y: Y coordinate of the region
+        width: Width of the region
+        height: Height of the region
+        slot_index: The index of this medal slot (1-5)
+    """
+    try:
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for medal analysis")
+            print("MEDAL_ANALYSIS_RESULT=0")
+            print("MEDAL_ANALYSIS_ERROR=No recent screenshot found")
+            return
+        
+        # Read the screenshot
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            logging.error(f"Could not read image: {screenshot_path}")
+            print("MEDAL_ANALYSIS_RESULT=0")
+            print("MEDAL_ANALYSIS_ERROR=Could not read screenshot")
+            return
+        
+        # Get image dimensions
+        img_height, img_width = img.shape[:2]
+        
+        # Ensure coordinates are within image bounds
+        region_x = max(0, min(region_x, img_width - 1))
+        region_y = max(0, min(region_y, img_height - 1))
+        width = min(width, img_width - region_x)
+        height = min(height, img_height - region_y)
+        
+        # Check if region dimensions are valid
+        if width <= 0 or height <= 0:
+            logging.error(f"Invalid region dimensions: {width}x{height}")
+            print("MEDAL_ANALYSIS_RESULT=0")
+            print("MEDAL_ANALYSIS_ERROR=Invalid region dimensions")
+            return
+        
+        # Extract the region
+        region = img[region_y:region_y+height, region_x:region_x+width]
+        
+        # Save the region for debugging
+        timestamp = int(time.time())
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        debug_path = os.path.join(debug_dir, f"medal_slot_{slot_index}_{timestamp}_{region_x}_{region_y}.png")
+        cv2.imwrite(debug_path, region)
+        logging.info(f"Saved medal slot {slot_index} region to: {debug_path}")
+        
+        # ---------- Multiple analysis methods ----------
+        
+        # Method 1: Edge detection
+        gray = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
+        edges = cv2.Canny(gray, 50, 150)
+        edge_density = cv2.countNonZero(edges) / (region.shape[0] * region.shape[1])
+        logging.info(f"Medal slot {slot_index} - Edge density: {edge_density:.4f}")
+        
+        # Method 2: Brightness variance
+        brightness_std = np.std(gray)
+        logging.info(f"Medal slot {slot_index} - Brightness standard deviation: {brightness_std:.4f}")
+        
+        # Method 3: Color variance (using HSV)
+        hsv = cv2.cvtColor(region, cv2.COLOR_BGR2HSV)
+        color_variance = np.mean([np.std(hsv[:,:,0]), np.std(hsv[:,:,1]), np.std(hsv[:,:,2])])
+        logging.info(f"Medal slot {slot_index} - Color variance: {color_variance:.4f}")
+        
+        # ---------- Decision criteria ----------
+        # These thresholds may need adjustment based on testing
+        has_medal = False
+        
+        # Edge detection threshold
+        if edge_density > 0.1:
+            has_medal = True
+            logging.info(f"Medal detected in slot {slot_index} based on edge density")
+        
+        # Brightness variation threshold
+        if brightness_std > 30.0:
+            has_medal = True
+            logging.info(f"Medal detected in slot {slot_index} based on brightness variation")
+            
+        # Color variation threshold
+        if color_variance > 20.0:
+            has_medal = True
+            logging.info(f"Medal detected in slot {slot_index} based on color variation")
+        
+        # Output the result
+        if has_medal:
+            print("MEDAL_ANALYSIS_RESULT=1")
+            print("MEDAL_PRESENT=1")
+            logging.info(f"Medal detected in slot {slot_index} at {region_x},{region_y}")
+        else:
+            print("MEDAL_ANALYSIS_RESULT=1")
+            print("MEDAL_PRESENT=0")
+            logging.info(f"No medal detected in slot {slot_index} at {region_x},{region_y}")
+        
+    except Exception as e:
+        logging.error(f"Error analyzing medal region: {str(e)}")
+        import traceback
+        logging.error(traceback.format_exc())
+        print("MEDAL_ANALYSIS_RESULT=0")
+        print(f"MEDAL_ANALYSIS_ERROR={str(e)}")
+
+def detect_medal_arrow():
+    """Detect the right-arrow that loads more medals"""
+    try:
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for medal arrow detection")
+            print("MEDAL_ARROW_RESULT=0")
+            print("MEDAL_ARROW_ERROR=No recent screenshot found")
+            return
+        
+        # Define the arrow ROI
+        arrow_roi_x = 1100
+        arrow_roi_y = 307
+        arrow_roi_width = 26
+        arrow_roi_height = 21
+        
+        # Use the extracted region for template matching
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            logging.error(f"Could not read image: {screenshot_path}")
+            print("MEDAL_ARROW_RESULT=0")
+            print("MEDAL_ARROW_ERROR=Could not read screenshot")
+            return
+            
+        # Ensure coordinates are within image bounds
+        img_height, img_width = img.shape[:2]
+        if (arrow_roi_x >= img_width or arrow_roi_y >= img_height or 
+            arrow_roi_x + arrow_roi_width > img_width or arrow_roi_y + arrow_roi_height > img_height):
+            logging.error(f"Arrow ROI outside image bounds: {arrow_roi_x},{arrow_roi_y},{arrow_roi_width},{arrow_roi_height}")
+            print("MEDAL_ARROW_RESULT=0")
+            print("MEDAL_ARROW_ERROR=Arrow ROI outside image bounds")
+            return
+            
+        # Extract the region
+        arrow_region = img[arrow_roi_y:arrow_roi_y+arrow_roi_height, arrow_roi_x:arrow_roi_x+arrow_roi_width]
+        
+        # Save the region for debugging
+        timestamp = int(time.time())
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        debug_path = os.path.join(debug_dir, f"medal_arrow_region_{timestamp}.png")
+        cv2.imwrite(debug_path, arrow_region)
+        
+        # Detect template
+        result, coords = detect_template(arrow_region, "right-arrow", threshold=0.7)
+        
+        # Output the result
+        if result:
+            logging.info("Medal right-arrow detected")
+            print("MEDAL_ARROW_RESULT=1")
+            print("MEDAL_ARROW_PRESENT=1")
+        else:
+            logging.info("Medal right-arrow not detected")
+            print("MEDAL_ARROW_RESULT=1")
+            print("MEDAL_ARROW_PRESENT=0")
+            
+    except Exception as e:
+        logging.error(f"Error detecting medal arrow: {str(e)}")
+        import traceback
+        logging.error(traceback.format_exc())
+        print("MEDAL_ARROW_RESULT=0")
+        print(f"MEDAL_ARROW_ERROR={str(e)}")
+
 # Main function for command-line usage
 if __name__ == "__main__":
     # Ensure Tesseract is available for OCR functions
@@ -1095,6 +1267,27 @@ if __name__ == "__main__":
                 print(f"T_ROW_Y={player['row_y']}")
         else:
             print("NICKNAME_RESULT=0")
+    
+    elif command == "analyze_medal_region":
+        # Check if region parameters were provided
+        if len(sys.argv) > 6:
+            try:
+                region_x = int(sys.argv[2])
+                region_y = int(sys.argv[3])
+                width = int(sys.argv[4])
+                height = int(sys.argv[5])
+                slot_index = int(sys.argv[6])
+                analyze_medal_region(region_x, region_y, width, height, slot_index)
+            except (ValueError, IndexError) as e:
+                logging.error(f"Invalid medal region parameters: {e}")
+                print("MEDAL_ANALYSIS_RESULT=0")
+                print(f"MEDAL_ANALYSIS_ERROR=Invalid medal region parameters: {e}")
+        else:
+            print("MEDAL_ANALYSIS_RESULT=0")
+            print("MEDAL_ANALYSIS_ERROR=Missing medal region parameters")
+            
+    elif command == "detect_medal_arrow":
+        detect_medal_arrow()
     
     elif command == "profile_button":
         # Check if region parameters were provided
