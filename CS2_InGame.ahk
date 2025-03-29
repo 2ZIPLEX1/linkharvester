@@ -170,7 +170,7 @@ CleanPlayerNickname(nickname, team) {
     return nickname
 }
 
-; Process an individual player's profile
+; Update ProcessPlayerProfile to use the new medal criteria
 ProcessPlayerProfile(team, player, &playersArray) {
     LogMessage("Processing " team " player profile: " player.nickname)
     
@@ -182,17 +182,18 @@ ProcessPlayerProfile(team, player, &playersArray) {
     ; First, view the player's in-game profile
     ViewPlayerInGameProfile(clickX, clickY)
     
-    ; Check for medals
+    ; Check for medals using the improved function
     medalInfo := CheckPlayerMedals(clickX, clickY)
     
     ; Log medal information
     LogMessage("Medal detection results: Has 4+ medals: " (medalInfo.hasFourMedals ? "Yes" : "No") 
-              ", Medal array: " AsText(medalInfo.medals) 
-              ", Has more medals: " (medalInfo.hasMoreMedals ? "Yes" : "No"))
+              ", Has 5-year coin: " (medalInfo.hasFiveYearCoin ? "Yes" : "No")
+              ", Total medals: " medalInfo.medalCount
+              ", Meets criteria: " (medalInfo.meetsAllCriteria ? "Yes" : "No"))
     
-    ; If the player doesn't have at least 4 medals, skip further processing
-    if (!medalInfo.hasFourMedals) {
-        LogMessage("Player doesn't have enough medals, skipping profile")
+    ; If the player doesn't meet our criteria, skip further processing
+    if (!medalInfo.meetsAllCriteria) {
+        LogMessage("Player doesn't meet medal criteria, skipping profile")
         
         ; Close the profile view
         Click clickX, clickY
@@ -204,6 +205,7 @@ ProcessPlayerProfile(team, player, &playersArray) {
     
     ; Store medal information
     player.medals := medalInfo.medals
+    player.medalCount := medalInfo.medalCount
     player.hasMoreMedals := medalInfo.hasMoreMedals
     
     ; Then, access their Steam profile
@@ -304,9 +306,9 @@ AccessSteamProfile(clickX, clickY, nickname := "") {
     }
 }
 
-; Process players by clicking through a grid pattern with medal filtering
+; Process players by clicking through a grid pattern with unified profile analysis
 ProcessPlayersGridMethod() {
-    LogMessage("Processing players using grid method with medal filtering...")
+    LogMessage("Processing players using grid method with unified profile analysis...")
     
     ; Constants for grid scanning
     startX := 720       ; X coordinate to start scanning
@@ -338,62 +340,110 @@ ProcessPlayersGridMethod() {
         CaptureScreenshot()
         Sleep 1000  ; Wait for screenshot to be saved
         
-        ; Find the profile button (returns true/false and exact coordinates)
-        buttonFound := false
-        buttonX := 0
-        buttonY := 0
-        buttonFound := FindProfileButton(startX, currentY, &buttonX, &buttonY)
+        ; Perform unified profile analysis with a single Python call
+        LogMessage("Performing unified profile analysis...")
+        analysisResult := RunPythonDetector("analyze_profile " startX " " currentY)
+        LogMessage("Profile analysis result: " analysisResult)
         
-        if (buttonFound) {
-            LogMessage("Profile button detected at " buttonX "," buttonY)
+        ; Parse the analysis results
+        profileButtonFound := InStr(analysisResult, "PROFILE_BUTTON_FOUND=1")
+        meetsCriteria := InStr(analysisResult, "MEETS_CRITERIA=1")
+        decision := ""
+        
+        ; Extract the decision
+        if RegExMatch(analysisResult, "DECISION=([A-Z]+)", &match)
+            decision := match[1]
+        
+        ; Extract profile button coordinates if found
+        profileButtonX := 0
+        profileButtonY := 0
+        if (profileButtonFound && RegExMatch(analysisResult, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &coordMatch)) {
+            profileButtonX := Integer(coordMatch[1])
+            profileButtonY := Integer(coordMatch[2])
+            LogMessage("Profile button found at coordinates: " profileButtonX "," profileButtonY)
+        }
+        
+        ; Extract medal information for logging
+        medalCount := 0
+        has5YearCoin := false
+        hasMoreMedals := false
+        detectedMedals := []
+        
+        if RegExMatch(analysisResult, "MEDAL_COUNT=(\d+)", &countMatch)
+            medalCount := Integer(countMatch[1])
             
-            ; Check for medals (particularly the fourth medal slot)
-            medalInfo := CheckPlayerMedals(startX, currentY)
-            
-            ; If the player has medal in fourth slot, proceed with profile button click
-            if (medalInfo.hasFourMedals) {
-                LogMessage("Player has medal in fourth slot, clicking profile button")
-                
-                ; Click the profile button at its exact detected coordinates
-                LogMessage("Clicking profile button at exact coordinates: " buttonX "," buttonY)
-                Click buttonX, buttonY
-                Sleep 3000  ; Give Steam browser time to open
-                
-                ; Take screenshot for URL OCR
-                CaptureScreenshot()
-                Sleep 1500  ; Give enough time for screenshot to be saved
-                
-                ; Extract Steam profile URL
-                steamProfileUrl := ExtractSteamProfileUrl()
-                
-                ; If we got a URL, save it
-                if (steamProfileUrl) {
-                    LogMessage("Found Steam profile URL: " steamProfileUrl)
-                    
-                    ; Save with medal information
-                    medalText := ""
-                    for i, val in medalInfo.medals
-                        medalText .= val
-                    
-                    SaveProfileUrl("player_" medalText "_" (medalInfo.hasMoreMedals ? "more" : "exact"), steamProfileUrl)
-                    profilesFound++
+        has5YearCoin := InStr(analysisResult, "HAS_5YEAR_COIN=1")
+        hasMoreMedals := InStr(analysisResult, "HAS_MORE_MEDALS=1")
+        
+        ; Parse individual medals
+        fileContent := analysisResult
+        Loop Parse, fileContent, "`n", "`r" {
+            if InStr(A_LoopField, "MEDAL_DETECTED=") {
+                if RegExMatch(A_LoopField, "MEDAL_DETECTED=([^`r`n]+)", &medalMatch) {
+                    medalName := Trim(medalMatch[1])
+                    detectedMedals.Push(medalName)
                 }
-                
-                ; Close the Steam browser window AND profile details with Escape
-                LogMessage("Closing Steam browser window and profile details...")
-                Send "{Escape}"
-                Sleep 1000
-            } else {
-                LogMessage("Player doesn't have medal in fourth slot, skipping profile")
-                
-                ; Just click again at the same coordinates to close profile details
-                LogMessage("Clicking again to close profile details")
-                Click startX, currentY
-                Sleep 500
             }
+        }
+        
+        ; Log comprehensive analysis results
+        LogMessage("Analysis summary:")
+        LogMessage("- Profile button found: " (profileButtonFound ? "Yes" : "No"))
+        LogMessage("- Medal count: " medalCount)
+        LogMessage("- Has 5-year veteran coin: " (has5YearCoin ? "Yes" : "No"))
+        LogMessage("- Has more medals indicator: " (hasMoreMedals ? "Yes" : "No"))
+        LogMessage("- Meets all criteria: " (meetsCriteria ? "Yes" : "No"))
+        LogMessage("- Decision: " decision)
+        
+        ; Generate a list of medals for logging
+        if (detectedMedals.Length > 0) {
+            medalList := ""
+            for i, medal in detectedMedals
+                medalList .= medal ", "
+            LogMessage("- Detected medals: " medalList)
+        }
+        
+        ; Process based on decision
+        if (decision = "PROCEED" && profileButtonFound) {
+            LogMessage("Player meets criteria, proceeding to view Steam profile")
+            
+            ; Click the profile button at its exact detected coordinates
+            LogMessage("Clicking profile button at exact coordinates: " profileButtonX "," profileButtonY)
+            Click profileButtonX, profileButtonY
+            Sleep 3000  ; Give Steam browser time to open
+            
+            ; Take screenshot for URL OCR
+            CaptureScreenshot()
+            Sleep 1500  ; Give enough time for screenshot to be saved
+            
+            ; Extract Steam profile URL
+            steamProfileUrl := ExtractSteamProfileUrl()
+            
+            ; If we got a URL, save it
+            if (steamProfileUrl) {
+                LogMessage("Found Steam profile URL: " steamProfileUrl)
+                
+                ; Create player identifier based on medal info
+                playerIdentifier := "player_medals" medalCount "_5yrcoin" (has5YearCoin ? "Yes" : "No")
+                
+                ; Save profile URL with medal information
+                SaveProfileUrl(playerIdentifier, steamProfileUrl)
+                profilesFound++
+            }
+            
+            ; Close the Steam browser window AND profile details with Escape
+            LogMessage("Closing Steam browser window and profile details...")
+            Send "{Escape}"
+            Sleep 1000
+            Send "{Escape}"
+            Sleep 500
         } else {
-            LogMessage("No profile button detected - profile details didn't load properly")
-            ; No need for an "away" click as we're still at the scoreboard
+            LogMessage("Player doesn't meet criteria or no profile button found, skipping profile")
+            
+            ; Just click again at the same coordinates to close profile details
+            LogMessage("Clicking again to close profile details")
+            Click startX, currentY
+            Sleep 500
         }
         
         ; Move to the next row
@@ -489,92 +539,83 @@ IsProfileButtonVisible(x, y) {
     return false
 }
 
-; Function to check player medals
+
+; Function to check player medals using template matching in a single ROI
 CheckPlayerMedals(clickX, clickY) {
-    LogMessage("Analyzing player medals relative to click position " clickX "," clickY)
+    LogMessage("Analyzing player medals in a single ROI relative to click position " clickX "," clickY)
     
-    ; Define medal slot information - relative to the original click position
-    medalSlotInfo := [
-        {offsetX: 125, offsetY: -70, width: 50, height: 50},  ; First medal
-        {offsetX: 175, offsetY: -70, width: 50, height: 50},  ; Second medal
-        {offsetX: 225, offsetY: -70, width: 50, height: 50},  ; Third medal
-        {offsetX: 275, offsetY: -70, width: 50, height: 50},  ; Fourth medal
-        {offsetX: 325, offsetY: -70, width: 50, height: 50}   ; Fifth medal
-    ]
+    ; Define a single, larger ROI that covers all medal slots
+    ; Starting at offset 28,-150 with size 384x413
+    roiX := clickX + 28
+    roiY := clickY - 150
+    roiWidth := 384
+    roiHeight := 413
     
     ; Take a screenshot for analysis
     CaptureScreenshot()
     Sleep 1000  ; Wait for screenshot to be saved
     
-    ; Check the fourth medal slot first (index 3 in zero-based array)
-    fourthMedalX := clickX + medalSlotInfo[4].offsetX
-    fourthMedalY := clickY + medalSlotInfo[4].offsetY
-    fourthSlotWidth := medalSlotInfo[4].width
-    fourthSlotHeight := medalSlotInfo[4].height
+    ; Run medal detection using Python
+    medalDetectionResult := RunPythonDetector("detect_medals " roiX " " roiY " " roiWidth " " roiHeight)
+    LogMessage("Medal detection result: " medalDetectionResult)
     
-    ; Run analysis on fourth medal slot
-    result := RunPythonDetector("analyze_medal_region " fourthMedalX " " fourthMedalY " " 
-                               fourthSlotWidth " " fourthSlotHeight " 4")
-    LogMessage("Fourth medal slot analysis result: " result)
+    ; Parse the medal detection results
+    detectedMedals := []
+    hasFiveYearCoin := false
+    totalMedals := 0
     
-    ; Check if fourth medal slot is empty
-    if !InStr(result, "MEDAL_PRESENT=1") {
-        LogMessage("Fourth medal slot is empty - player doesn't have enough medals")
-        return {hasFourMedals: false, medals: [0, 0, 0, 0, 0], hasMoreMedals: false}
-    }
-    
-    ; If we reach here, the fourth medal slot has a medal
-    LogMessage("Fourth medal slot has a medal - checking all medal slots")
-    
-    ; Array to store results (1=medal present, 0=empty)
-    medalResults := [0, 0, 0, 0, 1]  ; Fourth medal (index 3) is already 1
-    
-    ; Check the remaining medal slots
-    Loop 4 {
-        if (A_Index == 4) {
-            ; Skip the fourth slot as we already checked it
-            continue
+    ; Process detection result to count medals and check for 5-year veteran coin
+    Loop Parse, medalDetectionResult, "`n", "`r" {
+        LogMessage("Parsing line: " A_LoopField)
+        
+        ; Check for total medal count
+        if RegExMatch(A_LoopField, "MEDAL_COUNT=(\d+)", &countMatch) {
+            totalMedals := Integer(countMatch[1])
+            LogMessage("Total medals detected: " totalMedals)
         }
         
-        slotX := clickX + medalSlotInfo[A_Index].offsetX
-        slotY := clickY + medalSlotInfo[A_Index].offsetY
-        slotWidth := medalSlotInfo[A_Index].width
-        slotHeight := medalSlotInfo[A_Index].height
+        ; Check for veteran coin specifically
+        if InStr(A_LoopField, "MEDAL_DETECTED=5-year-veteran-coin") {
+            hasFiveYearCoin := true
+            LogMessage("5-year veteran coin detected")
+        }
         
-        ; Run analysis on this medal slot
-        result := RunPythonDetector("analyze_medal_region " slotX " " slotY " " 
-                                   slotWidth " " slotHeight " " A_Index)
-        LogMessage("Medal slot " A_Index " analysis result: " result)
-        
-        ; Parse the result to determine if medal is present
-        if InStr(result, "MEDAL_PRESENT=1") {
-            medalResults[A_Index] := 1
-            LogMessage("Medal detected in slot " A_Index)
-        } else {
-            LogMessage("No medal detected in slot " A_Index)
+        ; Add all detected medals to the list
+        if RegExMatch(A_LoopField, "MEDAL_DETECTED=([^`r`n]+)", &medalMatch) {
+            medalName := Trim(medalMatch[1])
+            detectedMedals.Push(medalName)
+            LogMessage("Detected medal: " medalName)
         }
     }
     
-    ; Check if the fifth medal slot is occupied
-    if medalResults[5] == 1 {
-        ; Check for the right-arrow that loads more medals
+    ; Check if there are more medals (look for arrow)
+    hasMoreMedals := false
+    if (totalMedals > 0) {
         arrowResult := RunPythonDetector("detect_medal_arrow")
         LogMessage("Medal arrow detection result: " arrowResult)
-        
         hasMoreMedals := InStr(arrowResult, "MEDAL_ARROW_PRESENT=1")
-        if hasMoreMedals {
-            LogMessage("Medal right-arrow detected - player has more medals")
-        } else {
-            LogMessage("No medal right-arrow detected")
-        }
-    } else {
-        hasMoreMedals := false
     }
+    
+    ; Check if we meet our criteria:
+    ; 1. Has 5-year veteran coin
+    ; 2. Has at least 4 medals total
+    hasSufficientMedals := (totalMedals >= 4)
+    meetsAllCriteria := (hasFiveYearCoin && hasSufficientMedals)
+    
+    LogMessage("Medal analysis summary:")
+    LogMessage("- Total medals detected: " totalMedals)
+    LogMessage("- Has 5-year veteran coin: " (hasFiveYearCoin ? "Yes" : "No"))
+    LogMessage("- Has sufficient medals (4+): " (hasSufficientMedals ? "Yes" : "No"))
+    LogMessage("- Has more medals indicator: " (hasMoreMedals ? "Yes" : "No"))
+    LogMessage("- Meets all criteria: " (meetsAllCriteria ? "Yes" : "No"))
     
     ; Return the medal information
     return {
-        hasFourMedals: true,
-        medals: medalResults,
+        hasFourMedals: hasSufficientMedals,
+        hasFiveYearCoin: hasFiveYearCoin,
+        meetsAllCriteria: meetsAllCriteria,
+        medals: detectedMedals,
+        medalCount: totalMedals,
         hasMoreMedals: hasMoreMedals
     }
 }

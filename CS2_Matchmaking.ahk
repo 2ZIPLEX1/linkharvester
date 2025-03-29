@@ -43,7 +43,26 @@ CheckForMatchmakingFailure() {
         if InStr(result, "ERROR_DETECTION_RESULT=1") {
             LogMessage("Error dialog detected positively!")
             
-            ; Parse coordinates
+            ; Check if this is error_dialog_3 (the fatal error)
+            if InStr(result, "ERROR_TYPE=fatal") {
+                LogMessage("FATAL ERROR DIALOG DETECTED! Will exit script after dismissal.")
+                
+                ; Press Escape to dismiss the dialog
+                Send "{Escape}"
+                Sleep 500
+                Send "{Escape}"  ; Try a second time
+                
+                ; Take a verification screenshot
+                CaptureScreenshot()
+                
+                ; Display message box to inform user
+                MsgBox("Fatal error detected in CS2. The script will now exit.`n`nPlease restart CS2 manually.", "Fatal Error", 48)
+                
+                ; Signal that we need to exit
+                return "fatal"
+            }
+            
+            ; Parse coordinates for regular errors
             coordPos := InStr(result, "ERROR_COORDS=")
             if (coordPos > 0) {
                 coordsStr := SubStr(result, coordPos + 13) ; 13 is length of "ERROR_COORDS="
@@ -93,57 +112,71 @@ CheckForMatchmakingFailure() {
     }
 }
 
-; Check for spectate button
-CheckForSpectateButton() {
+; New function to check for Spectate button using pixel color detection
+IsSpectateButtonVisible() {
+    ; Three key points to check on the spectate button's camera icon
+    point1X := 1587  ; Upper-left corner
+    point1Y := 1026
+    
+    point2X := 1596  ; Middle point
+    point2Y := 1032
+    
+    point3X := 1606  ; Lower-right corner
+    point3Y := 1039
     
     try {
-        ; Take a screenshot
-        CaptureScreenshot()
-        Sleep 1000  ; Wait for screenshot to be saved
+        ; Get colors at all three points
+        color1 := PixelGetColor(point1X, point1Y)
+        color2 := PixelGetColor(point2X, point2Y)
+        color3 := PixelGetColor(point3X, point3Y)
         
-        ; Run Python detector
-        result := RunPythonDetector("spectate")
+        ; Function to check if a color is whitish (high values in all RGB channels)
+        IsWhitish(color) {
+            r := (color >> 16) & 0xFF
+            g := (color >> 8) & 0xFF
+            b := color & 0xFF
+            
+            ; All channels should be high (above 200) for white
+            return (r > 200 && g > 200 && b > 200)
+        }
         
-        ; Enhanced parsing logic
-        if InStr(result, "SPECTATE_DETECTION_RESULT=1") {
-            
-            ; Parse coordinates
-            coordPos := InStr(result, "SPECTATE_COORDS=")
-            if (coordPos > 0) {
-                coordsStr := SubStr(result, coordPos + 16) ; 16 is length of "SPECTATE_COORDS="
-                coordsStr := RegExReplace(coordsStr, "\r?\n.*", "") ; Remove anything after the line
-                
-                coords := StrSplit(coordsStr, ",")
-                if (coords.Length = 2) {
-                    LogMessage("Found spectate coordinates: " coords[1] "," coords[2])
-                    return true
-                }
-            }
-            
-            ; Even if coordinates weren't properly parsed, we detected the button
-            LogMessage("Spectate button detected but couldn't parse coordinates")
+        ; Log the detected colors for debugging
+        LogMessage("Spectate button detection - Point 1: " Format("0x{:X}", color1) 
+                  " Point 2: " Format("0x{:X}", color2) 
+                  " Point 3: " Format("0x{:X}", color3))
+        
+        ; Check if all three points are whitish
+        if (IsWhitish(color1) && IsWhitish(color2) && IsWhitish(color3)) {
+            LogMessage("Spectate button detected by pixel color method!")
             return true
         }
+        
+        return false
     } catch Error as e {
-        LogMessage("Error in detection: " e.Message)
+        LogMessage("Error checking spectate button colors: " e.Message)
+        return false
     }
-    
-    return false
 }
 
-; Optimized match outcome detection with search status check
+; Optimized match outcome detection with direct pixel color method
 WaitForMatchOutcome() {
     LogMessage("Waiting for match outcome (success or failure)...")
     
     ; Store start time to enforce timeout
     startTime := A_TickCount
-    timeout := 600000  ; 10 minutes in milliseconds (increased from 1 minute)
+    timeout := 600000  ; 10 minutes in milliseconds
+    errorCheckInterval := 3000  ; Check for errors every 3 seconds
+    lastErrorCheckTime := 0
     
     LogMessage("Match detection timeout set to " timeout / 1000 " seconds")
     
     ; Phase tracking: 0 = searching, 1 = connecting/loading
     currentPhase := 0
     searchingEndTime := 0
+    
+    ; Spectate button click coordinates
+    spectateButtonX := 1596
+    spectateButtonY := 1032
     
     loop {
         ; Check if user requested exit
@@ -193,49 +226,21 @@ WaitForMatchOutcome() {
             Sleep 1000
         }
         
-        ; Log progress every 5 iterations during loading phase
+        ; Log progress during loading phase (less frequently)
         if (Mod(A_Index, 5) = 0) {
             timeInLoadingPhase := (A_TickCount - searchingEndTime) / 1000
             LogMessage("In loading phase... " timeInLoadingPhase " seconds elapsed since search ended")
         }
         
-        ; Take periodic screenshots only during loading phase
-        if (currentPhase = 1 && Mod(A_Index, 3) = 0) {
-            LogMessage("Taking detection screenshot...")
-            CaptureScreenshot()
-            Sleep 1000
-        }
-        
-        ; Check for success (Spectate button)
-        if (CheckForSpectateButton()) {
-            LogMessage("Successfully joined match!")
+        ; First priority: Check for Spectate button using pixel color method
+        if (IsSpectateButtonVisible()) {
+            LogMessage("Successfully joined match! Spectate button detected via pixel color method")
             
-            ; Run detector again to get fresh coordinates
-            result := RunPythonDetector("spectate")
-            
-            ; Default coordinates based on your configuration
-            buttonX := 1640  ; Center of spectate button X
-            buttonY := 1032  ; Center of spectate button Y
-            
-            ; Try to parse coordinates from result
-            coordPos := InStr(result, "SPECTATE_COORDS=")
-            if (coordPos > 0) {
-                coordsStr := SubStr(result, coordPos + 16)
-                coordsStr := RegExReplace(coordsStr, "\r?\n.*", "")
-                
-                coords := StrSplit(coordsStr, ",")
-                if (coords.Length = 2) {
-                    buttonX := Integer(coords[1])
-                    buttonY := Integer(coords[2])
-                    LogMessage("Using detected coordinates: " buttonX "," buttonY)
-                }
-            }
-            
-            ; Click the button - add multiple click attempts to ensure it works
-            LogMessage("Clicking spectator button at " buttonX ", " buttonY)
-            Click buttonX, buttonY
+            ; Click the spectate button at the predefined coordinates
+            LogMessage("Clicking spectator button at " spectateButtonX ", " spectateButtonY)
+            Click spectateButtonX, spectateButtonY
             Sleep 500
-            Click buttonX, buttonY  ; Try a second click
+            Click spectateButtonX, spectateButtonY  ; Try a second click for reliability
             Sleep 500
             
             ; Take a screenshot after clicking
@@ -244,14 +249,26 @@ WaitForMatchOutcome() {
             return "success"
         }
         
-        ; Check for failure dialog
-        if (CheckForMatchmakingFailure()) {
-            LogMessage("Matchmaking failure detected and handled")
-            return "failure"
+        ; Second priority: Check for error dialogs periodically
+        if (currentTime - lastErrorCheckTime > errorCheckInterval) {
+            LogMessage("Taking screenshot to check for error dialog...")
+            lastErrorCheckTime := currentTime
+            
+            ; Check for failure dialog
+            errorResult := CheckForMatchmakingFailure()
+            if (errorResult) {
+                if (errorResult = "fatal") {
+                    LogMessage("FATAL matchmaking error detected - exiting script")
+                    return "fatal_error"
+                } else {
+                    LogMessage("Matchmaking failure detected and handled")
+                    return "failure"
+                }
+            }
         }
         
-        ; Wait before next check during loading phase
-        Sleep 2000
+        ; Short sleep between checks to avoid excessive CPU usage
+        Sleep 500
     }
     
     return "unknown"  ; Should never reach here

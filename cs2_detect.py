@@ -62,14 +62,16 @@ def detect_template(image_input, template_name, threshold=None, roi=None):
         default_thresholds = {
             "spectate_button": 0.8,
             "error_dialog": 0.7,
-            "error_dialog_2": 0.7
+            "error_dialog_2": 0.7,
+            "error_dialog_3": 0.7
         }
         
         # Set default ROIs for each template type (if not provided)
         default_rois = {
             "spectate_button": (1577, 1008, 122, 47),
             "error_dialog": (704, 431, 512, 218),
-            "error_dialog_2": (600, 350, 720, 379)
+            "error_dialog_2": (600, 350, 720, 379),
+            "error_dialog_3": (704, 431, 512, 218)
         }
         
         # Use provided threshold or default for this template
@@ -165,14 +167,22 @@ def detect_error_dialog():
     # Check for any error dialog templates with ROI
     found1, _ = detect_template(screenshot, "error_dialog", 0.7, error_roi)
     found2, _ = detect_template(screenshot, "error_dialog_2", 0.7, error_roi)
+    found3, _ = detect_template(screenshot, "error_dialog_3", 0.7, error_roi)
     
     # If any error dialog was found
-    if found1 or found2:
-        dialog_type = "first" if found1 else "second"
-        logging.info(f"{dialog_type.upper()} ERROR DIALOG DETECTED!")
-        
-        # Instead of clicking on specific coordinates, we'll return special coordinates
-        # that signal the caller to press Escape instead
+    if found1 or found2 or found3:
+        # Determine dialog type 
+        if found3:
+            dialog_type = "fatal"
+            logging.info("FATAL ERROR DIALOG DETECTED!")
+            print("ERROR_DETECTION_RESULT=1")
+            print("ERROR_TYPE=fatal")
+            print("ERROR_COORDS=-1,-1")
+        else:
+            dialog_type = "first" if found1 else "second"
+            logging.info(f"{dialog_type.upper()} ERROR DIALOG DETECTED!")
+            print("ERROR_DETECTION_RESULT=1")
+            print("ERROR_COORDS=-1,-1")
         
         # Log performance
         elapsed_time = time.time() - start_time
@@ -183,6 +193,7 @@ def detect_error_dialog():
     
     # Log performance even when nothing found
     elapsed_time = time.time() - start_time
+    print("ERROR_DETECTION_RESULT=0")
     return False, None
 
 def detect_spectate_button():
@@ -957,113 +968,200 @@ def extract_steam_url():
         print("URL_EXTRACTION_RESULT=0")
         print(f"URL_EXTRACTION_ERROR={str(e)}")
 
-def analyze_medal_region(region_x, region_y, width, height, slot_index):
+def detect_medals(roi_x, roi_y, roi_width, roi_height):
     """
-    Analyze a region of the screenshot to determine if it contains a medal
+    Detect medals in a specified ROI using template matching
     
     Args:
-        region_x: X coordinate of the region
-        region_y: Y coordinate of the region
-        width: Width of the region
-        height: Height of the region
-        slot_index: The index of this medal slot (1-5)
+        roi_x: X-coordinate of the top-left corner of the ROI
+        roi_y: Y-coordinate of the top-left corner of the ROI
+        roi_width: Width of the ROI
+        roi_height: Height of the ROI
     """
     try:
         # Get the latest screenshot
         screenshot_path = get_latest_screenshot()
         if not screenshot_path:
-            logging.warning("No recent screenshot found for medal analysis")
-            print("MEDAL_ANALYSIS_RESULT=0")
-            print("MEDAL_ANALYSIS_ERROR=No recent screenshot found")
+            logging.warning("No recent screenshot found for medal detection")
+            print("MEDAL_DETECTION_RESULT=0")
+            print("MEDAL_DETECTION_ERROR=No recent screenshot found")
             return
         
         # Read the screenshot
         img = cv2.imread(screenshot_path)
         if img is None:
             logging.error(f"Could not read image: {screenshot_path}")
-            print("MEDAL_ANALYSIS_RESULT=0")
-            print("MEDAL_ANALYSIS_ERROR=Could not read screenshot")
+            print("MEDAL_DETECTION_RESULT=0")
+            print("MEDAL_DETECTION_ERROR=Could not read screenshot")
             return
         
         # Get image dimensions
         img_height, img_width = img.shape[:2]
         
-        # Ensure coordinates are within image bounds
-        region_x = max(0, min(region_x, img_width - 1))
-        region_y = max(0, min(region_y, img_height - 1))
-        width = min(width, img_width - region_x)
-        height = min(height, img_height - region_y)
+        # Ensure ROI is within image bounds
+        roi_x = max(0, min(roi_x, img_width - 1))
+        roi_y = max(0, min(roi_y, img_height - 1))
+        roi_width = min(roi_width, img_width - roi_x)
+        roi_height = min(roi_height, img_height - roi_y)
         
-        # Check if region dimensions are valid
-        if width <= 0 or height <= 0:
-            logging.error(f"Invalid region dimensions: {width}x{height}")
-            print("MEDAL_ANALYSIS_RESULT=0")
-            print("MEDAL_ANALYSIS_ERROR=Invalid region dimensions")
+        # Check if ROI dimensions are valid
+        if roi_width <= 0 or roi_height <= 0:
+            logging.error(f"Invalid ROI dimensions: {roi_width}x{roi_height}")
+            print("MEDAL_DETECTION_RESULT=0")
+            print("MEDAL_DETECTION_ERROR=Invalid ROI dimensions")
             return
         
-        # Extract the region
-        region = img[region_y:region_y+height, region_x:region_x+width]
+        # Extract the ROI
+        roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
         
-        # Save the region for debugging
+        # Save the ROI for debugging
         timestamp = int(time.time())
         debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
-        debug_path = os.path.join(debug_dir, f"medal_slot_{slot_index}_{timestamp}_{region_x}_{region_y}.png")
-        cv2.imwrite(debug_path, region)
-        logging.info(f"Saved medal slot {slot_index} region to: {debug_path}")
+        debug_path = os.path.join(debug_dir, f"medal_roi_{timestamp}.png")
+        cv2.imwrite(debug_path, roi)
+        logging.info(f"Saved medal ROI to: {debug_path}")
         
-        # ---------- Multiple analysis methods ----------
+        # List of medal templates to check
+        medal_templates = [
+            "5-year-veteran-coin",
+            "10-year-veteran-coin",
+            "global-offensive-badge",
+            "loyalty-badge",
+            "premier-season-one-medal",
+            "shanghai-2024-silver-coin",
+            "10-year-birthday-coin",
+            "2015-service-medal",
+            "2018-service-medal",
+            "2019-service-medal",
+            "2020-service-medal",
+            "2021-service-medal",
+            "2023-service-medal",
+            "2024-service-medal",
+            "2025-service-medal"
+        ]
         
-        # Method 1: Edge detection
-        gray = cv2.cvtColor(region, cv2.COLOR_BGR2GRAY)
-        edges = cv2.Canny(gray, 50, 150)
-        edge_density = cv2.countNonZero(edges) / (region.shape[0] * region.shape[1])
-        logging.info(f"Medal slot {slot_index} - Edge density: {edge_density:.4f}")
+        # Dictionary to store detection results
+        detected_medals = {}
+        medal_count = 0
         
-        # Method 2: Brightness variance
-        brightness_std = np.std(gray)
-        logging.info(f"Medal slot {slot_index} - Brightness standard deviation: {brightness_std:.4f}")
+        # Prepare visualization image for debugging
+        visualization = roi.copy()
         
-        # Method 3: Color variance (using HSV)
-        hsv = cv2.cvtColor(region, cv2.COLOR_BGR2HSV)
-        color_variance = np.mean([np.std(hsv[:,:,0]), np.std(hsv[:,:,1]), np.std(hsv[:,:,2])])
-        logging.info(f"Medal slot {slot_index} - Color variance: {color_variance:.4f}")
-        
-        # ---------- Decision criteria ----------
-        # These thresholds may need adjustment based on testing
-        has_medal = False
-        
-        # Edge detection threshold
-        if edge_density > 0.1:
-            has_medal = True
-            logging.info(f"Medal detected in slot {slot_index} based on edge density")
-        
-        # Brightness variation threshold
-        if brightness_std > 30.0:
-            has_medal = True
-            logging.info(f"Medal detected in slot {slot_index} based on brightness variation")
+        # Process each medal template
+        for template_name in medal_templates:
+            # Define template path in the medals subfolder
+            template_path = os.path.join(TEMPLATES_PATH, "medals", f"{template_name}.jpg")
             
-        # Color variation threshold
-        if color_variance > 20.0:
-            has_medal = True
-            logging.info(f"Medal detected in slot {slot_index} based on color variation")
+            # Check if template file exists
+            if not os.path.exists(template_path):
+                logging.warning(f"Medal template not found: {template_path}")
+                continue
+                
+            # Read template
+            template = cv2.imread(template_path)
+            if template is None:
+                logging.warning(f"Could not read medal template: {template_path}")
+                continue
+                
+            # Convert to grayscale
+            roi_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+            template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+            
+            # Check template size vs ROI size
+            template_h, template_w = template_gray.shape
+            roi_h, roi_w = roi_gray.shape
+            
+            if template_h > roi_h or template_w > roi_w:
+                logging.warning(f"Template {template_name} ({template_w}x{template_h}) is larger than ROI ({roi_w}x{roi_h})")
+                continue
+            
+            # Perform template matching with multiple thresholds
+            thresholds = [0.85, 0.80, 0.75]  # Start with high confidence threshold
+            
+            for threshold in thresholds:
+                # Perform template matching
+                result = cv2.matchTemplate(roi_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+                
+                # Find locations where match quality exceeds the threshold
+                locations = np.where(result >= threshold)
+                
+                # If we have some matches, process them
+                if len(locations[0]) > 0:
+                    # Group close matches using non-maximum suppression
+                    rectangles = []
+                    for pt in zip(*locations[::-1]):  # Switch columns and rows
+                        rectangles.append((pt[0], pt[1], template_w, template_h))
+                    
+                    # Convert to numpy array for easier processing
+                    rectangles = np.array(rectangles)
+                    
+                    # Perform non-maximum suppression to avoid duplicate detections
+                    # A simple approach: if rectangles overlap significantly, count only one
+                    if len(rectangles) > 0:
+                        picked_rectangles = []
+                        for rect in rectangles:
+                            overlap = False
+                            for picked_rect in picked_rectangles:
+                                # Calculate intersection over union (IOU)
+                                x1 = max(rect[0], picked_rect[0])
+                                y1 = max(rect[1], picked_rect[1])
+                                x2 = min(rect[0] + rect[2], picked_rect[0] + picked_rect[2])
+                                y2 = min(rect[1] + rect[3], picked_rect[1] + picked_rect[3])
+                                
+                                if x2 > x1 and y2 > y1:
+                                    intersection = (x2 - x1) * (y2 - y1)
+                                    union = rect[2] * rect[3] + picked_rect[2] * picked_rect[3] - intersection
+                                    iou = intersection / union
+                                    
+                                    if iou > 0.3:  # If IOU > 30%, consider as duplicate
+                                        overlap = True
+                                        break
+                            
+                            if not overlap:
+                                picked_rectangles.append(rect)
+                    
+                        # Add unique matches to the result
+                        for rect in picked_rectangles:
+                            x, y, w, h = rect
+                            medal_count += 1
+                            detected_medals[f"{template_name}_{medal_count}"] = {
+                                "name": template_name,
+                                "x": x + roi_x,  # Convert back to original image coordinates
+                                "y": y + roi_y,
+                                "confidence": float(result[y, x])
+                            }
+                            
+                            # Draw on visualization image
+                            cv2.rectangle(visualization, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                            cv2.putText(visualization, template_name, (x, y - 5), 
+                                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                    
+                    # Break after finding matches at this threshold
+                    break
         
-        # Output the result
-        if has_medal:
-            print("MEDAL_ANALYSIS_RESULT=1")
-            print("MEDAL_PRESENT=1")
-            logging.info(f"Medal detected in slot {slot_index} at {region_x},{region_y}")
-        else:
-            print("MEDAL_ANALYSIS_RESULT=1")
-            print("MEDAL_PRESENT=0")
-            logging.info(f"No medal detected in slot {slot_index} at {region_x},{region_y}")
+        # Save visualization for debugging
+        viz_path = os.path.join(debug_dir, f"medal_detection_viz_{timestamp}.png")
+        cv2.imwrite(viz_path, visualization)
+        logging.info(f"Saved medal detection visualization to: {viz_path}")
+        
+        # Output detection results
+        print("MEDAL_DETECTION_RESULT=1")
+        print(f"MEDAL_COUNT={len(detected_medals)}")
+        
+        for key, info in detected_medals.items():
+            print(f"MEDAL_DETECTED={info['name']}")
+            print(f"MEDAL_COORDS={info['x']},{info['y']}")
+            print(f"MEDAL_CONFIDENCE={info['confidence']:.4f}")
+        
+        logging.info(f"Detected {len(detected_medals)} medals in the ROI")
         
     except Exception as e:
-        logging.error(f"Error analyzing medal region: {str(e)}")
+        logging.error(f"Error detecting medals: {str(e)}")
         import traceback
         logging.error(traceback.format_exc())
-        print("MEDAL_ANALYSIS_RESULT=0")
-        print(f"MEDAL_ANALYSIS_ERROR={str(e)}")
+        print("MEDAL_DETECTION_RESULT=0")
+        print(f"MEDAL_DETECTION_ERROR={str(e)}")
 
 def detect_medal_arrow():
     """Detect the right-arrow that loads more medals"""
@@ -1128,6 +1226,480 @@ def detect_medal_arrow():
         logging.error(traceback.format_exc())
         print("MEDAL_ARROW_RESULT=0")
         print(f"MEDAL_ARROW_ERROR={str(e)}")
+
+def analyze_profile(click_x, click_y):
+    """
+    Unified profile analysis function that performs all detection steps in a single call.
+    This function analyzes the entire profile details region based on the original click coordinates.
+    
+    Args:
+        click_x: X-coordinate of original click position on player in scoreboard
+        click_y: Y-coordinate of original click position on player in scoreboard
+        
+    Returns:
+        Complete analysis with decision on whether to proceed with Steam profile check
+    """
+    try:
+        # Define the entire profile details ROI relative to click position
+        roi_x = click_x + 28
+        roi_y = click_y - 150
+        roi_width = 384
+        roi_height = 413
+        
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for profile analysis")
+            print("PROFILE_ANALYSIS_RESULT=0")
+            print("PROFILE_ANALYSIS_ERROR=No recent screenshot found")
+            return
+        
+        # Read the screenshot
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            logging.error(f"Could not read image: {screenshot_path}")
+            print("PROFILE_ANALYSIS_RESULT=0")
+            print("PROFILE_ANALYSIS_ERROR=Could not read screenshot")
+            return
+        
+        # Get image dimensions
+        img_height, img_width = img.shape[:2]
+        
+        # Ensure ROI is within image bounds
+        roi_x = max(0, min(roi_x, img_width - 1))
+        roi_y = max(0, min(roi_y, img_height - 1))
+        roi_width = min(roi_width, img_width - roi_x)
+        roi_height = min(roi_height, img_height - roi_y)
+        
+        # Check if ROI dimensions are valid
+        if roi_width <= 0 or roi_height <= 0:
+            logging.error(f"Invalid ROI dimensions: {roi_width}x{roi_height}")
+            print("PROFILE_ANALYSIS_RESULT=0")
+            print("PROFILE_ANALYSIS_ERROR=Invalid ROI dimensions")
+            return
+        
+        # Extract the full profile details ROI
+        profile_roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
+        
+        # Save the unified ROI
+        timestamp = int(time.time())
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        
+        # Save the unified ROI
+        roi_debug_path = os.path.join(debug_dir, f"profile_full_roi_{timestamp}.png")
+        cv2.imwrite(roi_debug_path, profile_roi)
+        logging.info(f"Saved full profile ROI to: {roi_debug_path}")
+        
+        # Save the original screenshot with ROI highlighted
+        debug_img = img.copy()
+        cv2.rectangle(debug_img, (roi_x, roi_y), (roi_x+roi_width, roi_y+roi_height), (0, 255, 0), 2)
+        cv2.putText(debug_img, "Unified Profile ROI", (roi_x, roi_y-10), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (0, 255, 0), 2)
+        full_debug_path = os.path.join(debug_dir, f"unified_roi_full_screenshot_{timestamp}.png")
+        cv2.imwrite(full_debug_path, debug_img)
+        logging.info(f"Saved full screenshot with unified ROI highlighted to: {full_debug_path}")
+        
+        # Create a visualization image for our detections
+        visualization = profile_roi.copy()
+        
+        # ------------- STEP 1: Check for profile button -------------
+        # Look for the profile button icon across the entire ROI
+        profile_button_found = False
+        profile_button_x = 0
+        profile_button_y = 0
+
+        # Template matching for profile button icon using the full ROI
+        template_path = os.path.join(TEMPLATES_PATH, "profile-button.jpg")
+        
+        # Enhanced template matching diagnostics
+        if os.path.exists(template_path):
+            template = cv2.imread(template_path)
+            if template is not None:
+                # Save template for reference
+                template_debug_path = os.path.join(debug_dir, f"profile_button_template_{timestamp}.png")
+                cv2.imwrite(template_debug_path, template)
+                logging.info(f"Saved template image to: {template_debug_path}")
+                
+                logging.info(f"Template dimensions: {template.shape}")
+                logging.info(f"Full ROI dimensions: {profile_roi.shape}")
+                
+                # Try multiple methods for diagnostics
+                methods = [
+                    ('TM_CCOEFF_NORMED', cv2.TM_CCOEFF_NORMED),
+                    ('TM_CCORR_NORMED', cv2.TM_CCORR_NORMED),
+                    ('TM_SQDIFF_NORMED', cv2.TM_SQDIFF_NORMED)
+                ]
+                
+                # Convert to grayscale once
+                full_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
+                template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+                
+                # Try each method for diagnostics
+                for method_name, method in methods:
+                    # Perform template matching
+                    result = cv2.matchTemplate(full_gray, template_gray, method)
+                    
+                    # Get min/max values
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+                    
+                    # For TM_SQDIFF_NORMED, smaller values are better
+                    if method == cv2.TM_SQDIFF_NORMED:
+                        match_val = 1.0 - min_val
+                        best_loc = min_loc
+                    else:
+                        match_val = max_val
+                        best_loc = max_loc
+                    
+                    logging.info(f"Method {method_name}: Best match value = {match_val:.4f}")
+                    
+                    # Create a heatmap for visualization
+                    result_norm = result.copy()
+                    if method == cv2.TM_SQDIFF_NORMED:
+                        result_norm = 1.0 - result_norm
+                        
+                    # Normalize to 0-1 range and create heatmap
+                    result_norm = cv2.normalize(result_norm, None, 0, 1, cv2.NORM_MINMAX)
+                    result_heatmap = cv2.applyColorMap((result_norm * 255).astype(np.uint8), cv2.COLORMAP_JET)
+                    
+                    # Save heatmap
+                    heatmap_path = os.path.join(debug_dir, f"heatmap_{method_name}_{timestamp}.png")
+                    cv2.imwrite(heatmap_path, result_heatmap)
+                    logging.info(f"Saved heatmap for {method_name} to: {heatmap_path}")
+                
+                # Now do the actual detection with multiple methods and thresholds
+                detect_methods = [cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF_NORMED]
+                thresholds = [0.7, 0.6, 0.5, 0.4]  # Try progressively lower thresholds
+                
+                # Try each method and threshold for actual detection
+                for method in detect_methods:
+                    if profile_button_found:
+                        break
+                        
+                    for threshold in thresholds:
+                        if profile_button_found:
+                            break
+                            
+                        # Perform template matching
+                        result = cv2.matchTemplate(full_gray, template_gray, method)
+                        
+                        # For SQDIFF methods, smaller values = better matches
+                        if method == cv2.TM_SQDIFF_NORMED:
+                            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+                            match_val = 1.0 - min_val  # Convert to a similarity score
+                            match_loc = min_loc
+                            logging.info(f"SQDIFF method match value: {match_val:.3f} (threshold: {threshold})")
+                        else:
+                            min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+                            match_val = max_val
+                            match_loc = max_loc
+                            logging.info(f"Method {method} match value: {match_val:.3f} (threshold: {threshold})")
+                        
+                        if ((method == cv2.TM_SQDIFF_NORMED and match_val >= threshold) or 
+                            (method != cv2.TM_SQDIFF_NORMED and match_val >= threshold)):
+                            h, w = template.shape[:2]
+                            # Calculate coordinates relative to full image
+                            profile_button_x = roi_x + match_loc[0] + w//2
+                            profile_button_y = roi_y + match_loc[1] + h//2
+                            profile_button_found = True
+                            
+                            # Draw on visualization
+                            cv2.rectangle(visualization, 
+                                        (match_loc[0], match_loc[1]),
+                                        (match_loc[0] + w, match_loc[1] + h),
+                                        (0, 255, 0), 2)
+                            cv2.putText(visualization, f"Profile Button ({match_val:.2f})", 
+                                    (match_loc[0], match_loc[1] - 5),
+                                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                            
+                            logging.info(f"Profile button found at {profile_button_x},{profile_button_y} with confidence {match_val:.3f}")
+                            break
+            else:
+                logging.warning(f"Failed to load template image: {template_path}")
+        else:
+            logging.warning(f"Profile button template not found at: {template_path}")
+
+        # If no profile button found, try with a simple color-based detection approach as a fallback
+        if not profile_button_found:
+            logging.info("Template matching failed. Trying simple icon detection as a fallback.")
+            
+            # Convert to HSV color space for better color filtering
+            hsv = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2HSV)
+            
+            # Define range for white/light gray (common color for profile icons)
+            lower_gray = np.array([0, 0, 180])
+            upper_gray = np.array([180, 30, 255])
+            
+            # Threshold the HSV image to get only white/light areas
+            mask = cv2.inRange(hsv, lower_gray, upper_gray)
+            
+            # Save the mask for debugging
+            mask_path = os.path.join(debug_dir, f"profile_button_mask_{timestamp}.png")
+            cv2.imwrite(mask_path, mask)
+            
+            # Find contours in the mask
+            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            
+            # Filter contours by size (profile button should be a reasonable size)
+            filtered_contours = []
+            for contour in contours:
+                area = cv2.contourArea(contour)
+                # Adjust these thresholds based on your button's actual size
+                if 50 < area < 500:  
+                    x, y, w, h = cv2.boundingRect(contour)
+                    # Filter by aspect ratio (profile icons are approximately square)
+                    aspect_ratio = float(w) / h
+                    if 0.7 < aspect_ratio < 1.3:
+                        filtered_contours.append((x, y, w, h, area))
+            
+            # Sort by area (largest first)
+            filtered_contours.sort(key=lambda x: x[4], reverse=True)
+            
+            # Draw the contours on a debug image
+            contour_img = profile_roi.copy()
+            for i, (x, y, w, h, area) in enumerate(filtered_contours[:5]):  # Show top 5
+                color = (0, 255, 0) if i == 0 else (0, 0, 255)
+                cv2.rectangle(contour_img, (x, y), (x + w, y + h), color, 2)
+                cv2.putText(contour_img, f"{i+1}: {area:.1f}", (x, y - 5), 
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 1)
+            
+            # Save the contour image
+            contour_path = os.path.join(debug_dir, f"profile_button_contours_{timestamp}.png")
+            cv2.imwrite(contour_path, contour_img)
+            
+            # If we found any potential buttons, use the largest one
+            if filtered_contours:
+                x, y, w, h, area = filtered_contours[0]
+                profile_button_x = roi_x + x + w//2
+                profile_button_y = roi_y + y + h//2
+                profile_button_found = True
+                
+                # Draw on visualization
+                cv2.rectangle(visualization, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                cv2.putText(visualization, f"Profile Button (contour: {area:.1f})", 
+                        (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                
+                logging.info(f"Profile button found using contour method at {profile_button_x},{profile_button_y}")
+
+        # If no profile button found, exit early
+        if not profile_button_found:
+            logging.info("No profile button detected in profile details")
+            print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_BUTTON_FOUND=0")
+            print("DECISION=SKIP")
+            
+            # Save visualization anyway for debugging
+            viz_debug_path = os.path.join(debug_dir, f"profile_analysis_viz_{timestamp}.png")
+            cv2.imwrite(viz_debug_path, visualization)
+            return
+            
+        logging.info(f"Profile button found at {profile_button_x},{profile_button_y}")
+        print("PROFILE_BUTTON_FOUND=1")
+        print(f"PROFILE_BUTTON_COORDS={profile_button_x},{profile_button_y}")
+        
+        # ------------- STEP 2: Detect medals -------------
+        # Look for medals across the entire ROI
+        
+        # List of medal templates to check
+        medal_templates = [
+            "5-year-veteran-coin",
+            "10-year-veteran-coin",
+            "global-offensive-badge",
+            "loyalty-badge",
+            "premier-season-one-medal",
+            "shanghai-2024-silver-coin",
+            "10-year-birthday-coin",
+            "2015-service-medal",
+            "2018-service-medal",
+            "2019-service-medal",
+            "2020-service-medal",
+            "2021-service-medal",
+            "2023-service-medal",
+            "2024-service-medal",
+            "2025-service-medal"
+        ]
+        
+        # Dictionary to store detected medals
+        detected_medals = {}
+        
+        # Flag for 5-year veteran coin
+        has_5year_coin = False
+        
+        # Convert profile ROI to grayscale once for all medal detections
+        profile_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
+        
+        # Process each medal template
+        for template_name in medal_templates:
+            # Define template path in the medals subfolder
+            template_path = os.path.join(TEMPLATES_PATH, "medals", f"{template_name}.jpg")
+            
+            # Check if template file exists
+            if not os.path.exists(template_path):
+                logging.warning(f"Medal template not found: {template_path}")
+                continue
+                
+            # Read template
+            template = cv2.imread(template_path)
+            if template is None:
+                logging.warning(f"Could not read medal template: {template_path}")
+                continue
+                
+            # Convert to grayscale
+            template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+            
+            # Check template size vs ROI size
+            template_h, template_w = template_gray.shape
+            if template_h > profile_gray.shape[0] or template_w > profile_gray.shape[1]:
+                logging.warning(f"Template {template_name} too large for ROI")
+                continue
+            
+            # Perform template matching with multiple thresholds
+            thresholds = [0.85, 0.80, 0.75]  # Start with high confidence
+            
+            for threshold in thresholds:
+                # Perform template matching
+                result = cv2.matchTemplate(profile_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+                
+                # Find locations where match quality exceeds the threshold
+                locations = np.where(result >= threshold)
+                
+                # If we have matches, process them
+                if len(locations[0]) > 0:
+                    # Group close matches using non-maximum suppression
+                    rectangles = []
+                    for pt in zip(*locations[::-1]):  # Switch columns and rows
+                        rectangles.append((pt[0], pt[1], template_w, template_h))
+                    
+                    # Convert to numpy array for easier processing
+                    rectangles = np.array(rectangles)
+                    
+                    # Perform non-maximum suppression to avoid duplicates
+                    if len(rectangles) > 0:
+                        picked_rectangles = []
+                        for rect in rectangles:
+                            overlap = False
+                            for picked_rect in picked_rectangles:
+                                # Calculate intersection over union (IOU)
+                                x1 = max(rect[0], picked_rect[0])
+                                y1 = max(rect[1], picked_rect[1])
+                                x2 = min(rect[0] + rect[2], picked_rect[0] + picked_rect[2])
+                                y2 = min(rect[1] + rect[3], picked_rect[1] + picked_rect[3])
+                                
+                                if x2 > x1 and y2 > y1:
+                                    intersection = (x2 - x1) * (y2 - y1)
+                                    union = rect[2] * rect[3] + picked_rect[2] * picked_rect[3] - intersection
+                                    iou = intersection / union
+                                    
+                                    if iou > 0.3:  # If IOU > 30%, consider as duplicate
+                                        overlap = True
+                                        break
+                            
+                            if not overlap:
+                                picked_rectangles.append(rect)
+                    
+                        # Add unique matches to the result
+                        for i, rect in enumerate(picked_rectangles):
+                            x, y, w, h = rect
+                            confidence = float(result[y, x])
+                            
+                            detected_medals[f"{template_name}_{i}"] = {
+                                "name": template_name,
+                                "x": x,
+                                "y": y,
+                                "confidence": confidence
+                            }
+                            
+                            # Check if this is the 5-year veteran coin
+                            if template_name == "5-year-veteran-coin":
+                                has_5year_coin = True
+                                logging.info(f"5-year veteran coin detected with confidence {confidence:.3f}")
+                            
+                            # Draw on visualization
+                            cv2.rectangle(visualization, 
+                                         (x, y),
+                                         (x + w, y + h),
+                                         (0, 255, 0), 2)
+                            cv2.putText(visualization, f"{template_name} ({confidence:.2f})", 
+                                       (x, y - 5),
+                                       cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+                    
+                    # Break after finding matches at this threshold
+                    break
+        
+        # ------------- STEP 3: Check for medal arrow -------------
+        # Look for the right arrow across the entire ROI
+        has_more_medals = False
+        arrow_template_path = os.path.join(TEMPLATES_PATH, "right-arrow.jpg")
+        
+        if os.path.exists(arrow_template_path):
+            arrow_template = cv2.imread(arrow_template_path)
+            if arrow_template is not None:
+                arrow_template_gray = cv2.cvtColor(arrow_template, cv2.COLOR_BGR2GRAY)
+                
+                # Check if template fits in ROI
+                if (arrow_template_gray.shape[0] <= profile_gray.shape[0] and
+                    arrow_template_gray.shape[1] <= profile_gray.shape[1]):
+                    
+                    # Perform template matching
+                    arrow_result = cv2.matchTemplate(profile_gray, arrow_template_gray, cv2.TM_CCOEFF_NORMED)
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(arrow_result)
+                    
+                    logging.info(f"Medal arrow match confidence: {max_val:.3f}")
+                    
+                    if max_val >= 0.7:  # Adjust threshold as needed
+                        has_more_medals = True
+                        h, w = arrow_template.shape[:2]
+                        
+                        # Draw on visualization
+                        cv2.rectangle(visualization, 
+                                     (max_loc[0], max_loc[1]),
+                                     (max_loc[0] + w, max_loc[1] + h),
+                                     (0, 255, 0), 2)
+                        cv2.putText(visualization, f"More Medals ({max_val:.2f})", 
+                                   (max_loc[0], max_loc[1] - 5),
+                                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+                        
+                        logging.info("More medals arrow detected")
+        
+        # ------------- STEP 4: Make decision -------------
+        # Count total medals
+        medal_count = len(detected_medals)
+        
+        # Decision criteria:
+        # 1. Has 5-year veteran coin
+        # 2. Has at least 4 medals total
+        meets_criteria = has_5year_coin and medal_count >= 4
+        
+        # Save the visualization with analysis results
+        viz_debug_path = os.path.join(debug_dir, f"profile_analysis_viz_{timestamp}.png")
+        cv2.imwrite(viz_debug_path, visualization)
+        
+        # Output results
+        print("PROFILE_ANALYSIS_RESULT=1")
+        print(f"MEDAL_COUNT={medal_count}")
+        print(f"HAS_5YEAR_COIN={1 if has_5year_coin else 0}")
+        print(f"HAS_MORE_MEDALS={1 if has_more_medals else 0}")
+        print(f"MEETS_CRITERIA={1 if meets_criteria else 0}")
+        
+        # Include individual medal information
+        for key, info in detected_medals.items():
+            print(f"MEDAL_DETECTED={info['name']}")
+        
+        # Final decision
+        if meets_criteria:
+            print("DECISION=PROCEED")
+        else:
+            print("DECISION=SKIP")
+        
+        logging.info(f"Profile analysis complete: {medal_count} medals, 5-year coin: {has_5year_coin}, " +
+                    f"Decision: {'PROCEED' if meets_criteria else 'SKIP'}")
+        
+    except Exception as e:
+        logging.error(f"Error in profile analysis: {str(e)}")
+        import traceback
+        logging.error(traceback.format_exc())
+        print("PROFILE_ANALYSIS_RESULT=0")
+        print(f"PROFILE_ANALYSIS_ERROR={str(e)}")
+        print("DECISION=SKIP")  # Default to skip on error
 
 # Main function for command-line usage
 if __name__ == "__main__":
@@ -1268,23 +1840,39 @@ if __name__ == "__main__":
         else:
             print("NICKNAME_RESULT=0")
     
-    elif command == "analyze_medal_region":
-        # Check if region parameters were provided
-        if len(sys.argv) > 6:
+    elif command == "analyze_profile":
+        # Check if click coordinates were provided
+        if len(sys.argv) > 3:
             try:
-                region_x = int(sys.argv[2])
-                region_y = int(sys.argv[3])
-                width = int(sys.argv[4])
-                height = int(sys.argv[5])
-                slot_index = int(sys.argv[6])
-                analyze_medal_region(region_x, region_y, width, height, slot_index)
+                click_x = int(sys.argv[2])
+                click_y = int(sys.argv[3])
+                analyze_profile(click_x, click_y)
             except (ValueError, IndexError) as e:
-                logging.error(f"Invalid medal region parameters: {e}")
-                print("MEDAL_ANALYSIS_RESULT=0")
-                print(f"MEDAL_ANALYSIS_ERROR=Invalid medal region parameters: {e}")
+                logging.error(f"Invalid click coordinates: {e}")
+                print("PROFILE_ANALYSIS_RESULT=0")
+                print(f"PROFILE_ANALYSIS_ERROR=Invalid click coordinates: {e}")
+                print("DECISION=SKIP")
         else:
-            print("MEDAL_ANALYSIS_RESULT=0")
-            print("MEDAL_ANALYSIS_ERROR=Missing medal region parameters")
+            print("PROFILE_ANALYSIS_RESULT=0")
+            print("PROFILE_ANALYSIS_ERROR=Missing click coordinates")
+            print("DECISION=SKIP")
+    
+    elif command == "detect_medals":
+        # Check if ROI parameters were provided
+        if len(sys.argv) > 5:
+            try:
+                roi_x = int(sys.argv[2])
+                roi_y = int(sys.argv[3])
+                roi_width = int(sys.argv[4])
+                roi_height = int(sys.argv[5])
+                detect_medals(roi_x, roi_y, roi_width, roi_height)
+            except (ValueError, IndexError) as e:
+                logging.error(f"Invalid ROI parameters: {e}")
+                print("MEDAL_DETECTION_RESULT=0")
+                print(f"MEDAL_DETECTION_ERROR=Invalid ROI parameters: {e}")
+        else:
+            print("MEDAL_DETECTION_RESULT=0")
+            print("MEDAL_DETECTION_ERROR=Missing ROI parameters")
             
     elif command == "detect_medal_arrow":
         detect_medal_arrow()
