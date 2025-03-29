@@ -137,8 +137,7 @@ SelectMap(mapName) {
     Click CONFIG.accept_match_x, CONFIG.accept_match_y
     Sleep 500
     
-    ; For debugging, take a screenshot of current state
-    CaptureScreenshot()
+    ; Removed screenshot capture to improve efficiency
     
     LogMessage("Map selection sequence completed for: " mapName)
     return true

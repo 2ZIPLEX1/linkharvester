@@ -322,11 +322,6 @@ ProcessPlayersGridMethod() {
     ; Make sure the scoreboard is visible
     EnsureScoreboardVisible()
     
-    ; First take a screenshot to make sure the scoreboard is visible
-    LogMessage("Taking initial screenshot of scoreboard...")
-    CaptureScreenshot()
-    Sleep 1000  ; Wait for screenshot to be saved
-    
     ; Iterate through the grid pattern
     currentY := startY
     while (currentY <= endY) {
@@ -505,10 +500,6 @@ EnsureScoreboardVisible() {
     ; Press Escape to open the pause menu/scoreboard
     LogMessage("Pressing Escape to view scoreboard...")
     Send "{Escape}"
-    Sleep 1000
-    
-    ; Take a screenshot for verification
-    CaptureScreenshot()
     Sleep 1000
     
     LogMessage("Scoreboard should now be visible.")

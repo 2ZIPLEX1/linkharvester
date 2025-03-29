@@ -1,0 +1,138 @@
+2025-03-29 11:34:37 - === CS2 Automation Script Started ===
+2025-03-29 11:34:37 - AHK Version: 2.0.19
+2025-03-29 11:34:37 - Script Path: C:\LinkHarvesterScript\cs2_automation.ahk
+2025-03-29 11:34:37 - Log File: C:\LinkHarvesterScript\cs2_automation.log
+2025-03-29 11:34:38 - Checking if CS2 is running...
+2025-03-29 11:34:38 - CS2 is already running. Window activated.
+2025-03-29 11:34:39 - Starting Sigma match automation
+2025-03-29 11:34:39 - Selecting map: Sigma
+2025-03-29 11:34:40 - Clicking Play button at coordinates: 985,30
+2025-03-29 11:34:40 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-29 11:34:41 - Selecting casual league at coordinates: 906,130
+2025-03-29 11:34:41 - Selecting Sigma map at coordinates: 380,430
+2025-03-29 11:34:41 - Clicking Accept Match at coordinates: 1695,1030
+2025-03-29 11:34:41 - Map selection sequence completed for: Sigma
+2025-03-29 11:34:41 - Map selected, now waiting for match to be found and joined...
+2025-03-29 11:34:41 - Waiting for match outcome (success or failure)...
+2025-03-29 11:34:41 - Match detection timeout set to 600.0 seconds
+2025-03-29 11:34:41 - Will wait 10.0 seconds after Cancel Search disappears before checking for errors
+2025-03-29 11:34:57 - Search phase ended, now in connecting/loading phase after 16.030999999999999 seconds
+2025-03-29 11:34:57 - Spectate button detection - Point 1: 0x503611 Point 2: 0x513311 Point 3: 0x382409
+2025-03-29 11:34:58 - Spectate button detection - Point 1: 0x4E3D38 Point 2: 0x4F3E40 Point 3: 0x362D32
+2025-03-29 11:34:58 - In loading phase... 0.54700000000000004 seconds elapsed since search ended
+2025-03-29 11:34:58 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:34:59 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:34:59 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:35:00 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:35:00 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:35:00 - In loading phase... 3.1400000000000001 seconds elapsed since search ended
+2025-03-29 11:35:01 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:35:02 - Spectate button detection - Point 1: 0x435C84 Point 2: 0x405981 Point 3: 0x2E4060
+2025-03-29 11:35:02 - Spectate button detection - Point 1: 0xB1B7C3 Point 2: 0xB4B9C4 Point 3: 0xB3B5BC
+2025-03-29 11:35:03 - Spectate button detection - Point 1: 0xFFFFFF Point 2: 0xFFFFFF Point 3: 0xFFFFFF
+2025-03-29 11:35:03 - Spectate button detected by pixel color method!
+2025-03-29 11:35:03 - Successfully joined match! Spectate button detected via pixel color method
+2025-03-29 11:35:03 - Clicking spectator button at 1596, 1032
+2025-03-29 11:35:04 - Match outcome: success
+2025-03-29 11:35:04 - Successfully joined match!
+2025-03-29 11:35:04 - Processing match...
+2025-03-29 11:35:04 - Processing players using grid method with unified profile analysis...
+2025-03-29 11:35:04 - Ensuring scoreboard is visible...
+2025-03-29 11:35:04 - Pressing Escape to view scoreboard...
+2025-03-29 11:35:05 - Scoreboard should now be visible.
+2025-03-29 11:35:05 - Checking row at y-coordinate: 300
+2025-03-29 11:35:06 - Taking Steam screenshot with F12
+2025-03-29 11:35:08 - Performing unified profile analysis...
+2025-03-29 11:35:08 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=968,243
+PROFILE_ANALYSIS_RESULT=1
+MEDAL_COUNT=0
+HAS_5YEAR_COIN=0
+HAS_MORE_MEDALS=0
+MEETS_CRITERIA=0
+DECISION=SKIP
+
+2025-03-29 11:35:08 - Profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=968,243
+PROFILE_ANALYSIS_RESULT=1
+MEDAL_COUNT=0
+HAS_5YEAR_COIN=0
+HAS_MORE_MEDALS=0
+MEETS_CRITERIA=0
+DECISION=SKIP
+
+2025-03-29 11:35:08 - Profile button found at coordinates: 968,243
+2025-03-29 11:35:08 - Analysis summary:
+2025-03-29 11:35:08 - - Profile button found: Yes
+2025-03-29 11:35:08 - - Medal count: 0
+2025-03-29 11:35:08 - - Has 5-year veteran coin: No
+2025-03-29 11:35:08 - - Has more medals indicator: No
+2025-03-29 11:35:08 - - Meets all criteria: No
+2025-03-29 11:35:09 - - Decision: SKIP
+2025-03-29 11:35:09 - Player doesn't meet criteria or no profile button found, skipping profile
+2025-03-29 11:35:09 - Clicking again to close profile details
+2025-03-29 11:35:09 - Checking row at y-coordinate: 326
+2025-03-29 11:35:10 - Taking Steam screenshot with F12
+2025-03-29 11:35:12 - Performing unified profile analysis...
+2025-03-29 11:35:12 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=1112,544
+PROFILE_ANALYSIS_RESULT=1
+MEDAL_COUNT=0
+HAS_5YEAR_COIN=0
+HAS_MORE_MEDALS=0
+MEETS_CRITERIA=0
+DECISION=SKIP
+
+2025-03-29 11:35:12 - Profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=1112,544
+PROFILE_ANALYSIS_RESULT=1
+MEDAL_COUNT=0
+HAS_5YEAR_COIN=0
+HAS_MORE_MEDALS=0
+MEETS_CRITERIA=0
+DECISION=SKIP
+
+2025-03-29 11:35:12 - Profile button found at coordinates: 1112,544
+2025-03-29 11:35:12 - Analysis summary:
+2025-03-29 11:35:12 - - Profile button found: Yes
+2025-03-29 11:35:12 - - Medal count: 0
+2025-03-29 11:35:12 - - Has 5-year veteran coin: No
+2025-03-29 11:35:12 - - Has more medals indicator: No
+2025-03-29 11:35:12 - - Meets all criteria: No
+2025-03-29 11:35:12 - - Decision: SKIP
+2025-03-29 11:35:12 - Player doesn't meet criteria or no profile button found, skipping profile
+2025-03-29 11:35:12 - Clicking again to close profile details
+2025-03-29 11:35:13 - Checking row at y-coordinate: 352
+2025-03-29 11:35:14 - Taking Steam screenshot with F12
+2025-03-29 11:35:15 - Performing unified profile analysis...
+2025-03-29 11:35:16 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=857,294
+PROFILE_ANALYSIS_RESULT=1
+MEDAL_COUNT=0
+HAS_5YEAR_COIN=0
+HAS_MORE_MEDALS=0
+MEETS_CRITERIA=0
+DECISION=SKIP
+
+2025-03-29 11:35:16 - Profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=857,294
+PROFILE_ANALYSIS_RESULT=1
+MEDAL_COUNT=0
+HAS_5YEAR_COIN=0
+HAS_MORE_MEDALS=0
+MEETS_CRITERIA=0
+DECISION=SKIP
+
+2025-03-29 11:35:16 - Profile button found at coordinates: 857,294
+2025-03-29 11:35:16 - Analysis summary:
+2025-03-29 11:35:16 - - Profile button found: Yes
+2025-03-29 11:35:16 - - Medal count: 0
+2025-03-29 11:35:16 - - Has 5-year veteran coin: No
+2025-03-29 11:35:16 - - Has more medals indicator: No
+2025-03-29 11:35:16 - - Meets all criteria: No
+2025-03-29 11:35:16 - - Decision: SKIP
+2025-03-29 11:35:16 - Player doesn't meet criteria or no profile button found, skipping profile
+2025-03-29 11:35:16 - Clicking again to close profile details
+2025-03-29 11:35:17 - Checking row at y-coordinate: 378
+2025-03-29 11:35:18 - Taking Steam screenshot with F12
+2025-03-29 11:35:18 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***

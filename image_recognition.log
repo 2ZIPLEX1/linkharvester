@@ -1,0 +1,53 @@
+2025-03-29 11:35:08,582 - INFO - Saved full profile ROI to: C:\LinkHarvesterScript\debug_regions\profile_full_roi_1743244508.png
+2025-03-29 11:35:08,664 - INFO - Saved full screenshot with unified ROI highlighted to: C:\LinkHarvesterScript\debug_regions\unified_roi_full_screenshot_1743244508.png
+2025-03-29 11:35:08,666 - INFO - Saved template image to: C:\LinkHarvesterScript\debug_regions\profile_button_template_1743244508.png
+2025-03-29 11:35:08,666 - INFO - Template dimensions: (16, 14, 3)
+2025-03-29 11:35:08,666 - INFO - Full ROI dimensions: (413, 384, 3)
+2025-03-29 11:35:08,677 - INFO - Method TM_CCOEFF_NORMED: Best match value = 0.5764
+2025-03-29 11:35:08,687 - INFO - Saved heatmap for TM_CCOEFF_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_CCOEFF_NORMED_1743244508.png
+2025-03-29 11:35:08,689 - INFO - Method TM_CCORR_NORMED: Best match value = 0.8807
+2025-03-29 11:35:08,695 - INFO - Saved heatmap for TM_CCORR_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_CCORR_NORMED_1743244508.png
+2025-03-29 11:35:08,698 - INFO - Method TM_SQDIFF_NORMED: Best match value = 0.7032
+2025-03-29 11:35:08,703 - INFO - Saved heatmap for TM_SQDIFF_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_SQDIFF_NORMED_1743244508.png
+2025-03-29 11:35:08,707 - INFO - Method 5 match value: 0.576 (threshold: 0.7)
+2025-03-29 11:35:08,710 - INFO - Method 5 match value: 0.576 (threshold: 0.6)
+2025-03-29 11:35:08,713 - INFO - Method 5 match value: 0.576 (threshold: 0.5)
+2025-03-29 11:35:08,713 - INFO - Profile button found at 968,243 with confidence 0.576
+2025-03-29 11:35:08,713 - INFO - Profile button found at 968,243
+2025-03-29 11:35:08,888 - INFO - Medal arrow match confidence: 0.549
+2025-03-29 11:35:08,895 - INFO - Profile analysis complete: 0 medals, 5-year coin: False, Decision: SKIP
+2025-03-29 11:35:12,387 - INFO - Saved full profile ROI to: C:\LinkHarvesterScript\debug_regions\profile_full_roi_1743244512.png
+2025-03-29 11:35:12,460 - INFO - Saved full screenshot with unified ROI highlighted to: C:\LinkHarvesterScript\debug_regions\unified_roi_full_screenshot_1743244512.png
+2025-03-29 11:35:12,462 - INFO - Saved template image to: C:\LinkHarvesterScript\debug_regions\profile_button_template_1743244512.png
+2025-03-29 11:35:12,462 - INFO - Template dimensions: (16, 14, 3)
+2025-03-29 11:35:12,462 - INFO - Full ROI dimensions: (413, 384, 3)
+2025-03-29 11:35:12,468 - INFO - Method TM_CCOEFF_NORMED: Best match value = 0.5542
+2025-03-29 11:35:12,476 - INFO - Saved heatmap for TM_CCOEFF_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_CCOEFF_NORMED_1743244512.png
+2025-03-29 11:35:12,478 - INFO - Method TM_CCORR_NORMED: Best match value = 0.8773
+2025-03-29 11:35:12,484 - INFO - Saved heatmap for TM_CCORR_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_CCORR_NORMED_1743244512.png
+2025-03-29 11:35:12,487 - INFO - Method TM_SQDIFF_NORMED: Best match value = 0.5539
+2025-03-29 11:35:12,491 - INFO - Saved heatmap for TM_SQDIFF_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_SQDIFF_NORMED_1743244512.png
+2025-03-29 11:35:12,495 - INFO - Method 5 match value: 0.554 (threshold: 0.7)
+2025-03-29 11:35:12,498 - INFO - Method 5 match value: 0.554 (threshold: 0.6)
+2025-03-29 11:35:12,501 - INFO - Method 5 match value: 0.554 (threshold: 0.5)
+2025-03-29 11:35:12,501 - INFO - Profile button found at 1112,544 with confidence 0.554
+2025-03-29 11:35:12,501 - INFO - Profile button found at 1112,544
+2025-03-29 11:35:12,660 - INFO - Medal arrow match confidence: 0.568
+2025-03-29 11:35:12,667 - INFO - Profile analysis complete: 0 medals, 5-year coin: False, Decision: SKIP
+2025-03-29 11:35:16,175 - INFO - Saved full profile ROI to: C:\LinkHarvesterScript\debug_regions\profile_full_roi_1743244516.png
+2025-03-29 11:35:16,245 - INFO - Saved full screenshot with unified ROI highlighted to: C:\LinkHarvesterScript\debug_regions\unified_roi_full_screenshot_1743244516.png
+2025-03-29 11:35:16,247 - INFO - Saved template image to: C:\LinkHarvesterScript\debug_regions\profile_button_template_1743244516.png
+2025-03-29 11:35:16,247 - INFO - Template dimensions: (16, 14, 3)
+2025-03-29 11:35:16,248 - INFO - Full ROI dimensions: (413, 384, 3)
+2025-03-29 11:35:16,254 - INFO - Method TM_CCOEFF_NORMED: Best match value = 0.6094
+2025-03-29 11:35:16,262 - INFO - Saved heatmap for TM_CCOEFF_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_CCOEFF_NORMED_1743244516.png
+2025-03-29 11:35:16,264 - INFO - Method TM_CCORR_NORMED: Best match value = 0.8946
+2025-03-29 11:35:16,270 - INFO - Saved heatmap for TM_CCORR_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_CCORR_NORMED_1743244516.png
+2025-03-29 11:35:16,273 - INFO - Method TM_SQDIFF_NORMED: Best match value = 0.7263
+2025-03-29 11:35:16,276 - INFO - Saved heatmap for TM_SQDIFF_NORMED to: C:\LinkHarvesterScript\debug_regions\heatmap_TM_SQDIFF_NORMED_1743244516.png
+2025-03-29 11:35:16,279 - INFO - Method 5 match value: 0.609 (threshold: 0.7)
+2025-03-29 11:35:16,283 - INFO - Method 5 match value: 0.609 (threshold: 0.6)
+2025-03-29 11:35:16,283 - INFO - Profile button found at 857,294 with confidence 0.609
+2025-03-29 11:35:16,283 - INFO - Profile button found at 857,294
+2025-03-29 11:35:16,440 - INFO - Medal arrow match confidence: 0.552
+2025-03-29 11:35:16,447 - INFO - Profile analysis complete: 0 medals, 5-year coin: False, Decision: SKIP

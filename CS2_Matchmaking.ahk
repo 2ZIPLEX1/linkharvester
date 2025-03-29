@@ -52,9 +52,6 @@ CheckForMatchmakingFailure() {
                 Sleep 500
                 Send "{Escape}"  ; Try a second time
                 
-                ; Take a verification screenshot
-                CaptureScreenshot()
-                
                 ; Display message box to inform user
                 MsgBox("Fatal error detected in CS2. The script will now exit.`n`nPlease restart CS2 manually.", "Fatal Error", 48)
                 
@@ -87,9 +84,6 @@ CheckForMatchmakingFailure() {
                         Click buttonX, buttonY
                     }
                     
-                    ; Take a verification screenshot
-                    CaptureScreenshot()
-                    
                     return true
                 }
             }
@@ -98,9 +92,6 @@ CheckForMatchmakingFailure() {
             Send "{Escape}"
             Sleep 500
             Send "{Escape}"  ; Try again
-            
-            ; Take a verification screenshot
-            CaptureScreenshot()
             
             return true
         }
@@ -165,10 +156,17 @@ WaitForMatchOutcome() {
     ; Store start time to enforce timeout
     startTime := A_TickCount
     timeout := 600000  ; 10 minutes in milliseconds
-    errorCheckInterval := 3000  ; Check for errors every 3 seconds
+    
+    ; Time to wait before starting error checks (allowing time for match loading)
+    initialErrorWait := 10000  ; 10 seconds
+    errorCheckInterval := 3000  ; Check for errors every 3 seconds after initial wait
     lastErrorCheckTime := 0
     
+    ; Flag to track if spectate button detection is successful
+    spectateButtonClicked := false
+    
     LogMessage("Match detection timeout set to " timeout / 1000 " seconds")
+    LogMessage("Will wait " initialErrorWait / 1000 " seconds after Cancel Search disappears before checking for errors")
     
     ; Phase tracking: 0 = searching, 1 = connecting/loading
     currentPhase := 0
@@ -206,6 +204,7 @@ WaitForMatchOutcome() {
             if (currentPhase != 0) {
                 LogMessage("Returned to searching state, resetting phase")
                 currentPhase := 0
+                spectateButtonClicked := false  ; Reset this flag when we go back to searching
             }
             
             ; During search phase, we log less frequently and don't take screenshots
@@ -220,20 +219,11 @@ WaitForMatchOutcome() {
             currentPhase := 1
             searchingEndTime := A_TickCount
             LogMessage("Search phase ended, now in connecting/loading phase after " (searchingEndTime - startTime) / 1000 " seconds")
-            
-            ; Take a screenshot at phase transition
-            CaptureScreenshot()
-            Sleep 1000
+            lastErrorCheckTime := searchingEndTime  ; Initialize for first error check timing
         }
         
-        ; Log progress during loading phase (less frequently)
-        if (Mod(A_Index, 5) = 0) {
-            timeInLoadingPhase := (A_TickCount - searchingEndTime) / 1000
-            LogMessage("In loading phase... " timeInLoadingPhase " seconds elapsed since search ended")
-        }
-        
-        ; First priority: Check for Spectate button using pixel color method
-        if (IsSpectateButtonVisible()) {
+        ; First priority: Check for Spectate button using pixel color method (only if we haven't clicked it yet)
+        if (!spectateButtonClicked && IsSpectateButtonVisible()) {
             LogMessage("Successfully joined match! Spectate button detected via pixel color method")
             
             ; Click the spectate button at the predefined coordinates
@@ -243,26 +233,37 @@ WaitForMatchOutcome() {
             Click spectateButtonX, spectateButtonY  ; Try a second click for reliability
             Sleep 500
             
-            ; Take a screenshot after clicking
-            CaptureScreenshot()
+            ; Set flag to indicate we've successfully clicked the button
+            spectateButtonClicked := true
             
+            ; Return success immediately - no need to continue with error checking
             return "success"
         }
         
-        ; Second priority: Check for error dialogs periodically
-        if (currentTime - lastErrorCheckTime > errorCheckInterval) {
-            LogMessage("Taking screenshot to check for error dialog...")
-            lastErrorCheckTime := currentTime
-            
-            ; Check for failure dialog
-            errorResult := CheckForMatchmakingFailure()
-            if (errorResult) {
-                if (errorResult = "fatal") {
-                    LogMessage("FATAL matchmaking error detected - exiting script")
-                    return "fatal_error"
-                } else {
-                    LogMessage("Matchmaking failure detected and handled")
-                    return "failure"
+        ; Log progress during loading phase (less frequently)
+        if (Mod(A_Index, 5) = 0 && !spectateButtonClicked) {
+            timeInLoadingPhase := (A_TickCount - searchingEndTime) / 1000
+            LogMessage("In loading phase... " timeInLoadingPhase " seconds elapsed since search ended")
+        }
+        
+        ; Second priority: Check for error dialogs, but only after the initial wait period
+        ; Only do this if we haven't detected and clicked the spectate button yet
+        if (!spectateButtonClicked) {
+            timeInLoadingPhase := A_TickCount - searchingEndTime
+            if (timeInLoadingPhase > initialErrorWait && currentTime - lastErrorCheckTime > errorCheckInterval) {
+                LogMessage("Taking screenshot to check for error dialog...")
+                lastErrorCheckTime := currentTime
+                
+                ; Check for failure dialog
+                errorResult := CheckForMatchmakingFailure()
+                if (errorResult) {
+                    if (errorResult = "fatal") {
+                        LogMessage("FATAL matchmaking error detected - exiting script")
+                        return "fatal_error"
+                    } else {
+                        LogMessage("Matchmaking failure detected and handled")
+                        return "failure"
+                    }
                 }
             }
         }
