@@ -426,12 +426,10 @@ ProcessPlayersGridMethod() {
                 profilesFound++
             }
             
-            ; Close the Steam browser window AND profile details with Escape
+            ; Close the Steam browser window with Escape
             LogMessage("Closing Steam browser window and profile details...")
             Send "{Escape}"
             Sleep 1000
-            Send "{Escape}"
-            Sleep 500
         } else {
             LogMessage("Player doesn't meet criteria or no profile button found, skipping profile")
             
