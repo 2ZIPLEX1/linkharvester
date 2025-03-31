@@ -435,7 +435,6 @@ def detect_medals_in_roi(profile_roi, roi_x, roi_y, visualization):
             "global-offensive-badge",
             "loyalty-badge",
             "premier-season-one-medal",
-            "shanghai-2024-silver-coin",
             "10-year-birthday-coin",
             "2015-service-medal",
             "2018-service-medal",

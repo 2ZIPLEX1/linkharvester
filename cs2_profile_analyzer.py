@@ -18,9 +18,7 @@ from cs2_detection_utils import get_latest_screenshot
 from cs2_detection_utils import (
     get_profile_roi, 
     detect_profile_button_in_roi,
-    detect_medals_in_roi,
-    detect_medal_arrow_in_roi,
-    make_medal_decision
+    detect_medals_in_roi
 )
 
 # Configure logging
@@ -148,7 +146,15 @@ def check_for_unwanted_medals(detected_medals):
         bool: True if unwanted medals found, False otherwise
     """
     # List of unwanted medal templates
-    unwanted_medals = ["hydra-pin", "aces-high-pin"]
+    unwanted_medals = ["unwanted-aces-high-pin", "unwanted-antwerp-2022-coin", "unwanted-berlin-2019-coin",
+                       "unwanted-copenhagen-2024-silver-coin", "unwanted-diamond-operation-broken-fang-coin",
+                       "unwanted-diamond-operation-riptide-coin", "unwanted-katowice-2019-silver-coin",
+                       "unwanted-operation-broken-fang-challenge-coin",
+                        "unwanted-operation-shattered-web-challenge-coin", "unwanted-paris-2023-coin",
+                        "unwanted-paris-2023-gold-coin", "unwanted-rio-2022-coin",
+                        "unwanted-rio-2022-gold-coin", "unwanted-shanghai-2024-diamond-coin",
+                        "unwanted-shanghai-2024-gold-coin", "unwanted-shanghai-2024-silver-coin",
+                        "unwanted-stockholm-2021-diamond-coin"]
     
     # Check if any unwanted medals are in the detected list
     for medal in detected_medals:
