@@ -131,14 +131,8 @@ IsSpectateButtonVisible() {
             return (r > 200 && g > 200 && b > 200)
         }
         
-        ; Log the detected colors for debugging
-        LogMessage("Spectate button detection - Point 1: " Format("0x{:X}", color1) 
-                  " Point 2: " Format("0x{:X}", color2) 
-                  " Point 3: " Format("0x{:X}", color3))
-        
         ; Check if all three points are whitish
         if (IsWhitish(color1) && IsWhitish(color2) && IsWhitish(color3)) {
-            LogMessage("Spectate button detected by pixel color method!")
             return true
         }
         
