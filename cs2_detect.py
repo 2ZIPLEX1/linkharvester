@@ -5,8 +5,6 @@ import time
 import glob
 import logging
 import numpy as np
-import subprocess
-import re
 import pytesseract
 
 # Configure paths

@@ -1,0 +1,1130 @@
+2025-03-31 14:47:56 - === CS2 Automation Script Started ===
+2025-03-31 14:47:56 - AHK Version: 2.0.19
+2025-03-31 14:47:56 - Script Path: C:\LinkHarvesterScript\cs2_automation.ahk
+2025-03-31 14:47:56 - Log File: C:\LinkHarvesterScript\cs2_automation.log
+2025-03-31 14:47:57 - Checking if CS2 is running...
+2025-03-31 14:47:57 - CS2 is already running. Window activated.
+2025-03-31 14:47:58 - Starting Sigma match automation
+2025-03-31 14:47:58 - Selecting map: Sigma
+2025-03-31 14:47:59 - Clicking Play button at coordinates: 985,30
+2025-03-31 14:47:59 - Selecting matchmaking mode at coordinates: 813,85
+2025-03-31 14:47:59 - Selecting casual league at coordinates: 906,130
+2025-03-31 14:48:00 - Selecting Sigma map at coordinates: 380,430
+2025-03-31 14:48:00 - Clicking Accept Match at coordinates: 1695,1030
+2025-03-31 14:48:00 - Map selection sequence completed for: Sigma
+2025-03-31 14:48:00 - Map selected, now waiting for match to be found and joined...
+2025-03-31 14:48:00 - Waiting for match outcome (success or failure)...
+2025-03-31 14:48:00 - Match detection timeout set to 600.0 seconds
+2025-03-31 14:48:00 - Will wait 10.0 seconds after Cancel Search disappears before checking for errors
+2025-03-31 14:48:16 - Search phase ended, now in connecting/loading phase after 16.030999999999999 seconds
+2025-03-31 14:48:17 - In loading phase... 0.54700000000000004 seconds elapsed since search ended
+2025-03-31 14:48:19 - In loading phase... 3.1869999999999998 seconds elapsed since search ended
+2025-03-31 14:48:22 - Successfully joined match! Spectate button detected via pixel color method
+2025-03-31 14:48:22 - Clicking spectator button at 1596, 1032
+2025-03-31 14:48:23 - Match outcome: success
+2025-03-31 14:48:23 - Successfully joined match!
+2025-03-31 14:48:23 - Processing match...
+2025-03-31 14:48:24 - Processing players using grid method with structured profile analysis...
+2025-03-31 14:48:24 - Ensuring scoreboard is visible...
+2025-03-31 14:48:24 - Pressing Escape to view scoreboard...
+2025-03-31 14:48:25 - Scoreboard should now be visible.
+2025-03-31 14:48:25 - Checking row at y-coordinate: 326
+2025-03-31 14:48:26 - Taking Steam screenshot with F12
+2025-03-31 14:48:27 - Performing initial profile analysis...
+2025-03-31 14:48:28 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=777,203
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:48:28 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=777,203
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:48:28 - Profile button found at coordinates: 777,203
+2025-03-31 14:48:28 - Initial analysis summary:
+2025-03-31 14:48:28 - - Profile button found: Yes
+2025-03-31 14:48:28 - - Four+ medals found: No
+2025-03-31 14:48:28 - - 5-year veteran coin found: No
+2025-03-31 14:48:28 - - Unwanted medals found: No
+2025-03-31 14:48:28 - - More medals available: No
+2025-03-31 14:48:28 - - Medal count: 0
+2025-03-31 14:48:28 - Less than 4 medals found, skipping player
+2025-03-31 14:48:28 - Clicking again to close profile details
+2025-03-31 14:48:29 - Checking row at y-coordinate: 352
+2025-03-31 14:48:30 - Taking Steam screenshot with F12
+2025-03-31 14:48:31 - Performing initial profile analysis...
+2025-03-31 14:48:32 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=882,229
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:48:32 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=882,229
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:48:32 - Profile button found at coordinates: 882,229
+2025-03-31 14:48:32 - Initial analysis summary:
+2025-03-31 14:48:32 - - Profile button found: Yes
+2025-03-31 14:48:32 - - Four+ medals found: No
+2025-03-31 14:48:32 - - 5-year veteran coin found: No
+2025-03-31 14:48:32 - - Unwanted medals found: No
+2025-03-31 14:48:32 - - More medals available: No
+2025-03-31 14:48:32 - - Medal count: 0
+2025-03-31 14:48:32 - Less than 4 medals found, skipping player
+2025-03-31 14:48:32 - Clicking again to close profile details
+2025-03-31 14:48:33 - Checking row at y-coordinate: 378
+2025-03-31 14:48:34 - Taking Steam screenshot with F12
+2025-03-31 14:48:35 - Performing initial profile analysis...
+2025-03-31 14:48:36 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=336
+ARROW_COORDS=1110,336
+MEDAL_COUNT=4
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:36 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=336
+ARROW_COORDS=1110,336
+MEDAL_COUNT=4
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:36 - Profile button found at coordinates: 795,524
+2025-03-31 14:48:36 - Initial analysis summary:
+2025-03-31 14:48:36 - - Profile button found: Yes
+2025-03-31 14:48:36 - - Four+ medals found: Yes
+2025-03-31 14:48:36 - - 5-year veteran coin found: No
+2025-03-31 14:48:36 - - Unwanted medals found: No
+2025-03-31 14:48:36 - - More medals available: Yes
+2025-03-31 14:48:36 - - Medal count: 4
+2025-03-31 14:48:36 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:48:36 - Extracted arrow X coordinate: 1110
+2025-03-31 14:48:36 - Found arrow Y coordinate line: ARROW_COORDS_Y=336
+2025-03-31 14:48:36 - Extracted arrow Y coordinate: 336
+2025-03-31 14:48:36 - Found combined arrow coordinates line: ARROW_COORDS=1110,336
+2025-03-31 14:48:36 - Extracted combined arrow coordinates: 1110,336
+2025-03-31 14:48:36 - Using detected arrow coordinates: 1110,336
+2025-03-31 14:48:36 - Clicking medal arrow at coordinates: 1110,336
+2025-03-31 14:48:37 - Taking Steam screenshot with F12
+2025-03-31 14:48:39 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:48:40 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=336
+ARROW_COORDS=1110,336
+MEDAL_COUNT=3
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:40 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=336
+ARROW_COORDS=1110,336
+MEDAL_COUNT=3
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:40 - After arrow click 1:
+2025-03-31 14:48:40 - - 5-year veteran coin found: No
+2025-03-31 14:48:40 - - Unwanted medals found: No
+2025-03-31 14:48:40 - - More medals available: Yes
+2025-03-31 14:48:40 - - Medal count: 3
+2025-03-31 14:48:40 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:48:40 - Extracted arrow X coordinate: 1110
+2025-03-31 14:48:40 - Found arrow Y coordinate line: ARROW_COORDS_Y=336
+2025-03-31 14:48:40 - Extracted arrow Y coordinate: 336
+2025-03-31 14:48:40 - Found combined arrow coordinates line: ARROW_COORDS=1110,336
+2025-03-31 14:48:40 - Extracted combined arrow coordinates: 1110,336
+2025-03-31 14:48:40 - Using detected arrow coordinates: 1110,336
+2025-03-31 14:48:40 - Clicking medal arrow at coordinates: 1110,336
+2025-03-31 14:48:41 - Taking Steam screenshot with F12
+2025-03-31 14:48:42 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:48:43 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=336
+ARROW_COORDS=1110,336
+MEDAL_COUNT=2
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:43 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=336
+ARROW_COORDS=1110,336
+MEDAL_COUNT=2
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:43 - After arrow click 2:
+2025-03-31 14:48:43 - - 5-year veteran coin found: No
+2025-03-31 14:48:43 - - Unwanted medals found: No
+2025-03-31 14:48:43 - - More medals available: Yes
+2025-03-31 14:48:43 - - Medal count: 2
+2025-03-31 14:48:43 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:48:43 - Extracted arrow X coordinate: 1110
+2025-03-31 14:48:43 - Found arrow Y coordinate line: ARROW_COORDS_Y=336
+2025-03-31 14:48:43 - Extracted arrow Y coordinate: 336
+2025-03-31 14:48:43 - Found combined arrow coordinates line: ARROW_COORDS=1110,336
+2025-03-31 14:48:43 - Extracted combined arrow coordinates: 1110,336
+2025-03-31 14:48:43 - Using detected arrow coordinates: 1110,336
+2025-03-31 14:48:43 - Clicking medal arrow at coordinates: 1110,336
+2025-03-31 14:48:44 - Taking Steam screenshot with F12
+2025-03-31 14:48:46 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:48:47 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=2021-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:47 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,524
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=2021-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:47 - After arrow click 3:
+2025-03-31 14:48:47 - - 5-year veteran coin found: No
+2025-03-31 14:48:47 - - Unwanted medals found: No
+2025-03-31 14:48:47 - - More medals available: No
+2025-03-31 14:48:47 - - Medal count: 2
+2025-03-31 14:48:47 - Player has 4+ medals but no 5-year coin, skipping profile
+2025-03-31 14:48:47 - Clicking again to close profile details
+2025-03-31 14:48:47 - Checking row at y-coordinate: 404
+2025-03-31 14:48:48 - Taking Steam screenshot with F12
+2025-03-31 14:48:50 - Performing initial profile analysis...
+2025-03-31 14:48:51 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,550
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=4
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:48:51 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,550
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=4
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:48:51 - Profile button found at coordinates: 795,550
+2025-03-31 14:48:51 - Initial analysis summary:
+2025-03-31 14:48:51 - - Profile button found: Yes
+2025-03-31 14:48:51 - - Four+ medals found: Yes
+2025-03-31 14:48:51 - - 5-year veteran coin found: No
+2025-03-31 14:48:51 - - Unwanted medals found: No
+2025-03-31 14:48:51 - - More medals available: No
+2025-03-31 14:48:51 - - Medal count: 4
+2025-03-31 14:48:51 - Player has 4+ medals but no 5-year coin, skipping profile
+2025-03-31 14:48:51 - Clicking again to close profile details
+2025-03-31 14:48:51 - Checking row at y-coordinate: 430
+2025-03-31 14:48:52 - Taking Steam screenshot with F12
+2025-03-31 14:48:54 - Performing initial profile analysis...
+2025-03-31 14:48:55 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,576
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=388
+ARROW_COORDS=1110,388
+MEDAL_COUNT=4
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:55 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,576
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=388
+ARROW_COORDS=1110,388
+MEDAL_COUNT=4
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:48:55 - Profile button found at coordinates: 795,576
+2025-03-31 14:48:55 - Initial analysis summary:
+2025-03-31 14:48:55 - - Profile button found: Yes
+2025-03-31 14:48:55 - - Four+ medals found: Yes
+2025-03-31 14:48:55 - - 5-year veteran coin found: No
+2025-03-31 14:48:55 - - Unwanted medals found: No
+2025-03-31 14:48:55 - - More medals available: Yes
+2025-03-31 14:48:55 - - Medal count: 4
+2025-03-31 14:48:55 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:48:55 - Extracted arrow X coordinate: 1110
+2025-03-31 14:48:55 - Found arrow Y coordinate line: ARROW_COORDS_Y=388
+2025-03-31 14:48:55 - Extracted arrow Y coordinate: 388
+2025-03-31 14:48:55 - Found combined arrow coordinates line: ARROW_COORDS=1110,388
+2025-03-31 14:48:55 - Extracted combined arrow coordinates: 1110,388
+2025-03-31 14:48:55 - Using detected arrow coordinates: 1110,388
+2025-03-31 14:48:55 - Clicking medal arrow at coordinates: 1110,388
+2025-03-31 14:48:56 - Taking Steam screenshot with F12
+2025-03-31 14:48:57 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:48:58 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,576
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=388
+ARROW_COORDS=1110,388
+MEDAL_COUNT=4
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2021-service-medal
+MEDAL_DETECTED=2023-service-medal
+
+2025-03-31 14:48:58 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,576
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=388
+ARROW_COORDS=1110,388
+MEDAL_COUNT=4
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2021-service-medal
+MEDAL_DETECTED=2023-service-medal
+
+2025-03-31 14:48:58 - After arrow click 1:
+2025-03-31 14:48:58 - - 5-year veteran coin found: Yes
+2025-03-31 14:48:58 - - Unwanted medals found: No
+2025-03-31 14:48:58 - - More medals available: Yes
+2025-03-31 14:48:58 - - Medal count: 4
+2025-03-31 14:48:58 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:48:58 - Extracted arrow X coordinate: 1110
+2025-03-31 14:48:58 - Found arrow Y coordinate line: ARROW_COORDS_Y=388
+2025-03-31 14:48:58 - Extracted arrow Y coordinate: 388
+2025-03-31 14:48:58 - Found combined arrow coordinates line: ARROW_COORDS=1110,388
+2025-03-31 14:48:58 - Extracted combined arrow coordinates: 1110,388
+2025-03-31 14:48:58 - Using detected arrow coordinates: 1110,388
+2025-03-31 14:48:58 - Clicking medal arrow at coordinates: 1110,388
+2025-03-31 14:48:59 - Taking Steam screenshot with F12
+2025-03-31 14:49:01 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:49:02 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,576
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=loyalty-badge
+MEDAL_DETECTED=2020-service-medal
+
+2025-03-31 14:49:02 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,576
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=loyalty-badge
+MEDAL_DETECTED=2020-service-medal
+
+2025-03-31 14:49:02 - After arrow click 2:
+2025-03-31 14:49:02 - - 5-year veteran coin found: Yes
+2025-03-31 14:49:02 - - Unwanted medals found: No
+2025-03-31 14:49:02 - - More medals available: No
+2025-03-31 14:49:02 - - Medal count: 2
+2025-03-31 14:49:02 - Player meets all criteria, proceeding to view Steam profile
+2025-03-31 14:49:02 - Clicking profile button at exact coordinates: 795,576
+2025-03-31 14:49:05 - Taking Steam screenshot with F12
+2025-03-31 14:49:07 - Extracting Steam profile URL using OCR...
+2025-03-31 14:49:08 - Python detector output: URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198274550090/
+
+2025-03-31 14:49:08 - URL extraction result: URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198274550090/
+
+2025-03-31 14:49:08 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198274550090/
+2025-03-31 14:49:08 - Found Steam profile URL: https://steamcommunity.com/profiles/76561198274550090/
+2025-03-31 14:49:08 - Saved profile URL for player_medals2_5yrcoin_yes: https://steamcommunity.com/profiles/76561198274550090/
+2025-03-31 14:49:08 - Closing Steam browser window...
+2025-03-31 14:49:09 - Back at scoreboard, continuing to next player
+2025-03-31 14:49:09 - Checking row at y-coordinate: 456
+2025-03-31 14:49:10 - Taking Steam screenshot with F12
+2025-03-31 14:49:12 - Performing initial profile analysis...
+2025-03-31 14:49:12 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,602
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:12 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,602
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:13 - Profile button found at coordinates: 795,602
+2025-03-31 14:49:13 - Initial analysis summary:
+2025-03-31 14:49:13 - - Profile button found: Yes
+2025-03-31 14:49:13 - - Four+ medals found: No
+2025-03-31 14:49:13 - - 5-year veteran coin found: No
+2025-03-31 14:49:13 - - Unwanted medals found: No
+2025-03-31 14:49:13 - - More medals available: No
+2025-03-31 14:49:13 - - Medal count: 2
+2025-03-31 14:49:13 - Less than 4 medals found, skipping player
+2025-03-31 14:49:13 - Clicking again to close profile details
+2025-03-31 14:49:13 - Checking row at y-coordinate: 482
+2025-03-31 14:49:14 - Taking Steam screenshot with F12
+2025-03-31 14:49:16 - Performing initial profile analysis...
+2025-03-31 14:49:17 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,628
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:49:17 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,628
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:49:17 - Profile button found at coordinates: 795,628
+2025-03-31 14:49:17 - Initial analysis summary:
+2025-03-31 14:49:17 - - Profile button found: Yes
+2025-03-31 14:49:17 - - Four+ medals found: No
+2025-03-31 14:49:17 - - 5-year veteran coin found: No
+2025-03-31 14:49:17 - - Unwanted medals found: No
+2025-03-31 14:49:17 - - More medals available: No
+2025-03-31 14:49:17 - - Medal count: 1
+2025-03-31 14:49:17 - Less than 4 medals found, skipping player
+2025-03-31 14:49:17 - Clicking again to close profile details
+2025-03-31 14:49:17 - Checking row at y-coordinate: 508
+2025-03-31 14:49:18 - Taking Steam screenshot with F12
+2025-03-31 14:49:20 - Performing initial profile analysis...
+2025-03-31 14:49:20 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,646
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=466
+ARROW_COORDS=1110,466
+MEDAL_COUNT=5
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2020-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:20 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,646
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=466
+ARROW_COORDS=1110,466
+MEDAL_COUNT=5
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2020-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:21 - Profile button found at coordinates: 795,646
+2025-03-31 14:49:21 - Initial analysis summary:
+2025-03-31 14:49:21 - - Profile button found: Yes
+2025-03-31 14:49:21 - - Four+ medals found: Yes
+2025-03-31 14:49:21 - - 5-year veteran coin found: Yes
+2025-03-31 14:49:21 - - Unwanted medals found: No
+2025-03-31 14:49:21 - - More medals available: Yes
+2025-03-31 14:49:21 - - Medal count: 5
+2025-03-31 14:49:21 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:49:21 - Extracted arrow X coordinate: 1110
+2025-03-31 14:49:21 - Found arrow Y coordinate line: ARROW_COORDS_Y=466
+2025-03-31 14:49:21 - Extracted arrow Y coordinate: 466
+2025-03-31 14:49:21 - Found combined arrow coordinates line: ARROW_COORDS=1110,466
+2025-03-31 14:49:21 - Extracted combined arrow coordinates: 1110,466
+2025-03-31 14:49:21 - Using detected arrow coordinates: 1110,466
+2025-03-31 14:49:21 - Clicking medal arrow at coordinates: 1110,466
+2025-03-31 14:49:22 - Taking Steam screenshot with F12
+2025-03-31 14:49:23 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:49:24 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,646
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=loyalty-badge
+MEDAL_DETECTED=2019-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:24 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,646
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=loyalty-badge
+MEDAL_DETECTED=2019-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:24 - After arrow click 1:
+2025-03-31 14:49:24 - - 5-year veteran coin found: Yes
+2025-03-31 14:49:24 - - Unwanted medals found: No
+2025-03-31 14:49:24 - - More medals available: No
+2025-03-31 14:49:24 - - Medal count: 3
+2025-03-31 14:49:24 - Player meets all criteria, proceeding to view Steam profile
+2025-03-31 14:49:24 - Clicking profile button at exact coordinates: 795,646
+2025-03-31 14:49:27 - Taking Steam screenshot with F12
+2025-03-31 14:49:29 - Extracting Steam profile URL using OCR...
+2025-03-31 14:49:30 - Python detector output: URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198421867759/
+
+2025-03-31 14:49:30 - URL extraction result: URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198421867759/
+
+2025-03-31 14:49:30 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198421867759/
+2025-03-31 14:49:30 - Found Steam profile URL: https://steamcommunity.com/profiles/76561198421867759/
+2025-03-31 14:49:30 - Saved profile URL for player_medals3_5yrcoin_yes: https://steamcommunity.com/profiles/76561198421867759/
+2025-03-31 14:49:30 - Closing Steam browser window...
+2025-03-31 14:49:31 - Back at scoreboard, continuing to next player
+2025-03-31 14:49:31 - Checking row at y-coordinate: 534
+2025-03-31 14:49:32 - Taking Steam screenshot with F12
+2025-03-31 14:49:34 - Performing initial profile analysis...
+2025-03-31 14:49:35 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,680
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=492
+ARROW_COORDS=1110,492
+MEDAL_COUNT=4
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:49:35 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,680
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1110
+ARROW_COORDS_Y=492
+ARROW_COORDS=1110,492
+MEDAL_COUNT=4
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:49:35 - Profile button found at coordinates: 795,680
+2025-03-31 14:49:35 - Initial analysis summary:
+2025-03-31 14:49:35 - - Profile button found: Yes
+2025-03-31 14:49:35 - - Four+ medals found: Yes
+2025-03-31 14:49:35 - - 5-year veteran coin found: No
+2025-03-31 14:49:35 - - Unwanted medals found: No
+2025-03-31 14:49:35 - - More medals available: Yes
+2025-03-31 14:49:35 - - Medal count: 4
+2025-03-31 14:49:35 - Found arrow X coordinate line: ARROW_COORDS_X=1110
+2025-03-31 14:49:35 - Extracted arrow X coordinate: 1110
+2025-03-31 14:49:35 - Found arrow Y coordinate line: ARROW_COORDS_Y=492
+2025-03-31 14:49:35 - Extracted arrow Y coordinate: 492
+2025-03-31 14:49:35 - Found combined arrow coordinates line: ARROW_COORDS=1110,492
+2025-03-31 14:49:35 - Extracted combined arrow coordinates: 1110,492
+2025-03-31 14:49:35 - Using detected arrow coordinates: 1110,492
+2025-03-31 14:49:35 - Clicking medal arrow at coordinates: 1110,492
+2025-03-31 14:49:36 - Taking Steam screenshot with F12
+2025-03-31 14:49:37 - Performing follow-up profile analysis after arrow click...
+2025-03-31 14:49:38 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,680
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=4
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2021-service-medal
+MEDAL_DETECTED=2023-service-medal
+
+2025-03-31 14:49:38 - Follow-up analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,680
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=4
+MEDAL_DETECTED=shanghai-2024-silver-coin
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2021-service-medal
+MEDAL_DETECTED=2023-service-medal
+
+2025-03-31 14:49:38 - After arrow click 1:
+2025-03-31 14:49:38 - - 5-year veteran coin found: No
+2025-03-31 14:49:38 - - Unwanted medals found: No
+2025-03-31 14:49:38 - - More medals available: No
+2025-03-31 14:49:38 - - Medal count: 4
+2025-03-31 14:49:38 - Player has 4+ medals but no 5-year coin, skipping profile
+2025-03-31 14:49:38 - Clicking again to close profile details
+2025-03-31 14:49:39 - Checking row at y-coordinate: 560
+2025-03-31 14:49:40 - Taking Steam screenshot with F12
+2025-03-31 14:49:41 - Performing initial profile analysis...
+2025-03-31 14:49:42 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,706
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:42 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,706
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+
+2025-03-31 14:49:42 - Profile button found at coordinates: 795,706
+2025-03-31 14:49:42 - Initial analysis summary:
+2025-03-31 14:49:42 - - Profile button found: Yes
+2025-03-31 14:49:42 - - Four+ medals found: No
+2025-03-31 14:49:42 - - 5-year veteran coin found: No
+2025-03-31 14:49:42 - - Unwanted medals found: No
+2025-03-31 14:49:42 - - More medals available: No
+2025-03-31 14:49:42 - - Medal count: 3
+2025-03-31 14:49:42 - Less than 4 medals found, skipping player
+2025-03-31 14:49:42 - Clicking again to close profile details
+2025-03-31 14:49:43 - Checking row at y-coordinate: 586
+2025-03-31 14:49:44 - Taking Steam screenshot with F12
+2025-03-31 14:49:45 - Performing initial profile analysis...
+2025-03-31 14:49:46 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,732
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:49:46 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,732
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:49:46 - Profile button found at coordinates: 795,732
+2025-03-31 14:49:46 - Initial analysis summary:
+2025-03-31 14:49:46 - - Profile button found: Yes
+2025-03-31 14:49:46 - - Four+ medals found: No
+2025-03-31 14:49:46 - - 5-year veteran coin found: No
+2025-03-31 14:49:46 - - Unwanted medals found: No
+2025-03-31 14:49:46 - - More medals available: No
+2025-03-31 14:49:46 - - Medal count: 0
+2025-03-31 14:49:46 - Less than 4 medals found, skipping player
+2025-03-31 14:49:46 - Clicking again to close profile details
+2025-03-31 14:49:47 - Checking row at y-coordinate: 612
+2025-03-31 14:49:48 - Taking Steam screenshot with F12
+2025-03-31 14:49:49 - Performing initial profile analysis...
+2025-03-31 14:49:50 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,690
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:49:50 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,690
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:49:50 - Profile button found at coordinates: 795,690
+2025-03-31 14:49:50 - Initial analysis summary:
+2025-03-31 14:49:50 - - Profile button found: Yes
+2025-03-31 14:49:50 - - Four+ medals found: No
+2025-03-31 14:49:50 - - 5-year veteran coin found: No
+2025-03-31 14:49:50 - - Unwanted medals found: No
+2025-03-31 14:49:50 - - More medals available: No
+2025-03-31 14:49:50 - - Medal count: 0
+2025-03-31 14:49:50 - Less than 4 medals found, skipping player
+2025-03-31 14:49:50 - Clicking again to close profile details
+2025-03-31 14:49:51 - Checking row at y-coordinate: 638
+2025-03-31 14:49:52 - Taking Steam screenshot with F12
+2025-03-31 14:49:53 - Performing initial profile analysis...
+2025-03-31 14:49:54 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,784
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:49:54 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,784
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:49:54 - Profile button found at coordinates: 795,784
+2025-03-31 14:49:54 - Initial analysis summary:
+2025-03-31 14:49:54 - - Profile button found: Yes
+2025-03-31 14:49:54 - - Four+ medals found: No
+2025-03-31 14:49:54 - - 5-year veteran coin found: No
+2025-03-31 14:49:54 - - Unwanted medals found: No
+2025-03-31 14:49:54 - - More medals available: No
+2025-03-31 14:49:54 - - Medal count: 1
+2025-03-31 14:49:54 - Less than 4 medals found, skipping player
+2025-03-31 14:49:54 - Clicking again to close profile details
+2025-03-31 14:49:55 - Checking row at y-coordinate: 664
+2025-03-31 14:49:56 - Taking Steam screenshot with F12
+2025-03-31 14:49:58 - Performing initial profile analysis...
+2025-03-31 14:49:58 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,742
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:49:58 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,742
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:49:58 - Profile button found at coordinates: 795,742
+2025-03-31 14:49:58 - Initial analysis summary:
+2025-03-31 14:49:58 - - Profile button found: Yes
+2025-03-31 14:49:58 - - Four+ medals found: No
+2025-03-31 14:49:58 - - 5-year veteran coin found: No
+2025-03-31 14:49:58 - - Unwanted medals found: No
+2025-03-31 14:49:58 - - More medals available: No
+2025-03-31 14:49:58 - - Medal count: 1
+2025-03-31 14:49:58 - Less than 4 medals found, skipping player
+2025-03-31 14:49:58 - Clicking again to close profile details
+2025-03-31 14:49:59 - Checking row at y-coordinate: 690
+2025-03-31 14:50:00 - Taking Steam screenshot with F12
+2025-03-31 14:50:02 - Performing initial profile analysis...
+2025-03-31 14:50:02 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,768
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:50:02 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,768
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:50:02 - Profile button found at coordinates: 795,768
+2025-03-31 14:50:02 - Initial analysis summary:
+2025-03-31 14:50:02 - - Profile button found: Yes
+2025-03-31 14:50:02 - - Four+ medals found: No
+2025-03-31 14:50:02 - - 5-year veteran coin found: No
+2025-03-31 14:50:02 - - Unwanted medals found: No
+2025-03-31 14:50:02 - - More medals available: No
+2025-03-31 14:50:02 - - Medal count: 1
+2025-03-31 14:50:02 - Less than 4 medals found, skipping player
+2025-03-31 14:50:03 - Clicking again to close profile details
+2025-03-31 14:50:03 - Checking row at y-coordinate: 716
+2025-03-31 14:50:04 - Taking Steam screenshot with F12
+2025-03-31 14:50:06 - Performing initial profile analysis...
+2025-03-31 14:50:06 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,854
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:50:06 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,854
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-03-31 14:50:06 - Profile button found at coordinates: 795,854
+2025-03-31 14:50:06 - Initial analysis summary:
+2025-03-31 14:50:06 - - Profile button found: Yes
+2025-03-31 14:50:06 - - Four+ medals found: No
+2025-03-31 14:50:06 - - 5-year veteran coin found: No
+2025-03-31 14:50:06 - - Unwanted medals found: No
+2025-03-31 14:50:06 - - More medals available: No
+2025-03-31 14:50:06 - - Medal count: 0
+2025-03-31 14:50:06 - Less than 4 medals found, skipping player
+2025-03-31 14:50:06 - Clicking again to close profile details
+2025-03-31 14:50:07 - Checking row at y-coordinate: 742
+2025-03-31 14:50:08 - Taking Steam screenshot with F12
+2025-03-31 14:50:10 - Performing initial profile analysis...
+2025-03-31 14:50:10 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,880
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=shanghai-2024-silver-coin
+
+2025-03-31 14:50:10 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,880
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=shanghai-2024-silver-coin
+
+2025-03-31 14:50:10 - Profile button found at coordinates: 795,880
+2025-03-31 14:50:10 - Initial analysis summary:
+2025-03-31 14:50:10 - - Profile button found: Yes
+2025-03-31 14:50:10 - - Four+ medals found: No
+2025-03-31 14:50:10 - - 5-year veteran coin found: No
+2025-03-31 14:50:10 - - Unwanted medals found: No
+2025-03-31 14:50:10 - - More medals available: No
+2025-03-31 14:50:10 - - Medal count: 1
+2025-03-31 14:50:10 - Less than 4 medals found, skipping player
+2025-03-31 14:50:10 - Clicking again to close profile details
+2025-03-31 14:50:11 - Checking row at y-coordinate: 768
+2025-03-31 14:50:12 - Taking Steam screenshot with F12
+2025-03-31 14:50:14 - Performing initial profile analysis...
+2025-03-31 14:50:14 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,906
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=1
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:50:14 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,906
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=1
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+
+2025-03-31 14:50:14 - Profile button found at coordinates: 795,906
+2025-03-31 14:50:14 - Initial analysis summary:
+2025-03-31 14:50:14 - - Profile button found: Yes
+2025-03-31 14:50:14 - - Four+ medals found: No
+2025-03-31 14:50:14 - - 5-year veteran coin found: Yes
+2025-03-31 14:50:14 - - Unwanted medals found: No
+2025-03-31 14:50:14 - - More medals available: No
+2025-03-31 14:50:14 - - Medal count: 2
+2025-03-31 14:50:14 - Less than 4 medals found, skipping player
+2025-03-31 14:50:14 - Clicking again to close profile details
+2025-03-31 14:50:15 - Checking row at y-coordinate: 794
+2025-03-31 14:50:16 - Taking Steam screenshot with F12
+2025-03-31 14:50:17 - Performing initial profile analysis...
+2025-03-31 14:50:18 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,932
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:50:18 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,932
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:50:18 - Profile button found at coordinates: 795,932
+2025-03-31 14:50:18 - Initial analysis summary:
+2025-03-31 14:50:18 - - Profile button found: Yes
+2025-03-31 14:50:18 - - Four+ medals found: No
+2025-03-31 14:50:18 - - 5-year veteran coin found: No
+2025-03-31 14:50:18 - - Unwanted medals found: No
+2025-03-31 14:50:18 - - More medals available: No
+2025-03-31 14:50:18 - - Medal count: 3
+2025-03-31 14:50:18 - Less than 4 medals found, skipping player
+2025-03-31 14:50:18 - Clicking again to close profile details
+2025-03-31 14:50:19 - Checking row at y-coordinate: 820
+2025-03-31 14:50:20 - Taking Steam screenshot with F12
+2025-03-31 14:50:21 - Performing initial profile analysis...
+2025-03-31 14:50:22 - Python detector output: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,894
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:50:22 - Initial profile analysis result: PROFILE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=795,894
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_BUTTON_FOUND=1
+FOUR_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+UNWANTED_MEDALS_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+MEDAL_DETECTED=2024-service-medal
+
+2025-03-31 14:50:22 - Profile button found at coordinates: 795,894
+2025-03-31 14:50:22 - Initial analysis summary:
+2025-03-31 14:50:22 - - Profile button found: Yes
+2025-03-31 14:50:22 - - Four+ medals found: No
+2025-03-31 14:50:22 - - 5-year veteran coin found: No
+2025-03-31 14:50:22 - - Unwanted medals found: No
+2025-03-31 14:50:22 - - More medals available: No
+2025-03-31 14:50:22 - - Medal count: 3
+2025-03-31 14:50:22 - Less than 4 medals found, skipping player
+2025-03-31 14:50:22 - Clicking again to close profile details
+2025-03-31 14:50:23 - Grid scanning completed. Found 2 qualified player profiles.
+2025-03-31 14:50:23 - Returning to main menu by leaving match...
+2025-03-31 14:50:23 - Clicking Leave Match button at 1170,130
+2025-03-31 14:50:24 - Clicking OK to confirm at 1100,600
+2025-03-31 14:50:25 - Taking Steam screenshot with F12
+2025-03-31 14:50:26 - Match processing completed successfully
+2025-03-31 14:50:26 - Finished with match
+2025-03-31 14:50:26 - Automation completed
+2025-03-31 14:50:36 - *** EMERGENCY EXIT TRIGGERED BY USER (Ctrl+Alt+X) ***

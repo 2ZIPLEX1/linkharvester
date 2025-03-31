@@ -14,7 +14,7 @@ import logging
 import numpy as np
 import traceback
 
-TESTING_MODE = True  # Set to False to disable testing mode
+TESTING_MODE = False  # Set to False to disable testing mode
 
 # Configure paths
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))

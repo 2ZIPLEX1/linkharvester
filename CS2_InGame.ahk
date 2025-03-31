@@ -306,9 +306,9 @@ AccessSteamProfile(clickX, clickY, nickname := "") {
     }
 }
 
-; Process players by clicking through a grid pattern with unified profile analysis
+; Process players by clicking through a grid pattern with the new structured analysis
 ProcessPlayersGridMethod() {
-    LogMessage("Processing players using grid method with unified profile analysis...")
+    LogMessage("Processing players using grid method with structured profile analysis...")
     
     ; Constants for grid scanning
     startX := 720       ; X coordinate to start scanning
@@ -335,105 +335,217 @@ ProcessPlayersGridMethod() {
         CaptureScreenshot()
         Sleep 1000  ; Wait for screenshot to be saved
         
-        ; Perform unified profile analysis with a single Python call
-        LogMessage("Performing unified profile analysis...")
+        ; Initialize decision state variables
+        profile_button_found := false
+        four_plus_medals_found := false
+        five_year_medal_found := false
+        unwanted_medals_found := false
+        more_medals_available := false
+        
+        ; Perform initial profile analysis
+        LogMessage("Performing initial profile analysis...")
         analysisResult := RunPythonDetector("analyze_profile " startX " " currentY)
-        LogMessage("Profile analysis result: " analysisResult)
+        LogMessage("Initial profile analysis result: " analysisResult)
         
-        ; Parse the analysis results
-        profileButtonFound := InStr(analysisResult, "PROFILE_BUTTON_FOUND=1")
-        meetsCriteria := InStr(analysisResult, "MEETS_CRITERIA=1")
-        decision := ""
-        
-        ; Extract the decision
-        if RegExMatch(analysisResult, "DECISION=([A-Z]+)", &match)
-            decision := match[1]
+        ; Parse the initial analysis results
+        profile_button_found := InStr(analysisResult, "PROFILE_BUTTON_FOUND=1")
+        four_plus_medals_found := InStr(analysisResult, "FOUR_PLUS_MEDALS_FOUND=1")
+        five_year_medal_found := InStr(analysisResult, "FIVE_YEAR_MEDAL_FOUND=1")
+        unwanted_medals_found := InStr(analysisResult, "UNWANTED_MEDALS_FOUND=1")
+        more_medals_available := InStr(analysisResult, "CLICK_TO_SEE_MORE_MEDALS=1")
         
         ; Extract profile button coordinates if found
         profileButtonX := 0
         profileButtonY := 0
-        if (profileButtonFound && RegExMatch(analysisResult, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &coordMatch)) {
+        if (profile_button_found && RegExMatch(analysisResult, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &coordMatch)) {
             profileButtonX := Integer(coordMatch[1])
             profileButtonY := Integer(coordMatch[2])
             LogMessage("Profile button found at coordinates: " profileButtonX "," profileButtonY)
         }
         
-        ; Extract medal information for logging
+        ; Extract medal count for logging
         medalCount := 0
-        has5YearCoin := false
-        hasMoreMedals := false
-        detectedMedals := []
-        
         if RegExMatch(analysisResult, "MEDAL_COUNT=(\d+)", &countMatch)
             medalCount := Integer(countMatch[1])
-            
-        has5YearCoin := InStr(analysisResult, "HAS_5YEAR_COIN=1")
-        hasMoreMedals := InStr(analysisResult, "HAS_MORE_MEDALS=1")
-        
-        ; Parse individual medals
-        fileContent := analysisResult
-        Loop Parse, fileContent, "`n", "`r" {
-            if InStr(A_LoopField, "MEDAL_DETECTED=") {
-                if RegExMatch(A_LoopField, "MEDAL_DETECTED=([^`r`n]+)", &medalMatch) {
-                    medalName := Trim(medalMatch[1])
-                    detectedMedals.Push(medalName)
-                }
-            }
-        }
         
         ; Log comprehensive analysis results
-        LogMessage("Analysis summary:")
-        LogMessage("- Profile button found: " (profileButtonFound ? "Yes" : "No"))
+        LogMessage("Initial analysis summary:")
+        LogMessage("- Profile button found: " (profile_button_found ? "Yes" : "No"))
+        LogMessage("- Four+ medals found: " (four_plus_medals_found ? "Yes" : "No"))
+        LogMessage("- 5-year veteran coin found: " (five_year_medal_found ? "Yes" : "No"))
+        LogMessage("- Unwanted medals found: " (unwanted_medals_found ? "Yes" : "No"))
+        LogMessage("- More medals available: " (more_medals_available ? "Yes" : "No"))
         LogMessage("- Medal count: " medalCount)
-        LogMessage("- Has 5-year veteran coin: " (has5YearCoin ? "Yes" : "No"))
-        LogMessage("- Has more medals indicator: " (hasMoreMedals ? "Yes" : "No"))
-        LogMessage("- Meets all criteria: " (meetsCriteria ? "Yes" : "No"))
-        LogMessage("- Decision: " decision)
         
-        ; Generate a list of medals for logging
-        if (detectedMedals.Length > 0) {
-            medalList := ""
-            for i, medal in detectedMedals
-                medalList .= medal ", "
-            LogMessage("- Detected medals: " medalList)
+        ; Make initial decision
+        shouldContinue := true
+        
+        ; Early skip conditions
+        if (!profile_button_found) {
+            LogMessage("No profile button found, skipping player")
+            shouldContinue := false
+        } else if (!four_plus_medals_found) {
+            LogMessage("Less than 4 medals found, skipping player")
+            shouldContinue := false
+        } else if (unwanted_medals_found) {
+            LogMessage("Unwanted medals found, skipping player")
+            shouldContinue := false
         }
         
-        ; Process based on decision
-        if (decision = "PROCEED" && profileButtonFound) {
-            LogMessage("Player meets criteria, proceeding to view Steam profile")
+        ; If we should continue and more medals are available, click to see more medals
+        maxArrowClicks := 3  ; Maximum number of times to click the arrow to prevent infinite loops
+        arrowClickCount := 0
+        
+        ; If we need to continue and more medals are available, click on the arrow
+        while (shouldContinue && more_medals_available && arrowClickCount < maxArrowClicks) {
+            ; Default arrow coordinates (fallback if detection fails)
+            arrowX := startX + 394
+            arrowY := currentY - 35
             
-            ; Click the profile button at its exact detected coordinates
-            LogMessage("Clicking profile button at exact coordinates: " profileButtonX "," profileButtonY)
-            Click profileButtonX, profileButtonY
-            Sleep 3000  ; Give Steam browser time to open
+            ; Try to get precise arrow coordinates from Python analysis using individual X,Y values
+            foundArrowX := false
+            foundArrowY := false
             
-            ; Take screenshot for URL OCR
-            CaptureScreenshot()
-            Sleep 1500  ; Give enough time for screenshot to be saved
-            
-            ; Extract Steam profile URL
-            steamProfileUrl := ExtractSteamProfileUrl()
-            
-            ; If we got a URL, save it
-            if (steamProfileUrl) {
-                LogMessage("Found Steam profile URL: " steamProfileUrl)
-                
-                ; Create player identifier based on medal info
-                playerIdentifier := "player_medals" medalCount "_5yrcoin" (has5YearCoin ? "Yes" : "No")
-                
-                ; Save profile URL with medal information
-                SaveProfileUrl(playerIdentifier, steamProfileUrl)
-                profilesFound++
+            ; Parse the entire output line by line to find the individual coordinates
+            Loop Parse, analysisResult, "`n", "`r" {
+                if (InStr(A_LoopField, "ARROW_COORDS_X=")) {
+                    LogMessage("Found arrow X coordinate line: " A_LoopField)
+                    if (RegExMatch(A_LoopField, "ARROW_COORDS_X=(\d+)", &xMatch)) {
+                        arrowX := Integer(xMatch[1])
+                        LogMessage("Extracted arrow X coordinate: " arrowX)
+                        foundArrowX := true
+                    }
+                }
+                else if (InStr(A_LoopField, "ARROW_COORDS_Y=")) {
+                    LogMessage("Found arrow Y coordinate line: " A_LoopField)
+                    if (RegExMatch(A_LoopField, "ARROW_COORDS_Y=(\d+)", &yMatch)) {
+                        arrowY := Integer(yMatch[1])
+                        LogMessage("Extracted arrow Y coordinate: " arrowY)
+                        foundArrowY := true
+                    }
+                }
+                ; Also try the combined format as a fallback
+                else if (InStr(A_LoopField, "ARROW_COORDS=")) {
+                    LogMessage("Found combined arrow coordinates line: " A_LoopField)
+                    if (RegExMatch(A_LoopField, "ARROW_COORDS=(\d+),(\d+)", &coordsMatch)) {
+                        arrowX := Integer(coordsMatch[1])
+                        arrowY := Integer(coordsMatch[2])
+                        LogMessage("Extracted combined arrow coordinates: " arrowX "," arrowY)
+                        foundArrowX := true
+                        foundArrowY := true
+                    }
+                }
             }
             
-            ; Close the Steam browser window with Escape
-            LogMessage("Closing Steam browser window and profile details...")
-            Send "{Escape}"
-            Sleep 1000
-        } else {
-            LogMessage("Player doesn't meet criteria or no profile button found, skipping profile")
+            if (foundArrowX && foundArrowY) {
+                LogMessage("Using detected arrow coordinates: " arrowX "," arrowY)
+            } else {
+                LogMessage("Could not find both arrow coordinates! Using fallback: " arrowX "," arrowY)
+                ; Log which one was missing
+                if (!foundArrowX)
+                    LogMessage("Missing X coordinate in output")
+                if (!foundArrowY)
+                    LogMessage("Missing Y coordinate in output")
+            }
             
-            ; Just click again at the same coordinates to close profile details
+            LogMessage("Clicking medal arrow at coordinates: " arrowX "," arrowY)
+            Click arrowX, arrowY
+            Sleep 1000  ; Wait for UI to update
+            
+            ; Take a new screenshot after clicking the arrow
+            CaptureScreenshot()
+            Sleep 1000  ; Wait for screenshot to be saved
+            
+            ; Analyze again with the new screenshot
+            LogMessage("Performing follow-up profile analysis after arrow click...")
+            followUpResult := RunPythonDetector("analyze_profile " startX " " currentY)
+            LogMessage("Follow-up analysis result: " followUpResult)
+            
+            ; Update the state variables that might change
+            ; Note: We don't update profile_button_found or four_plus_medals_found as they should remain true
+            
+            ; Check if 5-year medal was found (if not found before)
+            if (!five_year_medal_found)
+                five_year_medal_found := InStr(followUpResult, "FIVE_YEAR_MEDAL_FOUND=1")
+                
+            ; Check if unwanted medals were found (if not found before)
+            if (!unwanted_medals_found)
+                unwanted_medals_found := InStr(followUpResult, "UNWANTED_MEDALS_FOUND=1")
+                
+            ; Check if there are still more medals to see
+            more_medals_available := InStr(followUpResult, "CLICK_TO_SEE_MORE_MEDALS=1")
+            
+            ; Update medal count for logging
+            if RegExMatch(followUpResult, "MEDAL_COUNT=(\d+)", &countMatch)
+                medalCount := Integer(countMatch[1])
+                
+            ; For the next iteration, we need the full new analysis result
+            analysisResult := followUpResult  ; Update for next loop iteration to get correct arrow coords
+            
+            ; Log updated state
+            arrowClickCount++
+            LogMessage("After arrow click " arrowClickCount ":")
+            LogMessage("- 5-year veteran coin found: " (five_year_medal_found ? "Yes" : "No"))
+            LogMessage("- Unwanted medals found: " (unwanted_medals_found ? "Yes" : "No"))
+            LogMessage("- More medals available: " (more_medals_available ? "Yes" : "No"))
+            LogMessage("- Medal count: " medalCount)
+            
+            ; Check if we should stop because of unwanted medals
+            if (unwanted_medals_found) {
+                LogMessage("Unwanted medals found after viewing more medals, skipping player")
+                shouldContinue := false
+                break
+            }
+        }
+        
+        ; Make final decision after seeing all medals
+        if (shouldContinue) {
+            ; Final check for 5-year medal
+            if (five_year_medal_found) {
+                LogMessage("Player meets all criteria, proceeding to view Steam profile")
+                
+                ; Click the profile button at its exact detected coordinates
+                LogMessage("Clicking profile button at exact coordinates: " profileButtonX "," profileButtonY)
+                Click profileButtonX, profileButtonY
+                Sleep 3000  ; Give Steam browser time to open
+                
+                ; Take screenshot for URL OCR
+                CaptureScreenshot()
+                Sleep 1500  ; Give enough time for screenshot to be saved
+                
+                ; Extract Steam profile URL
+                steamProfileUrl := ExtractSteamProfileUrl()
+                
+                ; If we got a URL, save it
+                if (steamProfileUrl) {
+                    LogMessage("Found Steam profile URL: " steamProfileUrl)
+                    
+                    ; Create player identifier with medal info
+                    playerIdentifier := "player_medals" medalCount "_5yrcoin_yes"
+                    
+                    ; Save profile URL with medal information
+                    SaveProfileUrl(playerIdentifier, steamProfileUrl)
+                    profilesFound++
+                }
+                
+                ; Close the Steam browser window with Escape
+                ; This returns us directly to the scoreboard
+                LogMessage("Closing Steam browser window...")
+                Send "{Escape}"
+                Sleep 1000
+                
+                ; No need for additional clicks here as we're already at the scoreboard
+                LogMessage("Back at scoreboard, continuing to next player")
+            } else {
+                LogMessage("Player has 4+ medals but no 5-year coin, skipping profile")
+                
+                ; Need to close profile details in this case
+                LogMessage("Clicking again to close profile details")
+                Click startX, currentY
+                Sleep 500
+            }
+        } else {
+            ; Only click to close profile details if we didn't open Steam profile
             LogMessage("Clicking again to close profile details")
             Click startX, currentY
             Sleep 500
