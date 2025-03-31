@@ -574,6 +574,10 @@ def detect_medal_arrow_in_roi(profile_roi, visualization):
     }
     
     try:
+        # Create debug directory if it doesn't exist
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        
         # Convert to grayscale once
         profile_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
         
@@ -610,7 +614,25 @@ def detect_medal_arrow_in_roi(profile_roi, visualization):
                                    (max_loc[0], max_loc[1] - 5),
                                    cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
                         
-                        logging.info("More medals arrow detected")
+                        # Save debug images
+                        timestamp = int(time.time())
+                        
+                        # Save the full ROI with visualization
+                        viz_path = os.path.join(debug_dir, f"medal_arrow_detection_{timestamp}.png")
+                        cv2.imwrite(viz_path, visualization)
+                        logging.info(f"Saved medal arrow visualization to {viz_path}")
+                        
+                        # Extract just the arrow region and save it
+                        arrow_region = profile_roi[max_loc[1]:max_loc[1]+h, max_loc[0]:max_loc[0]+w]
+                        arrow_path = os.path.join(debug_dir, f"medal_arrow_found_{timestamp}_{max_val:.2f}.png")
+                        cv2.imwrite(arrow_path, arrow_region)
+                        logging.info(f"Saved detected arrow region to {arrow_path}")
+                        
+                        # Also save the template for comparison
+                        template_path = os.path.join(debug_dir, f"medal_arrow_template_{timestamp}.png")
+                        cv2.imwrite(template_path, arrow_template)
+                        
+                        logging.info("More medals arrow detected and saved to debug regions")
         
         return result
         
@@ -637,29 +659,63 @@ def make_medal_decision(medal_count, has_5year_coin, has_more_medals):
         "reason": ""
     }
     
+    # Log the original input values before any modifications
+    logging.info(f"Medal decision input: count={medal_count}, 5yr={has_5year_coin}, more={has_more_medals}")
+    
+    # If more medals indicator is found, add it to the count to represent hidden medals
+    # This helps account for medals that might be out of view
+    adjusted_medal_count = medal_count
+    if has_more_medals:
+        adjusted_medal_count += 2  # Assume at least 2 more medals if arrow is present
+        logging.info(f"More medals indicator detected, adjusting count from {medal_count} to {adjusted_medal_count}")
+    
     # Apply testing mode ONLY if we have at least 4 medals
-    has_sufficient_medals = medal_count >= 4
+    has_sufficient_medals = adjusted_medal_count >= 4
+    
+    original_criteria_met = has_5year_coin and has_sufficient_medals
+    testing_mode_applied = False
+    
     if TESTING_MODE and has_sufficient_medals:
         original_5year_status = has_5year_coin
         has_5year_coin = True
-        logging.warning(f"TESTING MODE: Found {medal_count} medals, 5-year veteran coin detection changed from {original_5year_status} to TRUE")
+        testing_mode_applied = True
+        logging.warning(f"TESTING MODE: Found {adjusted_medal_count} medals, 5-year veteran coin detection changed from {original_5year_status} to TRUE")
     
     # Decision criteria:
     # 1. Has 5-year veteran coin
-    # 2. Has at least 4 medals total
+    # 2. Has at least 4 medals total (including adjustment for more medals indicator)
     meets_criteria = has_5year_coin and has_sufficient_medals
     
     if meets_criteria:
         result["meets_criteria"] = True
-        medal_status = "5-year coin (FORCED TRUE)" if (TESTING_MODE and has_sufficient_medals) else "5-year coin"
-        result["reason"] = f"Player has {medal_status} and {medal_count} medals"
+        
+        if testing_mode_applied:
+            result["reason"] = f"Player has 5-year coin (FORCED TRUE by TESTING MODE) and {adjusted_medal_count} medals"
+            if has_more_medals:
+                result["reason"] += f" (including {adjusted_medal_count - medal_count} estimated from more-medals indicator)"
+        else:
+            result["reason"] = f"Player has 5-year coin and {adjusted_medal_count} medals"
+            if has_more_medals:
+                result["reason"] += f" (including {adjusted_medal_count - medal_count} estimated from more-medals indicator)"
     else:
         if not has_5year_coin:
             result["reason"] = "Missing 5-year veteran coin"
+            if testing_mode_applied:
+                result["reason"] += " (would have been forced TRUE in TESTING MODE but original criteria not met)"
         elif not has_sufficient_medals:
-            result["reason"] = f"Insufficient medals ({medal_count}/4 required)"
+            result["reason"] = f"Insufficient medals ({adjusted_medal_count}/4 required)"
+            if has_more_medals:
+                result["reason"] += f" (includes {adjusted_medal_count - medal_count} estimated from more-medals indicator)"
         else:
             result["reason"] = "Unknown reason for not meeting criteria"
     
+    # Add whether testing mode was applied to the result
+    result["testing_mode_applied"] = testing_mode_applied
+    result["original_criteria_met"] = original_criteria_met
+    
+    # Log detailed decision information
     logging.info(f"Medal decision: {result['meets_criteria']} - {result['reason']}")
+    if testing_mode_applied:
+        logging.info(f"Testing mode was applied. Original criteria met: {original_criteria_met}")
+    
     return result

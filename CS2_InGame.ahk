@@ -312,7 +312,7 @@ ProcessPlayersGridMethod() {
     
     ; Constants for grid scanning
     startX := 720       ; X coordinate to start scanning
-    startY := 300       ; Y coordinate to start scanning
+    startY := 326       ; Y coordinate to start scanning
     endY := 820         ; Y coordinate to stop scanning
     rowHeight := 26     ; Vertical distance between rows
     
@@ -528,7 +528,6 @@ IsProfileButtonVisible(x, y) {
     return false
 }
 
-
 ; Function to check player medals using template matching in a single ROI
 CheckPlayerMedals(clickX, clickY) {
     LogMessage("Analyzing player medals in a single ROI relative to click position " clickX "," clickY)
@@ -577,12 +576,20 @@ CheckPlayerMedals(clickX, clickY) {
         }
     }
     
-    ; Check if there are more medals (look for arrow)
+    ; Check if there are more medals using the precise arrow detection
     hasMoreMedals := false
     if (totalMedals > 0) {
-        arrowResult := RunPythonDetector("detect_medal_arrow")
-        LogMessage("Medal arrow detection result: " arrowResult)
+        ; Use the precise arrow detection with click coordinates
+        arrowResult := RunPythonDetector("detect_medal_arrow " clickX " " clickY)
+        LogMessage("Medal arrow detection result (using precise method): " arrowResult)
         hasMoreMedals := InStr(arrowResult, "MEDAL_ARROW_PRESENT=1")
+        
+        ; Extract confidence if available
+        arrowConfidence := 0
+        if RegExMatch(arrowResult, "MEDAL_ARROW_CONFIDENCE=([0-9\.]+)", &confMatch) {
+            arrowConfidence := Float(confMatch[1])
+            LogMessage("Medal arrow confidence: " arrowConfidence)
+        }
     }
     
     ; Check if we meet our criteria:

@@ -616,48 +616,73 @@ if __name__ == "__main__":
             print("MEDAL_DETECTION_ERROR=Missing ROI parameters")
             
     elif command == "detect_medal_arrow":
-        # Import from detection utilities
-        from cs2_detection_utils import detect_medal_arrow_in_roi
-        
-        # Get the screenshot
-        screenshot_path = get_latest_screenshot()
-        if not screenshot_path:
-            print("MEDAL_ARROW_RESULT=0")
-            print("MEDAL_ARROW_ERROR=No recent screenshot found")
-            sys.exit(1)
-        
-        # Define the arrow ROI (standard region where the arrow appears)
-        arrow_roi_x = 1100
-        arrow_roi_y = 307
-        arrow_roi_width = 26
-        arrow_roi_height = 21
-        
-        # Read the screenshot
-        img = cv2.imread(screenshot_path)
-        if img is None:
-            print("MEDAL_ARROW_RESULT=0")
-            print("MEDAL_ARROW_ERROR=Could not read screenshot")
-            sys.exit(1)
-        
-        # Ensure coordinates are within image bounds
-        img_height, img_width = img.shape[:2]
-        if (arrow_roi_x >= img_width or arrow_roi_y >= img_height or 
-            arrow_roi_x + arrow_roi_width > img_width or arrow_roi_y + arrow_roi_height > img_height):
-            print("MEDAL_ARROW_RESULT=0")
-            print("MEDAL_ARROW_ERROR=Arrow ROI outside image bounds")
-            sys.exit(1)
+        # Check if click coordinates were provided
+        if len(sys.argv) > 3:
+            try:
+                click_x = int(sys.argv[2])
+                click_y = int(sys.argv[3])
+                
+                # Import from detection utilities
+                from cs2_detection_utils import detect_precise_medal_arrow
+                
+                # Perform precise arrow detection using click coordinates
+                arrow_result = detect_precise_medal_arrow(click_x, click_y)
+                
+                # Output the result
+                print("MEDAL_ARROW_RESULT=1")
+                print(f"MEDAL_ARROW_PRESENT={1 if arrow_result['has_more_medals'] else 0}")
+                if arrow_result["has_more_medals"]:
+                    print(f"MEDAL_ARROW_CONFIDENCE={arrow_result['confidence']:.2f}")
+                    
+            except (ValueError, IndexError) as e:
+                logging.error(f"Invalid click coordinates for medal arrow detection: {e}")
+                print("MEDAL_ARROW_RESULT=0")
+                print(f"MEDAL_ARROW_ERROR=Invalid click coordinates: {e}")
+        else:
+            # Fallback to traditional detection method if no coordinates provided
+            from cs2_detection_utils import detect_medal_arrow_in_roi
             
-        # Extract the region
-        arrow_region = img[arrow_roi_y:arrow_roi_y+arrow_roi_height, arrow_roi_x:arrow_roi_x+arrow_roi_width]
-        visualization = arrow_region.copy()
-        
-        # Detect arrow
-        arrow_result = detect_medal_arrow_in_roi(arrow_region, visualization)
-        
-        # Output the result
-        print("MEDAL_ARROW_RESULT=1")
-        print(f"MEDAL_ARROW_PRESENT={1 if arrow_result['has_more_medals'] else 0}")
-    
+            # Get the screenshot
+            screenshot_path = get_latest_screenshot()
+            if not screenshot_path:
+                print("MEDAL_ARROW_RESULT=0")
+                print("MEDAL_ARROW_ERROR=No recent screenshot found")
+                sys.exit(1)
+            
+            # Read the screenshot
+            img = cv2.imread(screenshot_path)
+            if img is None:
+                print("MEDAL_ARROW_RESULT=0")
+                print("MEDAL_ARROW_ERROR=Could not read screenshot")
+                sys.exit(1)
+            
+            # Standard arrow region (for backward compatibility)
+            arrow_roi_x = 1100
+            arrow_roi_y = 307
+            arrow_roi_width = 26
+            arrow_roi_height = 21
+            
+            # Ensure coordinates are within image bounds
+            img_height, img_width = img.shape[:2]
+            if (arrow_roi_x >= img_width or arrow_roi_y >= img_height or 
+                arrow_roi_x + arrow_roi_width > img_width or arrow_roi_y + arrow_roi_height > img_height):
+                print("MEDAL_ARROW_RESULT=0")
+                print("MEDAL_ARROW_ERROR=Arrow ROI outside image bounds")
+                sys.exit(1)
+                
+            # Extract the region
+            arrow_region = img[arrow_roi_y:arrow_roi_y+arrow_roi_height, arrow_roi_x:arrow_roi_x+arrow_roi_width]
+            visualization = arrow_region.copy()
+            
+            # Detect arrow
+            arrow_result = detect_medal_arrow_in_roi(arrow_region, visualization)
+            
+            # Output the result
+            print("MEDAL_ARROW_RESULT=1")
+            print(f"MEDAL_ARROW_PRESENT={1 if arrow_result['has_more_medals'] else 0}")
+            if arrow_result["has_more_medals"]:
+                print(f"MEDAL_ARROW_CONFIDENCE={arrow_result['confidence']:.2f}")
+
     elif command == "profile_button":
         # Import from detection utilities
         from cs2_detection_utils import detect_profile_button_in_roi
