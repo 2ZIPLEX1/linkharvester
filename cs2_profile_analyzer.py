@@ -13,7 +13,8 @@ import cv2
 import traceback
 import numpy as np
 import glob
-from pathlib import Path
+
+from detect_sympathies import detect_sympathy_template, extract_sympathy_number
 
 # Configure logging
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -260,6 +261,168 @@ def detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization):
         
     except Exception as e:
         logging.error(f"Error detecting profile button in ROI: {str(e)}")
+        logging.error(traceback.format_exc())
+        return result
+
+def detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization):
+    """
+    Detect sympathies (smile, teach, crown) icons and their values in the profile ROI.
+    Uses a common search region to handle cases where fewer than 3 icons are present.
+    
+    Args:
+        profile_roi: The profile details region of interest
+        roi_x: X-coordinate of the ROI in the original image
+        roi_y: Y-coordinate of the ROI in the original image
+        visualization: Image to draw detection results on
+        
+    Returns:
+        dict: Information about sympathies detection
+    """
+    # Default result structure
+    result = {
+        "smile_value": 0,
+        "teach_value": 0,
+        "crown_value": 0,
+        "sympathies_sum": 0,
+        "too_many_sympathies": False
+    }
+    
+    try:
+        # Create timestamp for debug images
+        timestamp = int(time.time())
+        
+        # Define a common search region for all icons
+        # The sympathies region starts ~125px from the click position
+        # and spans about 150px width to cover all possible icons
+        sympathies_x = 38 + 55  # 38px to adjust for ROI, then 125px offset from click
+        sympathies_y = 140       # Approximate Y position (may vary)
+        sympathies_width = 200   # Width to capture all icons and numbers
+        sympathies_height = 120   # Height to capture vertical variation
+        
+        # Create a single ROI for all sympathies
+        sympathies_region = profile_roi[sympathies_y:sympathies_y+sympathies_height, 
+                                        sympathies_x:sympathies_x+sympathies_width]
+        
+        # Save the sympathies region for debugging
+        debug_dir = os.path.join(PROJECT_PATH, "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        debug_path = os.path.join(debug_dir, f"sympathies_region_{timestamp}.png")
+        cv2.imwrite(debug_path, sympathies_region)
+        
+        # Define the icon templates to search for
+        icon_configs = [
+            {"name": "smile", "width": 25, "height": 25, "min_spacing": 50},
+            {"name": "teach", "width": 25, "height": 24, "min_spacing": 50},
+            {"name": "crown", "width": 26, "height": 26, "min_spacing": 50}
+        ]
+        
+        # Detected icon positions (to handle potential overlaps)
+        detected_positions = []
+        
+        # Process each icon type within the common region
+        for config in icon_configs:
+            icon_name = config["name"]
+            icon_width = config["width"]
+            icon_height = config["height"]
+            min_spacing = config["min_spacing"]
+            
+            # Debug name for this icon
+            debug_name = f"sympathy_{icon_name}_{timestamp}"
+            
+            # Detect the icon within the sympathies region
+            found, coords, confidence = detect_sympathy_template(
+                sympathies_region, icon_name, threshold=0.7, debug_name=debug_name)
+            
+            if found:
+                # Check if this detection overlaps with previous ones
+                is_duplicate = False
+                for pos in detected_positions:
+                    # Calculate distance to previous detections
+                    dist_x = abs(coords[0] - pos[0])
+                    if dist_x < min_spacing:
+                        is_duplicate = True
+                        break
+                
+                if not is_duplicate:
+                    # Store the position to check for duplicates
+                    detected_positions.append(coords)
+                    
+                    # Extract the exact coordinates relative to the sympathies region
+                    icon_x = coords[0] - icon_width // 2
+                    icon_y = coords[1] - icon_height // 2
+                    
+                    # Draw rectangle around found icon on the visualization (adjust to full ROI coords)
+                    cv2.rectangle(visualization, 
+                                 (sympathies_x + icon_x, sympathies_y + icon_y),
+                                 (sympathies_x + icon_x + icon_width, sympathies_y + icon_y + icon_height),
+                                 (0, 255, 0), 2)
+                    cv2.putText(visualization, f"{icon_name} ({confidence:.2f})", 
+                              (sympathies_x + icon_x, sympathies_y + icon_y - 5),
+                              cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+                    
+                    # Define number ROI to the right of the icon
+                    number_width = 37  # Width to capture number
+                    number_height = icon_height
+                    
+                    # Coordinates relative to the sympathies region
+                    number_x = icon_x + icon_width
+                    number_y = icon_y
+                    
+                    # Check if number region is within bounds
+                    if number_x + number_width <= sympathies_width:
+                        # Extract the number using the utility function
+                        number_debug_name = f"sympathy_{icon_name}_number_{timestamp}"
+                        number_value = extract_sympathy_number(
+                            sympathies_region, 
+                            number_x, 
+                            number_y, 
+                            number_width, 
+                            number_height, 
+                            number_debug_name
+                        )
+                        
+                        # Store the value
+                        result[f"{icon_name}_value"] = number_value
+                        
+                        # Draw number area and value on visualization
+                        cv2.rectangle(visualization, 
+                                     (sympathies_x + number_x, sympathies_y + number_y),
+                                     (sympathies_x + number_x + number_width, sympathies_y + number_y + number_height),
+                                     (255, 0, 0), 1)
+                        
+                        cv2.putText(visualization, f"{number_value}", 
+                                   (sympathies_x + number_x, sympathies_y + number_y - 5),
+                                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+                        
+                        logging.info(f"Detected {icon_name} with value {number_value}")
+                    else:
+                        logging.warning(f"Number region for {icon_name} would be out of bounds")
+                else:
+                    logging.info(f"Skipping {icon_name} detection as it overlaps with another icon")
+            else:
+                logging.info(f"Could not detect {icon_name} icon (confidence: {confidence:.2f})")
+        
+        # Calculate the sum
+        result["sympathies_sum"] = (result["smile_value"] + 
+                                   result["teach_value"] + 
+                                   result["crown_value"])
+        
+        # Determine if there are too many sympathies
+        result["too_many_sympathies"] = result["sympathies_sum"] > 100
+        
+        # Add sum to visualization
+        cv2.putText(visualization, f"Sympathies Sum: {result['sympathies_sum']}", 
+                   (10, 20),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
+        
+        logging.info(f"Sympathies detection complete: smile={result['smile_value']}, " +
+                    f"teach={result['teach_value']}, crown={result['crown_value']}, " +
+                    f"sum={result['sympathies_sum']}, too_many={result['too_many_sympathies']}")
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error detecting sympathies in ROI: {str(e)}")
         logging.error(traceback.format_exc())
         return result
 
@@ -664,6 +827,11 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             # Error already logged and printed by get_profile_roi
             print("PROFILE_ANALYSIS_RESULT=0")
             print("PROFILE_BUTTON_FOUND=0")
+            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+            print(f"SMILE_VALUE={sympathies_result['smile_value']}")
+            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+            print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
             print("FOUR_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
@@ -685,10 +853,15 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             logging.info("No profile button detected in profile details")
             print("PROFILE_ANALYSIS_RESULT=1")
             print("PROFILE_BUTTON_FOUND=0")
+            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+            print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
             print("FOUR_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
             print("CLICK_TO_SEE_MORE_MEDALS=0")
+            print("SYMPATHIES_SUM=0")
+            print("TOO_MANY_SYMPATHIES=0")
             
             # Save debug visualization
             debug_path = os.path.join(debug_dir, f"profile_no_button_{timestamp}.png")
@@ -699,7 +872,33 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         result["profile_button_x"] = profile_button_result["x"]
         result["profile_button_y"] = profile_button_result["y"]
         
-        # STEP 3: Check for unwanted medals first
+        # STEP 3: Check for sympathies now that we know the profile button exists
+        sympathies_result = detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization)
+        
+        # If too many sympathies, exit early
+        if sympathies_result["too_many_sympathies"]:
+            logging.info(f"Too many sympathies detected: {sympathies_result['sympathies_sum']} > 100")
+            print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_BUTTON_FOUND=1")
+            print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+            print(f"SMILE_VALUE={sympathies_result['smile_value']}")
+            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+            print("TOO_MANY_SYMPATHIES=0")
+            print("UNWANTED_MEDALS_FOUND=0")  # Not relevant when skipping due to sympathies
+            print("FOUR_PLUS_MEDALS_FOUND=0") # Not relevant when skipping due to sympathies
+            print("FIVE_YEAR_MEDAL_FOUND=0")  # Not relevant when skipping due to sympathies
+            print("CLICK_TO_SEE_MORE_MEDALS=0")  # Not relevant when skipping due to sympathies
+            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+            print("TOO_MANY_SYMPATHIES=1")
+            
+            # Save debug visualization
+            debug_path = os.path.join(debug_dir, f"profile_too_many_sympathies_{timestamp}.png")
+            cv2.imwrite(debug_path, visualization)
+            return
+        
+        # STEP 4: Check for unwanted medals first
         unwanted_medal_result = detect_unwanted_medals(profile_roi, roi_x, roi_y, visualization)
         result["unwanted_medals_found"] = unwanted_medal_result["unwanted_medals_found"]
         
@@ -709,6 +908,11 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print("PROFILE_ANALYSIS_RESULT=1")
             print("PROFILE_BUTTON_FOUND=1")
             print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+            print(f"SMILE_VALUE={sympathies_result['smile_value']}")
+            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+            print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=1")
             print("FOUR_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
@@ -723,7 +927,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             cv2.imwrite(debug_path, visualization)
             return
         
-        # STEP 4: Detect regular medals
+        # STEP 5: Detect regular medals
         medal_result = detect_regular_medals(profile_roi, roi_x, roi_y, visualization)
         result["medal_count"] = medal_result["count"]
         result["five_year_medal_found"] = medal_result["has_5year_coin"]
@@ -735,6 +939,11 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print("PROFILE_ANALYSIS_RESULT=1")
             print("PROFILE_BUTTON_FOUND=1")
             print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+            print(f"SMILE_VALUE={sympathies_result['smile_value']}")
+            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+            print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
             print("FOUR_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
@@ -750,7 +959,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             cv2.imwrite(debug_path, visualization)
             return
         
-        # STEP 5: Check for medal arrow
+        # STEP 6: Check for medal arrow
         arrow_result = detect_medal_arrow(click_x, click_y, screenshot_path, visualization)
         result["more_medals_available"] = arrow_result["has_more_medals"]
         result["arrow_x"] = arrow_result["arrow_x"]
@@ -760,6 +969,11 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         print("PROFILE_ANALYSIS_RESULT=1")
         print("PROFILE_BUTTON_FOUND=1")
         print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+        print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+        print(f"SMILE_VALUE={sympathies_result['smile_value']}")
+        print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+        print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+        print("TOO_MANY_SYMPATHIES=0")
         print("UNWANTED_MEDALS_FOUND=0")
         print(f"FOUR_PLUS_MEDALS_FOUND={1 if has_four_plus_medals else 0}")
         print(f"FIVE_YEAR_MEDAL_FOUND={1 if result['five_year_medal_found'] else 0}")
@@ -790,7 +1004,12 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         logging.error(f"Error in profile analysis: {str(e)}")
         logging.error(traceback.format_exc())
         print("PROFILE_ANALYSIS_RESULT=0")
-        print("PROFILE_BUTTON_FOUND=0") 
+        print("PROFILE_BUTTON_FOUND=0")
+        print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
+        print(f"SMILE_VALUE={sympathies_result['smile_value']}")
+        print(f"TEACH_VALUE={sympathies_result['teach_value']}")
+        print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+        print("TOO_MANY_SYMPATHIES=0")
         print("UNWANTED_MEDALS_FOUND=0")
         print("FOUR_PLUS_MEDALS_FOUND=0")
         print("FIVE_YEAR_MEDAL_FOUND=0")
