@@ -448,8 +448,8 @@ ProcessPlayersGridMethod() {
                     LogMessage("Missing Y coordinate in output")
             }
             
-            LogMessage("Clicking medal arrow at coordinates: " arrowX "," arrowY)
-            Click arrowX, arrowY
+            LogMessage("Clicking medal arrow at coordinates: " arrowX+5 "," arrowY+7)
+            Click arrowX+5, arrowY+7
             Sleep 1000  ; Wait for UI to update
             
             ; Take a new screenshot after clicking the arrow

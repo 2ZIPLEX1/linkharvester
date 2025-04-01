@@ -1,5 +1,5 @@
 """
-CS2 Profile Analyzer
+CS2 Profile Analyzer - Refactored
 Specialized module for analyzing player profiles in Counter-Strike 2.
 
 This module uses the detection utilities to analyze player profiles, check medals,
@@ -12,19 +12,16 @@ import logging
 import cv2
 import traceback
 import numpy as np
-from cs2_detection_utils import get_latest_screenshot
-
-# Import detection utilities
-from cs2_detection_utils import (
-    get_profile_roi, 
-    detect_profile_button_in_roi,
-    detect_medals_in_roi
-)
+import glob
+from pathlib import Path
 
 # Configure logging
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
+MEDALS_PATH = os.path.join(TEMPLATES_PATH, 'medals')
+UNWANTED_MEDALS_PATH = os.path.join(MEDALS_PATH, 'unwanted')
 LOG_FILE = os.path.join(PROJECT_PATH, 'profile_analyzer.log')
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -32,143 +29,430 @@ logging.basicConfig(
     filemode='a'
 )
 
-def analyze_profile(click_x, click_y, screenshot_path=None):
+def get_latest_screenshot(screenshot_path=None):
     """
-    Unified profile analysis function that outputs structured flags for decision making.
+    Get the most recent screenshot from Steam's screenshot folder or use provided path.
+    """
+    try:
+        if screenshot_path:
+            # Use the provided screenshot path
+            if os.path.exists(screenshot_path):
+                return screenshot_path
+            else:
+                logging.error(f"Provided screenshot does not exist: {screenshot_path}")
+                return None
+                
+        # Default Steam screenshots path
+        STEAM_SCREENSHOTS_PATH = r'C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots'
+        screenshots = glob.glob(os.path.join(STEAM_SCREENSHOTS_PATH, '*.jpg'))
+        
+        if not screenshots:
+            logging.warning("No screenshots found")
+            return None
+            
+        latest_screenshot = max(screenshots, key=os.path.getmtime)
+        
+        # Only use if it's less than 30 seconds old
+        if time.time() - os.path.getmtime(latest_screenshot) > 30:
+            logging.warning("No recent screenshots found")
+            return None
+            
+        return latest_screenshot
+    except Exception as e:
+        logging.error(f"Error getting screenshot: {str(e)}")
+        return None
+
+def get_profile_roi(click_x, click_y, screenshot_path=None):
+    """
+    Extract the profile details region of interest from the screenshot.
     
     Args:
-        click_x: X-coordinate of original click position on player in scoreboard
-        click_y: Y-coordinate of original click position on player in scoreboard
+        click_x: X-coordinate of original click position
+        click_y: Y-coordinate of original click position
         screenshot_path: Optional path to screenshot to use
         
     Returns:
-        Outputs structured flags through print statements
+        tuple: (profile_roi, roi_x, roi_y) or (None, None, None) on error
     """
     try:
-        # Get the profile ROI from the screenshot
-        profile_roi, roi_x, roi_y = get_profile_roi(click_x, click_y, screenshot_path)
-        if profile_roi is None:
-            # Error already logged and printed by get_profile_roi
-            print("PROFILE_ANALYSIS_RESULT=0")
-            print("PROFILE_BUTTON_FOUND=0")
-            print("FOUR_PLUS_MEDALS_FOUND=0")
-            print("FIVE_YEAR_MEDAL_FOUND=0")
-            print("UNWANTED_MEDALS_FOUND=0")
-            print("CLICK_TO_SEE_MORE_MEDALS=0")
-            return
-            
-        # Create a visualization image for our detections
-        visualization = profile_roi.copy()
+        # Define the profile details ROI relative to click position
+        roi_x = click_x + 28
+        roi_y = click_y - 150
+        roi_width = 384
+        roi_height = 413
         
-        # Detect profile button
-        profile_button_result = detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization)
-        profile_button_found = profile_button_result["found"]
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot(screenshot_path)
+        if not screenshot_path:
+            logging.warning("No recent screenshot found for profile analysis")
+            return None, None, None
         
-        # If no profile button found, exit early with structured output
-        if not profile_button_found:
-            logging.info("No profile button detected in profile details")
-            print("PROFILE_ANALYSIS_RESULT=1")
-            print("PROFILE_BUTTON_FOUND=0")
-            print("FOUR_PLUS_MEDALS_FOUND=0")
-            print("FIVE_YEAR_MEDAL_FOUND=0")
-            print("UNWANTED_MEDALS_FOUND=0")
-            print("CLICK_TO_SEE_MORE_MEDALS=0")
-            return
-            
-        # Log and print profile button coordinates
-        profile_button_x = profile_button_result["x"]
-        profile_button_y = profile_button_result["y"]
-        print("PROFILE_BUTTON_FOUND=1")
-        print(f"PROFILE_BUTTON_COORDS={profile_button_x},{profile_button_y}")
+        # Read the screenshot
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            logging.error(f"Could not read image: {screenshot_path}")
+            return None, None, None
         
-        # Detect medals
-        medal_result = detect_medals_in_roi(profile_roi, roi_x, roi_y, visualization)
+        # Get image dimensions
+        img_height, img_width = img.shape[:2]
         
-        # Check for medal arrow using precise offset from original click
-        arrow_result = detect_precise_medal_arrow(click_x, click_y, screenshot_path, visualization)
+        # Ensure ROI is within image bounds
+        roi_x = max(0, min(roi_x, img_width - 1))
+        roi_y = max(0, min(roi_y, img_height - 1))
+        roi_width = min(roi_width, img_width - roi_x)
+        roi_height = min(roi_height, img_height - roi_y)
         
-        # Check for unwanted medals (like hydra pin and aces high pin)
-        unwanted_medals_found = check_for_unwanted_medals(medal_result["detected_medals"])
+        # Check if ROI dimensions are valid
+        if roi_width <= 0 or roi_height <= 0:
+            logging.error(f"Invalid ROI dimensions: {roi_width}x{roi_height}")
+            return None, None, None
         
-        # Determine if we have 4+ medals
-        four_plus_medals = medal_result["count"] >= 4
+        # Extract the full profile details ROI
+        profile_roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
         
-        # Check for 5-year medal specifically
-        five_year_medal_found = medal_result["has_5year_coin"]
-        
-        # Output results in the new structured format
-        print("PROFILE_ANALYSIS_RESULT=1")
-        print(f"PROFILE_BUTTON_FOUND={1 if profile_button_found else 0}")
-        print(f"FOUR_PLUS_MEDALS_FOUND={1 if four_plus_medals else 0}")
-        print(f"FIVE_YEAR_MEDAL_FOUND={1 if five_year_medal_found else 0}")
-        print(f"UNWANTED_MEDALS_FOUND={1 if unwanted_medals_found else 0}")
-        print(f"CLICK_TO_SEE_MORE_MEDALS={1 if arrow_result['has_more_medals'] else 0}")
-        
-        # Include arrow coordinates if an arrow was detected
-        if arrow_result["has_more_medals"] and "arrow_x" in arrow_result and "arrow_y" in arrow_result:
-            arrow_x = arrow_result["arrow_x"]
-            arrow_y = arrow_result["arrow_y"]
-            print(f"ARROW_COORDS_X={arrow_x}")
-            print(f"ARROW_COORDS_Y={arrow_y}")
-            print(f"ARROW_COORDS={arrow_x},{arrow_y}")
-        
-        # Include medal count information
-        print(f"MEDAL_COUNT={medal_result['count']}")
-        
-        # Include individual medal information
-        for medal_name in medal_result["detected_medals"]:
-            print(f"MEDAL_DETECTED={medal_name}")
-        
-        logging.info(f"Profile analysis complete: {medal_result['count']} medals, " +
-                    f"5-year coin: {five_year_medal_found}, " +
-                    f"Unwanted medals: {unwanted_medals_found}, " +
-                    f"More medals available: {arrow_result['has_more_medals']}")
+        return profile_roi, roi_x, roi_y
         
     except Exception as e:
-        logging.error(f"Error in profile analysis: {str(e)}")
+        logging.error(f"Error getting profile ROI: {str(e)}")
         logging.error(traceback.format_exc())
-        print("PROFILE_ANALYSIS_RESULT=0")
-        print("PROFILE_BUTTON_FOUND=0") 
-        print("FOUR_PLUS_MEDALS_FOUND=0")
-        print("FIVE_YEAR_MEDAL_FOUND=0")
-        print("UNWANTED_MEDALS_FOUND=0")
-        print("CLICK_TO_SEE_MORE_MEDALS=0")
-        print(f"PROFILE_ANALYSIS_ERROR={str(e)}")
+        return None, None, None
 
-def check_for_unwanted_medals(detected_medals):
+def detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization):
     """
-    Check if any unwanted medals are in the detected medals list.
+    Detect the profile button in the profile ROI.
     
     Args:
-        detected_medals: List of detected medal names
+        profile_roi: The profile details region of interest
+        roi_x: X-coordinate of the ROI in the original image
+        roi_y: Y-coordinate of the ROI in the original image
+        visualization: Image to draw detection results on
         
     Returns:
-        bool: True if unwanted medals found, False otherwise
+        dict: Information about the profile button detection
     """
-    # List of unwanted medal templates
-    unwanted_medals = ["unwanted-aces-high-pin", "unwanted-antwerp-2022-coin", "unwanted-berlin-2019-coin",
-                       "unwanted-copenhagen-2024-silver-coin", "unwanted-diamond-operation-broken-fang-coin",
-                       "unwanted-diamond-operation-riptide-coin", "unwanted-katowice-2019-silver-coin",
-                       "unwanted-operation-broken-fang-challenge-coin",
-                        "unwanted-operation-shattered-web-challenge-coin", "unwanted-paris-2023-coin",
-                        "unwanted-paris-2023-gold-coin", "unwanted-rio-2022-coin",
-                        "unwanted-rio-2022-gold-coin", "unwanted-shanghai-2024-diamond-coin",
-                        "unwanted-shanghai-2024-gold-coin", "unwanted-shanghai-2024-silver-coin",
-                        "unwanted-stockholm-2021-diamond-coin"]
+    # Default result structure
+    result = {
+        "found": False,
+        "x": 0,
+        "y": 0,
+        "confidence": 0.0
+    }
     
-    # Check if any unwanted medals are in the detected list
-    for medal in detected_medals:
-        for unwanted in unwanted_medals:
-            if unwanted in medal:
-                logging.info(f"Unwanted medal detected: {medal}")
-                return True
+    try:
+        # Template matching for profile button icon
+        template_path = os.path.join(TEMPLATES_PATH, "profile-button.jpg")
+        
+        if not os.path.exists(template_path):
+            logging.warning(f"Profile button template not found at: {template_path}")
+            return result
+            
+        template = cv2.imread(template_path)
+        if template is None:
+            logging.warning(f"Failed to load template image: {template_path}")
+            return result
+        
+        # Convert to grayscale once
+        full_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
+        template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        
+        # Try multiple methods and thresholds for detection (restored to original implementation)
+        detect_methods = [cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF_NORMED]
+        thresholds = [0.95, 0.9]
+        
+        # Try each method and threshold for actual detection
+        for method in detect_methods:
+            if result["found"]:
+                break
                 
-    return False
+            for threshold in thresholds:
+                if result["found"]:
+                    break
+                    
+                # Perform template matching
+                result_img = cv2.matchTemplate(full_gray, template_gray, method)
+                
+                # For SQDIFF methods, smaller values = better matches (restored special handling)
+                if method == cv2.TM_SQDIFF_NORMED:
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+                    match_val = 1.0 - min_val  # Convert to a similarity score
+                    match_loc = min_loc
+                else:
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+                    match_val = max_val
+                    match_loc = max_loc
+                
+                if ((method == cv2.TM_SQDIFF_NORMED and match_val >= threshold) or 
+                    (method != cv2.TM_SQDIFF_NORMED and match_val >= threshold)):
+                    h, w = template.shape[:2]
+                    # Calculate coordinates relative to full image
+                    profile_button_x = roi_x + match_loc[0] + w//2
+                    profile_button_y = roi_y + match_loc[1] + h//2
+                    
+                    result["found"] = True
+                    result["x"] = profile_button_x
+                    result["y"] = profile_button_y
+                    result["confidence"] = match_val
+                    
+                    # Draw on visualization
+                    cv2.rectangle(visualization, 
+                                (match_loc[0], match_loc[1]),
+                                (match_loc[0] + w, match_loc[1] + h),
+                                (0, 255, 0), 2)
+                    cv2.putText(visualization, f"Profile Button ({match_val:.2f})", 
+                            (match_loc[0], match_loc[1] - 5),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+                    
+                    logging.info(f"Profile button found at {profile_button_x},{profile_button_y} with method {method} and confidence {match_val:.2f}")
+                    break
 
-def detect_precise_medal_arrow(click_x, click_y, screenshot_path=None, visualization=None):
+        # If no profile button found with template matching, try color-based detection
+        if not result["found"]:
+            # Try color-based detection as fallback
+            hsv = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2HSV)
+            
+            # Define range for white/light gray (common color for profile icons)
+            lower_gray = np.array([0, 0, 180])
+            upper_gray = np.array([180, 30, 255])
+            
+            # Threshold the HSV image to get only white/light areas
+            mask = cv2.inRange(hsv, lower_gray, upper_gray)
+            
+            # Find contours in the mask
+            contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+            
+            # Filter contours by size (profile button should be a reasonable size)
+            filtered_contours = []
+            for contour in contours:
+                area = cv2.contourArea(contour)
+                # More strict size filtering to reduce false positives
+                if 80 < area < 400:  # Narrowed range from original 50-500
+                    x, y, w, h = cv2.boundingRect(contour)
+                    # Stricter aspect ratio filter for profile icons
+                    aspect_ratio = float(w) / h
+                    if 0.8 < aspect_ratio < 1.2:  # Narrowed from original 0.7-1.3
+                        filtered_contours.append((x, y, w, h, area))
+            
+            # Sort by area (largest first)
+            filtered_contours.sort(key=lambda x: x[4], reverse=True)
+            
+            # If we found any potential buttons, use the largest one
+            if filtered_contours and len(filtered_contours) <= 3:  # Limit to max 3 candidates to reduce false positives
+                x, y, w, h, area = filtered_contours[0]
+                
+                # Lower confidence and stricter conditions for color-based detection
+                confidence = min(0.6, area / 500)  # Reduced from 0.7 to 0.6
+                
+                # Only consider found if confidence is sufficient
+                if confidence >= 0.45:  # Added minimum threshold
+                    result["found"] = True
+                    result["x"] = roi_x + x + w//2
+                    result["y"] = roi_y + y + h//2
+                    result["confidence"] = confidence
+                    
+                    # Draw on visualization
+                    cv2.rectangle(visualization, (x, y), (x + w, y + h), (0, 255, 0), 2)
+                    cv2.putText(visualization, f"Profile Button (contour: {area:.1f}, conf: {confidence:.2f})", 
+                            (x, y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+                    
+                    logging.info(f"Profile button found using contour method at {result['x']},{result['y']} with confidence {confidence:.2f}")
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error detecting profile button in ROI: {str(e)}")
+        logging.error(traceback.format_exc())
+        return result
+
+def detect_unwanted_medals(profile_roi, roi_x, roi_y, visualization):
+    """
+    Check for unwanted medals in the profile ROI.
+    
+    Args:
+        profile_roi: The profile details region of interest
+        roi_x: X-coordinate of the ROI in the original image
+        roi_y: Y-coordinate of the ROI in the original image
+        visualization: Image to draw detection results on
+        
+    Returns:
+        dict: Information about unwanted medal detection
+    """
+    # Default result structure
+    result = {
+        "unwanted_medals_found": False,
+        "detected_unwanted_medals": []
+    }
+    
+    try:
+        # Get all unwanted medal templates from the unwanted medals folder
+        unwanted_medal_files = []
+        for ext in ['jpg', 'png']:
+            unwanted_medal_files.extend(glob.glob(os.path.join(UNWANTED_MEDALS_PATH, f"*.{ext}")))
+        
+        if not unwanted_medal_files:
+            logging.warning("No unwanted medal templates found")
+            return result
+            
+        # Convert profile ROI to grayscale once for all medal detections
+        profile_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
+        
+        # Process each unwanted medal template
+        for template_path in unwanted_medal_files:
+            medal_name = os.path.splitext(os.path.basename(template_path))[0]
+            
+            # Read template
+            template = cv2.imread(template_path)
+            if template is None:
+                continue
+                
+            # Convert to grayscale
+            template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+            
+            # Check template size vs ROI size
+            template_h, template_w = template_gray.shape
+            if template_h > profile_gray.shape[0] or template_w > profile_gray.shape[1]:
+                continue
+            
+            # Perform template matching with multiple thresholds
+            thresholds = [0.9, 0.85]
+            
+            for threshold in thresholds:
+                # Perform template matching
+                result_img = cv2.matchTemplate(profile_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+                
+                if max_val >= threshold:
+                    # We found an unwanted medal
+                    result["unwanted_medals_found"] = True
+                    result["detected_unwanted_medals"].append(medal_name)
+                    
+                    h, w = template.shape[:2]
+                    
+                    # Draw on visualization
+                    cv2.rectangle(visualization, 
+                                 (max_loc[0], max_loc[1]),
+                                 (max_loc[0] + w, max_loc[1] + h),
+                                 (0, 0, 255), 2)  # Red for unwanted medals
+                    cv2.putText(visualization, f"UNWANTED: {medal_name} ({max_val:.2f})", 
+                               (max_loc[0], max_loc[1] - 5),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 0, 255), 1)
+                    
+                    logging.info(f"Unwanted medal detected: {medal_name} with confidence {max_val:.2f}")
+                    
+                    # Early exit - no need to check more medals if we already found an unwanted one
+                    return result
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error detecting unwanted medals: {str(e)}")
+        logging.error(traceback.format_exc())
+        return result
+
+def detect_regular_medals(profile_roi, roi_x, roi_y, visualization):
+    """
+    Detect regular medals in the profile ROI.
+    
+    Args:
+        profile_roi: The profile details region of interest
+        roi_x: X-coordinate of the ROI in the original image
+        roi_y: Y-coordinate of the ROI in the original image
+        visualization: Image to draw detection results on
+        
+    Returns:
+        dict: Information about regular medal detection
+    """
+    # Default result structure
+    result = {
+        "count": 0,
+        "has_5year_coin": False,
+        "detected_medals": []
+    }
+    
+    try:
+        # Get all regular medal templates from the medals folder (excluding unwanted subfolder)
+        regular_medal_files = []
+        
+        # Get all files directly in the medals folder
+        for ext in ['jpg', 'png']:
+            medal_files = glob.glob(os.path.join(MEDALS_PATH, f"*.{ext}"))
+            regular_medal_files.extend(medal_files)
+        
+        if not regular_medal_files:
+            logging.warning("No regular medal templates found")
+            return result
+            
+        # Convert profile ROI to grayscale once for all medal detections
+        profile_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
+        
+        # Process each regular medal template
+        for template_path in regular_medal_files:
+            medal_name = os.path.splitext(os.path.basename(template_path))[0]
+            
+            # Read template
+            template = cv2.imread(template_path)
+            if template is None:
+                continue
+                
+            # Convert to grayscale
+            template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+            
+            # Check template size vs ROI size
+            template_h, template_w = template_gray.shape
+            if template_h > profile_gray.shape[0] or template_w > profile_gray.shape[1]:
+                continue
+            
+            # Perform template matching with multiple thresholds
+            thresholds = [0.9, 0.85]
+            medal_detected = False
+            
+            for threshold in thresholds:
+                if medal_detected:
+                    break
+                    
+                # Perform template matching
+                result_img = cv2.matchTemplate(profile_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+                
+                if max_val >= threshold:
+                    # We found a regular medal
+                    medal_detected = True
+                    
+                    # Add to the list of medal names if not already there
+                    if medal_name not in result["detected_medals"]:
+                        result["detected_medals"].append(medal_name)
+                        result["count"] += 1  # Increment count only for new medals
+                    
+                    # Check if this is the 5-year veteran coin
+                    if medal_name == "5-year-veteran-coin":
+                        result["has_5year_coin"] = True
+                        logging.info("5-year veteran coin detected")
+                    
+                    h, w = template.shape[:2]
+                    
+                    # Draw on visualization
+                    cv2.rectangle(visualization, 
+                                 (max_loc[0], max_loc[1]),
+                                 (max_loc[0] + w, max_loc[1] + h),
+                                 (0, 255, 0), 2)  # Green for regular medals
+                    cv2.putText(visualization, f"{medal_name} ({max_val:.2f})", 
+                               (max_loc[0], max_loc[1] - 5),
+                               cv2.FONT_HERSHEY_SIMPLEX, 0.4, (0, 255, 0), 1)
+                    
+                    logging.info(f"Regular medal detected: {medal_name} with confidence {max_val:.2f}")
+                    
+                    # Break after finding this medal and move to the next one
+                    break
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error detecting regular medals: {str(e)}")
+        logging.error(traceback.format_exc())
+        return result
+
+def detect_medal_arrow(click_x, click_y, screenshot_path=None, visualization=None):
     """
     Detect the medal arrow using precise offset from the original click position.
-    Also analyzes color characteristics to determine if the arrow is active or inactive.
     
     Args:
         click_x: X-coordinate of original click position
@@ -183,7 +467,9 @@ def detect_precise_medal_arrow(click_x, click_y, screenshot_path=None, visualiza
     result = {
         "has_more_medals": False,
         "confidence": 0.0,
-        "is_active": False
+        "is_active": False,
+        "arrow_x": 0,
+        "arrow_y": 0
     }
     
     try:
@@ -215,10 +501,6 @@ def detect_precise_medal_arrow(click_x, click_y, screenshot_path=None, visualiza
         if arrow_x >= img_width or arrow_min_y < 0 or arrow_max_y >= img_height:
             logging.error(f"Arrow region out of bounds: x={arrow_x}, y_min={arrow_min_y}, y_max={arrow_max_y}")
             return result
-        
-        # Create debug directory if it doesn't exist
-        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
-        os.makedirs(debug_dir, exist_ok=True)
         
         # Load the arrow template
         arrow_template_path = os.path.join(TEMPLATES_PATH, "right-arrow.jpg")
@@ -275,44 +557,32 @@ def detect_precise_medal_arrow(click_x, click_y, screenshot_path=None, visualiza
             # Calculate absolute Y position in the original image
             absolute_y = arrow_min_y + max_loc[1]
             
+            # Store the absolute coordinates
+            result["arrow_x"] = arrow_x + max_loc[0]
+            result["arrow_y"] = absolute_y
+            
             # Draw on visualization if provided
             if visualization is not None:
-                # Adjust coordinates for visualization (which is the profile_roi)
-                viz_x = max_loc[0]
-                viz_y = max_loc[1]
-                
                 # Use green for active arrows, red for inactive
                 color = (0, 255, 0) if is_active else (0, 0, 255)
                 
                 cv2.rectangle(visualization, 
-                             (viz_x, viz_y),
-                             (viz_x + w, viz_y + h),
+                             (max_loc[0], max_loc[1]),
+                             (max_loc[0] + w, max_loc[1] + h),
                              color, 2)
                 cv2.putText(visualization, 
                            f"{'Active' if is_active else 'Inactive'} Arrow ({max_val:.2f})", 
-                           (viz_x, viz_y - 5),
+                           (max_loc[0], max_loc[1] - 5),
                            cv2.FONT_HERSHEY_SIMPLEX, 0.4, color, 1)
-            
-            # Save debug images
-            timestamp = int(time.time())
-            
-            # Save the detected arrow region
-            arrow_found_region = arrow_region[max_loc[1]:max_loc[1]+h, max_loc[0]:max_loc[0]+w]
-            arrow_path = os.path.join(debug_dir, 
-                                     f"medal_arrow_precise_{timestamp}_{max_val:.2f}_{'active' if is_active else 'inactive'}.png")
-            cv2.imwrite(arrow_path, arrow_found_region)
             
             # Log detection results
             status = "active" if is_active else "inactive"
-            # Store the absolute coordinates for returning to AHK
-            result["arrow_x"] = arrow_x + max_loc[0]
-            result["arrow_y"] = absolute_y
-            logging.info(f"Medal arrow detected ({status}) with confidence {max_val:.2f} at absolute position {result['arrow_x']},{result['arrow_y']}")
-            
+            logging.info(f"Medal arrow detected ({status}) with confidence {max_val:.2f} at position {result['arrow_x']},{result['arrow_y']}")
+        
         return result
         
     except Exception as e:
-        logging.error(f"Error detecting precise medal arrow: {str(e)}")
+        logging.error(f"Error detecting medal arrow: {str(e)}")
         logging.error(traceback.format_exc())
         return result
 
@@ -343,12 +613,10 @@ def analyze_arrow_activity(arrow_region):
         logging.info(f"Arrow brightness analysis: mean={mean_brightness:.1f}, contrast={contrast:.1f}")
         
         # Thresholds for active arrows - these may need adjustment based on your game's visuals
-        # Active arrows are typically brighter and have more contrast
-        brightness_threshold = 125  # Lowered from 160 based on observed active arrow brightness
-        contrast_threshold = 25     # Adjust based on your observations
+        brightness_threshold = 125
+        contrast_threshold = 25
         
         # If we have very high contrast (>90), consider it active regardless of brightness
-        # This catches arrows that have strong contrast but lower overall brightness
         high_contrast_override = contrast > 90
         
         is_active = high_contrast_override or ((mean_brightness >= brightness_threshold) and (contrast >= contrast_threshold))
@@ -360,29 +628,189 @@ def analyze_arrow_activity(arrow_region):
         # Default to considering it active if analysis fails (safer to check than to skip)
         return True
 
-def batch_analyze_profiles(scoreboard_data):
+def analyze_profile(click_x, click_y, screenshot_path=None):
     """
-    Analyze multiple player profiles from scoreboard data.
+    Unified profile analysis function that follows the desired algorithm flow.
     
     Args:
-        scoreboard_data: List of dicts with player data including click coordinates
+        click_x: X-coordinate of original click position on player in scoreboard
+        click_y: Y-coordinate of original click position on player in scoreboard
+        screenshot_path: Optional path to screenshot to use
         
     Returns:
-        Dict with results for all analyzed profiles
+        Outputs structured flags through print statements for AHK
     """
-    results = {}
+    try:
+        # Create debug directory if it doesn't exist
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        
+        # Default result structure
+        result = {
+            "profile_button_found": False,
+            "profile_button_x": 0,
+            "profile_button_y": 0,
+            "unwanted_medals_found": False,
+            "medal_count": 0,
+            "five_year_medal_found": False,
+            "more_medals_available": False,
+            "arrow_x": 0,
+            "arrow_y": 0
+        }
+        
+        # STEP 1: Get the profile ROI from the screenshot
+        profile_roi, roi_x, roi_y = get_profile_roi(click_x, click_y, screenshot_path)
+        if profile_roi is None:
+            # Error already logged and printed by get_profile_roi
+            print("PROFILE_ANALYSIS_RESULT=0")
+            print("PROFILE_BUTTON_FOUND=0")
+            print("UNWANTED_MEDALS_FOUND=0")
+            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("FIVE_YEAR_MEDAL_FOUND=0")
+            print("CLICK_TO_SEE_MORE_MEDALS=0")
+            return
+            
+        # Create a visualization image for our detections
+        visualization = profile_roi.copy()
+        
+        # Save timestamp for debug images
+        timestamp = int(time.time())
+        
+        # STEP 2: Detect profile button
+        profile_button_result = detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization)
+        result["profile_button_found"] = profile_button_result["found"]
+        
+        # If no profile button found, exit early with structured output
+        if not result["profile_button_found"]:
+            logging.info("No profile button detected in profile details")
+            print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_BUTTON_FOUND=0")
+            print("UNWANTED_MEDALS_FOUND=0")
+            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("FIVE_YEAR_MEDAL_FOUND=0")
+            print("CLICK_TO_SEE_MORE_MEDALS=0")
+            
+            # Save debug visualization
+            debug_path = os.path.join(debug_dir, f"profile_no_button_{timestamp}.png")
+            cv2.imwrite(debug_path, visualization)
+            return
+            
+        # Store profile button coordinates
+        result["profile_button_x"] = profile_button_result["x"]
+        result["profile_button_y"] = profile_button_result["y"]
+        
+        # STEP 3: Check for unwanted medals first
+        unwanted_medal_result = detect_unwanted_medals(profile_roi, roi_x, roi_y, visualization)
+        result["unwanted_medals_found"] = unwanted_medal_result["unwanted_medals_found"]
+        
+        # If unwanted medals found, exit early
+        if result["unwanted_medals_found"]:
+            logging.info("Unwanted medals detected, stopping analysis")
+            print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_BUTTON_FOUND=1")
+            print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+            print("UNWANTED_MEDALS_FOUND=1")
+            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("FIVE_YEAR_MEDAL_FOUND=0")
+            print("CLICK_TO_SEE_MORE_MEDALS=0")
+            
+            # Add detected unwanted medals to output
+            for medal_name in unwanted_medal_result["detected_unwanted_medals"]:
+                print(f"UNWANTED_MEDAL_DETECTED={medal_name}")
+            
+            # Save debug visualization
+            debug_path = os.path.join(debug_dir, f"profile_unwanted_medals_{timestamp}.png")
+            cv2.imwrite(debug_path, visualization)
+            return
+        
+        # STEP 4: Detect regular medals
+        medal_result = detect_regular_medals(profile_roi, roi_x, roi_y, visualization)
+        result["medal_count"] = medal_result["count"]
+        result["five_year_medal_found"] = medal_result["has_5year_coin"]
+        
+        # Check if we have fewer than 4 medals
+        has_four_plus_medals = result["medal_count"] >= 4
+        if not has_four_plus_medals:
+            logging.info(f"Insufficient medals detected: {result['medal_count']}/4 required")
+            print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_BUTTON_FOUND=1")
+            print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+            print("UNWANTED_MEDALS_FOUND=0")
+            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("FIVE_YEAR_MEDAL_FOUND=0")
+            print("CLICK_TO_SEE_MORE_MEDALS=0")
+            print(f"MEDAL_COUNT={result['medal_count']}")
+            
+            # Include individual medal information
+            for medal_name in medal_result["detected_medals"]:
+                print(f"MEDAL_DETECTED={medal_name}")
+            
+            # Save debug visualization
+            debug_path = os.path.join(debug_dir, f"profile_insufficient_medals_{timestamp}.png")
+            cv2.imwrite(debug_path, visualization)
+            return
+        
+        # STEP 5: Check for medal arrow
+        arrow_result = detect_medal_arrow(click_x, click_y, screenshot_path, visualization)
+        result["more_medals_available"] = arrow_result["has_more_medals"]
+        result["arrow_x"] = arrow_result["arrow_x"]
+        result["arrow_y"] = arrow_result["arrow_y"]
+        
+        # STEP 6: Output final results
+        print("PROFILE_ANALYSIS_RESULT=1")
+        print("PROFILE_BUTTON_FOUND=1")
+        print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
+        print("UNWANTED_MEDALS_FOUND=0")
+        print(f"FOUR_PLUS_MEDALS_FOUND={1 if has_four_plus_medals else 0}")
+        print(f"FIVE_YEAR_MEDAL_FOUND={1 if result['five_year_medal_found'] else 0}")
+        print(f"CLICK_TO_SEE_MORE_MEDALS={1 if result['more_medals_available'] else 0}")
+        
+        # Include arrow coordinates if an arrow was detected
+        if result["more_medals_available"]:
+            print(f"ARROW_COORDS_X={result['arrow_x']}")
+            print(f"ARROW_COORDS_Y={result['arrow_y']}")
+            print(f"ARROW_COORDS={result['arrow_x']},{result['arrow_y']}")
+        
+        # Include medal count information
+        print(f"MEDAL_COUNT={result['medal_count']}")
+        
+        # Include individual medal information
+        for medal_name in medal_result["detected_medals"]:
+            print(f"MEDAL_DETECTED={medal_name}")
+        
+        # Save debug visualization with all detections
+        debug_path = os.path.join(debug_dir, f"profile_complete_analysis_{timestamp}.png")
+        cv2.imwrite(debug_path, visualization)
+        
+        logging.info(f"Profile analysis complete: {result['medal_count']} medals, " +
+                     f"5-year coin: {result['five_year_medal_found']}, " +
+                     f"More medals available: {result['more_medals_available']}")
+        
+    except Exception as e:
+        logging.error(f"Error in profile analysis: {str(e)}")
+        logging.error(traceback.format_exc())
+        print("PROFILE_ANALYSIS_RESULT=0")
+        print("PROFILE_BUTTON_FOUND=0") 
+        print("UNWANTED_MEDALS_FOUND=0")
+        print("FOUR_PLUS_MEDALS_FOUND=0")
+        print("FIVE_YEAR_MEDAL_FOUND=0")
+        print("CLICK_TO_SEE_MORE_MEDALS=0")
+        print(f"PROFILE_ANALYSIS_ERROR={str(e)}")
+
+if __name__ == "__main__":
+    import sys
     
-    for player in scoreboard_data:
-        player_id = player.get("nickname", f"player_{len(results)}")
-        logging.info(f"Analyzing profile for player: {player_id}")
-        
-        click_x = player.get("x", 0)
-        click_y = player.get("y", 0)
-        
-        # Individual results will be printed, but we also collect them
-        analyze_profile(click_x, click_y)
-        
-        # You could also add code here to parse the printed results and collect them
-        # or modify analyze_profile to return a dict with the results
-        
-    return results
+    if len(sys.argv) > 2:
+        try:
+            click_x = int(sys.argv[1])
+            click_y = int(sys.argv[2])
+            analyze_profile(click_x, click_y)
+        except (ValueError, IndexError) as e:
+            logging.error(f"Invalid click coordinates: {e}")
+            print("PROFILE_ANALYSIS_RESULT=0")
+            print(f"PROFILE_ANALYSIS_ERROR=Invalid click coordinates: {e}")
+            print("DECISION=SKIP")
+    else:
+        print("PROFILE_ANALYSIS_RESULT=0")
+        print("PROFILE_ANALYSIS_ERROR=Missing click coordinates")
+        print("DECISION=SKIP")
