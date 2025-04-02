@@ -323,7 +323,6 @@ RunPythonDetector(command) {
         
         ; Read the output
         result := exec.StdOut.ReadAll()
-        LogMessage("Python detector output: " result)
         return result
     } catch Error as e {
         LogMessage("Error running Python detector: " e.Message)

@@ -296,14 +296,14 @@ def detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization):
         # and spans about 150px width to cover all possible icons
         sympathies_x = 38 + 55  # 38px to adjust for ROI, then 125px offset from click
         sympathies_y = 140       # Approximate Y position (may vary)
-        sympathies_width = 200   # Width to capture all icons and numbers
+        sympathies_width = 250   # Increased width to capture all icons and numbers (increased from 200)
         sympathies_height = 120   # Height to capture vertical variation
         
         # Create a single ROI for all sympathies
         sympathies_region = profile_roi[sympathies_y:sympathies_y+sympathies_height, 
                                         sympathies_x:sympathies_x+sympathies_width]
         
-        # Save the sympathies region for debugging
+        # Save the sympathies region for debugging - KEEPING THIS ONE
         debug_dir = os.path.join(PROJECT_PATH, "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
         debug_path = os.path.join(debug_dir, f"sympathies_region_{timestamp}.png")
@@ -326,12 +326,12 @@ def detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization):
             icon_height = config["height"]
             min_spacing = config["min_spacing"]
             
-            # Debug name for this icon
-            debug_name = f"sympathy_{icon_name}_{timestamp}"
+            # REMOVED: Debug name for this icon
+            # Pass None instead of a debug name to prevent saving individual icon images
             
             # Detect the icon within the sympathies region
             found, coords, confidence = detect_sympathy_template(
-                sympathies_region, icon_name, threshold=0.7, debug_name=debug_name)
+                sympathies_region, icon_name, threshold=0.7, debug_name=None)
             
             if found:
                 # Check if this detection overlaps with previous ones
@@ -371,14 +371,14 @@ def detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization):
                     # Check if number region is within bounds
                     if number_x + number_width <= sympathies_width:
                         # Extract the number using the utility function
-                        number_debug_name = f"sympathy_{icon_name}_number_{timestamp}"
+                        # Pass None instead of debug_name to prevent saving number region images
                         number_value = extract_sympathy_number(
                             sympathies_region, 
                             number_x, 
                             number_y, 
                             number_width, 
                             number_height, 
-                            number_debug_name
+                            debug_name=None
                         )
                         
                         # Store the value
@@ -853,8 +853,6 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             logging.info("No profile button detected in profile details")
             print("PROFILE_ANALYSIS_RESULT=1")
             print("PROFILE_BUTTON_FOUND=0")
-            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
-            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
             print("FOUR_PLUS_MEDALS_FOUND=0")

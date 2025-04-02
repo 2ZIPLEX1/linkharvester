@@ -54,12 +54,8 @@ def detect_sympathy_template(image_input, template_name, threshold=0.7, roi=None
         else:
             img_roi = img
         
-        # Save ROI for debugging if debug_name provided
-        if debug_name:
-            debug_dir = os.path.join(PROJECT_PATH, "debug_regions")
-            os.makedirs(debug_dir, exist_ok=True)
-            debug_path = os.path.join(debug_dir, f"{debug_name}_roi.png")
-            cv2.imwrite(debug_path, img_roi)
+        # REMOVED: Save ROI for debugging if debug_name provided
+        # This prevents saving sympathy_crown_1743583770_roi.png etc.
         
         # Convert to grayscale
         img_gray = cv2.cvtColor(img_roi, cv2.COLOR_BGR2GRAY)
@@ -84,18 +80,8 @@ def detect_sympathy_template(image_input, template_name, threshold=0.7, roi=None
                 center_x = x + max_loc[0] + w // 2
                 center_y = y + max_loc[1] + h // 2
                 
-                # For debug visualization
-                if debug_name:
-                    debug_vis = img_roi.copy()
-                    cv2.rectangle(debug_vis, 
-                                 (max_loc[0], max_loc[1]),
-                                 (max_loc[0] + w, max_loc[1] + h),
-                                 (0, 255, 0), 2)
-                    cv2.putText(debug_vis, f"{template_name} ({max_val:.2f})", 
-                               (max_loc[0], max_loc[1] - 5),
-                               cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
-                    debug_path = os.path.join(debug_dir, f"{debug_name}_detected.png")
-                    cv2.imwrite(debug_path, debug_vis)
+                # REMOVED: For debug visualization with debug_name
+                # This prevents saving sympathy detection visualization
             else:
                 center_x = max_loc[0] + w // 2
                 center_y = max_loc[1] + h // 2
@@ -124,12 +110,8 @@ def extract_sympathy_number(img, roi_x, roi_y, roi_width, roi_height, debug_name
         # Extract the region
         roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
         
-        # Save ROI for debugging if debug_name provided
-        if debug_name:
-            debug_dir = os.path.join(PROJECT_PATH, "debug_regions")
-            os.makedirs(debug_dir, exist_ok=True)
-            debug_path = os.path.join(debug_dir, f"{debug_name}_number_roi.png")
-            cv2.imwrite(debug_path, roi)
+        # REMOVED: Save ROI for debugging if debug_name provided
+        # This prevents saving sympathy_crown_number_1743583742_number_roi.png etc.
         
         # Convert to grayscale
         gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
@@ -137,10 +119,8 @@ def extract_sympathy_number(img, roi_x, roi_y, roi_width, roi_height, debug_name
         # Apply thresholding to isolate the text
         _, thresh = cv2.threshold(gray, 140, 255, cv2.THRESH_BINARY)
         
-        # Save thresholded image for debugging
-        if debug_name:
-            thresh_path = os.path.join(debug_dir, f"{debug_name}_threshold.png")
-            cv2.imwrite(thresh_path, thresh)
+        # REMOVED: Save thresholded image for debugging
+        # This prevents saving sympathy number threshold images
         
         # Scale up the image for better OCR (3x)
         scaled = cv2.resize(thresh, (roi_width * 3, roi_height * 3), interpolation=cv2.INTER_CUBIC)

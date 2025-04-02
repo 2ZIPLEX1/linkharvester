@@ -1,66 +1,6 @@
 ; CS2 Automation - Refactored In-Game Module
 ; Handles actions once a match has been successfully joined
 
-; Process all players from both teams using a single screenshot
-ProcessAllPlayers() {
-    LogMessage("Starting player processing with single screenshot approach...")
-    
-    ; Variables to track team positions
-    ctFound := false
-    ctBaseX := 0
-    ctBaseY := 0
-    ctPlayers := []
-    
-    tFound := false
-    tBaseX := 0
-    tBaseY := 0
-    tPlayers := []
-    
-    ; Player row height (exact 26px as specified)
-    playerRowHeight := 26
-    
-    ; Maximum players to try (generous upper limit for casual matches)
-    maxPlayersToCheck := 20
-    
-    ; ---- STEP 1: Take a SINGLE screenshot of the scoreboard ----
-    LogMessage("Taking single screenshot of scoreboard...")
-    CaptureScreenshot()
-    Sleep 1000  ; Wait for screenshot to be saved
-    
-    LogMessage("Using a single screenshot for all player detection")
-    
-    ; ---- STEP 2: Find team positions using saved screenshot ----
-    ctFound := FindTeamPosition("ct", &ctBaseX, &ctBaseY)
-    tFound := FindTeamPosition("t", &tBaseX, &tBaseY)
-    
-    ; ---- STEP 3: Extract player nicknames ----
-    ctNicknames := ExtractPlayerNicknames("CT", ctFound, ctBaseX, ctBaseY, playerRowHeight, maxPlayersToCheck)
-    tNicknames := ExtractPlayerNicknames("T", tFound, tBaseX, tBaseY, playerRowHeight, maxPlayersToCheck)
-    
-    ; ---- STEP 4: Process player profiles ----
-    ; Process CT player profiles
-    for i, player in ctNicknames {
-        ProcessPlayerProfile("CT", player, &ctPlayers)
-    }
-
-    ; Process T player profiles
-    for i, player in tNicknames {
-        ProcessPlayerProfile("T", player, &tPlayers)
-    }
-    
-    ; Log summary
-    LogMessage("Player processing summary:")
-    LogMessage("- CT Players: " ctPlayers.Length)
-    for i, player in ctPlayers
-        LogMessage("  [" i "] " player.nickname)
-    
-    LogMessage("- T Players: " tPlayers.Length)
-    for i, player in tPlayers
-        LogMessage("  [" i "] " player.nickname)
-    
-    return (ctPlayers.Length > 0 || tPlayers.Length > 0)
-}
-
 ; Find the base position for a team (CT or T)
 FindTeamPosition(team, &baseX, &baseY) {
     LogMessage("Finding " team " team base position...")
@@ -170,61 +110,6 @@ CleanPlayerNickname(nickname, team) {
     return nickname
 }
 
-; Update ProcessPlayerProfile to use the new medal criteria
-ProcessPlayerProfile(team, player, &playersArray) {
-    LogMessage("Processing " team " player profile: " player.nickname)
-    
-    ; Calculate exact click coordinates
-    clickX := player.x + 10
-    clickY := player.y + 10
-    LogMessage("Clicking " team " player at coordinates: " clickX "," clickY)
-    
-    ; First, view the player's in-game profile
-    ViewPlayerInGameProfile(clickX, clickY)
-    
-    ; Check for medals using the improved function
-    medalInfo := CheckPlayerMedals(clickX, clickY)
-    
-    ; Log medal information
-    LogMessage("Medal detection results: Has 4+ medals: " (medalInfo.hasFourMedals ? "Yes" : "No") 
-              ", Has 5-year coin: " (medalInfo.hasFiveYearCoin ? "Yes" : "No")
-              ", Total medals: " medalInfo.medalCount
-              ", Meets criteria: " (medalInfo.meetsAllCriteria ? "Yes" : "No"))
-    
-    ; If the player doesn't meet our criteria, skip further processing
-    if (!medalInfo.meetsAllCriteria) {
-        LogMessage("Player doesn't meet medal criteria, skipping profile")
-        
-        ; Close the profile view
-        Click clickX, clickY
-        Sleep 500
-        
-        ; Don't add to player array
-        return false
-    }
-    
-    ; Store medal information
-    player.medals := medalInfo.medals
-    player.medalCount := medalInfo.medalCount
-    player.hasMoreMedals := medalInfo.hasMoreMedals
-    
-    ; Then, access their Steam profile
-    steamUrl := AccessSteamProfile(clickX, clickY, player.nickname)
-    
-    ; Save the Steam profile URL if we got one
-    if (steamUrl) {
-        player.steamUrl := steamUrl
-    }
-    
-    ; Close the profile view
-    Click clickX, clickY
-    Sleep 500
-    
-    ; Add to final player list
-    playersArray.Push(player)
-    return true
-}
-
 ; Helper function to convert array to text for logging
 AsText(array) {
     result := "["
@@ -250,60 +135,83 @@ ViewPlayerInGameProfile(clickX, clickY) {
     return true
 }
 
-; Access and extract the Steam profile URL for a player using OCR
-AccessSteamProfile(clickX, clickY, nickname := "") {
-    try {
-        ; Calculate position of the profile button (offset from player click)
-        profileButtonX := clickX + 80
-        profileButtonY := clickY + 150
-        LogMessage("Clicking profile button at: " profileButtonX "," profileButtonY)
-        
-        ; Click the profile button
-        Click profileButtonX, profileButtonY
-        Sleep 3000  ; Give Steam browser time to open
-        
-        ; Take screenshot of the browser for OCR recognition
-        LogMessage("Taking screenshot for URL OCR recognition")
-        CaptureScreenshot()
-        Sleep 1500  ; Give enough time for the screenshot to be saved
-        
-        ; Run Python URL extractor
-        LogMessage("Running URL OCR extraction")
-        urlResult := RunPythonDetector("extract_url")
-        LogMessage("URL extraction result: " urlResult)
-        
-        ; Parse the OCR output to get the URL
-        steamProfileUrl := ""
-        if InStr(urlResult, "URL_EXTRACTION_RESULT=1") {
-            ; Try to extract the URL from the output
-            if RegExMatch(urlResult, "URL=([^\r\n]+)", &match) {
-                steamProfileUrl := Trim(match[1])
-                LogMessage("Extracted Steam profile URL via OCR: " steamProfileUrl)
-            }
-        } else {
-            ; Extract error message if available
-            errorMsg := "Unknown error"
-            if RegExMatch(urlResult, "URL_EXTRACTION_ERROR=([^\r\n]+)", &match)
-                errorMsg := Trim(match[1])
-            LogMessage("Failed to extract URL: " errorMsg)
+; Helper function to close Steam browser tabs and overlay
+CloseTabAndOverlay(urlResult) {
+    ; Check if tab close button was found
+    tabCloseX := 0
+    tabCloseY := 0
+    tabCloseFound := false
+    
+    if InStr(urlResult, "TAB_CLOSE_BUTTON_FOUND=1") {
+        if RegExMatch(urlResult, "TAB_CLOSE_COORDS=(\d+),(\d+)", &coordMatch) {
+            tabCloseX := Integer(coordMatch[1])
+            tabCloseY := Integer(coordMatch[2])
+            tabCloseFound := true
+            LogMessage("Tab close button found at: " tabCloseX "," tabCloseY)
         }
-        
-        ; Save URL to file if we have a nickname and URL
-        if (nickname && steamProfileUrl)
-            SaveProfileUrl(nickname, steamProfileUrl)
-        
-        ; Close the Steam browser (Escape)
-        Send "{Escape}"
-        Sleep 500
-        
-        return steamProfileUrl
-    } catch Error as e {
-        LogMessage("Error accessing Steam profile: " e.Message)
-        ; Try to close Steam browser if it's open
-        Send "{Escape}"
-        Sleep 500
-        return ""
     }
+    
+    ; Close the tabs and overlay using clicks
+    if (tabCloseFound) {
+        ; First click the tab close button (adjusted X to target the 'x' specifically)
+        LogMessage("Clicking tab close button at: " tabCloseX-13 "," tabCloseY)
+        Click tabCloseX-13, tabCloseY
+        Sleep 1000  ; Wait for tab to close
+        
+        ; Then click the overlay close button
+        overlayCloseX := 1874
+        overlayCloseY := 48
+        LogMessage("Clicking overlay close button at: " overlayCloseX "," overlayCloseY)
+        Click overlayCloseX, overlayCloseY
+        Sleep 1000  ; Wait for overlay to close
+        
+        return true
+    } else {
+        ; Fallback to Escape key if tab close button not found
+        LogMessage("Tab close button not found, using Escape key as fallback")
+        Send "{Escape}"
+        Sleep 1000
+        
+        return false
+    }
+}
+
+; Function to extract Steam profile URL using OCR
+ExtractSteamProfileUrl() {
+    LogMessage("Extracting Steam profile URL using OCR...")
+    
+    ; Run the URL extraction
+    urlResult := RunPythonDetector("extract_url")
+    LogMessage("URL extraction result: " urlResult)
+    
+    ; Parse the OCR output to get the URL
+    steamProfileUrl := ""
+    if InStr(urlResult, "URL_EXTRACTION_RESULT=1") {
+        ; Try to extract the URL from the output
+        if RegExMatch(urlResult, "URL=([^\r\n]+)", &match) {
+            steamProfileUrl := Trim(match[1])
+            LogMessage("Successfully extracted Steam profile URL: " steamProfileUrl)
+            
+            ; Close the tab and overlay
+            CloseTabAndOverlay(urlResult)
+            
+            return steamProfileUrl
+        }
+    } else {
+        ; Extract error message if available
+        errorMsg := "Unknown error"
+        if RegExMatch(urlResult, "URL_EXTRACTION_ERROR=([^\r\n]+)", &match)
+            errorMsg := Trim(match[1])
+        LogMessage("Failed to extract URL: " errorMsg)
+    }
+    
+    ; If we reached here, we didn't find a URL or couldn't close the tab
+    ; Fallback to Escape key
+    LogMessage("Using Escape key as fallback to close overlay")
+    Send "{Escape}"
+    Sleep 1000
+    
+    return ""
 }
 
 ; Corrected ProcessPlayersGridMethod function with optimized checks
@@ -510,11 +418,6 @@ ProcessPlayersGridMethod() {
                     SaveProfileUrl(playerIdentifier, steamProfileUrl)
                     profilesFound++
                 }
-                
-                ; Close the Steam browser window with Escape
-                LogMessage("Closing Steam browser window...")
-                Send "{Escape}"
-                Sleep 1000
             } else {
                 LogMessage("Player has 4+ medals but no 5-year coin, skipping profile")
                 
@@ -705,34 +608,6 @@ CheckPlayerMedals(clickX, clickY) {
         medalCount: totalMedals,
         hasMoreMedals: hasMoreMedals
     }
-}
-
-; Function to extract Steam profile URL using OCR
-ExtractSteamProfileUrl() {
-    LogMessage("Extracting Steam profile URL using OCR...")
-    
-    ; Run the URL extraction
-    urlResult := RunPythonDetector("extract_url")
-    LogMessage("URL extraction result: " urlResult)
-    
-    ; Parse the OCR output to get the URL
-    steamProfileUrl := ""
-    if InStr(urlResult, "URL_EXTRACTION_RESULT=1") {
-        ; Try to extract the URL from the output
-        if RegExMatch(urlResult, "URL=([^\r\n]+)", &match) {
-            steamProfileUrl := Trim(match[1])
-            LogMessage("Successfully extracted Steam profile URL: " steamProfileUrl)
-            return steamProfileUrl
-        }
-    } else {
-        ; Extract error message if available
-        errorMsg := "Unknown error"
-        if RegExMatch(urlResult, "URL_EXTRACTION_ERROR=([^\r\n]+)", &match)
-            errorMsg := Trim(match[1])
-        LogMessage("Failed to extract URL: " errorMsg)
-    }
-    
-    return ""
 }
 
 ; Replace or modify the ProcessMatch function to use the new grid method

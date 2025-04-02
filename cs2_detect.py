@@ -6,6 +6,7 @@ import glob
 import logging
 import numpy as np
 import pytesseract
+import traceback
 
 # Configure paths
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
@@ -344,7 +345,7 @@ def detect_profile_button(region_x=None, region_y=None, region_width=None, regio
         print(f"PROFILE_BUTTON_ERROR={str(e)}")
 
 def extract_steam_url():
-    """Extract Steam profile URL from the Steam browser using lock icon detection and OCR"""
+    """Extract Steam profile URL from the Steam browser using lock icon detection and OCR, and also locate tab close button"""
     try:
         # Get the latest screenshot
         screenshot_path = get_latest_screenshot()
@@ -362,7 +363,7 @@ def extract_steam_url():
             print("URL_EXTRACTION_ERROR=Could not read screenshot")
             return
         
-        # Define the larger search region for the lock icon
+        # Define the larger search region for the lock icon and close button
         search_roi_x = 300
         search_roi_y = 150
         search_roi_width = 550
@@ -384,6 +385,30 @@ def extract_steam_url():
         
         # Find the lock icon within the search region
         lock_found, lock_coords = detect_template(search_region, "lock-icon", threshold=0.7)
+        
+        # Find the tab close button (x-plus pattern)
+        tab_close_found, tab_close_coords = detect_template(search_region, "x-plus", threshold=0.7)
+        
+        if tab_close_found:
+            # Calculate absolute coordinates
+            tab_close_x = search_roi_x + tab_close_coords[0]
+            tab_close_y = search_roi_y + tab_close_coords[1]
+            logging.info(f"Tab close button found at coordinates: {tab_close_x},{tab_close_y}")
+            print(f"TAB_CLOSE_BUTTON_FOUND=1")
+            print(f"TAB_CLOSE_COORDS={tab_close_x},{tab_close_y}")
+        else:
+            # Try with a lower threshold if not found initially
+            tab_close_found, tab_close_coords = detect_template(search_region, "x-plus", threshold=0.6)
+            
+            if tab_close_found:
+                tab_close_x = search_roi_x + tab_close_coords[0]
+                tab_close_y = search_roi_y + tab_close_coords[1]
+                logging.info(f"Tab close button found at coordinates: {tab_close_x},{tab_close_y}")
+                print(f"TAB_CLOSE_BUTTON_FOUND=1")
+                print(f"TAB_CLOSE_COORDS={tab_close_x},{tab_close_y}")
+            else:
+                logging.warning("Tab close button not found")
+                print("TAB_CLOSE_BUTTON_FOUND=0")
         
         if not lock_found:
             # Try with a lower threshold if not found initially
