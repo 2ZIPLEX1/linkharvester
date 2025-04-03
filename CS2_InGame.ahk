@@ -192,6 +192,9 @@ ExtractSteamProfileUrl() {
             steamProfileUrl := Trim(match[1])
             LogMessage("Successfully extracted Steam profile URL: " steamProfileUrl)
             
+            ; Call the Python bridge to add URL to the queue
+            AddToSteamProfileQueue(steamProfileUrl)
+            
             ; Close the tab and overlay
             CloseTabAndOverlay(urlResult)
             
@@ -212,6 +215,30 @@ ExtractSteamProfileUrl() {
     Sleep 1000
     
     return ""
+}
+
+; Function to add URL to Steam profile queue
+AddToSteamProfileQueue(url) {
+    try {
+        LogMessage("Adding URL to Steam profile queue: " . url)
+        
+        ; Use Chr(34) for quote characters to avoid complex nesting
+        quote := Chr(34)
+        command := A_ComSpec . " /c python steam_bridge.py add " . quote . url . quote
+        
+        ; Use RunWait for AHK v2
+        shell := ComObject("WScript.Shell")
+        exec := shell.Exec(command)
+        result := exec.StdOut.ReadAll()
+        
+        ; Log the result
+        LogMessage("Queue result: " . result)
+        
+        return true
+    } catch Error as e {
+        LogMessage("Error adding URL to queue: " . e.Message)
+        return false
+    }
 }
 
 ; Corrected ProcessPlayersGridMethod function with optimized checks
