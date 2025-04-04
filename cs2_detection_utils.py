@@ -668,8 +668,8 @@ def make_medal_decision(medal_count, has_5year_coin, has_more_medals):
         adjusted_medal_count += 2  # Assume at least 2 more medals if arrow is present
         logging.info(f"More medals indicator detected, adjusting count from {medal_count} to {adjusted_medal_count}")
     
-    # Apply testing mode ONLY if we have at least 4 medals
-    has_sufficient_medals = adjusted_medal_count >= 4
+    # Apply testing mode ONLY if we have at least 3 medals
+    has_sufficient_medals = adjusted_medal_count >= 3
     
     original_criteria_met = has_5year_coin and has_sufficient_medals
     testing_mode_applied = False
@@ -682,7 +682,7 @@ def make_medal_decision(medal_count, has_5year_coin, has_more_medals):
     
     # Decision criteria:
     # 1. Has 5-year veteran coin
-    # 2. Has at least 4 medals total (including adjustment for more medals indicator)
+    # 2. Has at least 3 medals total (including adjustment for more medals indicator)
     meets_criteria = has_5year_coin and has_sufficient_medals
     
     if meets_criteria:
@@ -702,7 +702,7 @@ def make_medal_decision(medal_count, has_5year_coin, has_more_medals):
             if testing_mode_applied:
                 result["reason"] += " (would have been forced TRUE in TESTING MODE but original criteria not met)"
         elif not has_sufficient_medals:
-            result["reason"] = f"Insufficient medals ({adjusted_medal_count}/4 required)"
+            result["reason"] = f"Insufficient medals ({adjusted_medal_count}/3 required)"
             if has_more_medals:
                 result["reason"] += f" (includes {adjusted_medal_count - medal_count} estimated from more-medals indicator)"
         else:

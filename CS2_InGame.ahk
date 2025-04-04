@@ -245,17 +245,27 @@ AddToSteamProfileQueue(url) {
 ProcessPlayersGridMethod() {
     LogMessage("Processing players using grid method with structured profile analysis...")
     
-    ; Constants for grid scanning
-    startX := 720       ; X coordinate to start scanning
-    startY := 326       ; Y coordinate to start scanning
-    endY := 820         ; Y coordinate to stop scanning
-    rowHeight := 26     ; Vertical distance between rows
+    ; Default constants for grid scanning
+    defaultStartX := 720       ; X coordinate to start scanning
+    defaultStartY := 326       ; Default Y coordinate to start scanning (fallback)
+    endY := 820                ; Y coordinate to stop scanning
+    rowHeight := 26            ; Vertical distance between rows
     
     ; Counter for profiles found
     profilesFound := 0
     
-    ; Make sure the scoreboard is visible
-    EnsureScoreboardVisible()
+    ; Ensure the scoreboard is visible and get the icon's Y position
+    iconStartY := 0
+    if (!EnsureScoreboardVisible(&iconStartY)) {
+        LogMessage("Failed to ensure scoreboard is visible. Exiting.")
+        return false
+    }
+    
+    ; Calculate optimal starting Y position based on icon's Y position
+    startY := (iconStartY > 0) ? (iconStartY + 65) : defaultStartY
+    startX := defaultStartX
+    
+    LogMessage("Using icon-based starting position: X=" startX ", Y=" startY " (icon found at Y=" iconStartY ")")
     
     ; Iterate through the grid pattern
     currentY := startY
@@ -277,7 +287,7 @@ ProcessPlayersGridMethod() {
         
         ; Parse the initial analysis results
         profile_button_found := InStr(analysisResult, "PROFILE_BUTTON_FOUND=1")
-        four_plus_medals_found := InStr(analysisResult, "FOUR_PLUS_MEDALS_FOUND=1")
+        three_plus_medals_found := InStr(analysisResult, "THREE_PLUS_MEDALS_FOUND=1")
         five_year_medal_found := InStr(analysisResult, "FIVE_YEAR_MEDAL_FOUND=1")
         unwanted_medals_found := InStr(analysisResult, "UNWANTED_MEDALS_FOUND=1")
         more_medals_available := InStr(analysisResult, "CLICK_TO_SEE_MORE_MEDALS=1")
@@ -308,7 +318,7 @@ ProcessPlayersGridMethod() {
         if (profile_button_found) {
             LogMessage("- Sympathies sum: " sympathies_sum)
             LogMessage("- Too many sympathies: " (too_many_sympathies ? "Yes" : "No"))
-            LogMessage("- Four+ medals found: " (four_plus_medals_found ? "Yes" : "No"))
+            LogMessage("- Three+ medals found: " (three_plus_medals_found ? "Yes" : "No"))
             LogMessage("- 5-year veteran coin found: " (five_year_medal_found ? "Yes" : "No"))
             LogMessage("- Unwanted medals found: " (unwanted_medals_found ? "Yes" : "No"))
             LogMessage("- More medals available: " (more_medals_available ? "Yes" : "No"))
@@ -328,7 +338,7 @@ ProcessPlayersGridMethod() {
         } else if (unwanted_medals_found) {
             LogMessage("Unwanted medals found, skipping player")
             shouldContinue := false
-        } else if (!four_plus_medals_found) {
+        } else if (!three_plus_medals_found) {
             LogMessage("Less than 4 medals found, skipping player")
             shouldContinue := false
         }
@@ -467,46 +477,14 @@ ProcessPlayersGridMethod() {
     LogMessage("Grid scanning completed. Found " profilesFound " qualified player profiles.")
     
     ; Return to normal game view
-    Send "{Escape}"  ; Close the scoreboard
-    Sleep 500
+    ; Send "{Escape}"  ; Close the scoreboard
+    ; Sleep 500
     
     return profilesFound > 0
 }
 
-; Function to find the exact coordinates of the profile button
-FindProfileButton(clickX, clickY, &outX, &outY) {
-    LogMessage("Searching for exact profile button coordinates around " clickX "," clickY)
-    
-    ; Define the search region (expanded area around click position)
-    regionX := clickX + 60  ; Start from 70px to the right of click
-    regionY := clickY + 35  ; Start from 75px above click
-    regionWidth := 30      ; Width to cover the expanded area
-    regionHeight := 155     ; Height to cover the expanded area
-    
-    ; Run profile button detection using Python
-    result := RunPythonDetector("profile_button " regionX " " regionY " " regionWidth " " regionHeight)
-    LogMessage("Profile button detection result: " result)
-    
-    ; Check if the button was detected
-    if InStr(result, "PROFILE_BUTTON_RESULT=1") {
-        ; Extract the exact coordinates
-        if RegExMatch(result, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &match) {
-            outX := Integer(match[1])
-            outY := Integer(match[2])
-            LogMessage("Found profile button at exact coordinates: " outX "," outY)
-            return true
-        } else {
-            LogMessage("Profile button detected but couldn't extract coordinates")
-            return false
-        }
-    }
-    
-    LogMessage("No profile button detected in search region")
-    return false
-}
-
 ; Function to ensure the scoreboard is visible
-EnsureScoreboardVisible() {
+EnsureScoreboardVisible(&iconStartY := 0) {
     LogMessage("Ensuring scoreboard is visible...")
     
     ; Make sure CS2 is the active window
@@ -516,13 +494,52 @@ EnsureScoreboardVisible() {
         Sleep 1000
     }
     
-    ; Press Escape to open the pause menu/scoreboard
-    LogMessage("Pressing Escape to view scoreboard...")
-    Send "{Escape}"
-    Sleep 1000
+    ; Define ROI for scoreboard icon
+    iconRoiX := 500
+    iconRoiY := 225
+    iconRoiWidth := 25
+    iconRoiHeight := 200
     
-    LogMessage("Scoreboard should now be visible.")
-    return true
+    ; Try to show scoreboard up to 3 times
+    Loop 3 {
+        ; Press Escape to open the pause menu/scoreboard
+        LogMessage("Pressing Escape to view scoreboard (attempt " A_Index "/3)...")
+        Send "{Escape}"
+        Sleep 2000  ; Wait 2 seconds for scoreboard to appear
+        
+        ; Take a screenshot
+        CaptureScreenshot()
+        Sleep 1000  ; Wait for screenshot to be saved
+        
+        ; Check if scoreboard is visible by looking for valve-cs2-icon.jpg
+        LogMessage("Checking for scoreboard icon...")
+        result := RunPythonDetector("check_scoreboard " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
+        LogMessage("Scoreboard check result: " result)
+        
+        ; Check if icon was detected
+        if InStr(result, "SCOREBOARD_VISIBLE=1") {
+            ; Extract icon's Y position if available
+            if RegExMatch(result, "ICON_Y=(\d+)", &yMatch) {
+                iconStartY := Integer(yMatch[1])
+                LogMessage("Scoreboard icon found at Y coordinate: " iconStartY)
+                return true
+            } else {
+                ; Icon found but couldn't get Y position
+                LogMessage("Scoreboard is visible but couldn't get icon Y position")
+                iconStartY := iconRoiY  ; Use ROI start Y as fallback
+                return true
+            }
+        }
+        
+        ; If we reach here, icon wasn't found on this attempt
+        LogMessage("Scoreboard icon not found on attempt " A_Index "/3, trying again...")
+        Sleep 1000  ; Wait before trying again
+    }
+    
+    ; If we've tried 3 times and failed
+    LogMessage("Failed to detect scoreboard after 3 attempts. Exiting.")
+    MsgBox("Failed to detect CS2 scoreboard after 3 attempts.`n`nPlease check if the game is running correctly.", "Scoreboard Detection Error", "OK Icon!")
+    return false
 }
 
 ; Function to check if the profile button is visible using template matching
@@ -549,94 +566,6 @@ IsProfileButtonVisible(x, y) {
     return false
 }
 
-; Function to check player medals using template matching in a single ROI
-CheckPlayerMedals(clickX, clickY) {
-    LogMessage("Analyzing player medals in a single ROI relative to click position " clickX "," clickY)
-    
-    ; Define a single, larger ROI that covers all medal slots
-    ; Starting at offset 28,-150 with size 384x413
-    roiX := clickX + 28
-    roiY := clickY - 150
-    roiWidth := 384
-    roiHeight := 413
-    
-    ; Take a screenshot for analysis
-    CaptureScreenshot()
-    Sleep 1000  ; Wait for screenshot to be saved
-    
-    ; Run medal detection using Python
-    medalDetectionResult := RunPythonDetector("detect_medals " roiX " " roiY " " roiWidth " " roiHeight)
-    LogMessage("Medal detection result: " medalDetectionResult)
-    
-    ; Parse the medal detection results
-    detectedMedals := []
-    hasFiveYearCoin := false
-    totalMedals := 0
-    
-    ; Process detection result to count medals and check for 5-year veteran coin
-    Loop Parse, medalDetectionResult, "`n", "`r" {
-        LogMessage("Parsing line: " A_LoopField)
-        
-        ; Check for total medal count
-        if RegExMatch(A_LoopField, "MEDAL_COUNT=(\d+)", &countMatch) {
-            totalMedals := Integer(countMatch[1])
-            LogMessage("Total medals detected: " totalMedals)
-        }
-        
-        ; Check for veteran coin specifically
-        if InStr(A_LoopField, "MEDAL_DETECTED=5-year-veteran-coin") {
-            hasFiveYearCoin := true
-            LogMessage("5-year veteran coin detected")
-        }
-        
-        ; Add all detected medals to the list
-        if RegExMatch(A_LoopField, "MEDAL_DETECTED=([^`r`n]+)", &medalMatch) {
-            medalName := Trim(medalMatch[1])
-            detectedMedals.Push(medalName)
-            LogMessage("Detected medal: " medalName)
-        }
-    }
-    
-    ; Check if there are more medals using the precise arrow detection
-    hasMoreMedals := false
-    if (totalMedals > 0) {
-        ; Use the precise arrow detection with click coordinates
-        arrowResult := RunPythonDetector("detect_medal_arrow " clickX " " clickY)
-        LogMessage("Medal arrow detection result (using precise method): " arrowResult)
-        hasMoreMedals := InStr(arrowResult, "MEDAL_ARROW_PRESENT=1")
-        
-        ; Extract confidence if available
-        arrowConfidence := 0
-        if RegExMatch(arrowResult, "MEDAL_ARROW_CONFIDENCE=([0-9\.]+)", &confMatch) {
-            arrowConfidence := Float(confMatch[1])
-            LogMessage("Medal arrow confidence: " arrowConfidence)
-        }
-    }
-    
-    ; Check if we meet our criteria:
-    ; 1. Has 5-year veteran coin
-    ; 2. Has at least 4 medals total
-    hasSufficientMedals := (totalMedals >= 4)
-    meetsAllCriteria := (hasFiveYearCoin && hasSufficientMedals)
-    
-    LogMessage("Medal analysis summary:")
-    LogMessage("- Total medals detected: " totalMedals)
-    LogMessage("- Has 5-year veteran coin: " (hasFiveYearCoin ? "Yes" : "No"))
-    LogMessage("- Has sufficient medals (4+): " (hasSufficientMedals ? "Yes" : "No"))
-    LogMessage("- Has more medals indicator: " (hasMoreMedals ? "Yes" : "No"))
-    LogMessage("- Meets all criteria: " (meetsAllCriteria ? "Yes" : "No"))
-    
-    ; Return the medal information
-    return {
-        hasFourMedals: hasSufficientMedals,
-        hasFiveYearCoin: hasFiveYearCoin,
-        meetsAllCriteria: meetsAllCriteria,
-        medals: detectedMedals,
-        medalCount: totalMedals,
-        hasMoreMedals: hasMoreMedals
-    }
-}
-
 ; Replace or modify the ProcessMatch function to use the new grid method
 ProcessMatch() {
     LogMessage("Processing match...")
@@ -659,28 +588,7 @@ ProcessMatch() {
     }
 }
 
-ViewPlayerList() {
-    LogMessage("Viewing player list...")
-    
-    ; Make sure CS2 is the active window
-    if !WinActive("Counter-Strike") {
-        WinActivate "Counter-Strike"
-        Sleep 1000
-    }
-    
-    ; Press Esc to view scoreboard
-    LogMessage("Pressing Escape to view scoreboard...")
-    Send "{Escape}"
-    Sleep 1000
-    
-    ; Take screenshot of player list
-    LogMessage("Taking screenshot of player list...")
-    CaptureScreenshot()
-    
-    return true
-}
-
-; Return to main menu by leaving the match
+; Return to main menu by leaving the match 
 ReturnToMainMenu() {
     LogMessage("Returning to main menu by leaving match...")
     
@@ -696,13 +604,10 @@ ReturnToMainMenu() {
     confirmY := 600
     LogMessage("Clicking OK to confirm at " confirmX "," confirmY)
     Click confirmX, confirmY
-    Sleep 500
+    Sleep 2500
     
     ; Take screenshot to confirm we're back at the main menu
     CaptureScreenshot()
-    
-    ; Wait a bit longer for the main menu to fully load
-    Sleep 1000
     
     return true
 }

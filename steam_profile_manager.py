@@ -14,11 +14,266 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     filename='steam_profile_manager.log',
-    filemode='w'  # Changed from 'a' to 'w' to start fresh
+    filemode='a'
 )
 
 # Replace with your actual API key
-API_KEY = "MY_KEY_CENSORED"
+API_KEY = "CFBC4A70290D1647D771A3016F59EAC7"
+
+class _CheckHandlers:
+    """Static methods for handling specific check types"""
+    
+    @staticmethod
+    def animated_avatar(manager, steam_id):
+        """Handle animated avatar check"""
+        try:
+            url = f"https://api.steampowered.com/IPlayerService/GetAnimatedAvatar/v1/?steamid={steam_id}"
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'response' in data and 'avatar' in data['response']:
+                has_animated_avatar = len(data['response']['avatar']) > 0
+                return {
+                    "success": True,
+                    "passed": not has_animated_avatar,
+                    "details": data['response'] if has_animated_avatar else {}
+                }
+            return {"success": False, "error": "Unexpected API response"}
+            
+        except Exception as e:
+            manager._log_check_error("animated_avatar", steam_id, e)
+            return {"success": False, "error": str(e)}
+
+    @staticmethod
+    def avatar_frame(manager, steam_id):
+        """Handle avatar frame check"""
+        try:
+            url = f"https://api.steampowered.com/IPlayerService/GetAvatarFrame/v1/?steamid={steam_id}"
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'response' in data and 'avatar_frame' in data['response']:
+                has_frame = bool(data['response']['avatar_frame'])
+                return {
+                    "success": True,
+                    "passed": not has_frame,
+                    "details": data['response'] if has_frame else {}
+                }
+            return {"success": False, "error": "Unexpected API response"}
+            
+        except Exception as e:
+            manager._log_check_error("avatar_frame", steam_id, e)
+            return {"success": False, "error": str(e)}
+        
+    @staticmethod
+    def mini_profile_background(manager, steam_id):
+        """Handle mini profile background check"""
+        try:
+            url = f"https://api.steampowered.com/IPlayerService/GetMiniProfileBackground/v1/?steamid={steam_id}"
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'response' in data and 'profile_background' in data['response']:
+                has_background = bool(data['response']['profile_background'])
+                return {
+                    "success": True,
+                    "passed": not has_background,
+                    "details": data['response'] if has_background else {}
+                }
+            return {"success": False, "error": "Unexpected API response"}
+            
+        except Exception as e:
+            manager._log_check_error("mini_profile_background", steam_id, e)
+            return {"success": False, "error": str(e)}
+    
+    @staticmethod
+    def profile_background(manager, steam_id):
+        """Handle profile background check"""
+        try:
+            url = f"https://api.steampowered.com/IPlayerService/GetProfileBackground/v1/?steamid={steam_id}"
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'response' in data and 'profile_background' in data['response']:
+                has_background = bool(data['response']['profile_background'])
+                return {
+                    "success": True,
+                    "passed": not has_background,
+                    "details": data['response'] if has_background else {}
+                }
+            return {"success": False, "error": "Unexpected API response"}
+            
+        except Exception as e:
+            manager._log_check_error("profile_background", steam_id, e)
+            return {"success": False, "error": str(e)}
+    
+    @staticmethod
+    def steam_level(manager, steam_id):
+        """Handle Steam level check (passes if level <= 13)"""
+        try:
+            url = f"https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key={API_KEY}&steamid={steam_id}"
+            logging.info(f"Checking Steam level for {steam_id}")
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'response' in data and 'player_level' in data['response']:
+                player_level = data['response']['player_level']
+                logging.info(f"Steam level check for {steam_id}: Level {player_level} (Max allowed: 14)")
+                return {
+                    "success": True,
+                    "passed": player_level <= 13,
+                    "details": {"player_level": player_level},
+                    "level": player_level
+                }
+            logging.error(f"Unexpected API response format for Steam level check: {data}")
+            return {"success": False, "error": "Unexpected API response"}
+            
+        except Exception as e:
+            manager._log_check_error("steam_level", steam_id, e)
+            return {"success": False, "error": str(e)}
+    
+    @staticmethod
+    def friends(manager, steam_id):
+        """Handle friends count check (passes if <= 60 friends)"""
+        try:
+            url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={API_KEY}&steamid={steam_id}&relationship=friend"
+            logging.info(f"Checking friends count for {steam_id}")
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'friendslist' in data and 'friends' in data['friendslist']:
+                friends_count = len(data['friendslist']['friends'])
+                logging.info(f"Friends check for {steam_id}: {friends_count} friends (Max allowed: 60)")
+                return {
+                    "success": True,
+                    "passed": friends_count <= 60,
+                    "details": {
+                        "friends_count": friends_count,
+                        "sample_friends": data['friendslist']['friends'][:3]
+                    },
+                    "count": friends_count
+                }
+                
+            logging.error(f"Unexpected API response format for friends check: {data}")
+            return {"success": False, "error": "Unexpected API response"}
+            
+        except urllib.error.HTTPError as e:
+            if e.code == 401:
+                logging.info(f"Friends check for {steam_id}: Private profile - automatically passing")
+                return {
+                    "success": True,
+                    "passed": True,
+                    "details": {"error": "Private profile - cannot check friends"},
+                    "count": 0
+                }
+            manager._log_check_error("friends", steam_id, e)
+            return {"success": False, "error": str(e)}
+        except Exception as e:
+            manager._log_check_error("friends", steam_id, e)
+            return {"success": False, "error": str(e)}
+    
+    @staticmethod
+    def csgo_inventory(manager, steam_id):
+        """Check if user has CS:GO inventory (passes if empty/null)"""
+        try:
+            url = f"https://steamcommunity.com/inventory/{steam_id}/730/2"
+            logging.info(f"Checking CS:GO inventory for {steam_id}")
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            data = json.loads(response.read().decode('utf-8'))
+            
+            # Pass if response is null or empty
+            if data is None or not data:
+                logging.info(f"CS:GO inventory check passed for {steam_id} (empty)")
+                return {
+                    "success": True,
+                    "passed": True,
+                    "details": {}
+                }
+            
+            # Check if inventory is actually empty
+            if isinstance(data, dict) and not data.get('assets', []) and not data.get('descriptions', []):
+                logging.info(f"CS:GO inventory check passed for {steam_id} (empty structure)")
+                return {
+                    "success": True,
+                    "passed": True,
+                    "details": {}
+                }
+            
+            # Inventory exists
+            item_count = len(data.get('assets', [])) if isinstance(data, dict) else 0
+            logging.info(f"CS:GO inventory check failed for {steam_id} (found {item_count} items)")
+            return {
+                "success": True,
+                "passed": False,
+                "details": {
+                    "item_count": item_count,
+                    "sample_items": data.get('assets', [])[:3] if isinstance(data, dict) else []
+                }
+            }
+            
+        except urllib.error.HTTPError as e:
+            if e.code == 403:
+                # Private inventory - treat as passed
+                logging.info(f"CS:GO inventory check for {steam_id}: Private inventory - automatically passing")
+                return {
+                    "success": True,
+                    "passed": True,
+                    "details": {"error": "Private inventory - cannot check"}
+                }
+            manager._log_check_error("csgo_inventory", steam_id, e)
+            return {"success": False, "error": str(e)}
+        except Exception as e:
+            manager._log_check_error("csgo_inventory", steam_id, e)
+            return {"success": False, "error": str(e)}
+
+class _CheckConfig:
+    """Configuration for all supported checks"""
+    
+    CHECKS = {
+        'animated_avatar': {
+            'handler': _CheckHandlers.animated_avatar,
+            'empty_means_pass': True,
+            'description': 'Checks for animated profile avatars'
+        },
+        'avatar_frame': {
+            'handler': _CheckHandlers.avatar_frame,
+            'empty_means_pass': True,
+            'description': 'Checks for profile avatar frames'
+        },
+        'mini_profile_background': {
+            'handler': _CheckHandlers.mini_profile_background,
+            'empty_means_pass': True,
+            'description': 'Checks for mini profile backgrounds'
+        },
+        'profile_background': {
+            'handler': _CheckHandlers.profile_background,
+            'empty_means_pass': True,
+            'description': 'Checks for profile backgrounds'
+        },
+        'steam_level': {
+            'handler': _CheckHandlers.steam_level,
+            'empty_means_pass': False,  # This check doesn't use empty means pass
+            'description': 'Checks if Steam level is 13 or lower'
+        },
+        'friends': {
+            'handler': _CheckHandlers.friends,
+            'empty_means_pass': False,
+            'description': 'Checks if user has 60 or fewer friends'
+        },
+        'csgo_inventory': {
+            'handler': _CheckHandlers.csgo_inventory,
+            'empty_means_pass': True,
+            'description': 'Checks for CS:GO inventory (passes if empty)'
+        }
+        # New checks can be added here
+    }
 
 class SteamProfileManager:
     def __init__(self, data_folder="steam_data"):
@@ -34,7 +289,21 @@ class SteamProfileManager:
         
         # Load existing queue
         self.load_queue()
+    
+    def _log_check_error(self, check_name, steam_id, error):
+        """Centralized error logging for checks"""
+        logging.error(f"Check '{check_name}' failed for {steam_id}: {error}")
+        logging.error(traceback.format_exc())
         
+    def _process_single_check(self, profile, check_name):
+        """Generic check processor"""
+        if check_name not in _CheckConfig.CHECKS:
+            logging.warning(f"Unknown check type: {check_name}")
+            return None
+            
+        handler = _CheckConfig.CHECKS[check_name]['handler']
+        return handler(self, profile['steam_id'])
+
     def load_queue(self):
         """Load the existing queue from file"""
         if os.path.exists(self.queue_file):
@@ -86,7 +355,8 @@ class SteamProfileManager:
                     "mini_profile_background": "to_check",
                     "profile_background": "to_check",
                     "steam_level": "to_check",
-                    "friends": "to_check"
+                    "friends": "to_check",
+                    "csgo_inventory": "to_check"
                 }
             }
             
@@ -97,8 +367,8 @@ class SteamProfileManager:
             # Save updated queue
             self.save_queue()
             
-            # Start processing if not already running
-            self.ensure_processing()
+            # Don't start background processing - we'll do it synchronously
+            # self.ensure_processing()
             
             return True
         except Exception as e:
@@ -123,45 +393,28 @@ class SteamProfileManager:
         
         try:
             logging.info(f"Starting queue processing with {len(self.profiles_queue)} profiles")
-            max_profiles_to_process = 3  # Process at most 3 profiles per run to avoid long-running threads
+            
+            # Counter to track profiles processed
             profiles_processed = 0
+            profiles_completed = 0
+            profiles_failed = 0
             
-            # Add a counter to prevent infinite processing on a single profile
-            profile_attempt_count = 0
-            max_attempts_per_profile = 3
-            
-            while self.profiles_queue and profiles_processed < max_profiles_to_process:
-                # Process most recently added profile first (from the end)
-                profile = self.profiles_queue[-1]
+            # Process each profile in the queue
+            index = len(self.profiles_queue) - 1
+            while index >= 0:
+                if index >= len(self.profiles_queue):
+                    index = len(self.profiles_queue) - 1
+                    if index < 0:
+                        break
+                        
+                profile = self.profiles_queue[index]
                 
-                # Check if we've been stuck on this profile too many times
-                profile_attempt_count += 1
-                if profile_attempt_count > max_attempts_per_profile:
-                    logging.warning(f"Max attempts reached for profile {profile['url']}, moving to beginning of queue")
-                    # Move to beginning of queue
-                    temp_profile = self.profiles_queue.pop()
-                    self.profiles_queue.insert(0, temp_profile)
-                    self.save_queue()
-                    profile_attempt_count = 0  # Reset counter for next profile
-                    continue
+                logging.info(f"Processing profile: {profile['url']} (Queue position: {index+1}/{len(self.profiles_queue)})")
+                profiles_processed += 1
                 
-                logging.info(f"Processing profile {profiles_processed+1}/{max_profiles_to_process}: {profile['url']} (Queue length: {len(self.profiles_queue)}, Attempt: {profile_attempt_count})")
-                
-                # Log what we're about to do
+                # STEP 1: Ensure we have a Steam ID
                 if not profile['steam_id'] and profile['vanity_id']:
                     logging.info(f"About to resolve vanity ID: {profile['vanity_id']}")
-                elif profile['steam_id']:
-                    logging.info(f"Profile already has Steam ID: {profile['steam_id']}")
-                else:
-                    logging.error(f"Profile has neither vanity_id nor steam_id: {profile}")
-                    # Remove invalid profile
-                    self.profiles_queue.pop()
-                    self.save_queue()
-                    continue
-                
-                # Step 1: Ensure we have a Steam ID
-                if not profile['steam_id'] and profile['vanity_id']:
-                    logging.info(f"Attempting to resolve vanity ID: {profile['vanity_id']}")
                     try:
                         result = self.resolve_vanity_url(profile['vanity_id'])
                         logging.info(f"Vanity URL resolution result: {result}")
@@ -171,121 +424,84 @@ class SteamProfileManager:
                             logging.info(f"Resolved vanity URL to Steam ID: {profile['steam_id']}")
                             # Save queue after getting Steam ID
                             self.save_queue()
+                            # Continue processing this profile
                         else:
                             # Failed to resolve, remove from queue
                             error_msg = result.get('error', 'Unknown error')
                             logging.error(f"Failed to resolve vanity URL: {profile['vanity_id']} - {error_msg}")
-                            self.profiles_queue.pop()
+                            del self.profiles_queue[index]
                             self.save_queue()
-                            profiles_processed += 1
-                            profile_attempt_count = 0  # Reset for next profile
+                            profiles_failed += 1
+                            index -= 1
                             continue
                     except Exception as e:
                         logging.error(f"Exception resolving vanity URL: {e}")
                         logging.error(traceback.format_exc())
-                        # Keep in queue but move to next profile
-                        # Temporarily move this profile to the beginning of the queue so we don't keep retrying it
-                        temp_profile = self.profiles_queue.pop()
-                        self.profiles_queue.insert(0, temp_profile)
-                        self.save_queue()
-                        profiles_processed += 1
-                        profile_attempt_count = 0  # Reset for next profile
+                        # Move to next profile for now, we'll retry this one later
+                        index -= 1
                         continue
                 
-                # Step 2: Check for animated avatar
-                if profile['steam_id'] and profile['checks']['animated_avatar'] == "to_check":
-                    logging.info(f"Checking animated avatar for: {profile['steam_id']}")
-                    try:
-                        result = self.check_animated_avatar(profile['steam_id'])
-                        logging.info(f"Animated avatar check result: {result}")
+                # STEP 2: Process each check for this profile
+                all_checks_complete = True
+                all_checks_passed = True
+                
+                for check_name, check_status in profile['checks'].items():
+                    if check_status == "to_check":
+                        result = self._process_single_check(profile, check_name)
                         
+                        if not result:
+                            continue  # Unknown check type
+                            
                         if result.get('success'):
                             if result.get('passed'):
-                                profile['checks']['animated_avatar'] = "passed"
-                                logging.info(f"Profile passed animated avatar check: {profile['steam_id']}")
-                                self.save_queue() # Save progress
-                            else:
-                                # Failed check, remove from queue
-                                logging.info(f"Profile failed animated avatar check: {profile['steam_id']}")
-                                self.profiles_queue.pop()
+                                profile['checks'][check_name] = "passed"
                                 self.save_queue()
-                                profiles_processed += 1
-                                profile_attempt_count = 0  # Reset for next profile
-                                continue
+                            else:
+                                # Check failed - remove from queue
+                                logging.info(f"Check failed for {profile['steam_id']}: {check_name}")
+                                del self.profiles_queue[index]
+                                self.save_queue()
+                                profiles_failed += 1
+                                all_checks_complete = False
+                                break
                         else:
-                            # API error, log and try again later
-                            error_msg = result.get('error', 'Unknown error')
-                            logging.error(f"Error checking animated avatar: {error_msg}")
-                            # Temporarily move this profile to the beginning of the queue
-                            temp_profile = self.profiles_queue.pop()
-                            self.profiles_queue.insert(0, temp_profile)
-                            self.save_queue()
-                            profiles_processed += 1
-                            profile_attempt_count = 0  # Reset for next profile
-                            time.sleep(2)  # Add delay before next profile
-                            continue
-                    except Exception as e:
-                        logging.error(f"Exception checking animated avatar: {e}")
-                        logging.error(traceback.format_exc())
-                        # Temporarily move this profile to the beginning of the queue
-                        temp_profile = self.profiles_queue.pop()
-                        self.profiles_queue.insert(0, temp_profile)
-                        self.save_queue()
-                        profiles_processed += 1
-                        profile_attempt_count = 0  # Reset for next profile
-                        time.sleep(2)  # Add delay before next profile
-                        continue
-                
-                # TODO: Implement additional checks here
-                # For now, if it reaches here and passes animated avatar check, consider it fully passed
-                
-                # Check if all implemented checks are passed
-                all_checks_passed = True
-                for check_name, check_status in profile['checks'].items():
-                    # Only consider checks that we've actually implemented
-                    if check_name == 'animated_avatar':
-                        if check_status != "passed":
-                            all_checks_passed = False
+                            # API error - skip for now
+                            logging.error(f"API error in check {check_name} for {profile['steam_id']}")
+                            all_checks_complete = False
                             break
-                
-                if all_checks_passed:
-                    logging.info(f"Profile passed all checks: {profile['steam_id']}")
                     
-                    # Remove from queue
-                    self.profiles_queue.pop()
-                    
-                    # Save to filtered list
-                    save_result = self.save_to_filtered_list(profile['steam_id'])
-                    logging.info(f"Save to filtered list result: {save_result}")
-                    
-                    # Save updated queue
-                    self.save_queue()
-                else:
-                    logging.warning(f"Not all checks passed for profile: {profile['steam_id']}")
-                    # Move to beginning of queue to avoid infinite processing
-                    temp_profile = self.profiles_queue.pop()
-                    self.profiles_queue.insert(0, temp_profile)
-                    self.save_queue()
+                    # Track if any check isn't passed (even if not "to_check")
+                    if profile['checks'][check_name] != "passed":
+                        all_checks_passed = False
                 
-                # Increment counter and reset attempt count
-                profiles_processed += 1
-                profile_attempt_count = 0
+                # Only proceed if all checks were processed without errors
+                if all_checks_complete:
+                    # If all checks passed, add to filtered list and remove from queue
+                    if all_checks_passed:
+                        logging.info(f"All checks passed for profile: {profile['steam_id']}")
+                        save_result = self.save_to_filtered_list(profile['steam_id'])
+                        logging.info(f"Save to filtered list result: {save_result}")
+                        
+                        # Remove from queue
+                        if index < len(self.profiles_queue):
+                            del self.profiles_queue[index]
+                            self.save_queue()
+                            profiles_completed += 1
                 
-                # Small delay between processing
-                time.sleep(1)
+                # Move to next profile
+                index -= 1
             
-            # If we processed the maximum number but there are still profiles in the queue
-            if self.profiles_queue:
-                logging.info(f"Processed maximum number of profiles ({max_profiles_to_process}), {len(self.profiles_queue)} profiles remaining in queue")
-                
-            logging.info(f"Queue processing complete for this run, processed {profiles_processed} profiles")
+            # Final log message
+            logging.info(f"Queue processing complete: {profiles_processed} profiles processed")
+            logging.info(f"{profiles_completed} completed successfully, {profiles_failed} failed checks")
+            logging.info(f"{len(self.profiles_queue)} profiles remaining in queue")
             
         except Exception as e:
             logging.error(f"Error in queue processing: {e}")
             logging.error(traceback.format_exc())
         finally:
             self.is_processing = False
-
+        
     def resolve_vanity_url(self, vanity_id):
         """Resolve a vanity URL to a Steam ID"""
         try:
@@ -346,7 +562,6 @@ class SteamProfileManager:
             
             response = urllib.request.urlopen(url)
             data = json.loads(response.read().decode('utf-8'))
-            logging.info(f"Raw API response: {data}")
             
             if 'response' in data and 'avatar' in data['response']:
                 has_animated_avatar = len(data['response']['avatar']) > 0
@@ -366,6 +581,42 @@ class SteamProfileManager:
             logging.error(traceback.format_exc())
             return {"success": False, "error": str(e)}
     
+    def check_avatar_frame(self, steam_id):
+        """Check if a Steam profile has an avatar frame"""
+        try:
+            url = f"https://api.steampowered.com/IPlayerService/GetAvatarFrame/v1/?steamid={steam_id}"
+            logging.info(f"Calling avatar frame API: {url}")
+            
+            # Create a request with timeout (5 seconds)
+            req = urllib.request.Request(url)
+            response = urllib.request.urlopen(req, timeout=5)
+            
+            data = json.loads(response.read().decode('utf-8'))
+            
+            if 'response' in data and 'avatar_frame' in data['response']:
+                has_avatar_frame = bool(data['response']['avatar_frame'])
+                
+                return {
+                    "success": True,
+                    "passed": not has_avatar_frame,
+                    "details": data['response'] if has_avatar_frame else {}
+                }
+            else:
+                return {"success": False, "error": "Unexpected API response format", "data": data}
+        except HTTPError as e:
+            logging.error(f"HTTP Error in check_avatar_frame: {e.code} - {e.reason}")
+            return {"success": False, "error": f"HTTP Error: {e.code} - {e.reason}"}
+        except socket.timeout:
+            logging.error("Socket timeout while checking avatar frame")
+            return {"success": False, "error": "API call timed out (socket)"}
+        except TimeoutError:
+            logging.error("Timeout error while checking avatar frame")
+            return {"success": False, "error": "API call timed out"}
+        except Exception as e:
+            logging.error(f"Exception in check_avatar_frame: {str(e)}")
+            logging.error(traceback.format_exc())
+            return {"success": False, "error": str(e)}
+
     def save_to_filtered_list(self, steam_id):
         """Save a Steam ID to the filtered list"""
         try:
@@ -386,10 +637,11 @@ class SteamProfileManager:
         }
     
     def process_profiles_now(self):
-        """Manually trigger queue processing"""
+        """Manually trigger queue processing synchronously"""
         self.is_processing = False  # Reset in case it got stuck
-        self.ensure_processing()
-        return {"success": True, "message": "Processing triggered"}
+        logging.info("Running process_queue synchronously")
+        self.process_queue()  # Run directly, not in a thread
+        return {"success": True, "message": "Processing completed"}
 
 # Test function
 def test_manager():

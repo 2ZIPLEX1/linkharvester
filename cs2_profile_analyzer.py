@@ -297,7 +297,7 @@ def detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization):
         sympathies_x = 38 + 55  # 38px to adjust for ROI, then 125px offset from click
         sympathies_y = 140       # Approximate Y position (may vary)
         sympathies_width = 250   # Increased width to capture all icons and numbers (increased from 200)
-        sympathies_height = 120   # Height to capture vertical variation
+        sympathies_height = 110   # Height to capture vertical variation
         
         # Create a single ROI for all sympathies
         sympathies_region = profile_roi[sympathies_y:sympathies_y+sympathies_height, 
@@ -833,7 +833,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print(f"CROWN_VALUE={sympathies_result['crown_value']}")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
-            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("THREE_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
             print("CLICK_TO_SEE_MORE_MEDALS=0")
             return
@@ -855,7 +855,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print("PROFILE_BUTTON_FOUND=0")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
-            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("THREE_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
             print("CLICK_TO_SEE_MORE_MEDALS=0")
             print("SYMPATHIES_SUM=0")
@@ -885,7 +885,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print(f"CROWN_VALUE={sympathies_result['crown_value']}")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")  # Not relevant when skipping due to sympathies
-            print("FOUR_PLUS_MEDALS_FOUND=0") # Not relevant when skipping due to sympathies
+            print("THREE_PLUS_MEDALS_FOUND=0") # Not relevant when skipping due to sympathies
             print("FIVE_YEAR_MEDAL_FOUND=0")  # Not relevant when skipping due to sympathies
             print("CLICK_TO_SEE_MORE_MEDALS=0")  # Not relevant when skipping due to sympathies
             print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
@@ -912,7 +912,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print(f"CROWN_VALUE={sympathies_result['crown_value']}")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=1")
-            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("THREE_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
             print("CLICK_TO_SEE_MORE_MEDALS=0")
             
@@ -930,9 +930,9 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         result["medal_count"] = medal_result["count"]
         result["five_year_medal_found"] = medal_result["has_5year_coin"]
         
-        # Check if we have fewer than 4 medals
-        has_four_plus_medals = result["medal_count"] >= 4
-        if not has_four_plus_medals:
+        # Check if we have fewer than 3 medals
+        has_three_plus_medals = result["medal_count"] >= 3
+        if not has_three_plus_medals:
             logging.info(f"Insufficient medals detected: {result['medal_count']}/4 required")
             print("PROFILE_ANALYSIS_RESULT=1")
             print("PROFILE_BUTTON_FOUND=1")
@@ -943,7 +943,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print(f"CROWN_VALUE={sympathies_result['crown_value']}")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
-            print("FOUR_PLUS_MEDALS_FOUND=0")
+            print("THREE_PLUS_MEDALS_FOUND=0")
             print("FIVE_YEAR_MEDAL_FOUND=0")
             print("CLICK_TO_SEE_MORE_MEDALS=0")
             print(f"MEDAL_COUNT={result['medal_count']}")
@@ -973,7 +973,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         print(f"CROWN_VALUE={sympathies_result['crown_value']}")
         print("TOO_MANY_SYMPATHIES=0")
         print("UNWANTED_MEDALS_FOUND=0")
-        print(f"FOUR_PLUS_MEDALS_FOUND={1 if has_four_plus_medals else 0}")
+        print(f"THREE_PLUS_MEDALS_FOUND={1 if has_three_plus_medals else 0}")
         print(f"FIVE_YEAR_MEDAL_FOUND={1 if result['five_year_medal_found'] else 0}")
         print(f"CLICK_TO_SEE_MORE_MEDALS={1 if result['more_medals_available'] else 0}")
         
@@ -1009,7 +1009,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         print(f"CROWN_VALUE={sympathies_result['crown_value']}")
         print("TOO_MANY_SYMPATHIES=0")
         print("UNWANTED_MEDALS_FOUND=0")
-        print("FOUR_PLUS_MEDALS_FOUND=0")
+        print("THREE_PLUS_MEDALS_FOUND=0")
         print("FIVE_YEAR_MEDAL_FOUND=0")
         print("CLICK_TO_SEE_MORE_MEDALS=0")
         print(f"PROFILE_ANALYSIS_ERROR={str(e)}")

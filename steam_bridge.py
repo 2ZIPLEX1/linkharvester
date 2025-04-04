@@ -18,6 +18,10 @@ def add_url(url):
         manager = SteamProfileManager()
         result = manager.add_profile_url(url)
         
+        # Process the queue synchronously after adding
+        logging.info("Processing queue synchronously after adding URL")
+        manager.process_profiles_now()
+        
         return {
             "success": result,
             "queue_length": len(manager.profiles_queue)

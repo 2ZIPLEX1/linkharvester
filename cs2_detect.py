@@ -563,6 +563,70 @@ if __name__ == "__main__":
         if found and coords:
             print(f"SPECTATE_COORDS={coords[0]},{coords[1]}")
     
+    elif command == "check_scoreboard":
+        try:
+            # Check if ROI parameters were provided
+            if len(sys.argv) > 5:
+                roi_x = int(sys.argv[2])
+                roi_y = int(sys.argv[3])
+                roi_width = int(sys.argv[4])
+                roi_height = int(sys.argv[5])
+                
+                # Get the latest screenshot
+                screenshot_path = get_latest_screenshot()
+                if not screenshot_path:
+                    print("SCOREBOARD_VISIBLE=0")
+                    print("ERROR=No recent screenshot found")
+                    sys.exit(1)
+                
+                # Read the screenshot
+                img = cv2.imread(screenshot_path)
+                if img is None:
+                    print("SCOREBOARD_VISIBLE=0")
+                    print("ERROR=Could not read screenshot")
+                    sys.exit(1)
+                
+                # Extract the ROI
+                roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
+                
+                # Save the ROI for debugging
+                timestamp = int(time.time())
+                debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+                os.makedirs(debug_dir, exist_ok=True)
+                debug_path = os.path.join(debug_dir, f"scoreboard_icon_roi_{timestamp}.png")
+                cv2.imwrite(debug_path, roi)
+                logging.info(f"Saved scoreboard icon ROI to: {debug_path}")
+                
+                # Detect the valve-cs2-icon.jpg in the ROI
+                template_path = os.path.join(TEMPLATES_PATH, "valve-cs2-icon.jpg")
+                found, coords = detect_template(roi, "valve-cs2-icon", threshold=0.7)
+                
+                if found:
+                    # Icon found
+                    icon_y = roi_y + coords[1]  # Adjust Y coordinate to full image space
+                    print("SCOREBOARD_VISIBLE=1")
+                    print(f"ICON_Y={icon_y}")
+                    logging.info(f"Scoreboard icon found at Y: {icon_y}")
+                    
+                    # Save a copy of the matched region for verification
+                    template = cv2.imread(template_path)
+                    h, w = template.shape[:2]
+                    matched_region = roi[coords[1]-5:coords[1]+h+5, coords[0]-5:coords[0]+w+5]
+                    match_path = os.path.join(debug_dir, f"scoreboard_icon_match_{timestamp}.png")
+                    cv2.imwrite(match_path, matched_region)
+                else:
+                    # Icon not found
+                    print("SCOREBOARD_VISIBLE=0")
+                    logging.info("Scoreboard icon not found in ROI")
+            else:
+                print("SCOREBOARD_VISIBLE=0")
+                print("ERROR=Missing ROI parameters")
+        except Exception as e:
+            print("SCOREBOARD_VISIBLE=0")
+            print(f"ERROR={str(e)}")
+            logging.error(f"Error checking scoreboard: {str(e)}")
+            logging.error(traceback.format_exc())
+    
     elif command == "analyze_profile":
         # Import the profile analyzer function
         from cs2_profile_analyzer import analyze_profile
@@ -582,183 +646,6 @@ if __name__ == "__main__":
             print("PROFILE_ANALYSIS_RESULT=0")
             print("PROFILE_ANALYSIS_ERROR=Missing click coordinates")
             print("DECISION=SKIP")
-    
-    elif command == "detect_medals":
-        # Import medal detection from detection utilities
-        from cs2_detection_utils import detect_medals_in_roi, get_profile_roi
-        
-        # Check if ROI parameters were provided
-        if len(sys.argv) > 5:
-            try:
-                roi_x = int(sys.argv[2])
-                roi_y = int(sys.argv[3])
-                roi_width = int(sys.argv[4])
-                roi_height = int(sys.argv[5])
-                
-                # Get the screenshot and create a dummy visualization for detection results
-                screenshot_path = get_latest_screenshot()
-                if not screenshot_path:
-                    print("MEDAL_DETECTION_RESULT=0")
-                    print("MEDAL_DETECTION_ERROR=No recent screenshot found")
-                    sys.exit(1)
-                
-                img = cv2.imread(screenshot_path)
-                if img is None:
-                    print("MEDAL_DETECTION_RESULT=0")
-                    print("MEDAL_DETECTION_ERROR=Could not read screenshot")
-                    sys.exit(1)
-                
-                # Extract ROI and create visualization
-                roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
-                visualization = roi.copy()
-                
-                # Detect medals
-                medal_result = detect_medals_in_roi(roi, roi_x, roi_y, visualization)
-                
-                # Save visualization
-                timestamp = int(time.time())
-                debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
-                os.makedirs(debug_dir, exist_ok=True)
-                viz_path = os.path.join(debug_dir, f"medal_detection_viz_{timestamp}.png")
-                cv2.imwrite(viz_path, visualization)
-                
-                # Output results
-                print("MEDAL_DETECTION_RESULT=1")
-                print(f"MEDAL_COUNT={medal_result['count']}")
-                print(f"HAS_5YEAR_COIN={1 if medal_result['has_5year_coin'] else 0}")
-                
-                for medal_name in medal_result["detected_medals"]:
-                    print(f"MEDAL_DETECTED={medal_name}")
-                
-            except (ValueError, IndexError) as e:
-                logging.error(f"Invalid ROI parameters: {e}")
-                print("MEDAL_DETECTION_RESULT=0")
-                print(f"MEDAL_DETECTION_ERROR=Invalid ROI parameters: {e}")
-        else:
-            print("MEDAL_DETECTION_RESULT=0")
-            print("MEDAL_DETECTION_ERROR=Missing ROI parameters")
-            
-    elif command == "detect_medal_arrow":
-        # Check if click coordinates were provided
-        if len(sys.argv) > 3:
-            try:
-                click_x = int(sys.argv[2])
-                click_y = int(sys.argv[3])
-                
-                # Import from detection utilities
-                from cs2_detection_utils import detect_precise_medal_arrow
-                
-                # Perform precise arrow detection using click coordinates
-                arrow_result = detect_precise_medal_arrow(click_x, click_y)
-                
-                # Output the result
-                print("MEDAL_ARROW_RESULT=1")
-                print(f"MEDAL_ARROW_PRESENT={1 if arrow_result['has_more_medals'] else 0}")
-                if arrow_result["has_more_medals"]:
-                    print(f"MEDAL_ARROW_CONFIDENCE={arrow_result['confidence']:.2f}")
-                    
-            except (ValueError, IndexError) as e:
-                logging.error(f"Invalid click coordinates for medal arrow detection: {e}")
-                print("MEDAL_ARROW_RESULT=0")
-                print(f"MEDAL_ARROW_ERROR=Invalid click coordinates: {e}")
-        else:
-            # Fallback to traditional detection method if no coordinates provided
-            from cs2_detection_utils import detect_medal_arrow_in_roi
-            
-            # Get the screenshot
-            screenshot_path = get_latest_screenshot()
-            if not screenshot_path:
-                print("MEDAL_ARROW_RESULT=0")
-                print("MEDAL_ARROW_ERROR=No recent screenshot found")
-                sys.exit(1)
-            
-            # Read the screenshot
-            img = cv2.imread(screenshot_path)
-            if img is None:
-                print("MEDAL_ARROW_RESULT=0")
-                print("MEDAL_ARROW_ERROR=Could not read screenshot")
-                sys.exit(1)
-            
-            # Standard arrow region (for backward compatibility)
-            arrow_roi_x = 1100
-            arrow_roi_y = 307
-            arrow_roi_width = 26
-            arrow_roi_height = 21
-            
-            # Ensure coordinates are within image bounds
-            img_height, img_width = img.shape[:2]
-            if (arrow_roi_x >= img_width or arrow_roi_y >= img_height or 
-                arrow_roi_x + arrow_roi_width > img_width or arrow_roi_y + arrow_roi_height > img_height):
-                print("MEDAL_ARROW_RESULT=0")
-                print("MEDAL_ARROW_ERROR=Arrow ROI outside image bounds")
-                sys.exit(1)
-                
-            # Extract the region
-            arrow_region = img[arrow_roi_y:arrow_roi_y+arrow_roi_height, arrow_roi_x:arrow_roi_x+arrow_roi_width]
-            visualization = arrow_region.copy()
-            
-            # Detect arrow
-            arrow_result = detect_medal_arrow_in_roi(arrow_region, visualization)
-            
-            # Output the result
-            print("MEDAL_ARROW_RESULT=1")
-            print(f"MEDAL_ARROW_PRESENT={1 if arrow_result['has_more_medals'] else 0}")
-            if arrow_result["has_more_medals"]:
-                print(f"MEDAL_ARROW_CONFIDENCE={arrow_result['confidence']:.2f}")
-
-    elif command == "profile_button":
-        # Import from detection utilities
-        from cs2_detection_utils import detect_profile_button_in_roi
-        
-        # Check if region parameters were provided
-        if len(sys.argv) > 5:
-            try:
-                region_x = int(sys.argv[2])
-                region_y = int(sys.argv[3])
-                region_width = int(sys.argv[4])
-                region_height = int(sys.argv[5])
-                
-                # Get the screenshot
-                screenshot_path = get_latest_screenshot()
-                if not screenshot_path:
-                    print("PROFILE_BUTTON_RESULT=0")
-                    print("PROFILE_BUTTON_ERROR=No recent screenshot found")
-                    sys.exit(1)
-                
-                # Read the screenshot
-                img = cv2.imread(screenshot_path)
-                if img is None:
-                    print("PROFILE_BUTTON_RESULT=0")
-                    print("PROFILE_BUTTON_ERROR=Could not read screenshot")
-                    sys.exit(1)
-                
-                # Ensure region is within image bounds
-                img_height, img_width = img.shape[:2]
-                region_x = max(0, min(region_x, img_width - 1))
-                region_y = max(0, min(region_y, img_height - 1))
-                region_width = min(region_width, img_width - region_x)
-                region_height = min(region_height, img_height - region_y)
-                
-                # Extract region
-                roi = img[region_y:region_y+region_height, region_x:region_x+region_width]
-                visualization = roi.copy()
-                
-                # Detect profile button
-                button_result = detect_profile_button_in_roi(roi, region_x, region_y, visualization)
-                
-                # Output results
-                if button_result["found"]:
-                    print("PROFILE_BUTTON_RESULT=1")
-                    print(f"PROFILE_BUTTON_COORDS={button_result['x']},{button_result['y']}")
-                else:
-                    print("PROFILE_BUTTON_RESULT=0")
-                
-            except (ValueError, IndexError) as e:
-                print("PROFILE_BUTTON_RESULT=0")
-                print(f"PROFILE_BUTTON_ERROR=Invalid region parameters: {e}")
-        else:
-            print("PROFILE_BUTTON_RESULT=0")
-            print("PROFILE_BUTTON_ERROR=Missing region parameters")
     
     elif command == "extract_url":
         extract_steam_url()
