@@ -7,6 +7,7 @@
 #Include "CS2_Matchmaking.ahk"
 #Include "CS2_InGame.ahk"
 #Include "CS2_Hotkeys.ahk"
+#Include "CS2_API_Integration.ahk"
 
 ; Initialize globals and setup
 Global LOG_FILE := "C:\LinkHarvesterScript\cs2_automation.log"
@@ -45,6 +46,9 @@ Main()
 Main() {
     ; Display minimal startup message
     MsgBox("CS2 Automation Starting`n`nHotkeys: Ctrl+Alt+X = Emergency Exit, Ctrl+Alt+P = Pause/Resume`n`nClick OK to begin.", "CS2 Automation", "OK")
+    
+    ; Process any previously saved IDs on startup
+    ProcessSavedIDs()
     
     ; Check if CS2 is running
     if (!EnsureCS2Running()) {

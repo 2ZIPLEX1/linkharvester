@@ -296,18 +296,12 @@ def detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization):
         # and spans about 150px width to cover all possible icons
         sympathies_x = 38 + 55  # 38px to adjust for ROI, then 125px offset from click
         sympathies_y = 140       # Approximate Y position (may vary)
-        sympathies_width = 250   # Increased width to capture all icons and numbers (increased from 200)
-        sympathies_height = 110   # Height to capture vertical variation
+        sympathies_width = 215   # Increased width to capture all icons and numbers (increased from 200)
+        sympathies_height = 105   # Height to capture vertical variation
         
         # Create a single ROI for all sympathies
         sympathies_region = profile_roi[sympathies_y:sympathies_y+sympathies_height, 
                                         sympathies_x:sympathies_x+sympathies_width]
-        
-        # Save the sympathies region for debugging - KEEPING THIS ONE
-        debug_dir = os.path.join(PROJECT_PATH, "debug_regions")
-        os.makedirs(debug_dir, exist_ok=True)
-        debug_path = os.path.join(debug_dir, f"sympathies_region_{timestamp}.png")
-        cv2.imwrite(debug_path, sympathies_region)
         
         # Define the icon templates to search for
         icon_configs = [

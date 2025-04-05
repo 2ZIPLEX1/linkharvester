@@ -329,34 +329,3 @@ RunPythonDetector(command) {
         return ""
     }
 }
-
-; Save player profile URL to CSV file
-SaveProfileUrl(nickname, url) {
-    try {
-        ; Validate the URL
-        if (!url || !InStr(url, "steamcommunity.com/")) {
-            LogMessage("Invalid Steam profile URL: " url)
-            return false
-        }
-        
-        csvPath := "C:\LinkHarvesterScript\data\player_profiles.csv"
-        
-        ; Create header if file doesn't exist
-        if !FileExist(csvPath)
-            FileAppend "Timestamp,Nickname,ProfileURL`n", csvPath
-        
-        ; Format timestamp
-        timestamp := FormatTime(, "yyyy-MM-dd HH:mm:ss")
-        
-        ; Sanitize nickname (remove commas)
-        nickname := StrReplace(nickname, ",", "")
-        
-        ; Append data
-        FileAppend timestamp "," nickname "," url "`n", csvPath
-        LogMessage("Saved profile URL for " nickname ": " url)
-        return true
-    } catch Error as e {
-        LogMessage("Error saving profile URL: " e.Message)
-        return false
-    }
-}

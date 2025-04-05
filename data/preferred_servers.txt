@@ -1,4 +1,4 @@
 # List your preferred servers below, one per line
 # Use the exact server names as they appear in all_servers.json
 # Examples:
-Warsaw (Poland) (waw)
+Paris (France) (par)

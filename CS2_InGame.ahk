@@ -1,6 +1,8 @@
 ; CS2 Automation - Refactored In-Game Module
 ; Handles actions once a match has been successfully joined
 
+#Include "CS2_API_Integration.ahk"
+
 ; Find the base position for a team (CT or T)
 FindTeamPosition(team, &baseX, &baseY) {
     LogMessage("Finding " team " team base position...")
@@ -176,7 +178,7 @@ CloseTabAndOverlay(urlResult) {
     }
 }
 
-; Function to extract Steam profile URL using OCR
+; Modified version of ExtractSteamProfileUrl to integrate with API
 ExtractSteamProfileUrl() {
     LogMessage("Extracting Steam profile URL using OCR...")
     
@@ -192,8 +194,9 @@ ExtractSteamProfileUrl() {
             steamProfileUrl := Trim(match[1])
             LogMessage("Successfully extracted Steam profile URL: " steamProfileUrl)
             
-            ; Call the Python bridge to add URL to the queue
-            AddToSteamProfileQueue(steamProfileUrl)
+            ; NEW: Use the API-integrated function instead of calling AddToSteamProfileQueue
+            playerIdentifier := "player_medals_5yrcoin"
+            SaveProfileUrlWithAPI(playerIdentifier, steamProfileUrl)
             
             ; Close the tab and overlay
             CloseTabAndOverlay(urlResult)
@@ -248,7 +251,7 @@ ProcessPlayersGridMethod() {
     ; Default constants for grid scanning
     defaultStartX := 720       ; X coordinate to start scanning
     defaultStartY := 326       ; Default Y coordinate to start scanning (fallback)
-    endY := 820                ; Y coordinate to stop scanning
+    endY := 836                ; Y coordinate to stop scanning
     rowHeight := 26            ; Vertical distance between rows
     
     ; Counter for profiles found
@@ -443,18 +446,6 @@ ProcessPlayersGridMethod() {
                 
                 ; Extract Steam profile URL
                 steamProfileUrl := ExtractSteamProfileUrl()
-                
-                ; If we got a URL, save it
-                if (steamProfileUrl) {
-                    LogMessage("Found Steam profile URL: " steamProfileUrl)
-                    
-                    ; Create player identifier with medal and sympathies info
-                    playerIdentifier := "player_medals" medalCount "_5yrcoin_yes_sympathies" sympathies_sum
-                    
-                    ; Save profile URL with medal and sympathies information
-                    SaveProfileUrl(playerIdentifier, steamProfileUrl)
-                    profilesFound++
-                }
             } else {
                 LogMessage("Player has 4+ medals but no 5-year coin, skipping profile")
                 
@@ -498,7 +489,7 @@ EnsureScoreboardVisible(&iconStartY := 0) {
     iconRoiX := 500
     iconRoiY := 225
     iconRoiWidth := 25
-    iconRoiHeight := 200
+    iconRoiHeight := 180
     
     ; Try to show scoreboard up to 3 times
     Loop 3 {
@@ -566,7 +557,6 @@ IsProfileButtonVisible(x, y) {
     return false
 }
 
-; Replace or modify the ProcessMatch function to use the new grid method
 ProcessMatch() {
     LogMessage("Processing match...")
     
