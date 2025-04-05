@@ -121,15 +121,28 @@ class _CheckHandlers:
             response = urllib.request.urlopen(req, timeout=5)
             data = json.loads(response.read().decode('utf-8'))
             
-            if 'response' in data and 'player_level' in data['response']:
-                player_level = data['response']['player_level']
-                logging.info(f"Steam level check for {steam_id}: Level {player_level} (Max allowed: 14)")
-                return {
-                    "success": True,
-                    "passed": player_level <= 13,
-                    "details": {"player_level": player_level},
-                    "level": player_level
-                }
+            if 'response' in data:
+                # If response is empty, consider it a pass
+                if not data['response']:
+                    logging.info(f"Steam level check for {steam_id}: Empty response - automatically passing")
+                    return {
+                        "success": True,
+                        "passed": True,
+                        "details": {"note": "Empty response from API"},
+                        "level": 0
+                    }
+                
+                # Regular case - response contains player_level
+                if 'player_level' in data['response']:
+                    player_level = data['response']['player_level']
+                    logging.info(f"Steam level check for {steam_id}: Level {player_level} (Max allowed: 14)")
+                    return {
+                        "success": True,
+                        "passed": player_level <= 13,
+                        "details": {"player_level": player_level},
+                        "level": player_level
+                    }
+                    
             logging.error(f"Unexpected API response format for Steam level check: {data}")
             return {"success": False, "error": "Unexpected API response"}
             

@@ -1,8 +1,6 @@
 ; CS2 Automation - Refactored In-Game Module
 ; Handles actions once a match has been successfully joined
 
-#Include "CS2_API_Integration.ahk"
-
 ; Find the base position for a team (CT or T)
 FindTeamPosition(team, &baseX, &baseY) {
     LogMessage("Finding " team " team base position...")
@@ -178,30 +176,27 @@ CloseTabAndOverlay(urlResult) {
     }
 }
 
-; Modified version of ExtractSteamProfileUrl to integrate with API
+; Refactored version of ExtractSteamProfileUrl that uses the direct Python approach
 ExtractSteamProfileUrl() {
-    LogMessage("Extracting Steam profile URL using OCR...")
+    LogMessage("Extracting and processing Steam profile URL directly in Python...")
     
-    ; Run the URL extraction
-    urlResult := RunPythonDetector("extract_url")
-    LogMessage("URL extraction result: " urlResult)
+    ; Run the consolidated URL extraction and processing function that directly uses SteamProfileManager
+    ; without the steam_bridge.py intermediary
+    urlResult := RunPythonDetector("extract_and_process_url")
+    LogMessage("Direct Python URL extraction and processing result: " urlResult)
     
-    ; Parse the OCR output to get the URL
+    ; Parse the OCR output to get the URL and processing status
     steamProfileUrl := ""
+    processingSuccess := false
+    apiSubmissionSuccess := false
+    savedToFallback := false
+    
+    ; Parse the URL first
     if InStr(urlResult, "URL_EXTRACTION_RESULT=1") {
         ; Try to extract the URL from the output
         if RegExMatch(urlResult, "URL=([^\r\n]+)", &match) {
             steamProfileUrl := Trim(match[1])
             LogMessage("Successfully extracted Steam profile URL: " steamProfileUrl)
-            
-            ; NEW: Use the API-integrated function instead of calling AddToSteamProfileQueue
-            playerIdentifier := "player_medals_5yrcoin"
-            SaveProfileUrlWithAPI(playerIdentifier, steamProfileUrl)
-            
-            ; Close the tab and overlay
-            CloseTabAndOverlay(urlResult)
-            
-            return steamProfileUrl
         }
     } else {
         ; Extract error message if available
@@ -211,13 +206,41 @@ ExtractSteamProfileUrl() {
         LogMessage("Failed to extract URL: " errorMsg)
     }
     
-    ; If we reached here, we didn't find a URL or couldn't close the tab
-    ; Fallback to Escape key
-    LogMessage("Using Escape key as fallback to close overlay")
-    Send "{Escape}"
-    Sleep 1000
+    ; Parse the processing results
+    if InStr(urlResult, "URL_PROCESSING_RESULT=1") {
+        processingSuccess := true
+        LogMessage("URL processing was successful")
+        
+        ; Check for API submission success
+        if InStr(urlResult, "API_SUBMISSION=SUCCESS") {
+            apiSubmissionSuccess := true
+            LogMessage("Successfully submitted to API endpoint")
+        } 
+        
+        ; Check if saved to fallback file
+        if InStr(urlResult, "SAVED_TO_FALLBACK=1") {
+            savedToFallback := true
+            LogMessage("URL was saved to fallback file for later processing")
+        }
+    } else if InStr(urlResult, "URL_PROCESSING_RESULT=0") {
+        ; Extract processing error if available
+        processingError := "Unknown processing error"
+        if RegExMatch(urlResult, "URL_PROCESSING_ERROR=([^\r\n]+)", &match)
+            processingError := Trim(match[1])
+        LogMessage("URL processing failed: " processingError)
+    }
     
-    return ""
+    ; Close the tab and overlay
+    tabCloseSuccess := CloseTabAndOverlay(urlResult)
+    
+    ; Log the complete result for debugging
+    LogMessage("URL extraction complete - URL: " steamProfileUrl)
+    LogMessage("Processing success: " processingSuccess)
+    LogMessage("API submission: " (apiSubmissionSuccess ? "Successful" : "Failed"))
+    LogMessage("Saved to fallback: " (savedToFallback ? "Yes" : "No"))
+    LogMessage("Tab close success: " tabCloseSuccess)
+    
+    return steamProfileUrl
 }
 
 ; Function to add URL to Steam profile queue

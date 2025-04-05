@@ -855,9 +855,6 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print("SYMPATHIES_SUM=0")
             print("TOO_MANY_SYMPATHIES=0")
             
-            # Save debug visualization
-            debug_path = os.path.join(debug_dir, f"profile_no_button_{timestamp}.png")
-            cv2.imwrite(debug_path, visualization)
             return
             
         # Store profile button coordinates

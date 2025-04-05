@@ -316,14 +316,22 @@ IsSimilarColor(color1, color2, tolerance := 30) {
 RunPythonDetector(command) {
     try {
         scriptPath := A_ScriptDir "\cs2_detect.py"
+        fullCommand := A_ComSpec " /c python " . scriptPath . " " . command
         
-        ; Use Run with "Hide" option and A_ComSpec
+        LogMessage("Executing command: " . fullCommand)
+        
         shell := ComObject("WScript.Shell")
-        exec := shell.Exec(A_ComSpec " /c python " . scriptPath . " " . command)
+        exec := shell.Exec(fullCommand)
         
-        ; Read the output
-        result := exec.StdOut.ReadAll()
-        return result
+        ; Read stdout and stderr separately
+        stdout := exec.StdOut.ReadAll()
+        stderr := exec.StdErr.ReadAll()
+        
+        ; Log both outputs
+        if (stderr)
+            LogMessage("Command stderr: " . stderr)
+        
+        return stdout
     } catch Error as e {
         LogMessage("Error running Python detector: " e.Message)
         return ""

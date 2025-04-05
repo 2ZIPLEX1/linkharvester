@@ -8,8 +8,6 @@
 ; This maintains compatibility with your existing code
 SaveProfileUrlWithAPI(nickname, url) {
     try {
-        ; First, do everything the original SaveProfileUrl does
-        ; to maintain backward compatibility
         
         ; Validate the URL
         if (!url || !InStr(url, "steamcommunity.com/")) {

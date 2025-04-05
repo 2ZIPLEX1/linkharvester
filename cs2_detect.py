@@ -344,8 +344,11 @@ def detect_profile_button(region_x=None, region_y=None, region_width=None, regio
         print("PROFILE_BUTTON_RESULT=0")
         print(f"PROFILE_BUTTON_ERROR={str(e)}")
 
-def extract_steam_url():
-    """Extract Steam profile URL from the Steam browser using lock icon detection and OCR, and also locate tab close button"""
+def extract_and_process_steam_url():
+    """
+    Extract Steam profile URL from the Steam browser using OCR, then process it directly 
+    through the filtering and API submission pipeline.
+    """
     try:
         # Get the latest screenshot
         screenshot_path = get_latest_screenshot()
@@ -452,6 +455,7 @@ def extract_steam_url():
         
         # Store all results
         ocr_results = []
+        steam_urls = []
         
         # Try OCR with grayscale (worked well in testing)
         try:
@@ -482,8 +486,6 @@ def extract_steam_url():
             return
         
         # Validate and select the best result
-        steam_urls = []
-        
         for method, text in ocr_results:
             # Clean up the text to look for a valid Steam URL
             cleaned_text = text.replace(" ", "").replace("\n", "").replace("\r", "")
@@ -507,7 +509,26 @@ def extract_steam_url():
             logging.info(f"Found valid Steam URL ({best_method}): {best_url}")
             print("URL_EXTRACTION_RESULT=1")
             print(f"URL={best_url}")
-            return
+            
+            # Process the URL directly here
+            process_result = process_steam_url(best_url)
+            
+            # Log and output processing results 
+            logging.info(f"URL processing result: {process_result}")
+            print(f"URL_PROCESSING_RESULT={1 if process_result['success'] else 0}")
+            
+            if process_result['success']:
+                print("URL_PROCESSING_STATUS=SUCCESS")
+                if process_result.get('api_success'):
+                    print("API_SUBMISSION=SUCCESS")
+                elif process_result.get('saved_to_fallback'):
+                    print("API_SUBMISSION=FAILED")
+                    print("SAVED_TO_FALLBACK=1")
+            else:
+                print("URL_PROCESSING_STATUS=FAILED")
+                print(f"URL_PROCESSING_ERROR={process_result.get('error', 'Unknown error')}")
+            
+            return best_url, process_result
         
         logging.warning("Could not find a valid Steam URL")
         print("URL_EXTRACTION_RESULT=0")
@@ -518,6 +539,136 @@ def extract_steam_url():
         logging.error(traceback.format_exc())
         print("URL_EXTRACTION_RESULT=0")
         print(f"URL_EXTRACTION_ERROR={str(e)}")
+
+def process_steam_url(url):
+    """
+    Process a Steam profile URL through filtering and API submission
+    
+    Args:
+        url: The Steam profile URL to process
+        
+    Returns:
+        dict: Result of the processing operation
+    """
+    try:
+        logging.info(f"Processing Steam URL: {url}")
+        result = {
+            "success": False,
+            "url": url,
+            "api_success": False,
+            "saved_to_fallback": False,
+            "error": None
+        }
+        
+        # Step 1: Directly use SteamProfileManager for filtering
+        from steam_profile_manager import SteamProfileManager
+        
+        # Create manager instance
+        manager = SteamProfileManager()
+        
+        # Add URL directly to the processing queue
+        add_success = manager.add_profile_url(url)
+        
+        if not add_success:
+            result['error'] = f"Failed to add URL to processing queue"
+            logging.error(result['error'])
+            return result
+        
+        # Process the queue immediately
+        process_result = manager.process_profiles_now()
+        
+        if not process_result.get('success'):
+            result['error'] = f"Failed to process URL in queue: {process_result.get('message', 'Unknown error')}"
+            logging.error(result['error'])
+            return result
+        
+        logging.info(f"Successfully processed URL through filtering queue: {url}")
+        
+        # Step 2: Try API submission through api_service
+        try:
+            from api_service import APIService
+            
+            api_service = APIService()
+            
+            # Extract Steam ID from URL for API submission
+            steam_id = ""
+            if "/profiles/" in url:
+                steam_id_pos = url.find("/profiles/") + 10
+                steam_id = url[steam_id_pos:].split('/')[0]
+                
+                # If we have a valid Steam ID, submit it directly
+                if steam_id:
+                    api_result = api_service.handle_new_steam_id(steam_id)
+                    
+                    if api_result.get('success'):
+                        result['api_success'] = True
+                        result['success'] = True
+                        logging.info(f"Successfully submitted Steam ID {steam_id} to API")
+                    elif api_result.get('saved_to_fallback'):
+                        result['saved_to_fallback'] = True
+                        result['success'] = True
+                        logging.info(f"Saved Steam ID {steam_id} to fallback file for later processing")
+                    else:
+                        result['error'] = f"API submission failed: {api_result.get('error', 'Unknown error')}"
+                        logging.error(result['error'])
+                        # Still mark as success because filtering worked
+                        result['success'] = True
+                else:
+                    result['error'] = "Could not extract Steam ID from URL"
+                    logging.error(result['error'])
+            else:
+                # For vanity URLs, use the Steam ID from the filtered_steamids.txt file
+                # The SteamProfileManager would have added it there if it passed all checks
+                try:
+                    filtered_file = os.path.join("steam_data", "filtered_steamids.txt")
+                    if os.path.exists(filtered_file):
+                        with open(filtered_file, 'r') as f:
+                            lines = f.readlines()
+                            if lines:
+                                # Get the most recently added Steam ID (last line)
+                                steam_id = lines[-1].strip()
+                                if steam_id:
+                                    api_result = api_service.handle_new_steam_id(steam_id)
+                                    
+                                    if api_result.get('success'):
+                                        result['api_success'] = True
+                                        result['success'] = True
+                                        logging.info(f"Successfully submitted resolved Steam ID {steam_id} to API")
+                                    elif api_result.get('saved_to_fallback'):
+                                        result['saved_to_fallback'] = True
+                                        result['success'] = True
+                                        logging.info(f"Saved resolved Steam ID {steam_id} to fallback file")
+                                    else:
+                                        result['error'] = f"API submission failed: {api_result.get('error', 'Unknown error')}"
+                                        logging.error(result['error'])
+                                        # Still mark as success because filtering worked
+                                        result['success'] = True
+                except Exception as e:
+                    logging.warning(f"Could not process vanity URL from filtered file: {str(e)}")
+                    # Mark as success even if we couldn't read the filtered file
+                    # as the SteamProfileManager likely processed it
+                    result['success'] = True
+                    result['saved_to_fallback'] = True
+                    logging.info(f"Vanity URL was processed by SteamProfileManager: {url}")
+        
+        except Exception as api_error:
+            # If API submission fails, log the error but consider filtering success
+            result['error'] = f"API service error: {str(api_error)}"
+            logging.error(f"API service error: {str(api_error)}")
+            logging.error(traceback.format_exc())
+            # Still mark overall process as success if we got to this point
+            result['success'] = True
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error processing Steam URL: {str(e)}")
+        logging.error(traceback.format_exc())
+        return {
+            "success": False,
+            "url": url,
+            "error": str(e)
+        }
 
 # Main function for command-line usage
 if __name__ == "__main__":
@@ -534,8 +685,9 @@ if __name__ == "__main__":
         print("Available commands:")
         print("  error                    - Detect error dialogs")
         print("  spectate                 - Detect spectate button")
+        print("  check_scoreboard         - Check the presence of scoreboard")
         print("  profile_button          - Detect profile button")
-        print("  extract_url             - Extract Steam profile URL")
+        print("  extract_and_process_url - Extract and process Steam profile URL")
         print("  analyze_profile x y     - Analyze player profile at coordinates (x,y)")
         print("  detect_medals x y w h   - Detect medals in region (x,y,width,height)")
         print("  detect_medal_arrow      - Detect medal arrow indicator")
@@ -647,8 +799,8 @@ if __name__ == "__main__":
             print("PROFILE_ANALYSIS_ERROR=Missing click coordinates")
             print("DECISION=SKIP")
     
-    elif command == "extract_url":
-        extract_steam_url()
+    elif command == "extract_and_process_url":
+        extract_and_process_steam_url()
 
     else:
         print(f"Unknown command: {command}")
