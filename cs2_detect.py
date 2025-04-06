@@ -26,6 +26,62 @@ logging.basicConfig(
     filemode='a'
 )
 
+# URL cache to prevent redundant processing
+# This will be maintained for the duration of a match
+processed_urls = set()
+
+# File to store URL cache between process invocations
+URL_CACHE_FILE = os.path.join(PROJECT_PATH, "url_cache.tmp")
+
+def load_url_cache():
+    """Load the URL cache from a temporary file"""
+    processed_urls = set()
+    
+    if os.path.exists(URL_CACHE_FILE):
+        try:
+            with open(URL_CACHE_FILE, 'r') as f:
+                for line in f:
+                    url = line.strip()
+                    if url:
+                        processed_urls.add(url)
+            logging.info(f"Loaded URL cache with {len(processed_urls)} URLs")
+        except Exception as e:
+            logging.error(f"Error loading URL cache: {str(e)}")
+    
+    return processed_urls
+
+def save_url_cache(processed_urls):
+    """Save the URL cache to a temporary file"""
+    try:
+        with open(URL_CACHE_FILE, 'w') as f:
+            for url in processed_urls:
+                f.write(f"{url}\n")
+        logging.info(f"Saved URL cache with {len(processed_urls)} URLs")
+    except Exception as e:
+        logging.error(f"Error saving URL cache: {str(e)}")
+
+def clear_url_cache():
+    """Clear the cache of processed URLs"""
+    url_count = 0
+    
+    # Load the current cache to get the count
+    if os.path.exists(URL_CACHE_FILE):
+        try:
+            with open(URL_CACHE_FILE, 'r') as f:
+                url_count = sum(1 for line in f if line.strip())
+        except Exception as e:
+            logging.error(f"Error reading URL cache file: {str(e)}")
+    
+    # Delete the cache file
+    if os.path.exists(URL_CACHE_FILE):
+        try:
+            os.remove(URL_CACHE_FILE)
+            logging.info(f"URL cache cleared ({url_count} URLs removed)")
+        except Exception as e:
+            logging.error(f"Error deleting URL cache file: {str(e)}")
+    
+    return url_count
+
 def get_latest_screenshot():
     """Get the most recent screenshot from Steam's screenshot folder"""
     try:
@@ -486,29 +542,59 @@ def extract_and_process_steam_url():
             return
         
         # Validate and select the best result
+        valid_urls = []
         for method, text in ocr_results:
             # Clean up the text to look for a valid Steam URL
             cleaned_text = text.replace(" ", "").replace("\n", "").replace("\r", "")
             
             # Check if it looks like a Steam URL
             if "steamcommunity.com" in cleaned_text.lower():
-                steam_urls.append((method, cleaned_text))
-        
-        if steam_urls:
-            # Sort by length (longer URLs are likely more complete)
-            steam_urls.sort(key=lambda x: len(x[1]), reverse=True)
+                # Validate the URL and extract Steam ID
+                is_valid, clean_url, steam_id = validate_steam_url(cleaned_text)
+                
+                if is_valid:
+                    valid_urls.append((method, clean_url, steam_id))
+                    if steam_id:
+                        logging.info(f"Valid profile URL found ({method}): {clean_url} with ID: {steam_id}")
+                    else:
+                        logging.info(f"Valid vanity URL found ({method}): {clean_url}")
+                else:
+                    logging.warning(f"Invalid Steam URL format ({method}): {cleaned_text}")
+              
+        if valid_urls:
+            # If we have multiple valid URLs, choose the best one based on priority:
+            # 1. URLs with valid Steam IDs
+            # 2. Vanity URLs
+            # 3. Fall back to the longest URL if necessary
             
-            best_url = steam_urls[0][1]
-            best_method = steam_urls[0][0]
+            # First try to find a URL with a valid Steam ID
+            profile_urls = [item for item in valid_urls if item[2]]
             
-            # Ensure the URL ends with a slash
-            if not best_url.endswith('/'):
-                best_url += '/'
-                logging.info(f"Added missing slash to URL: {best_url}")
+            if profile_urls:
+                # Choose the first valid ID URL
+                best_method, best_url, steam_id = profile_urls[0]
+                logging.info(f"Selected URL with valid Steam ID: {best_url}")
+            else:
+                # Fall back to any valid URL (probably a vanity URL)
+                best_method, best_url, steam_id = valid_urls[0]
+                logging.info(f"No URLs with valid Steam IDs found, using: {best_url}")
             
             logging.info(f"Found valid Steam URL ({best_method}): {best_url}")
             print("URL_EXTRACTION_RESULT=1")
             print(f"URL={best_url}")
+            
+            # Check if this URL has already been processed in this match
+            processed_urls = load_url_cache()
+            if best_url in processed_urls:
+                logging.info(f"URL already processed in this match: {best_url}")
+                print("URL_ALREADY_PROCESSED=1")
+                print("URL_PROCESSING_STATUS=ALREADY_PROCESSED")
+                return best_url, {"success": True, "already_processed": True}
+            
+            # Add to processed URLs
+            processed_urls.add(best_url)
+            save_url_cache(processed_urls)
+            logging.info(f"Added URL to processed cache (total: {len(processed_urls)})")
             
             # Process the URL directly here
             process_result = process_steam_url(best_url)
@@ -560,7 +646,7 @@ def process_steam_url(url):
             "error": None
         }
         
-        # Step 1: Directly use SteamProfileManager for filtering
+        # Step 1: Use SteamProfileManager for filtering
         from steam_profile_manager import SteamProfileManager
         
         # Create manager instance
@@ -574,15 +660,59 @@ def process_steam_url(url):
             logging.error(result['error'])
             return result
         
+        # Get the queue status before processing to compare later
+        before_status = manager.get_queue_status()
+        before_queue_length = before_status.get("queue_length", 0)
+        
         # Process the queue immediately
         process_result = manager.process_profiles_now()
         
-        if not process_result.get('success'):
-            result['error'] = f"Failed to process URL in queue: {process_result.get('message', 'Unknown error')}"
+        # Get the queue status after processing
+        after_status = manager.get_queue_status()
+        after_queue_length = after_status.get("queue_length", 0)
+        
+        # Check if the filtered_steamids.txt file has been updated
+        filtered_file = os.path.join("steam_data", "filtered_steamids.txt")
+        filtered_id_found = False
+        steam_id = ""
+        
+        # Extract Steam ID from URL if it's a profile URL
+        steam_id = extract_steam_id_from_url(url)
+
+        # For profile URLs, we expect a valid Steam ID
+        if "/profiles/" in url and not steam_id:
+            result['error'] = f"Invalid Steam ID format in profile URL: {url}"
             logging.error(result['error'])
             return result
         
+        # Check if the Steam ID is in the filtered_steamids.txt file
+        if os.path.exists(filtered_file) and steam_id:
+            try:
+                with open(filtered_file, 'r') as f:
+                    content = f.read()
+                    if steam_id in content:
+                        filtered_id_found = True
+                        logging.info(f"Steam ID {steam_id} found in filtered_steamids.txt")
+            except Exception as e:
+                logging.error(f"Error checking filtered file: {str(e)}")
+        
+        # If the queue length decreased but the ID is not in the filtered file,
+        # it means the profile failed at least one check
+        if before_queue_length > after_queue_length and not filtered_id_found:
+            result['error'] = f"Profile failed checks and was removed from queue, but not added to filtered list"
+            logging.error(result['error'])
+            return result
+        
+        # If our Steam ID is not in the filtered list, the profile likely failed checks
+        # We'll explicitly check the manager's filtered list
+        if not filtered_id_found:
+            result['error'] = f"Profile did not pass all checks - ID not found in filtered list"
+            logging.error(result['error'])
+            return result
+        
+        # If we reach here, it means the profile passed all checks
         logging.info(f"Successfully processed URL through filtering queue: {url}")
+        result['success'] = True
         
         # Step 2: Try API submission through api_service
         try:
@@ -590,74 +720,28 @@ def process_steam_url(url):
             
             api_service = APIService()
             
-            # Extract Steam ID from URL for API submission
-            steam_id = ""
-            if "/profiles/" in url:
-                steam_id_pos = url.find("/profiles/") + 10
-                steam_id = url[steam_id_pos:].split('/')[0]
+            # We already have the Steam ID from above
+            if steam_id:
+                api_result = api_service.handle_new_steam_id(steam_id)
                 
-                # If we have a valid Steam ID, submit it directly
-                if steam_id:
-                    api_result = api_service.handle_new_steam_id(steam_id)
-                    
-                    if api_result.get('success'):
-                        result['api_success'] = True
-                        result['success'] = True
-                        logging.info(f"Successfully submitted Steam ID {steam_id} to API")
-                    elif api_result.get('saved_to_fallback'):
-                        result['saved_to_fallback'] = True
-                        result['success'] = True
-                        logging.info(f"Saved Steam ID {steam_id} to fallback file for later processing")
-                    else:
-                        result['error'] = f"API submission failed: {api_result.get('error', 'Unknown error')}"
-                        logging.error(result['error'])
-                        # Still mark as success because filtering worked
-                        result['success'] = True
+                if api_result.get('success'):
+                    result['api_success'] = True
+                    logging.info(f"Successfully submitted Steam ID {steam_id} to API")
+                elif api_result.get('saved_to_fallback'):
+                    result['saved_to_fallback'] = True
+                    logging.info(f"Saved Steam ID {steam_id} to fallback file for later processing")
                 else:
-                    result['error'] = "Could not extract Steam ID from URL"
+                    result['error'] = f"API submission failed: {api_result.get('error', 'Unknown error')}"
                     logging.error(result['error'])
             else:
-                # For vanity URLs, use the Steam ID from the filtered_steamids.txt file
-                # The SteamProfileManager would have added it there if it passed all checks
-                try:
-                    filtered_file = os.path.join("steam_data", "filtered_steamids.txt")
-                    if os.path.exists(filtered_file):
-                        with open(filtered_file, 'r') as f:
-                            lines = f.readlines()
-                            if lines:
-                                # Get the most recently added Steam ID (last line)
-                                steam_id = lines[-1].strip()
-                                if steam_id:
-                                    api_result = api_service.handle_new_steam_id(steam_id)
-                                    
-                                    if api_result.get('success'):
-                                        result['api_success'] = True
-                                        result['success'] = True
-                                        logging.info(f"Successfully submitted resolved Steam ID {steam_id} to API")
-                                    elif api_result.get('saved_to_fallback'):
-                                        result['saved_to_fallback'] = True
-                                        result['success'] = True
-                                        logging.info(f"Saved resolved Steam ID {steam_id} to fallback file")
-                                    else:
-                                        result['error'] = f"API submission failed: {api_result.get('error', 'Unknown error')}"
-                                        logging.error(result['error'])
-                                        # Still mark as success because filtering worked
-                                        result['success'] = True
-                except Exception as e:
-                    logging.warning(f"Could not process vanity URL from filtered file: {str(e)}")
-                    # Mark as success even if we couldn't read the filtered file
-                    # as the SteamProfileManager likely processed it
-                    result['success'] = True
-                    result['saved_to_fallback'] = True
-                    logging.info(f"Vanity URL was processed by SteamProfileManager: {url}")
+                result['error'] = "Could not extract Steam ID from URL"
+                logging.error(result['error'])
         
         except Exception as api_error:
-            # If API submission fails, log the error but consider filtering success
+            # If API submission fails, log the error
             result['error'] = f"API service error: {str(api_error)}"
             logging.error(f"API service error: {str(api_error)}")
             logging.error(traceback.format_exc())
-            # Still mark overall process as success if we got to this point
-            result['success'] = True
         
         return result
         
@@ -669,6 +753,83 @@ def process_steam_url(url):
             "url": url,
             "error": str(e)
         }
+
+def is_valid_steam_id(steam_id):
+    """
+    Check if a string is a valid Steam ID (17 digits starting with 7656119)
+    
+    Args:
+        steam_id: String to check
+        
+    Returns:
+        bool: True if valid, False otherwise
+    """
+    # Remove any non-digit characters
+    digits_only = ''.join(c for c in steam_id if c.isdigit())
+    
+    # Check if it's 17 digits and starts with 7656119
+    return (len(digits_only) == 17 and digits_only.startswith('7656119'))
+
+def extract_steam_id_from_url(url):
+    """
+    Extract the Steam ID from a Steam profile URL
+    
+    Args:
+        url: Steam profile URL
+        
+    Returns:
+        str: Steam ID or empty string if not found/valid
+    """
+    if "/profiles/" in url:
+        # Extract the ID part
+        parts = url.split("/profiles/")
+        if len(parts) > 1:
+            # Get everything after /profiles/ and before any subsequent /
+            id_part = parts[1].split("/")[0].strip()
+            
+            # Check if it's a valid Steam ID
+            if is_valid_steam_id(id_part):
+                return id_part
+    
+    return ""
+
+def validate_steam_url(url):
+    """
+    Validate a Steam profile URL by checking if it contains a valid Steam ID
+    or is a valid vanity URL
+    
+    Args:
+        url: URL to validate
+        
+    Returns:
+        tuple: (is_valid, clean_url, steam_id)
+    """
+    if not url or "steamcommunity.com" not in url:
+        return False, "", ""
+    
+    # Check if it's a vanity URL
+    if "/id/" in url:
+        # Extract the vanity ID
+        parts = url.split("/id/")
+        if len(parts) > 1:
+            vanity_id = parts[1].split("/")[0].strip()
+            if vanity_id:
+                # Construct a clean URL with the vanity ID
+                clean_url = f"https://steamcommunity.com/id/{vanity_id}/"
+                return True, clean_url, ""  # No Steam ID for vanity URLs
+    
+    # If not a vanity URL, check if it's a profile URL with valid Steam ID
+    elif "/profiles/" in url:
+        # Extract the Steam ID
+        steam_id = extract_steam_id_from_url(url)
+        
+        if steam_id:
+            # Construct a clean URL with the valid Steam ID
+            clean_url = f"https://steamcommunity.com/profiles/{steam_id}/"
+            return True, clean_url, steam_id
+    
+    # If we reach here, it's not a recognized Steam URL format
+    return False, "", ""
 
 # Main function for command-line usage
 if __name__ == "__main__":
@@ -683,6 +844,7 @@ if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: python cs2_detect.py [command] [options]")
         print("Available commands:")
+        print("  clear_url_cache          - Clears the list of Steam URLs before match start")
         print("  error                    - Detect error dialogs")
         print("  spectate                 - Detect spectate button")
         print("  check_scoreboard         - Check the presence of scoreboard")
@@ -696,7 +858,15 @@ if __name__ == "__main__":
     command = sys.argv[1].lower()
     
     # Handle different commands
-    if command == "error":
+
+    if command == "clear_url_cache":
+        # Use the file-based clear_url_cache function
+        cleared_count = clear_url_cache()
+        print(f"URL_CACHE_CLEARED=1")
+        print(f"CLEARED_URL_COUNT={cleared_count}")
+        logging.info(f"URL cache cleared via command line: {cleared_count} URLs removed")
+
+    elif command == "error":
         found, coords = detect_error_dialog()
         result = "1" if found else "0"
         print(f"ERROR_DETECTION_RESULT={result}")

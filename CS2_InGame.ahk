@@ -512,7 +512,7 @@ EnsureScoreboardVisible(&iconStartY := 0) {
     iconRoiX := 500
     iconRoiY := 225
     iconRoiWidth := 25
-    iconRoiHeight := 180
+    iconRoiHeight := 150
     
     ; Try to show scoreboard up to 3 times
     Loop 3 {
@@ -583,6 +583,9 @@ IsProfileButtonVisible(x, y) {
 ProcessMatch() {
     LogMessage("Processing match...")
     
+    ; Clear the URL cache at the beginning of each match
+    ClearUrlCache()
+    
     ; Wait a few seconds for the match to fully load
     Sleep 500
     
@@ -597,6 +600,25 @@ ProcessMatch() {
         return true
     } else {
         LogMessage("Match processing completed but no profiles were found")
+        return false
+    }
+}
+
+; Function to clear the URL cache at the start of a new match
+ClearUrlCache() {
+    LogMessage("Clearing URL cache for new match...")
+    result := RunPythonDetector("clear_url_cache")
+    
+    ; Parse the result for stats
+    if InStr(result, "URL_CACHE_CLEARED=1") {
+        clearCount := 0
+        if RegExMatch(result, "CLEARED_URL_COUNT=(\d+)", &countMatch)
+            clearCount := Integer(countMatch[1])
+        
+        LogMessage("URL cache cleared: " clearCount " URLs removed")
+        return true
+    } else {
+        LogMessage("Failed to clear URL cache")
         return false
     }
 }
