@@ -1,6 +1,8 @@
 ; CS2 Automation - Refactored In-Game Module
 ; Handles actions once a match has been successfully joined
 
+#Include "CS2_Helpers.ahk"
+
 ; Find the base position for a team (CT or T)
 FindTeamPosition(team, &baseX, &baseY) {
     LogMessage("Finding " team " team base position...")
@@ -126,7 +128,7 @@ AsText(array) {
 ViewPlayerInGameProfile(clickX, clickY) {
     ; Click to view player profile
     Click clickX, clickY
-    Sleep 1000
+    Sleep 500
     
     ; Take screenshot of profile
     CaptureScreenshot()
@@ -156,14 +158,14 @@ CloseTabAndOverlay(urlResult) {
         ; First click the tab close button (adjusted X to target the 'x' specifically)
         LogMessage("Clicking tab close button at: " tabCloseX-13 "," tabCloseY)
         Click tabCloseX-13, tabCloseY
-        Sleep 1000  ; Wait for tab to close
+        Sleep 500  ; Wait for tab to close
         
         ; Then click the overlay close button
         overlayCloseX := 1874
         overlayCloseY := 48
         LogMessage("Clicking overlay close button at: " overlayCloseX "," overlayCloseY)
         Click overlayCloseX, overlayCloseY
-        Sleep 1000  ; Wait for overlay to close
+        Sleep 500  ; Wait for overlay to close
         
         return true
     } else {
@@ -300,11 +302,11 @@ ProcessPlayersGridMethod() {
         
         ; Click at the current position
         Click startX, currentY
-        Sleep 1000  ; Wait for any profile window to appear
+        Sleep 900  ; Wait for any profile window to appear
         
         ; Take a screenshot to check if profile details loaded
         CaptureScreenshot()
-        Sleep 1000  ; Wait for screenshot to be saved
+        Sleep 800  ; Wait for screenshot to be saved
         
         ; Perform initial profile analysis (includes profile button, sympathies, and medals check)
         LogMessage("Performing profile analysis...")
@@ -410,11 +412,11 @@ ProcessPlayersGridMethod() {
             
             LogMessage("Clicking medal arrow at: " arrowX+5 "," arrowY+7)
             Click arrowX+5, arrowY+7
-            Sleep 1000  ; Wait for UI to update
+            Sleep 700  ; Wait for UI to update
             
             ; Take a new screenshot after clicking the arrow
             CaptureScreenshot()
-            Sleep 1000  ; Wait for screenshot to be saved
+            Sleep 800  ; Wait for screenshot to be saved
             
             ; Analyze again with the new screenshot
             LogMessage("Performing follow-up profile analysis after arrow click...")
@@ -461,11 +463,11 @@ ProcessPlayersGridMethod() {
                 ; Click the profile button at its exact detected coordinates
                 LogMessage("Clicking profile button at exact coordinates: " profileButtonX "," profileButtonY)
                 Click profileButtonX, profileButtonY
-                Sleep 3000  ; Give Steam browser time to open
+                Sleep 2000  ; Give Steam browser time to open
                 
                 ; Take screenshot for URL OCR
                 CaptureScreenshot()
-                Sleep 1500  ; Give enough time for screenshot to be saved
+                Sleep 800  ; Give enough time for screenshot to be saved
                 
                 ; Extract Steam profile URL
                 steamProfileUrl := ExtractSteamProfileUrl()
@@ -475,13 +477,13 @@ ProcessPlayersGridMethod() {
                 ; Need to close profile details in this case
                 LogMessage("Clicking again to close profile details")
                 Click startX, currentY
-                Sleep 500
+                Sleep 300
             }
         } else {
             ; Only click to close profile details if we didn't open Steam profile
             LogMessage("Clicking again to close profile details")
             Click startX, currentY
-            Sleep 500
+            Sleep 300
         }
         
         ; Move to the next row
@@ -512,18 +514,18 @@ EnsureScoreboardVisible(&iconStartY := 0) {
     iconRoiX := 500
     iconRoiY := 225
     iconRoiWidth := 25
-    iconRoiHeight := 150
+    iconRoiHeight := 165
     
     ; Try to show scoreboard up to 3 times
     Loop 3 {
         ; Press Escape to open the pause menu/scoreboard
         LogMessage("Pressing Escape to view scoreboard (attempt " A_Index "/3)...")
         Send "{Escape}"
-        Sleep 2000  ; Wait 2 seconds for scoreboard to appear
+        Sleep 500  ; Wait 2 seconds for scoreboard to appear
         
         ; Take a screenshot
         CaptureScreenshot()
-        Sleep 1000  ; Wait for screenshot to be saved
+        Sleep 800  ; Wait for screenshot to be saved
         
         ; Check if scoreboard is visible by looking for valve-cs2-icon.jpg
         LogMessage("Checking for scoreboard icon...")
@@ -583,9 +585,6 @@ IsProfileButtonVisible(x, y) {
 ProcessMatch() {
     LogMessage("Processing match...")
     
-    ; Clear the URL cache at the beginning of each match
-    ClearUrlCache()
-    
     ; Wait a few seconds for the match to fully load
     Sleep 500
     
@@ -594,31 +593,15 @@ ProcessMatch() {
     
     ; Return to main menu using ESC
     ReturnToMainMenu()
+
+    ; Clean up screenshots that are no longer needed
+    ; CleanupScreenshots()
     
     if (success) {
         LogMessage("Match processing completed successfully")
         return true
     } else {
         LogMessage("Match processing completed but no profiles were found")
-        return false
-    }
-}
-
-; Function to clear the URL cache at the start of a new match
-ClearUrlCache() {
-    LogMessage("Clearing URL cache for new match...")
-    result := RunPythonDetector("clear_url_cache")
-    
-    ; Parse the result for stats
-    if InStr(result, "URL_CACHE_CLEARED=1") {
-        clearCount := 0
-        if RegExMatch(result, "CLEARED_URL_COUNT=(\d+)", &countMatch)
-            clearCount := Integer(countMatch[1])
-        
-        LogMessage("URL cache cleared: " clearCount " URLs removed")
-        return true
-    } else {
-        LogMessage("Failed to clear URL cache")
         return false
     }
 }
@@ -639,10 +622,7 @@ ReturnToMainMenu() {
     confirmY := 600
     LogMessage("Clicking OK to confirm at " confirmX "," confirmY)
     Click confirmX, confirmY
-    Sleep 2500
-    
-    ; Take screenshot to confirm we're back at the main menu
-    CaptureScreenshot()
+    Sleep 500
     
     return true
 }

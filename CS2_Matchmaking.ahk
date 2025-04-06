@@ -33,7 +33,7 @@ CheckForMatchmakingFailure() {
     try {
         ; Take a screenshot
         CaptureScreenshot()
-        Sleep 1000  ; Wait for screenshot to be saved
+        Sleep 800  ; Wait for screenshot to be saved
         
         ; Run Python detector
         result := RunPythonDetector("error")

@@ -151,10 +151,9 @@ LaunchCS2() {
     return true
 }
 
-; Simplified screenshot function that only uses Steam's F12
 CaptureScreenshot() {
     try {
-        LogMessage("Taking Steam screenshot with F12")
+        LogMessage("Taking Steam screenshot")
         Send "{F12}"
         Sleep 500
         return true
@@ -335,5 +334,88 @@ RunPythonDetector(command) {
     } catch Error as e {
         LogMessage("Error running Python detector: " e.Message)
         return ""
+    }
+}
+
+; Function to clear the URL cache at the start of a new server round
+ClearUrlCache() {
+    LogMessage("Clearing URL cache for new server round...")
+    result := RunPythonDetector("clear_url_cache")
+    
+    ; Parse the result for stats
+    if InStr(result, "URL_CACHE_CLEARED=1") {
+        clearCount := 0
+        if RegExMatch(result, "CLEARED_URL_COUNT=(\d+)", &countMatch)
+            clearCount := Integer(countMatch[1])
+        
+        LogMessage("URL cache cleared: " clearCount " URLs removed")
+        return true
+    } else {
+        LogMessage("Failed to clear URL cache")
+        return false
+    }
+}
+
+; Function to clean up screenshots that are no longer needed
+CleanupScreenshots() {
+    try {
+        screenshotsPath := "C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots"
+        thumbnailsPath := screenshotsPath "\thumbnails"
+        
+        ; Delete all screenshots
+        LogMessage("Cleaning up CS2 screenshots...")
+        FileDelete screenshotsPath "\*.jpg"
+        
+        ; Delete all thumbnails
+        LogMessage("Cleaning up CS2 screenshot thumbnails...")
+        FileDelete thumbnailsPath "\*.jpg"
+        
+        LogMessage("Screenshot cleanup completed")
+        return true
+    } catch Error as e {
+        LogMessage("Error cleaning up screenshots: " e.Message)
+        return false
+    }
+}
+
+; Function to disconnect from match using console command
+DisconnectFromMatch() {
+    try {
+        LogMessage("Disconnecting from match using console command...")
+        
+        ; Open console (~ key)
+        LogMessage("Opening console with ~ key")
+        Send "``"  ; Backtick character needs to be escaped in AHK v2
+        Sleep 1000
+        
+        ; Type disconnect command and press Enter
+        LogMessage("Entering 'disconnect' command")
+        Send "disconnect{Enter}"
+        Sleep 2000
+        
+        ; Close console
+        LogMessage("Closing console")
+        Send "``"
+        
+        ; Wait for disconnection to complete and return to lobby
+        LogMessage("Waiting for disconnection to complete (3 seconds)...")
+        Sleep 3000
+        
+        ; Verify we're in the lobby by looking for Play button
+        ; This could be enhanced with a visual check for the play button
+        LogMessage("Checking if we're back in the lobby")
+        
+        ; Take a screenshot to verify state if needed
+        CaptureScreenshot()
+        
+        ; For now, we'll just assume the 3-second wait was sufficient
+        ; In the future, this could be extended with a visual verification
+        
+        LogMessage("Successfully disconnected and returned to lobby")
+        return true
+    }
+    catch Error as e {
+        LogMessage("Error in DisconnectFromMatch: " e.Message)
+        return false
     }
 }

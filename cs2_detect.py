@@ -865,6 +865,92 @@ if __name__ == "__main__":
         print(f"URL_CACHE_CLEARED=1")
         print(f"CLEARED_URL_COUNT={cleared_count}")
         logging.info(f"URL cache cleared via command line: {cleared_count} URLs removed")
+    
+    elif command == "main_menu":
+        try:
+            # Check if ROI parameters were provided
+            if len(sys.argv) > 5:
+                roi_x = int(sys.argv[2])
+                roi_y = int(sys.argv[3])
+                roi_width = int(sys.argv[4])
+                roi_height = int(sys.argv[5])
+                
+                # Get the latest screenshot
+                screenshot_path = get_latest_screenshot()
+                if not screenshot_path:
+                    print("MAIN_MENU_DETECTED=0")
+                    print("ERROR=No recent screenshot found")
+                    sys.exit(1)
+                
+                # Read the screenshot
+                img = cv2.imread(screenshot_path)
+                if img is None:
+                    print("MAIN_MENU_DETECTED=0")
+                    print("ERROR=Could not read screenshot")
+                    sys.exit(1)
+                
+                # Extract the ROI
+                if roi_x + roi_width > img.shape[1] or roi_y + roi_height > img.shape[0]:
+                    # Adjust ROI to fit within image bounds
+                    roi_width = min(roi_width, img.shape[1] - roi_x)
+                    roi_height = min(roi_height, img.shape[0] - roi_y)
+                
+                if roi_width <= 0 or roi_height <= 0:
+                    print("MAIN_MENU_DETECTED=0")
+                    print("ERROR=Invalid ROI dimensions")
+                    sys.exit(1)
+                
+                roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
+                
+                # Detect the shut-down-icon.jpg in the ROI
+                template_path = os.path.join(TEMPLATES_PATH, "shut-down-icon.jpg")
+                template = cv2.imread(template_path)
+                
+                if template is None:
+                    print("MAIN_MENU_DETECTED=0")
+                    print("ERROR=Could not read shut-down-icon.jpg template")
+                    logging.error(f"Could not read template: {template_path}")
+                    sys.exit(1)
+                
+                # Make sure template size is not bigger than the ROI
+                if template.shape[0] > roi.shape[0] or template.shape[1] > roi.shape[1]:
+                    print("MAIN_MENU_DETECTED=0")
+                    print("ERROR=Template larger than ROI")
+                    sys.exit(1)
+                
+                # Perform template matching
+                result = cv2.matchTemplate(roi, template, cv2.TM_CCOEFF_NORMED)
+                min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+                
+                # Print the match confidence for debug purposes
+                logging.info(f"Main menu template match confidence: {max_val:.4f}")
+                
+                if max_val >= 0.9:
+                    # Main menu icon found
+                    print("MAIN_MENU_DETECTED=1")
+                    print(f"CONFIDENCE={max_val:.4f}")
+                    logging.info(f"Main menu detected with confidence {max_val:.4f}")
+                    
+                    # Draw box around the match for visualization
+                    h, w = template.shape[:2]
+                    top_left = max_loc
+                    bottom_right = (top_left[0] + w, top_left[1] + h)
+                    
+                    match_visualization = roi.copy()
+                    cv2.rectangle(match_visualization, top_left, bottom_right, (0, 255, 0), 2)
+                else:
+                    # Icon not found
+                    print("MAIN_MENU_DETECTED=0")
+                    print(f"CONFIDENCE={max_val:.4f}")
+                    logging.info(f"Main menu not detected (confidence: {max_val:.4f})")
+            else:
+                print("MAIN_MENU_DETECTED=0")
+                print("ERROR=Missing ROI parameters")
+        except Exception as e:
+            print("MAIN_MENU_DETECTED=0")
+            print(f"ERROR={str(e)}")
+            logging.error(f"Error checking main menu: {str(e)}")
+            logging.error(traceback.format_exc())
 
     elif command == "error":
         found, coords = detect_error_dialog()
@@ -911,14 +997,6 @@ if __name__ == "__main__":
                 # Extract the ROI
                 roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
                 
-                # Save the ROI for debugging
-                timestamp = int(time.time())
-                debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
-                os.makedirs(debug_dir, exist_ok=True)
-                debug_path = os.path.join(debug_dir, f"scoreboard_icon_roi_{timestamp}.png")
-                cv2.imwrite(debug_path, roi)
-                logging.info(f"Saved scoreboard icon ROI to: {debug_path}")
-                
                 # Detect the valve-cs2-icon.jpg in the ROI
                 template_path = os.path.join(TEMPLATES_PATH, "valve-cs2-icon.jpg")
                 found, coords = detect_template(roi, "valve-cs2-icon", threshold=0.7)
@@ -929,13 +1007,6 @@ if __name__ == "__main__":
                     print("SCOREBOARD_VISIBLE=1")
                     print(f"ICON_Y={icon_y}")
                     logging.info(f"Scoreboard icon found at Y: {icon_y}")
-                    
-                    # Save a copy of the matched region for verification
-                    template = cv2.imread(template_path)
-                    h, w = template.shape[:2]
-                    matched_region = roi[coords[1]-5:coords[1]+h+5, coords[0]-5:coords[0]+w+5]
-                    match_path = os.path.join(debug_dir, f"scoreboard_icon_match_{timestamp}.png")
-                    cv2.imwrite(match_path, matched_region)
                 else:
                     # Icon not found
                     print("SCOREBOARD_VISIBLE=0")
