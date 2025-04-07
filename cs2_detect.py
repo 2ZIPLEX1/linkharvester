@@ -118,7 +118,8 @@ def detect_template(image_input, template_name, threshold=None, roi=None):
             "spectate_button": 0.8,
             "error_dialog": 0.7,
             "error_dialog_2": 0.7,
-            "error_dialog_3": 0.7
+            "error_dialog_3": 0.7,
+            "error_dialog_4": 0.7
         }
         
         # Set default ROIs for each template type (if not provided)
@@ -126,7 +127,8 @@ def detect_template(image_input, template_name, threshold=None, roi=None):
             "spectate_button": (1577, 1008, 122, 47),
             "error_dialog": (704, 431, 512, 218),
             "error_dialog_2": (600, 350, 720, 379),
-            "error_dialog_3": (704, 431, 512, 218)
+            "error_dialog_3": (704, 431, 512, 218),
+            "error_dialog_4": (704, 431, 512, 218)
         }
         
         # Use provided threshold or default for this template
@@ -223,9 +225,10 @@ def detect_error_dialog():
     found1, _ = detect_template(screenshot, "error_dialog", 0.7, error_roi)
     found2, _ = detect_template(screenshot, "error_dialog_2", 0.7, error_roi)
     found3, _ = detect_template(screenshot, "error_dialog_3", 0.7, error_roi)
+    found4, _ = detect_template(screenshot, "error_dialog_4", 0.7, error_roi)
     
     # If any error dialog was found
-    if found1 or found2 or found3:
+    if found1 or found2 or found3 or found4:
         # Determine dialog type 
         if found3:
             dialog_type = "fatal"
@@ -313,7 +316,115 @@ def check_tesseract_available():
         logging.error(f"Error checking Tesseract availability: {str(e)}")
         print(f"ERROR: Could not check Tesseract OCR: {str(e)}")
         return False
+
+def find_attention_icon_in_region(img, base_y):
+    """
+    Find the first attention icon in a region, starting at offset from base_y.
     
+    Args:
+        img: The screenshot image
+        base_x: Base X coordinate (unused but kept for compatibility)
+        base_y: Base Y coordinate - search will start below this point
+        y_offset: Additional vertical offset to avoid finding the same icon (default 10px)
+        
+    Returns:
+        tuple: (found, icon_coords, player_coords) where coords are (x, y) if found
+    """
+    try:
+        # Calculate the search region - fixed width but shifted vertically
+        roi_x = 1358
+        roi_width = 38
+        roi_height = 450
+        
+        # If base_y is provided and > 0, start the search below it (with offset)
+        # Otherwise use the default starting position
+        if base_y > 0:
+            roi_y = base_y + 10  # Start search just below the previous player
+            logging.info(f"Shifting search region to start at y={roi_y}")
+        else:
+            roi_y = 290  # Default starting position
+            logging.info(f"Using default search region starting at y={roi_y}")
+        
+        # Ensure ROI is within image bounds
+        img_height, img_width = img.shape[:2]
+        roi_x = max(0, min(roi_x, img_width - 1))
+        roi_y = max(0, min(roi_y, img_height - 1))
+        roi_width = min(roi_width, img_width - roi_x)
+        roi_height = min(roi_height, img_height - roi_y)
+        
+        # Create debug directory
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        timestamp = int(time.time())
+        
+        # Extract the ROI
+        roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
+        
+        # Load the template
+        template_path = os.path.join(TEMPLATES_PATH, "attention-icon.jpg")
+        template = cv2.imread(template_path)
+        
+        if template is None:
+            logging.error(f"Could not read attention icon template: {template_path}")
+            return False, None, None
+        
+        # Convert to grayscale
+        roi_gray = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
+        template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        
+        # Perform template matching
+        result = cv2.matchTemplate(roi_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+        
+        # Find all matches above a certain threshold
+        threshold = 0.9
+        loc = np.where(result >= threshold)
+        matches = list(zip(*loc[::-1]))  # Convert to (x, y) format
+        
+        # Create a visualization with all matches
+        vis_img = roi.copy()
+        h, w = template.shape[:2]
+        
+        logging.info(f"Found {len(matches)} attention icon matches above threshold {threshold}")
+        
+        if matches:
+            # Sort matches by y-coordinate (top to bottom)
+            matches.sort(key=lambda m: m[1])
+            
+            # Take the top-most match
+            match_x, match_y = matches[0]
+            
+            # Calculate center of the match
+            center_x = match_x + w // 2
+            center_y = match_y + h // 2
+            
+            # Draw rectangles for all matches (red)
+            for mx, my in matches:
+                cv2.rectangle(vis_img, (mx, my), (mx + w, my + h), (0, 0, 255), 2)
+            
+            # Draw rectangle for the selected match (green)
+            cv2.rectangle(vis_img, (match_x, match_y), (match_x + w, match_y + h), (0, 255, 0), 2)
+            cv2.putText(vis_img, "SELECTED", (match_x, match_y - 5), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+
+            # Convert to absolute coordinates
+            abs_x = roi_x + center_x
+            abs_y = roi_y + center_y
+            
+            # Calculate the player click position (relative to the attention icon)
+            player_x = abs_x - 638
+            player_y = abs_y
+            
+            logging.info(f"Selected topmost attention icon at relative position: {match_x},{match_y}")
+            logging.info(f"Absolute attention icon position: {abs_x},{abs_y}")
+            logging.info(f"Calculated player click position: {player_x},{player_y}")
+            
+            return True, (abs_x, abs_y), (player_x, player_y)
+        else:
+            return False, None, None
+    except Exception as e:
+        logging.error(f"Error in find_attention_icon_in_region: {str(e)}")
+        logging.error(traceback.format_exc())
+        return False, None, None
+
 def detect_profile_button(region_x=None, region_y=None, region_width=None, region_height=None):
     """
     Detect profile button in a screenshot
@@ -971,6 +1082,49 @@ if __name__ == "__main__":
         if found and coords:
             print(f"SPECTATE_COORDS={coords[0]},{coords[1]}")
     
+    elif command == "find_first_attention_icon":
+        try:
+            # Check if ROI parameters were provided
+            if len(sys.argv) > 5:
+                roi_x = int(sys.argv[2])
+                roi_y = int(sys.argv[3])
+                roi_width = int(sys.argv[4])
+                roi_height = int(sys.argv[5])
+                
+                # Get the latest screenshot
+                screenshot_path = get_latest_screenshot()
+                if not screenshot_path:
+                    print("ATTENTION_ICON_FOUND=0")
+                    print("ERROR=No recent screenshot found")
+                    sys.exit(1)
+                
+                # Read the screenshot
+                img = cv2.imread(screenshot_path)
+                if img is None:
+                    print("ATTENTION_ICON_FOUND=0")
+                    print("ERROR=Could not read screenshot")
+                    sys.exit(1)
+                    
+                # Search for the first attention icon
+                found, abs_coords, player_coords = find_attention_icon_in_region(img, 0)
+                
+                if found:
+                    print("ATTENTION_ICON_FOUND=1")
+                    print(f"ATTENTION_ICON_COORDS={abs_coords[0]},{abs_coords[1]}")
+                    print(f"PLAYER_CLICK_COORDS={player_coords[0]},{player_coords[1]}")
+                    logging.info(f"First attention icon found at {abs_coords}, suggesting player click at {player_coords}")
+                else:
+                    print("ATTENTION_ICON_FOUND=0")
+                    logging.info("No attention icons found in initial scan")
+            else:
+                print("ATTENTION_ICON_FOUND=0")
+                print("ERROR=Missing ROI parameters")
+        except Exception as e:
+            print("ATTENTION_ICON_FOUND=0")
+            print(f"ERROR={str(e)}")
+            logging.error(f"Error finding first attention icon: {str(e)}")
+            logging.error(traceback.format_exc())
+    
     elif command == "check_scoreboard":
         try:
             # Check if ROI parameters were provided
@@ -1042,6 +1196,96 @@ if __name__ == "__main__":
     
     elif command == "extract_and_process_url":
         extract_and_process_steam_url()
+    
+    elif command == "check_attention_icon":
+        try:
+            # Check if ROI parameters were provided
+            if len(sys.argv) > 5:
+                roi_x = int(sys.argv[2])
+                roi_y = int(sys.argv[3])
+                roi_width = int(sys.argv[4])
+                roi_height = int(sys.argv[5])
+                
+                # Get the latest screenshot
+                screenshot_path = get_latest_screenshot()
+                if not screenshot_path:
+                    print("ATTENTION_ICON_FOUND=0")
+                    print("ERROR=No recent screenshot found")
+                    sys.exit(1)
+                
+                # Read the screenshot
+                img = cv2.imread(screenshot_path)
+                if img is None:
+                    print("ATTENTION_ICON_FOUND=0")
+                    print("ERROR=Could not read screenshot")
+                    sys.exit(1)
+                
+                # Ensure ROI is within image bounds
+                img_height, img_width = img.shape[:2]
+                roi_x = max(0, min(roi_x, img_width - 1))
+                roi_y = max(0, min(roi_y, img_height - 1))
+                roi_width = min(roi_width, img_width - roi_x)
+                roi_height = min(roi_height, img_height - roi_y)
+                
+                if roi_width <= 0 or roi_height <= 0:
+                    print("ATTENTION_ICON_FOUND=0")
+                    print("ERROR=Invalid ROI dimensions")
+                    sys.exit(1)
+                
+                # Extract the ROI
+                roi = img[roi_y:roi_y+roi_height, roi_x:roi_x+roi_width]
+                
+                # Save the extracted region for debugging
+                timestamp = int(time.time())
+                debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+                os.makedirs(debug_dir, exist_ok=True)
+                
+                # Save the full screenshot with ROI rectangle drawn
+                debug_full_path = os.path.join(debug_dir, f"attention_icon_full_{timestamp}.png")
+                img_with_rect = img.copy()
+                cv2.rectangle(img_with_rect, (roi_x, roi_y), (roi_x + roi_width, roi_y + roi_height), (0, 255, 0), 2)
+                cv2.imwrite(debug_full_path, img_with_rect)
+                logging.info(f"Saved full screenshot with ROI to: {debug_full_path}")
+                
+                # Save the ROI itself
+                debug_roi_path = os.path.join(debug_dir, f"attention_icon_roi_{timestamp}_{roi_x}_{roi_y}.png")
+                cv2.imwrite(debug_roi_path, roi)
+                logging.info(f"Saved attention icon ROI to: {debug_roi_path}")
+                
+                # Detect the attention-icon.jpg in the ROI
+                found, coords = detect_template(roi, "attention-icon", threshold=0.7)
+                
+                if found:
+                    # If found, save a marked version showing where it was found
+                    roi_with_marker = roi.copy()
+                    cv2.circle(roi_with_marker, coords, 15, (0, 255, 0), 2)
+                    debug_found_path = os.path.join(debug_dir, f"attention_icon_found_{timestamp}.png")
+                    cv2.imwrite(debug_found_path, roi_with_marker)
+                    logging.info(f"Saved marked attention icon detection to: {debug_found_path}")
+                    
+                    # Icon found
+                    print("ATTENTION_ICON_FOUND=1")
+                    print(f"ATTENTION_ICON_COORDS={coords[0]},{coords[1]}")
+                    print(f"DEBUG_IMAGES_SAVED=1")
+                    print(f"FULL_IMAGE={debug_full_path}")
+                    print(f"ROI_IMAGE={debug_roi_path}")
+                    print(f"FOUND_IMAGE={debug_found_path}")
+                    logging.info(f"Attention icon found at ROI coordinates: {coords}")
+                else:
+                    # Icon not found
+                    print("ATTENTION_ICON_FOUND=0")
+                    print(f"DEBUG_IMAGES_SAVED=1")
+                    print(f"FULL_IMAGE={debug_full_path}")
+                    print(f"ROI_IMAGE={debug_roi_path}")
+                    logging.info("Attention icon not found in ROI")
+            else:
+                print("ATTENTION_ICON_FOUND=0")
+                print("ERROR=Missing ROI parameters")
+        except Exception as e:
+            print("ATTENTION_ICON_FOUND=0")
+            print(f"ERROR={str(e)}")
+            logging.error(f"Error checking attention icon: {str(e)}")
+            logging.error(traceback.format_exc())
 
     else:
         print(f"Unknown command: {command}")

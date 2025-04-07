@@ -36,9 +36,9 @@ Global CONFIG := {
 
 ; Map coordinates in a Map object for easy reference
 Global MAP_COORDINATES := Map(
-    ; "Sigma", {x: 502, y: 570, name: "Sigma"},
+    "Sigma", {x: 502, y: 570, name: "Sigma"},
     "Delta", {x: 868, y: 570, name: "Delta"},
-    ; "DustII", {x: 1230, y: 570, name: "Dust II"},
+    "DustII", {x: 1230, y: 570, name: "Dust II"},
     "Hostage", {x: 1596, y: 570, name: "Hostage Group"}
 )
 
@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 1 {
+    Loop 2 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -79,8 +79,8 @@ Main() {
 
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
-    ; mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    mapKeys := ["Delta", "Hostage"]
+    mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
+    ; mapKeys := ["Delta"]
     
     ; Process each map in order
     for mapKey in mapKeys {
@@ -119,40 +119,33 @@ IsAtMainMenu() {
     return InStr(result, "MAIN_MENU_DETECTED=1")
 }
 
-EnsureAtMainMenu(maxAttempts := 3) {
+EnsureAtMainMenu(maxAttempts := 2) {
     LogMessage("Ensuring we're at the main menu...")
     
-    Loop maxAttempts {
-        ; Check if we're already at the main menu
+    ; First check if we're already at the main menu
+    if (IsAtMainMenu()) {
+        LogMessage("Already at main menu")
+        return true
+    }
+    
+    ; First attempt: Try to get back to main menu by clicking in the corner
+    LogMessage("Attempting to return to main menu (attempt 1)")
+    Click 31, 31
+    Sleep 2000
+    
+    ; Final attempt: Try to disconnect from match (more aggressive approach)
+    LogMessage("Basic attempts failed, trying DisconnectFromMatch function")
+    if (DisconnectFromMatch()) {
+        Sleep 3000  ; Give it more time to return to menu after disconnect
+        
+        ; Final check
         if (IsAtMainMenu()) {
-            LogMessage("Already at main menu")
-            return true
-        }
-        
-        ; Try to get back to main menu by clicking in the corner (31,31)
-        LogMessage("Attempting to return to main menu (attempt " A_Index "/" maxAttempts ")")
-        Click 31, 31
-        Sleep 2000
-        
-        ; Check again
-        if (IsAtMainMenu()) {
-            LogMessage("Successfully returned to main menu")
-            return true
-        }
-        
-        ; If click didn't work, try Escape as a fallback
-        LogMessage("Corner click didn't work, trying Escape key as fallback")
-        Send "{Escape}"
-        Sleep 2000
-        
-        ; Check once more
-        if (IsAtMainMenu()) {
-            LogMessage("Successfully returned to main menu using Escape")
+            LogMessage("Successfully returned to main menu after disconnecting")
             return true
         }
     }
     
-    LogMessage("Failed to return to main menu after " maxAttempts " attempts")
+    LogMessage("Failed to return to main menu after all attempts")
     return false
 }
 

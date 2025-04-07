@@ -152,8 +152,8 @@ WaitForMatchOutcome() {
     timeout := 600000  ; 10 minutes in milliseconds
     
     ; Time to wait before starting error checks (allowing time for match loading)
-    initialErrorWait := 10000  ; 10 seconds
-    errorCheckInterval := 3000  ; Check for errors every 3 seconds after initial wait
+    initialErrorWait := 1000  ; 10 seconds
+    errorCheckInterval := 3000  ; Check for errors every 5 seconds after initial wait
     lastErrorCheckTime := 0
     
     ; Flag to track if spectate button detection is successful

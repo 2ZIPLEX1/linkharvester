@@ -269,48 +269,77 @@ AddToSteamProfileQueue(url) {
     }
 }
 
-; Corrected ProcessPlayersGridMethod function with optimized checks
+; Enhanced ProcessPlayersGridMethod with dynamic icon-based positioning
 ProcessPlayersGridMethod() {
     LogMessage("Processing players using grid method with structured profile analysis...")
     
     ; Default constants for grid scanning
     defaultStartX := 720       ; X coordinate to start scanning
     defaultStartY := 326       ; Default Y coordinate to start scanning (fallback)
-    endY := 836                ; Y coordinate to stop scanning
-    rowHeight := 26            ; Vertical distance between rows
+    endY := 836                ; Y coordinate to stop scanning (safety limit)
     
     ; Counter for profiles found
     profilesFound := 0
     
-    ; Ensure the scoreboard is visible and get the icon's Y position
-    iconStartY := 0
-    if (!EnsureScoreboardVisible(&iconStartY)) {
-        LogMessage("Failed to ensure scoreboard is visible. Exiting.")
+    ; Counter for consecutive failures
+    consecutiveFailures := 0
+    
+    ; Flag to track if we have a next position from icon detection
+    haveNextIconPosition := false
+    nextClickX := 0
+    nextClickY := 0
+    
+    ; Simply press Escape to view the scoreboard
+    LogMessage("Opening scoreboard with Escape key...")
+    Send "{Escape}"
+    Sleep 1000
+    
+    ; Take a screenshot for attention icon detection
+    LogMessage("Searching for attention icons...")
+    CaptureScreenshot()
+    Sleep 800
+    
+    ; Search in the right side area for attention icons
+    firstIconResult := RunPythonDetector("find_first_attention_icon 1358 290 38 450")
+    LogMessage("First icon search result: " firstIconResult)
+    
+    ; Check if an icon was found and get its coordinates
+    if InStr(firstIconResult, "ATTENTION_ICON_FOUND=1") {
+        if RegExMatch(firstIconResult, "PLAYER_CLICK_COORDS=(\d+),(\d+)", &coordMatch) {
+            startX := Integer(coordMatch[1])
+            startY := Integer(coordMatch[2])
+            LogMessage("Found first attention icon! Starting at: X=" startX ", Y=" startY)
+        } else {
+            ; Fall back to defaults if coordinates couldn't be parsed
+            startX := defaultStartX
+            startY := defaultStartY
+            LogMessage("Attention icon found but couldn't parse coordinates. Using defaults: X=" startX ", Y=" startY)
+        }
+    } else {
+        LogMessage("No attention icons found in scoreboard. This might be an empty match or scoreboard not showing.")
+        LogMessage("Disconnecting from match since no players to analyze...")
+        DisconnectFromMatch()
         return false
     }
     
-    ; Calculate optimal starting Y position based on icon's Y position
-    startY := (iconStartY > 0) ? (iconStartY + 65) : defaultStartY
-    startX := defaultStartX
-    
-    LogMessage("Using icon-based starting position: X=" startX ", Y=" startY " (icon found at Y=" iconStartY ")")
-    
-    ; Iterate through the grid pattern
+    ; Iterate through the player grid using initial position
+    currentX := startX
     currentY := startY
-    while (currentY <= endY) {
-        LogMessage("Checking row at y-coordinate: " currentY)
+    
+    while (currentY <= endY) {  ; Keep the safety limit to prevent infinite loops
+        LogMessage("Checking player at coordinates: " currentX "," currentY)
         
         ; Click at the current position
-        Click startX, currentY
+        Click currentX, currentY
         Sleep 900  ; Wait for any profile window to appear
         
         ; Take a screenshot to check if profile details loaded
         CaptureScreenshot()
         Sleep 800  ; Wait for screenshot to be saved
         
-        ; Perform initial profile analysis (includes profile button, sympathies, and medals check)
+        ; Perform profile analysis (includes profile button, sympathies, medals, and next attention icon check)
         LogMessage("Performing profile analysis...")
-        analysisResult := RunPythonDetector("analyze_profile " startX " " currentY)
+        analysisResult := RunPythonDetector("analyze_profile " currentX " " currentY)
         LogMessage("Profile analysis result: " analysisResult)
         
         ; Parse the initial analysis results
@@ -320,6 +349,47 @@ ProcessPlayersGridMethod() {
         unwanted_medals_found := InStr(analysisResult, "UNWANTED_MEDALS_FOUND=1")
         more_medals_available := InStr(analysisResult, "CLICK_TO_SEE_MORE_MEDALS=1")
         too_many_sympathies := InStr(analysisResult, "TOO_MANY_SYMPATHIES=1")
+        
+        ; Check for next attention icon coordinates
+        haveNextIconPosition := InStr(analysisResult, "NEXT_ATTENTION_ICON_FOUND=1")
+        if (haveNextIconPosition) {
+            if RegExMatch(analysisResult, "NEXT_CLICK_COORDS=(\d+),(\d+)", &nextCoordMatch) {
+                nextClickX := Integer(nextCoordMatch[1])
+                nextClickY := Integer(nextCoordMatch[2])
+                LogMessage("Found next player position at: " nextClickX "," nextClickY " (from attention icon)")
+            } else {
+                haveNextIconPosition := false
+            }
+        }
+        
+        ; Check if profile details loaded
+        if (!profile_button_found) {
+            ; Increment consecutive failures counter
+            consecutiveFailures++
+            LogMessage("No profile details loaded. Consecutive failures: " consecutiveFailures)
+            
+            ; After 3 consecutive failures, check if we should exit
+            if (consecutiveFailures >= 3) {
+                LogMessage("Three consecutive failures reached. Verifying options...")
+                
+                ; If we have a next position from icon detection, try that before giving up
+                if (haveNextIconPosition) {
+                    LogMessage("Found next attention icon despite failures. Will try that position.")
+                    consecutiveFailures := 1  ; Reset but not to zero to keep some caution
+                } else {
+                    LogMessage("No next attention icon found after 3 failures. Exiting to lobby...")
+                    
+                    ; Use console to disconnect from match
+                    DisconnectFromMatch()
+                    
+                    ; Return true to indicate we've finished with this map
+                    return true
+                }
+            }
+        } else {
+            ; Reset consecutive failures counter since we found a profile
+            consecutiveFailures := 0
+        }
         
         ; Extract sympathies sum for logging
         sympathies_sum := 0
@@ -341,7 +411,7 @@ ProcessPlayersGridMethod() {
         }
         
         ; Log comprehensive analysis results
-        LogMessage("Initial analysis summary:")
+        LogMessage("Analysis summary:")
         LogMessage("- Profile button found: " (profile_button_found ? "Yes" : "No"))
         if (profile_button_found) {
             LogMessage("- Sympathies sum: " sympathies_sum)
@@ -352,6 +422,7 @@ ProcessPlayersGridMethod() {
             LogMessage("- More medals available: " (more_medals_available ? "Yes" : "No"))
             LogMessage("- Medal count: " medalCount)
         }
+        LogMessage("- Next player position from icon: " (haveNextIconPosition ? "Yes" : "No"))
         
         ; Make initial decision
         shouldContinue := true
@@ -378,7 +449,7 @@ ProcessPlayersGridMethod() {
         ; If we need to continue and more medals are available, click on the arrow
         while (shouldContinue && more_medals_available && arrowClickCount < maxArrowClicks) {
             ; Default arrow coordinates (fallback if detection fails)
-            arrowX := startX + 394
+            arrowX := currentX + 394
             arrowY := currentY - 35
             
             ; Try to get precise arrow coordinates from Python analysis
@@ -420,7 +491,7 @@ ProcessPlayersGridMethod() {
             
             ; Analyze again with the new screenshot
             LogMessage("Performing follow-up profile analysis after arrow click...")
-            followUpResult := RunPythonDetector("analyze_profile " startX " " currentY)
+            followUpResult := RunPythonDetector("analyze_profile " currentX " " currentY)
             
             ; Update the state variables that might change
             if (!five_year_medal_found)
@@ -434,6 +505,18 @@ ProcessPlayersGridMethod() {
             ; Update medal count for logging
             if RegExMatch(followUpResult, "MEDAL_COUNT=(\d+)", &countMatch)
                 medalCount := Integer(countMatch[1])
+                
+            ; Check for updated next attention icon position
+            if InStr(followUpResult, "NEXT_ATTENTION_ICON_FOUND=1") {
+                haveNextIconPosition := true
+                if RegExMatch(followUpResult, "NEXT_CLICK_COORDS=(\d+),(\d+)", &nextCoordMatch) {
+                    nextClickX := Integer(nextCoordMatch[1])
+                    nextClickY := Integer(nextCoordMatch[2])
+                    LogMessage("Updated next player position: " nextClickX "," nextClickY)
+                } else {
+                    haveNextIconPosition := false
+                }
+            }
                 
             ; For the next iteration, we need the full new analysis result
             analysisResult := followUpResult
@@ -471,31 +554,44 @@ ProcessPlayersGridMethod() {
                 
                 ; Extract Steam profile URL
                 steamProfileUrl := ExtractSteamProfileUrl()
+                
+                ; Increment profiles found counter if URL was extracted
+                if (steamProfileUrl) {
+                    profilesFound++
+                    LogMessage("Profile #" profilesFound " processed successfully with URL: " steamProfileUrl)
+                }
             } else {
                 LogMessage("Player has 4+ medals but no 5-year coin, skipping profile")
                 
                 ; Need to close profile details in this case
                 LogMessage("Clicking again to close profile details")
-                Click startX, currentY
+                Click currentX, currentY
                 Sleep 300
             }
         } else {
             ; Only click to close profile details if we didn't open Steam profile
             LogMessage("Clicking again to close profile details")
-            Click startX, currentY
+            Click currentX, currentY
             Sleep 300
         }
         
-        ; Move to the next row
-        currentY += rowHeight
+        ; Move to the next row using either icon-based position or default offset
+        if (haveNextIconPosition) {
+            ; Use the position from attention icon detection
+            currentX := nextClickX
+            currentY := nextClickY
+            LogMessage("Moving to next player using attention icon coordinates: " currentX "," currentY)
+        } else {
+            ; No more attention icons found - we've reached the end of human players
+            LogMessage("No more attention icons found - we've reached the end of human players in this match")
+            LogMessage("Disconnecting from match to save time...")
+            DisconnectFromMatch()
+            return profilesFound > 0
+        }
     }
     
+    ; This should rarely be reached since we now exit when no more attention icons are found
     LogMessage("Grid scanning completed. Found " profilesFound " qualified player profiles.")
-    
-    ; Return to normal game view
-    ; Send "{Escape}"  ; Close the scoreboard
-    ; Sleep 500
-    
     return profilesFound > 0
 }
 
@@ -595,7 +691,7 @@ ProcessMatch() {
     ReturnToMainMenu()
 
     ; Clean up screenshots that are no longer needed
-    ; CleanupScreenshots()
+    CleanupScreenshots()
     
     if (success) {
         LogMessage("Match processing completed successfully")

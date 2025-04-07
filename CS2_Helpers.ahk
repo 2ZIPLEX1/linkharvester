@@ -337,6 +337,28 @@ RunPythonDetector(command) {
     }
 }
 
+; Function to check if the attention icon is visible at a specific position
+IsAttentionIconVisible(x, y) {
+    LogMessage("Checking for attention icon near position: " x "," y)
+    
+    ; Calculate ROI for attention icon (x+641, y-9 with size 31x31)
+    iconRoiX := x + 641 - 15  ; Expand a bit for tolerance
+    iconRoiY := y - 9 - 15    ; Expand a bit for tolerance
+    iconRoiWidth := 31 + 30   ; Expand a bit for tolerance
+    iconRoiHeight := 31 + 30  ; Expand a bit for tolerance
+    
+    ; Take a screenshot
+    CaptureScreenshot()
+    Sleep 800  ; Wait for screenshot to be saved
+    
+    ; Run Python detector
+    result := RunPythonDetector("check_attention_icon " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
+    LogMessage("Attention icon check result: " result)
+    
+    ; Check if icon was detected
+    return InStr(result, "ATTENTION_ICON_FOUND=1")
+}
+
 ; Function to clear the URL cache at the start of a new server round
 ClearUrlCache() {
     LogMessage("Clearing URL cache for new server round...")
@@ -378,7 +400,7 @@ CleanupScreenshots() {
     }
 }
 
-; Function to disconnect from match using console command
+; Function to disconnect from match using console command 
 DisconnectFromMatch() {
     try {
         LogMessage("Disconnecting from match using console command...")
@@ -398,15 +420,12 @@ DisconnectFromMatch() {
         Send "``"
         
         ; Wait for disconnection to complete and return to lobby
-        LogMessage("Waiting for disconnection to complete (3 seconds)...")
-        Sleep 3000
+        LogMessage("Waiting for disconnection to complete (1 second)...")
+        Sleep 1000
         
         ; Verify we're in the lobby by looking for Play button
         ; This could be enhanced with a visual check for the play button
         LogMessage("Checking if we're back in the lobby")
-        
-        ; Take a screenshot to verify state if needed
-        CaptureScreenshot()
         
         ; For now, we'll just assume the 3-second wait was sufficient
         ; In the future, this could be extended with a visual verification

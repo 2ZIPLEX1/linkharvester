@@ -83,6 +83,7 @@ def detect_template(image_input, template_name, threshold=None, roi=None):
             "error_dialog": 0.7,
             "error_dialog_2": 0.7,
             "error_dialog_3": 0.7,
+            "error_dialog_4": 0.7,
             "profile-button": 0.7,
             "right-arrow": 0.7
         }

@@ -817,14 +817,34 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         
         # STEP 1: Get the profile ROI from the screenshot
         profile_roi, roi_x, roi_y = get_profile_roi(click_x, click_y, screenshot_path)
+        
+        # Get the full screenshot for attention icon detection
+        screenshot_path = get_latest_screenshot(screenshot_path)
+        if screenshot_path:
+            full_img = cv2.imread(screenshot_path)
+            
+            # Look for the next attention icon
+            from cs2_detect import find_attention_icon_in_region
+            icon_found, icon_coords, next_click_coords = find_attention_icon_in_region(
+                full_img, click_y)
+                
+            if icon_found:
+                print(f"NEXT_ATTENTION_ICON_FOUND=1")
+                print(f"NEXT_ATTENTION_ICON_COORDS={icon_coords[0]},{icon_coords[1]}")
+                print(f"NEXT_CLICK_COORDS={next_click_coords[0]},{next_click_coords[1]}")
+                logging.info(f"Found next attention icon at {icon_coords}, suggesting next click at {next_click_coords}")
+            else:
+                print("NEXT_ATTENTION_ICON_FOUND=0")
+                logging.info("No next attention icon found")
+        
         if profile_roi is None:
             # Error already logged and printed by get_profile_roi
             print("PROFILE_ANALYSIS_RESULT=0")
             print("PROFILE_BUTTON_FOUND=0")
-            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
-            print(f"SMILE_VALUE={sympathies_result['smile_value']}")
-            print(f"TEACH_VALUE={sympathies_result['teach_value']}")
-            print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+            print("SYMPATHIES_SUM=0")
+            print("SMILE_VALUE=0")
+            print("TEACH_VALUE=0")
+            print("CROWN_VALUE=0")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
             print("THREE_PLUS_MEDALS_FOUND=0")
@@ -874,17 +894,12 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print(f"SMILE_VALUE={sympathies_result['smile_value']}")
             print(f"TEACH_VALUE={sympathies_result['teach_value']}")
             print(f"CROWN_VALUE={sympathies_result['crown_value']}")
-            print("TOO_MANY_SYMPATHIES=0")
+            print("TOO_MANY_SYMPATHIES=1")
             print("UNWANTED_MEDALS_FOUND=0")  # Not relevant when skipping due to sympathies
             print("THREE_PLUS_MEDALS_FOUND=0") # Not relevant when skipping due to sympathies
             print("FIVE_YEAR_MEDAL_FOUND=0")  # Not relevant when skipping due to sympathies
             print("CLICK_TO_SEE_MORE_MEDALS=0")  # Not relevant when skipping due to sympathies
-            print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
-            print("TOO_MANY_SYMPATHIES=1")
             
-            # Save debug visualization
-            debug_path = os.path.join(debug_dir, f"profile_too_many_sympathies_{timestamp}.png")
-            cv2.imwrite(debug_path, visualization)
             return
         
         # STEP 4: Check for unwanted medals first
@@ -910,10 +925,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             # Add detected unwanted medals to output
             for medal_name in unwanted_medal_result["detected_unwanted_medals"]:
                 print(f"UNWANTED_MEDAL_DETECTED={medal_name}")
-            
-            # Save debug visualization
-            debug_path = os.path.join(debug_dir, f"profile_unwanted_medals_{timestamp}.png")
-            cv2.imwrite(debug_path, visualization)
+
             return
         
         # STEP 5: Detect regular medals
@@ -942,10 +954,7 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             # Include individual medal information
             for medal_name in medal_result["detected_medals"]:
                 print(f"MEDAL_DETECTED={medal_name}")
-            
-            # Save debug visualization
-            debug_path = os.path.join(debug_dir, f"profile_insufficient_medals_{timestamp}.png")
-            cv2.imwrite(debug_path, visualization)
+
             return
         
         # STEP 6: Check for medal arrow
@@ -994,10 +1003,10 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         logging.error(traceback.format_exc())
         print("PROFILE_ANALYSIS_RESULT=0")
         print("PROFILE_BUTTON_FOUND=0")
-        print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
-        print(f"SMILE_VALUE={sympathies_result['smile_value']}")
-        print(f"TEACH_VALUE={sympathies_result['teach_value']}")
-        print(f"CROWN_VALUE={sympathies_result['crown_value']}")
+        print("SYMPATHIES_SUM=0")
+        print("SMILE_VALUE=0")
+        print("TEACH_VALUE=0")
+        print("CROWN_VALUE=0")
         print("TOO_MANY_SYMPATHIES=0")
         print("UNWANTED_MEDALS_FOUND=0")
         print("THREE_PLUS_MEDALS_FOUND=0")
