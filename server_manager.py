@@ -7,14 +7,14 @@ import time
 import logging
 from datetime import datetime
 
-# Print startup message to console (will be visible in PowerShell window)
+# Print startup message to console (will be visible in PowerShell window) 
 print("CS2 Server Manager starting...")
 print(f"Script path: {os.path.abspath(__file__)}")
 print(f"Current directory: {os.getcwd()}")
 
 # Setup logging to OneDrive Documents folder
 home_dir = os.path.expanduser("~")
-log_directory = "C:\\LinkHarvesterScript" 
+log_directory = "C:\\LinkHarvesterScript\logs" 
 
 # Create directories if they don't exist
 try:

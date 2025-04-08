@@ -650,7 +650,7 @@ EnsureScoreboardVisible(&iconStartY := 0) {
     
     ; If we've tried 3 times and failed
     LogMessage("Failed to detect scoreboard after 3 attempts. Exiting.")
-    MsgBox("Failed to detect CS2 scoreboard after 3 attempts.`n`nPlease check if the game is running correctly.", "Scoreboard Detection Error", "OK Icon!")
+    ; MsgBox("Failed to detect CS2 scoreboard after 3 attempts.`n`nPlease check if the game is running correctly.", "Scoreboard Detection Error", "OK Icon!")
     return false
 }
 

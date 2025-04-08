@@ -20,14 +20,22 @@ TESTING_MODE = False  # Set to False to disable testing mode
 PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
 
-# Configure logging
-LOG_FILE = os.path.join(PROJECT_PATH, 'image_recognition.log')
+# Configure logging 
+logs_dir = os.path.join(PROJECT_PATH, 'logs')
+os.makedirs(logs_dir, exist_ok=True)
+LOG_FILE = os.path.join(logs_dir, 'image_recognition.log')
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     filename=LOG_FILE,
     filemode='a'
 )
+
+def ensure_logs_directory():
+    """Ensure the logs directory exists."""
+    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
+    return logs_dir
 
 def get_latest_screenshot(screenshot_path=None):
     """

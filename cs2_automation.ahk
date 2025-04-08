@@ -10,7 +10,7 @@
 #Include "CS2_API_Integration.ahk"
 
 ; Initialize globals and setup
-Global LOG_FILE := "C:\LinkHarvesterScript\cs2_automation.log"
+Global LOG_FILE := "C:\LinkHarvesterScript\logs\cs2_automation.log"
 
 ; Make sure log directory exists
 If !DirExist(A_MyDocuments "\AutoHotkey")
@@ -48,7 +48,7 @@ Main()
 ; Main function
 Main() {
     ; Display minimal startup message
-    MsgBox("CS2 Automation Starting`n`nHotkeys: Ctrl+Alt+X = Emergency Exit, Ctrl+Alt+P = Pause/Resume`n`nClick OK to begin.", "CS2 Automation", "OK")
+    ; MsgBox("CS2 Automation Starting`n`nHotkeys: Ctrl+Alt+X = Emergency Exit, Ctrl+Alt+P = Pause/Resume`n`nClick OK to begin.", "CS2 Automation", "OK")
     
     ; Clear the URL cache at the beginning of each server round
     ClearUrlCache()
@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 2 {
+    Loop 1 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -74,13 +74,17 @@ Main() {
     }
     
     LogMessage("All rounds completed!")
-    MsgBox("CS2 Automation completed`n`nAll 3 rounds with 4 maps each have been processed.", "Done", "OK")
+    ; MsgBox("CS2 Automation completed`n`nAll 3 rounds with 4 maps each have been processed.", "Done", "OK")
+
+    ; Exit the script
+    LogMessage("All tasks completed. Exiting AHK...")
+    ExitApp
 }
 
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
     mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    ; mapKeys := ["Delta"]
+    ; mapKeys := ["Hostage"]
     
     ; Process each map in order
     for mapKey in mapKeys {
@@ -96,16 +100,20 @@ RunAllMaps(roundNumber) {
         LogMessage("Round " roundNumber ": Starting map " mapInfo.name)
         
         ; Run this map
-        success := RunMap(mapKey)
+        mapResult := RunMap(mapKey)
         
-        if (success) {
+        ; Check for fatal error
+        if (mapResult = "fatal_error") {
+            LogMessage("Fatal error detected. Exiting script...")
+            ; MsgBox("A fatal server connection error was detected.`n`nThe script will now exit.", "Fatal Error", 48)
+            ExitApp  ; Exit the entire script
+        }
+        
+        if (mapResult = true) {
             LogMessage("Round " roundNumber ": Successfully completed map " mapInfo.name)
         } else {
             LogMessage("Round " roundNumber ": Failed or skipped map " mapInfo.name)
         }
-        
-        ; Short pause between maps
-        ; Sleep 1000
     }
 }
 
@@ -183,6 +191,10 @@ RunMap(mapKey) {
         LogMessage("Finished with " mapInfo.name " match")
         return true
     }
+    else if (matchOutcome = "fatal_error") {
+        LogMessage("Fatal server error detected. Signaling for script termination.")
+        return "fatal_error"  ; Special return value for fatal errors
+    }
     else if (matchOutcome = "failure" || matchOutcome = "timeout") {
         LogMessage("Failed to join " mapInfo.name " match: " matchOutcome)
         
@@ -213,7 +225,7 @@ SelectMap(mapKey) {
     ; 1. Press Play button
     LogMessage("Clicking Play button at coordinates: " CONFIG.play_button_x "," CONFIG.play_button_y)
     Click CONFIG.play_button_x, CONFIG.play_button_y
-    Sleep 500
+    Sleep 1000
     
     ; 2. Select Matchmaking mode
     LogMessage("Selecting matchmaking mode at coordinates: " CONFIG.mode_selection_x "," CONFIG.mode_selection_y)
@@ -223,17 +235,17 @@ SelectMap(mapKey) {
     ; 3. Select League (Casual)
     LogMessage("Selecting casual league at coordinates: " CONFIG.league_selection_x "," CONFIG.league_selection_y)
     Click CONFIG.league_selection_x, CONFIG.league_selection_y
-    Sleep 500
+    Sleep 300
     
     ; 4. Select the specific map
     LogMessage("Selecting " mapInfo.name " map at coordinates: " mapInfo.x "," mapInfo.y)
     Click mapInfo.x, mapInfo.y
-    Sleep 500
+    Sleep 100
     
     ; 5. Accept/Start Match
     LogMessage("Clicking Accept Match at coordinates: " CONFIG.accept_match_x "," CONFIG.accept_match_y)
-    Click CONFIG.accept_match_x, CONFIG.accept_match_y
-    Sleep 500
+    Click 1550, 1030
+    ; Sleep 500
     
     LogMessage("Map selection sequence completed for: " mapInfo.name)
     return true

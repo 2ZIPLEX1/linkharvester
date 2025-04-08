@@ -27,7 +27,7 @@ IsSearching() {
     return false
 }
 
-; Check for error dialog with Escape key dismissal
+; Existing function, modified to return "fatal" when a fatal error is detected
 CheckForMatchmakingFailure() {
     
     try {
@@ -43,7 +43,7 @@ CheckForMatchmakingFailure() {
         if InStr(result, "ERROR_DETECTION_RESULT=1") {
             LogMessage("Error dialog detected positively!")
             
-            ; Check if this is error_dialog_3 (the fatal error)
+            ; Check if this is error_dialog_1, 2, or 3 (the fatal error)
             if InStr(result, "ERROR_TYPE=fatal") {
                 LogMessage("FATAL ERROR DIALOG DETECTED! Will exit script after dismissal.")
                 
@@ -53,7 +53,7 @@ CheckForMatchmakingFailure() {
                 Send "{Escape}"  ; Try a second time
                 
                 ; Display message box to inform user
-                MsgBox("Fatal error detected in CS2. The script will now exit.`n`nPlease restart CS2 manually.", "Fatal Error", 48)
+                ; MsgBox("Fatal error detected in CS2. The script will now exit.`n`nPlease restart CS2 manually.", "Fatal Error", 48)
                 
                 ; Signal that we need to exit
                 return "fatal"
@@ -149,12 +149,16 @@ WaitForMatchOutcome() {
     
     ; Store start time to enforce timeout
     startTime := A_TickCount
-    timeout := 600000  ; 10 minutes in milliseconds
+    timeout := 90000  ; 10 minutes in milliseconds
     
     ; Time to wait before starting error checks (allowing time for match loading)
-    initialErrorWait := 1000  ; 10 seconds
-    errorCheckInterval := 3000  ; Check for errors every 5 seconds after initial wait
+    initialErrorWait := 10000  ; 10 seconds
+    errorCheckInterval := 3000  ; Check for errors every 3 seconds after initial wait
     lastErrorCheckTime := 0
+    
+    ; Add a counter for consecutive error checks
+    consecutiveErrorChecks := 0
+    maxConsecutiveErrorChecks := 6  ; Maximum number of consecutive error checks before giving up
     
     ; Flag to track if spectate button detection is successful
     spectateButtonClicked := false
@@ -199,6 +203,7 @@ WaitForMatchOutcome() {
                 LogMessage("Returned to searching state, resetting phase")
                 currentPhase := 0
                 spectateButtonClicked := false  ; Reset this flag when we go back to searching
+                consecutiveErrorChecks := 0     ; Reset error check counter when we go back to searching
             }
             
             ; During search phase, we log less frequently and don't take screenshots
@@ -214,6 +219,7 @@ WaitForMatchOutcome() {
             searchingEndTime := A_TickCount
             LogMessage("Search phase ended, now in connecting/loading phase after " (searchingEndTime - startTime) / 1000 " seconds")
             lastErrorCheckTime := searchingEndTime  ; Initialize for first error check timing
+            consecutiveErrorChecks := 0  ; Reset the counter when entering loading phase
         }
         
         ; First priority: Check for Spectate button using pixel color method (only if we haven't clicked it yet)
@@ -256,6 +262,16 @@ WaitForMatchOutcome() {
                         return "fatal_error"
                     } else {
                         LogMessage("Matchmaking failure detected and handled")
+                        return "failure"
+                    }
+                } else {
+                    ; Increment consecutive error checks counter
+                    consecutiveErrorChecks++
+                    LogMessage("No error dialog found. Consecutive error checks: " consecutiveErrorChecks "/" maxConsecutiveErrorChecks)
+                    
+                    ; Check if we've reached the maximum consecutive error checks
+                    if (consecutiveErrorChecks >= maxConsecutiveErrorChecks) {
+                        LogMessage("Reached maximum consecutive error checks (" maxConsecutiveErrorChecks "). Assuming match failure.")
                         return "failure"
                     }
                 }

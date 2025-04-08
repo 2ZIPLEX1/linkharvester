@@ -17,8 +17,10 @@ STEAM_SCREENSHOTS_PATH = r'C:\Program Files (x86)\Steam\userdata\1067368752\760\
 TESSERACT_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
 
-# Configure logging
-LOG_FILE = os.path.join(PROJECT_PATH, 'image_recognition.log')
+# Configure logging 
+logs_dir = os.path.join(PROJECT_PATH, 'logs')
+os.makedirs(logs_dir, exist_ok=True)
+LOG_FILE = os.path.join(logs_dir, 'image_recognition.log')
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -32,6 +34,12 @@ processed_urls = set()
 
 # File to store URL cache between process invocations
 URL_CACHE_FILE = os.path.join(PROJECT_PATH, "url_cache.tmp")
+
+def ensure_logs_directory():
+    """Ensure the logs directory exists."""
+    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
+    return logs_dir
 
 def load_url_cache():
     """Load the URL cache from a temporary file"""
@@ -230,17 +238,17 @@ def detect_error_dialog():
     # If any error dialog was found
     if found1 or found2 or found3 or found4:
         # Determine dialog type 
-        if found3:
+        if found1 or found2 or found3:
             dialog_type = "fatal"
             logging.info("FATAL ERROR DIALOG DETECTED!")
             print("ERROR_DETECTION_RESULT=1")
             print("ERROR_TYPE=fatal")
             print("ERROR_COORDS=-1,-1")
-        else:
-            dialog_type = "first" if found1 else "second"
-            logging.info(f"{dialog_type.upper()} ERROR DIALOG DETECTED!")
-            print("ERROR_DETECTION_RESULT=1")
-            print("ERROR_COORDS=-1,-1")
+        # else:
+        #     dialog_type = "first" if found1 else "second"
+        #     logging.info(f"{dialog_type.upper()} ERROR DIALOG DETECTED!")
+        #     print("ERROR_DETECTION_RESULT=1")
+        #     print("ERROR_COORDS=-1,-1")
         
         # Log performance
         elapsed_time = time.time() - start_time

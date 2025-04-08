@@ -4,15 +4,23 @@ import logging
 import requests
 import json
 import time
-from typing import Dict, List, Tuple, Optional, Any
+from typing import Dict, List, Tuple, Any
 
-# Configure logging
+# Configure logging 
+logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+os.makedirs(logs_dir, exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='api_service.log',
+    filename=os.path.join(logs_dir, 'api_service.log'),
     filemode='a'
 )
+
+def ensure_logs_directory():
+    """Ensure the logs directory exists."""
+    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    os.makedirs(logs_dir, exist_ok=True)
+    return logs_dir
 
 class APIService:
     """
