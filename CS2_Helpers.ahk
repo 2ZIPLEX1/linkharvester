@@ -400,15 +400,68 @@ CleanupScreenshots() {
     }
 }
 
-; Enhanced function to disconnect from match with visual verification
+; Enhanced function to disconnect from match with multiple strategies
 DisconnectFromMatch(maxAttempts := 3) {
     try {
         attemptCount := 0
         
-        ; Try disconnecting up to maxAttempts times
-        Loop maxAttempts {
+        ; Try Strategy 1: Direct "Exit to main menu" button click (assuming scoreboard is visible)
+        attemptCount++
+        LogMessage("Disconnecting from match (strategy 1: direct exit button click)...")
+        
+        ; Define button coordinates
+        exitButtonX := 1155
+        exitButtonY := 125
+        confirmYesX := 1100
+        confirmYesY := 600
+        
+        ; Click the Exit button
+        LogMessage("Clicking 'Exit to main menu' button at " exitButtonX "," exitButtonY)
+        Click exitButtonX, exitButtonY
+        Sleep 800
+        
+        ; Click the Yes confirmation button
+        LogMessage("Clicking 'Yes' confirmation button at " confirmYesX "," confirmYesY)
+        Click confirmYesX, confirmYesY
+        Sleep 2000
+        
+        ; Verify if we're back in the lobby
+        if VerifyBackInLobby() {
+            LogMessage("Successfully disconnected using strategy 1")
+            return true
+        }
+        
+        ; Try Strategy 2: Press Escape to bring up scoreboard, then click Exit button
+        if attemptCount < maxAttempts {
             attemptCount++
-            LogMessage("Disconnecting from match (attempt " attemptCount "/" maxAttempts ")...")
+            LogMessage("Disconnecting from match (strategy 2: Escape key + exit button)...")
+            
+            ; Press Escape to bring up scoreboard
+            LogMessage("Pressing Escape key to bring up scoreboard")
+            Send "{Escape}"
+            Sleep 1000
+            
+            ; Click the Exit button
+            LogMessage("Clicking 'Exit to main menu' button at " exitButtonX "," exitButtonY)
+            Click exitButtonX, exitButtonY
+            Sleep 800
+            
+            ; Click the Yes confirmation button
+            LogMessage("Clicking 'Yes' confirmation button at " confirmYesX "," confirmYesY)
+            Click confirmYesX, confirmYesY
+            Sleep 2000
+            
+            ; Verify if we're back in the lobby
+            if VerifyBackInLobby() {
+                LogMessage("Successfully disconnected using strategy 2")
+                return true
+            }
+        }
+        
+        ; Try Strategy 3: Console disconnect command (fallback method)
+        if attemptCount < maxAttempts {
+            attemptCount++
+            LogMessage("Disconnecting from match (strategy 3: console command fallback)...")
             
             ; Open console (~ key)
             LogMessage("Opening console with ~ key")
@@ -423,75 +476,97 @@ DisconnectFromMatch(maxAttempts := 3) {
             ; Close console
             LogMessage("Closing console")
             Send "``"
+            Sleep 1000
             
-            ; Wait for disconnection to complete and return to lobby
-            LogMessage("Waiting for disconnection to complete...")
-            Sleep 3000  ; Increased wait time for disconnection
-            
-            ; Verify we're in the lobby by checking for the shut-down icon
-            LogMessage("Verifying we're back in the lobby by checking for shut-down icon...")
-            
-            ; Take a screenshot for verification
-            CaptureScreenshot()
-            Sleep 800  ; Wait for screenshot to be saved
-            
-            ; Check for shut-down icon in the header area of the main menu
-            iconRoiX := 202  ; Approximate X coordinate of the shut-down icon
-            iconRoiY := 17    ; Approximate Y coordinate of the shut-down icon
-            iconRoiWidth := 31
-            iconRoiHeight := 30
-            
-            result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
-            LogMessage("Main menu detection result: " result)
-            
-            ; Check if the icon was detected
-            if InStr(result, "MAIN_MENU_DETECTED=1") {
-                LogMessage("Successfully disconnected and returned to lobby (verified with shut-down icon)")
+            ; Verify if we're back in the lobby
+            if VerifyBackInLobby() {
+                LogMessage("Successfully disconnected using strategy 3 (console command)")
                 return true
-            }
-            
-            LogMessage("Not back in lobby yet, waiting additional time...")
-            Sleep 3000  ; Wait a bit longer before trying again
-            
-            ; Take another screenshot and try one more verification
-            CaptureScreenshot()
-            Sleep 800
-            
-            result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
-            if InStr(result, "MAIN_MENU_DETECTED=1") {
-                LogMessage("Successfully disconnected and returned to lobby after additional wait")
-                return true
-            }
-            
-            ; If this isn't the last attempt, try again
-            if (A_Index < maxAttempts) {
-                LogMessage("Still not in lobby, trying disconnection again...")
             }
         }
         
-        ; If we've reached here, we've failed all attempts
-        LogMessage("Failed to verify return to lobby after " maxAttempts " disconnect attempts")
+        ; If all strategies failed, try some last resort attempts
+        LogMessage("All disconnect strategies failed, trying last resort options...")
         
-        ; Try pressing Escape as a last resort to get back to the menu
-        LogMessage("Trying Escape key as last resort...")
+        ; Try pressing Escape several times
+        LogMessage("Pressing Escape key multiple times")
+        Send "{Escape}"
+        Sleep 800
+        Send "{Escape}"
+        Sleep 800
         Send "{Escape}"
         Sleep 2000
         
-        ; Take a final screenshot to check
-        CaptureScreenshot()
-        Sleep 800
-        
-        result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
-        if InStr(result, "MAIN_MENU_DETECTED=1") {
-            LogMessage("Successfully returned to lobby after using Escape key")
+        ; Final verification
+        if VerifyBackInLobby() {
+            LogMessage("Successfully disconnected after last resort attempts")
             return true
         }
         
-        LogMessage("All disconnect attempts failed, script may need to be restarted")
+        LogMessage("All disconnect attempts failed")
         return false
     }
     catch Error as e {
         LogMessage("Error in DisconnectFromMatch: " e.Message)
         return false
     }
+}
+
+; Helper function to verify we're back in the lobby
+VerifyBackInLobby() {
+    try {
+        CaptureScreenshot()
+        Sleep 800
+        
+        ; Check for the shut-down icon in the header area of the main menu
+        iconRoiX := 202  ; Approximate X coordinate of the shut-down icon
+        iconRoiY := 17   ; Approximate Y coordinate of the shut-down icon
+        iconRoiWidth := 31
+        iconRoiHeight := 30
+        
+        result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
+        LogMessage("Main menu detection result: " result)
+        
+        return InStr(result, "MAIN_MENU_DETECTED=1")
+    }
+    catch Error as e {
+        LogMessage("Error in VerifyBackInLobby: " e.Message)
+        return false
+    }
+}
+
+; Check for and dismiss voted-off error dialog
+DismissVotedOffErrorDialog() {
+    LogMessage("Checking for voted-off error dialog...")
+    
+    ; Take a screenshot
+    CaptureScreenshot()
+    Sleep 800  ; Wait for screenshot to be saved
+    
+    ; Run Python detector
+    result := RunPythonDetector("check_voted_off_error_dialog")
+    LogMessage("Voted-off error dialog detection result: " result)
+    
+    ; Check if error dialog was detected
+    if InStr(result, "VOTED_OFF_ERROR_DIALOG_DETECTED=1") {
+        LogMessage("Voted-off error dialog detected!")
+        
+        ; Try to extract coordinates from result
+        if RegExMatch(result, "OK_BUTTON_COORDS=(\d+),(\d+)", &coordMatch) {
+            okButtonX := Integer(coordMatch[1])
+            okButtonY := Integer(coordMatch[2])
+            
+            LogMessage("Clicking OK button at coordinates: " okButtonX "," okButtonY)
+            Click okButtonX, okButtonY
+        } else {
+            ; Fallback coordinates if detection didn't provide them
+            LogMessage("Using fallback coordinates for OK button")
+            Click 1160, 600
+        }
+        
+        Sleep 500
+        return true
+    }
+    
+    return false
 }

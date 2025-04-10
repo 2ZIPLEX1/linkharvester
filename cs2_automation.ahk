@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 3 {
+    Loop 1 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -83,8 +83,8 @@ Main() {
 
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
-    mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    ; mapKeys := ["DustII"]
+    ; mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
+    mapKeys := ["Sigma"]
     
     ; Process each map in order
     for mapKey in mapKeys {
@@ -132,6 +132,8 @@ EnsureAtMainMenu(maxAttempts := 2) {
     
     ; First check if we're already at the main menu
     if (IsAtMainMenu()) {
+        ; Even if we're at main menu, check for and dismiss voted-off error dialog
+        DismissVotedOffErrorDialog()
         LogMessage("Already at main menu")
         return true
     }
@@ -141,10 +143,22 @@ EnsureAtMainMenu(maxAttempts := 2) {
     Click 31, 31
     Sleep 1000
     
+    ; Check for voted-off error dialog after first attempt
+    if (DismissVotedOffErrorDialog()) {
+        Sleep 500
+        if (IsAtMainMenu()) {
+            LogMessage("Successfully returned to main menu after dismissing voted-off error dialog")
+            return true
+        }
+    }
+    
     ; Final attempt: Try to disconnect from match (more aggressive approach)
     LogMessage("Basic attempts failed, trying DisconnectFromMatch function")
     if (DisconnectFromMatch()) {
         Sleep 3000  ; Give it more time to return to menu after disconnect
+        
+        ; Check for voted-off error dialog after disconnect
+        DismissVotedOffErrorDialog()
         
         ; Final check
         if (IsAtMainMenu()) {

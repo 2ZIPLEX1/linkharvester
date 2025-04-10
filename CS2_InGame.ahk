@@ -514,8 +514,7 @@ ProcessPlayersGridMethod() {
                 break
             }
             
-            if (!five_year_medal_found)
-                five_year_medal_found := InStr(followUpResult, "FIVE_YEAR_MEDAL_FOUND=1")
+            five_year_medal_found := five_year_medal_found || InStr(followUpResult, "FIVE_YEAR_MEDAL_FOUND=1")
                 
             if (!unwanted_medals_found)
                 unwanted_medals_found := InStr(followUpResult, "UNWANTED_MEDALS_FOUND=1")

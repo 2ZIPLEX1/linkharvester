@@ -1295,6 +1295,42 @@ if __name__ == "__main__":
             logging.error(f"Error checking attention icon: {str(e)}")
             logging.error(traceback.format_exc())
 
+    elif command == "check_voted_off_error_dialog":
+        try:
+            # Get the latest screenshot
+            screenshot_path = get_latest_screenshot()
+            if not screenshot_path:
+                print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
+                print("ERROR=No recent screenshot found")
+                sys.exit(1)
+            
+            # Read the screenshot
+            img = cv2.imread(screenshot_path)
+            if img is None:
+                print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
+                print("ERROR=Could not read screenshot")
+                sys.exit(1)
+            
+            # Detect the voted-off-error-dialog.jpg template
+            found, coords = detect_template(img, "voted-off-error-dialog", threshold=0.7)
+            
+            if found:
+                print("VOTED_OFF_ERROR_DIALOG_DETECTED=1")
+                
+                # The OK button is typically at a position relative to the dialog
+                # Using your suggested coordinates
+                ok_button_x = 1160
+                ok_button_y = 600
+                
+                print(f"OK_BUTTON_COORDS={ok_button_x},{ok_button_y}")
+            else:
+                print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
+        except Exception as e:
+            print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
+            print(f"ERROR={str(e)}")
+            logging.error(f"Error checking voted-off error dialog: {str(e)}")
+            logging.error(traceback.format_exc())
+
     else:
         print(f"Unknown command: {command}")
         print("Use 'python cs2_detect.py' without arguments to see available commands.")

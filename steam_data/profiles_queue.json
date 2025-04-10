@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "url": "https://steamcommunity.com/profiles/76561198009296439/",
+    "timestamp": 1744285013.3997736,
+    "vanity_id": null,
+    "steam_id": "76561198009296439",
+    "checks": {
+      "animated_avatar": "passed",
+      "avatar_frame": "passed",
+      "mini_profile_background": "passed",
+      "profile_background": "passed",
+      "steam_level": "passed",
+      "friends": "passed",
+      "csgo_inventory": "to_check"
+    }
+  }
+]
