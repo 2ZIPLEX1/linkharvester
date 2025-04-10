@@ -32,8 +32,8 @@ CheckForMatchmakingFailure() {
     
     try {
         ; Take a screenshot
-        CaptureScreenshot()
-        Sleep 800  ; Wait for screenshot to be saved
+        ;CaptureScreenshot()
+        ; Sleep 800  ; Wait for screenshot to be saved
         
         ; Run Python detector
         result := RunPythonDetector("error")
@@ -152,7 +152,7 @@ WaitForMatchOutcome() {
     timeout := 90000  ; 10 minutes in milliseconds
     
     ; Time to wait before starting error checks (allowing time for match loading)
-    initialErrorWait := 10000  ; 10 seconds
+    initialErrorWait := 1000  ; 10 seconds
     errorCheckInterval := 3000  ; Check for errors every 3 seconds after initial wait
     lastErrorCheckTime := 0
     
@@ -211,7 +211,7 @@ WaitForMatchOutcome() {
                 LogMessage("Still searching for match... " elapsedTime / 1000 " seconds elapsed")
             }
             
-            Sleep 2000  ; Check less frequently during search phase
+            ; Sleep 2000  ; Check less frequently during search phase
             continue
         } else if (currentPhase = 0) {
             ; We just transitioned from searching to connecting/loading
@@ -252,6 +252,8 @@ WaitForMatchOutcome() {
             timeInLoadingPhase := A_TickCount - searchingEndTime
             if (timeInLoadingPhase > initialErrorWait && currentTime - lastErrorCheckTime > errorCheckInterval) {
                 LogMessage("Taking screenshot to check for error dialog...")
+                CaptureScreenshot()
+                Sleep 800  ; Wait for screenshot to be saved
                 lastErrorCheckTime := currentTime
                 
                 ; Check for failure dialog

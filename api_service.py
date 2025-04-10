@@ -58,7 +58,8 @@ class APIService:
             if not os.path.exists(self.config_path):
                 # Create default configuration file if it doesn't exist
                 default_config = {
-                    "api_key": "",
+                    "tradebot_api_key": "",
+                    "steam_api_key": "",
                     "username": ""
                 }
                 with open(self.config_path, 'w') as f:
@@ -70,7 +71,7 @@ class APIService:
             with open(self.config_path, 'r') as f:
                 config = json.load(f)
                 
-            self.api_key = config.get("api_key", "")
+            self.api_key = config.get("tradebot_api_key", "")
             self.username = config.get("username", "")
             
             if not self.api_key or not self.username:
@@ -433,6 +434,62 @@ class APIService:
                      f"{results['remaining']} remaining")
         
         return results
+    
+    def send_notification(self, message_code: str) -> Tuple[bool, dict]:
+        """
+        Send a notification message to the API endpoint.
+        
+        Args:
+            message_code: Code representing the message type (e.g., 'script-finished-running')
+            
+        Returns:
+            Tuple[bool, dict]: (Success status, Response data or error message)
+        """
+        try:
+            # Ensure we have valid configuration
+            if not self.api_key or not self.username:
+                error_msg = "Missing API key or username in configuration"
+                logging.error(error_msg)
+                return False, {"error": error_msg}
+            
+            # Prepare request
+            params = {
+                "username": self.username,
+                "message_code": message_code,
+                "api_key": self.api_key
+            }
+            
+            # Define notification endpoint
+            notification_endpoint = "https://ziplex2.pythonanywhere.com/en/links/api/message-from-linkharvester/"
+            
+            # Send request
+            logging.info(f"Sending notification with message code: {message_code}")
+            response = requests.get(notification_endpoint, params=params, timeout=10)
+            
+            # Get response data
+            try:
+                data = response.json()
+            except ValueError:
+                data = {"error": "Invalid JSON response", "status_code": response.status_code}
+            
+            # Log response
+            log_msg = f"Notification API response: Status {response.status_code}"
+            if response.status_code == 200:
+                logging.info(f"{log_msg}, Success")
+                return True, data
+            else:
+                logging.warning(f"{log_msg}, {data.get('error', 'Unknown error')}")
+                return False, data
+                
+        except requests.exceptions.RequestException as e:
+            error_msg = f"Request error sending notification: {str(e)}"
+            logging.error(error_msg)
+            return False, {"error": error_msg, "exception": "RequestException"}
+            
+        except Exception as e:
+            error_msg = f"Unexpected error sending notification: {str(e)}"
+            logging.error(error_msg)
+            return False, {"error": error_msg}
 
 def main():
     """Main entry point when script is run directly"""

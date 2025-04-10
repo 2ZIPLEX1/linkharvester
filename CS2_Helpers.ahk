@@ -400,38 +400,95 @@ CleanupScreenshots() {
     }
 }
 
-; Function to disconnect from match using console command 
-DisconnectFromMatch() {
+; Enhanced function to disconnect from match with visual verification
+DisconnectFromMatch(maxAttempts := 3) {
     try {
-        LogMessage("Disconnecting from match using console command...")
+        attemptCount := 0
         
-        ; Open console (~ key)
-        LogMessage("Opening console with ~ key")
-        Send "``"  ; Backtick character needs to be escaped in AHK v2
-        Sleep 1000
+        ; Try disconnecting up to maxAttempts times
+        Loop maxAttempts {
+            attemptCount++
+            LogMessage("Disconnecting from match (attempt " attemptCount "/" maxAttempts ")...")
+            
+            ; Open console (~ key)
+            LogMessage("Opening console with ~ key")
+            Send "``"  ; Backtick character needs to be escaped in AHK v2
+            Sleep 1000
+            
+            ; Type disconnect command and press Enter
+            LogMessage("Entering 'disconnect' command")
+            Send "disconnect{Enter}"
+            Sleep 2000
+            
+            ; Close console
+            LogMessage("Closing console")
+            Send "``"
+            
+            ; Wait for disconnection to complete and return to lobby
+            LogMessage("Waiting for disconnection to complete...")
+            Sleep 3000  ; Increased wait time for disconnection
+            
+            ; Verify we're in the lobby by checking for the shut-down icon
+            LogMessage("Verifying we're back in the lobby by checking for shut-down icon...")
+            
+            ; Take a screenshot for verification
+            CaptureScreenshot()
+            Sleep 800  ; Wait for screenshot to be saved
+            
+            ; Check for shut-down icon in the header area of the main menu
+            iconRoiX := 202  ; Approximate X coordinate of the shut-down icon
+            iconRoiY := 17    ; Approximate Y coordinate of the shut-down icon
+            iconRoiWidth := 31
+            iconRoiHeight := 30
+            
+            result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
+            LogMessage("Main menu detection result: " result)
+            
+            ; Check if the icon was detected
+            if InStr(result, "MAIN_MENU_DETECTED=1") {
+                LogMessage("Successfully disconnected and returned to lobby (verified with shut-down icon)")
+                return true
+            }
+            
+            LogMessage("Not back in lobby yet, waiting additional time...")
+            Sleep 3000  ; Wait a bit longer before trying again
+            
+            ; Take another screenshot and try one more verification
+            CaptureScreenshot()
+            Sleep 800
+            
+            result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
+            if InStr(result, "MAIN_MENU_DETECTED=1") {
+                LogMessage("Successfully disconnected and returned to lobby after additional wait")
+                return true
+            }
+            
+            ; If this isn't the last attempt, try again
+            if (A_Index < maxAttempts) {
+                LogMessage("Still not in lobby, trying disconnection again...")
+            }
+        }
         
-        ; Type disconnect command and press Enter
-        LogMessage("Entering 'disconnect' command")
-        Send "disconnect{Enter}"
+        ; If we've reached here, we've failed all attempts
+        LogMessage("Failed to verify return to lobby after " maxAttempts " disconnect attempts")
+        
+        ; Try pressing Escape as a last resort to get back to the menu
+        LogMessage("Trying Escape key as last resort...")
+        Send "{Escape}"
         Sleep 2000
         
-        ; Close console
-        LogMessage("Closing console")
-        Send "``"
+        ; Take a final screenshot to check
+        CaptureScreenshot()
+        Sleep 800
         
-        ; Wait for disconnection to complete and return to lobby
-        LogMessage("Waiting for disconnection to complete (1 second)...")
-        Sleep 1000
+        result := RunPythonDetector("main_menu " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
+        if InStr(result, "MAIN_MENU_DETECTED=1") {
+            LogMessage("Successfully returned to lobby after using Escape key")
+            return true
+        }
         
-        ; Verify we're in the lobby by looking for Play button
-        ; This could be enhanced with a visual check for the play button
-        LogMessage("Checking if we're back in the lobby")
-        
-        ; For now, we'll just assume the 3-second wait was sufficient
-        ; In the future, this could be extended with a visual verification
-        
-        LogMessage("Successfully disconnected and returned to lobby")
-        return true
+        LogMessage("All disconnect attempts failed, script may need to be restarted")
+        return false
     }
     catch Error as e {
         LogMessage("Error in DisconnectFromMatch: " e.Message)

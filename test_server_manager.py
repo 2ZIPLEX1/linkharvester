@@ -7,10 +7,11 @@ import logging
 import time
 from datetime import datetime
 from collections import deque
+from api_service import APIService
 
 # Setup logging to OneDrive Documents folder
 home_dir = os.path.expanduser("~")
-log_directory = "C:\\LinkHarvesterScript"
+log_directory = "C:\\LinkHarvesterScript\logs"
 os.makedirs(log_directory, exist_ok=True)
 data_directory = "C:\\LinkHarvesterScript\\data"
 os.makedirs(data_directory, exist_ok=True)
@@ -634,6 +635,36 @@ class CS2TestServerManager:
         logging.info(f"Completed testing all servers. Success: {success_count}/{len(self.preferred_servers)}")
         
         return True
+    
+def send_completion_notification(success=True):
+    """
+    Send a notification that the script has completed running.
+    
+    Args:
+        success: Whether the script completed successfully or with an error
+    """
+    try:
+        # Create API service
+        api_service = APIService()
+        
+        # Send notification based on success status
+        message_code = "script-finished-running" if success else "script-error"
+        
+        # Log the notification attempt
+        logging.info(f"Sending completion notification with status: {'success' if success else 'error'}")
+        
+        # Send the notification
+        result, response = api_service.send_notification(message_code)
+        
+        # Log the result
+        if result:
+            logging.info("Successfully sent completion notification")
+        else:
+            logging.warning(f"Failed to send completion notification: {response.get('error', 'Unknown error')}")
+    
+    except Exception as e:
+        # Don't let notification errors affect the script execution
+        logging.error(f"Error sending completion notification: {e}")
 
 # Main execution
 if __name__ == "__main__":
@@ -650,6 +681,7 @@ if __name__ == "__main__":
         if not manager.fetch_server_data():
             logging.error("Failed to fetch server data. Exiting.")
             print("Failed to fetch server data. Exiting.")
+            send_completion_notification(success=False)
             sys.exit(1)
         
         # If no preferred servers defined, create an example file
@@ -716,8 +748,14 @@ if __name__ == "__main__":
         
         print("\nTest completed.")
         
+        # Send successful completion notification
+        send_completion_notification(success=True)
+        
     except Exception as e:
         print(f"Unhandled exception: {e}")
         logging.error(f"Unhandled exception: {e}", exc_info=True)
+        
+        # Send error notification
+        send_completion_notification(success=False)
     
     input("Press Enter to exit...")

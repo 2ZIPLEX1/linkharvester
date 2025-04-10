@@ -118,6 +118,120 @@ def get_profile_roi(click_x, click_y, screenshot_path=None):
         logging.error(traceback.format_exc())
         return None, None, None
 
+def detect_profile_popup_in_roi(profile_roi, roi_x, roi_y, visualization):
+    """
+    Detect the profile popup by checking for both profile button and message button.
+    Both must be present to confirm we're looking at a profile popup rather than the scoreboard.
+    
+    Args:
+        profile_roi: The profile details region of interest
+        roi_x: X-coordinate of the ROI in the original image
+        roi_y: Y-coordinate of the ROI in the original image
+        visualization: Image to draw detection results on
+        
+    Returns:
+        dict: Information about the profile popup detection
+    """
+    # Default result structure
+    result = {
+        "popup_detected": False,
+        "profile_button_found": False,
+        "message_button_found": False,
+        "profile_button_x": 0,
+        "profile_button_y": 0,
+        "message_button_x": 0,
+        "message_button_y": 0,
+        "confidence": 0.0
+    }
+    
+    try:
+        # 1. First detect the profile button
+        profile_button_result = detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization)
+        result["profile_button_found"] = profile_button_result["found"]
+        
+        if profile_button_result["found"]:
+            result["profile_button_x"] = profile_button_result["x"]
+            result["profile_button_y"] = profile_button_result["y"]
+            logging.info(f"Profile button found at {profile_button_result['x']},{profile_button_result['y']}")
+        else:
+            logging.info("Profile button not found")
+            return result  # Early return if no profile button
+        
+        # 2. Then detect the message button
+        message_button_result = detect_message_button_in_roi(profile_roi, roi_x, roi_y, visualization)
+        result["message_button_found"] = message_button_result["found"]
+        
+        if message_button_result["found"]:
+            result["message_button_x"] = message_button_result["x"]
+            result["message_button_y"] = message_button_result["y"]
+            logging.info(f"Message button found at {message_button_result['x']},{message_button_result['y']}")
+        else:
+            logging.info("Message button not found")
+            return result  # Early return if no message button
+        
+        # 3. Verify spatial relationship between the two buttons
+        # The message button should be positioned to the right of the profile button
+        # and roughly at the same vertical position
+        
+        # Calculate horizontal and vertical distance between buttons
+        horizontal_distance = abs(result["message_button_x"] - result["profile_button_x"])
+        vertical_distance = abs(result["message_button_y"] - result["profile_button_y"])
+        
+        # Define reasonable thresholds for button spacing
+        # Adjust these values based on actual UI layout
+        min_horizontal_distance = 30  # Minimum expected horizontal distance
+        max_horizontal_distance = 120  # Maximum expected horizontal distance
+        max_vertical_distance = 20     # Maximum allowed vertical difference
+        
+        spatial_check = (
+            horizontal_distance >= min_horizontal_distance and
+            horizontal_distance <= max_horizontal_distance and
+            vertical_distance <= max_vertical_distance and
+            result["message_button_x"] > result["profile_button_x"]  # Message button should be to the right
+        )
+        
+        if spatial_check:
+            logging.info(f"Buttons have valid spatial relationship. H-dist: {horizontal_distance}, V-dist: {vertical_distance}")
+        else:
+            logging.warning(f"Buttons detected but spatial relationship invalid. H-dist: {horizontal_distance}, V-dist: {vertical_distance}")
+            return result  # Early return if spatial relationship is wrong
+        
+        # 4. Only if both buttons found and spatial relationship checks out,
+        # consider this a confirmed profile popup detection
+        result["popup_detected"] = True
+        
+        # Calculate overall confidence as average of both detections
+        result["confidence"] = (profile_button_result["confidence"] + message_button_result["confidence"]) / 2
+        
+        logging.info(f"Profile popup confirmed with confidence {result['confidence']:.2f}")
+        
+        # Additional visualization: draw a connection line between the two buttons
+        if visualization is not None:
+            # Convert global coordinates to ROI-relative coordinates
+            pb_x_rel = result["profile_button_x"] - roi_x
+            pb_y_rel = result["profile_button_y"] - roi_y
+            mb_x_rel = result["message_button_x"] - roi_x
+            mb_y_rel = result["message_button_y"] - roi_y
+            
+            # Draw a connecting line between buttons
+            cv2.line(visualization, 
+                     (pb_x_rel, pb_y_rel), 
+                     (mb_x_rel, mb_y_rel), 
+                     (0, 255, 255), 2)  # Yellow line
+            
+            # Add a text label indicating confirmed popup
+            cv2.putText(visualization, 
+                       f"CONFIRMED POPUP (conf: {result['confidence']:.2f})", 
+                       (10, 30), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 255, 255), 2)
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error detecting profile popup: {str(e)}")
+        logging.error(traceback.format_exc())
+        return result
+
 def detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization):
     """
     Detect the profile button in the profile ROI.
@@ -261,6 +375,101 @@ def detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization):
         
     except Exception as e:
         logging.error(f"Error detecting profile button in ROI: {str(e)}")
+        logging.error(traceback.format_exc())
+        return result
+
+def detect_message_button_in_roi(profile_roi, roi_x, roi_y, visualization):
+    """
+    Detect the message button in the profile ROI.
+    
+    Args:
+        profile_roi: The profile details region of interest
+        roi_x: X-coordinate of the ROI in the original image
+        roi_y: Y-coordinate of the ROI in the original image
+        visualization: Image to draw detection results on
+        
+    Returns:
+        dict: Information about the message button detection
+    """
+    # Default result structure
+    result = {
+        "found": False,
+        "x": 0,
+        "y": 0,
+        "confidence": 0.0
+    }
+    
+    try:
+        # Template matching for message button icon
+        template_path = os.path.join(TEMPLATES_PATH, "message-button.jpg")
+        
+        if not os.path.exists(template_path):
+            logging.warning(f"Message button template not found at: {template_path}")
+            return result
+            
+        template = cv2.imread(template_path)
+        if template is None:
+            logging.warning(f"Failed to load message button template: {template_path}")
+            return result
+        
+        # Convert to grayscale
+        full_gray = cv2.cvtColor(profile_roi, cv2.COLOR_BGR2GRAY)
+        template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        
+        # Try multiple methods and thresholds for detection
+        detect_methods = [cv2.TM_CCOEFF_NORMED, cv2.TM_CCORR_NORMED, cv2.TM_SQDIFF_NORMED]
+        thresholds = [0.7, 0.6, 0.5, 0.4]
+        
+        # Try each method and threshold for actual detection
+        for method in detect_methods:
+            if result["found"]:
+                break
+                
+            for threshold in thresholds:
+                if result["found"]:
+                    break
+                    
+                # Perform template matching
+                result_img = cv2.matchTemplate(full_gray, template_gray, method)
+                
+                # For SQDIFF methods, smaller values = better matches
+                if method == cv2.TM_SQDIFF_NORMED:
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+                    match_val = 1.0 - min_val  # Convert to a similarity score
+                    match_loc = min_loc
+                else:
+                    min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+                    match_val = max_val
+                    match_loc = max_loc
+                
+                if ((method == cv2.TM_SQDIFF_NORMED and match_val >= threshold) or 
+                    (method != cv2.TM_SQDIFF_NORMED and match_val >= threshold)):
+                    h, w = template.shape[:2]
+                    # Calculate coordinates relative to full image
+                    message_button_x = roi_x + match_loc[0] + w//2
+                    message_button_y = roi_y + match_loc[1] + h//2
+                    
+                    result["found"] = True
+                    result["x"] = message_button_x
+                    result["y"] = message_button_y
+                    result["confidence"] = match_val
+                    
+                    # Draw on visualization
+                    cv2.rectangle(visualization, 
+                                (match_loc[0], match_loc[1]),
+                                (match_loc[0] + w, match_loc[1] + h),
+                                (255, 0, 255), 2)  # Magenta for message button
+                    cv2.putText(visualization, f"Message Button ({match_val:.2f})", 
+                            (match_loc[0], match_loc[1] - 5),
+                            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 255), 1)
+                    
+                    logging.info(f"Message button found at {message_button_x},{message_button_y} with method {method} and confidence {match_val:.2f}")
+                    break
+        
+        return result
+        
+    except Exception as e:
+        logging.error(f"Error detecting message button in ROI: {str(e)}")
         logging.error(traceback.format_exc())
         return result
 
@@ -804,7 +1013,9 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         
         # Default result structure
         result = {
+            "profile_popup_detected": False,
             "profile_button_found": False,
+            "message_button_found": False,
             "profile_button_x": 0,
             "profile_button_y": 0,
             "unwanted_medals_found": False,
@@ -840,7 +1051,9 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         if profile_roi is None:
             # Error already logged and printed by get_profile_roi
             print("PROFILE_ANALYSIS_RESULT=0")
+            print("PROFILE_POPUP_DETECTED=0")
             print("PROFILE_BUTTON_FOUND=0")
+            print("MESSAGE_BUTTON_FOUND=0")
             print("SYMPATHIES_SUM=0")
             print("SMILE_VALUE=0")
             print("TEACH_VALUE=0")
@@ -858,15 +1071,19 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         # Save timestamp for debug images
         timestamp = int(time.time())
         
-        # STEP 2: Detect profile button
-        profile_button_result = detect_profile_button_in_roi(profile_roi, roi_x, roi_y, visualization)
-        result["profile_button_found"] = profile_button_result["found"]
+        # STEP 2: Detect profile popup (both profile button AND message button)
+        profile_popup_result = detect_profile_popup_in_roi(profile_roi, roi_x, roi_y, visualization)
+        result["profile_popup_detected"] = profile_popup_result["popup_detected"]
+        result["profile_button_found"] = profile_popup_result["profile_button_found"]
+        result["message_button_found"] = profile_popup_result["message_button_found"]
         
-        # If no profile button found, exit early with structured output
-        if not result["profile_button_found"]:
-            logging.info("No profile button detected in profile details")
+        # If no profile popup detected, exit early with structured output
+        if not result["profile_popup_detected"]:
+            logging.info("No profile popup detected - either missing buttons or spatial relationship incorrect")
             print("PROFILE_ANALYSIS_RESULT=1")
-            print("PROFILE_BUTTON_FOUND=0")
+            print(f"PROFILE_POPUP_DETECTED=0")
+            print(f"PROFILE_BUTTON_FOUND={1 if result['profile_button_found'] else 0}")
+            print(f"MESSAGE_BUTTON_FOUND={1 if result['message_button_found'] else 0}")
             print("TOO_MANY_SYMPATHIES=0")
             print("UNWANTED_MEDALS_FOUND=0")
             print("THREE_PLUS_MEDALS_FOUND=0")
@@ -878,17 +1095,19 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             return
             
         # Store profile button coordinates
-        result["profile_button_x"] = profile_button_result["x"]
-        result["profile_button_y"] = profile_button_result["y"]
+        result["profile_button_x"] = profile_popup_result["profile_button_x"]
+        result["profile_button_y"] = profile_popup_result["profile_button_y"]
         
-        # STEP 3: Check for sympathies now that we know the profile button exists
+        # STEP 3: Check for sympathies now that we know the profile popup exists
         sympathies_result = detect_sympathies_in_roi(profile_roi, roi_x, roi_y, visualization)
         
         # If too many sympathies, exit early
         if sympathies_result["too_many_sympathies"]:
             logging.info(f"Too many sympathies detected: {sympathies_result['sympathies_sum']} > 100")
             print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_POPUP_DETECTED=1")
             print("PROFILE_BUTTON_FOUND=1")
+            print("MESSAGE_BUTTON_FOUND=1")
             print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
             print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
             print(f"SMILE_VALUE={sympathies_result['smile_value']}")
@@ -910,7 +1129,9 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         if result["unwanted_medals_found"]:
             logging.info("Unwanted medals detected, stopping analysis")
             print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_POPUP_DETECTED=1")
             print("PROFILE_BUTTON_FOUND=1")
+            print("MESSAGE_BUTTON_FOUND=1")
             print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
             print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
             print(f"SMILE_VALUE={sympathies_result['smile_value']}")
@@ -936,9 +1157,11 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         # Check if we have fewer than 3 medals
         has_three_plus_medals = result["medal_count"] >= 3
         if not has_three_plus_medals:
-            logging.info(f"Insufficient medals detected: {result['medal_count']}/4 required")
+            logging.info(f"Insufficient medals detected: {result['medal_count']}/3 required")
             print("PROFILE_ANALYSIS_RESULT=1")
+            print("PROFILE_POPUP_DETECTED=1")
             print("PROFILE_BUTTON_FOUND=1")
+            print("MESSAGE_BUTTON_FOUND=1")
             print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
             print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
             print(f"SMILE_VALUE={sympathies_result['smile_value']}")
@@ -965,7 +1188,9 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         
         # STEP 6: Output final results
         print("PROFILE_ANALYSIS_RESULT=1")
+        print("PROFILE_POPUP_DETECTED=1")
         print("PROFILE_BUTTON_FOUND=1")
+        print("MESSAGE_BUTTON_FOUND=1")
         print(f"PROFILE_BUTTON_COORDS={result['profile_button_x']},{result['profile_button_y']}")
         print(f"SYMPATHIES_SUM={sympathies_result['sympathies_sum']}")
         print(f"SMILE_VALUE={sympathies_result['smile_value']}")
@@ -1002,7 +1227,9 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
         logging.error(f"Error in profile analysis: {str(e)}")
         logging.error(traceback.format_exc())
         print("PROFILE_ANALYSIS_RESULT=0")
+        print("PROFILE_POPUP_DETECTED=0")
         print("PROFILE_BUTTON_FOUND=0")
+        print("MESSAGE_BUTTON_FOUND=0")
         print("SYMPATHIES_SUM=0")
         print("SMILE_VALUE=0")
         print("TEACH_VALUE=0")

@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 1 {
+    Loop 3 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -84,7 +84,7 @@ Main() {
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
     mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    ; mapKeys := ["Hostage"]
+    ; mapKeys := ["DustII"]
     
     ; Process each map in order
     for mapKey in mapKeys {
@@ -139,7 +139,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
     ; First attempt: Try to get back to main menu by clicking in the corner
     LogMessage("Attempting to return to main menu (attempt 1)")
     Click 31, 31
-    Sleep 2000
+    Sleep 1000
     
     ; Final attempt: Try to disconnect from match (more aggressive approach)
     LogMessage("Basic attempts failed, trying DisconnectFromMatch function")

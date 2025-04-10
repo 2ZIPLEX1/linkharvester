@@ -5,7 +5,7 @@ import json
 config = {
     "cs2_executable": "D:\\SteamLibrary\\steamapps\\common\\Counter-Strike Global Offensive\\game\\bin\\win64\\cs2.exe",
     "steam_executable": "C:\\Program Files (x86)\\Steam\\steam.exe",
-    "server_cycle_delay": 5,  # seconds between server cycles
+    "server_cycle_delay": 1,  # seconds between server cycles
     "match_timeout": 60,  # seconds to wait for a match
     "wait_between_clicks": 1000,  # milliseconds to wait between UI interactions
     "max_wait_for_match": 60,  # seconds to wait for match to start

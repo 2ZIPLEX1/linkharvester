@@ -269,9 +269,9 @@ AddToSteamProfileQueue(url) {
     }
 }
 
-; Enhanced ProcessPlayersGridMethod with dynamic icon-based positioning
+; Enhanced ProcessPlayersGridMethod with dual-button detection approach
 ProcessPlayersGridMethod() {
-    LogMessage("Processing players using grid method with structured profile analysis...")
+    LogMessage("Processing players using grid method with improved profile popup detection...")
     
     ; Default constants for grid scanning
     defaultStartX := 720       ; X coordinate to start scanning
@@ -337,13 +337,15 @@ ProcessPlayersGridMethod() {
         CaptureScreenshot()
         Sleep 800  ; Wait for screenshot to be saved
         
-        ; Perform profile analysis (includes profile button, sympathies, medals, and next attention icon check)
-        LogMessage("Performing profile analysis...")
+        ; Perform profile analysis (includes dual-button detection, sympathies, medals, and next attention icon check)
+        LogMessage("Performing profile analysis with dual-button detection...")
         analysisResult := RunPythonDetector("analyze_profile " currentX " " currentY)
         LogMessage("Profile analysis result: " analysisResult)
         
         ; Parse the initial analysis results
+        profile_popup_detected := InStr(analysisResult, "PROFILE_POPUP_DETECTED=1")
         profile_button_found := InStr(analysisResult, "PROFILE_BUTTON_FOUND=1")
+        message_button_found := InStr(analysisResult, "MESSAGE_BUTTON_FOUND=1")
         three_plus_medals_found := InStr(analysisResult, "THREE_PLUS_MEDALS_FOUND=1")
         five_year_medal_found := InStr(analysisResult, "FIVE_YEAR_MEDAL_FOUND=1")
         unwanted_medals_found := InStr(analysisResult, "UNWANTED_MEDALS_FOUND=1")
@@ -362,11 +364,22 @@ ProcessPlayersGridMethod() {
             }
         }
         
-        ; Check if profile details loaded
-        if (!profile_button_found) {
+        ; Check if profile popup was properly detected (both buttons found)
+        if (!profile_popup_detected) {
+            ; Log detailed information about which button was missing
+            buttonStatus := "Neither button found"
+            if (profile_button_found && !message_button_found)
+                buttonStatus := "Profile button found, message button missing"
+            else if (!profile_button_found && message_button_found)
+                buttonStatus := "Message button found, profile button missing"
+            else if (profile_button_found && message_button_found)
+                buttonStatus := "Both buttons found but spatial relationship invalid"
+                
+            LogMessage("Profile popup not detected: " buttonStatus)
+            
             ; Increment consecutive failures counter
             consecutiveFailures++
-            LogMessage("No profile details loaded. Consecutive failures: " consecutiveFailures)
+            LogMessage("No profile popup detected. Consecutive failures: " consecutiveFailures)
             
             ; After 3 consecutive failures, check if we should exit
             if (consecutiveFailures >= 3) {
@@ -387,7 +400,7 @@ ProcessPlayersGridMethod() {
                 }
             }
         } else {
-            ; Reset consecutive failures counter since we found a profile
+            ; Reset consecutive failures counter since we found a profile popup
             consecutiveFailures := 0
         }
         
@@ -401,10 +414,10 @@ ProcessPlayersGridMethod() {
         if RegExMatch(analysisResult, "MEDAL_COUNT=(\d+)", &countMatch)
             medalCount := Integer(countMatch[1])
         
-        ; Extract profile button coordinates if found
+        ; Extract profile button coordinates if popup detected
         profileButtonX := 0
         profileButtonY := 0
-        if (profile_button_found && RegExMatch(analysisResult, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &coordMatch)) {
+        if (profile_popup_detected && RegExMatch(analysisResult, "PROFILE_BUTTON_COORDS=(\d+),(\d+)", &coordMatch)) {
             profileButtonX := Integer(coordMatch[1])
             profileButtonY := Integer(coordMatch[2])
             LogMessage("Profile button found at coordinates: " profileButtonX "," profileButtonY)
@@ -412,8 +425,8 @@ ProcessPlayersGridMethod() {
         
         ; Log comprehensive analysis results
         LogMessage("Analysis summary:")
-        LogMessage("- Profile button found: " (profile_button_found ? "Yes" : "No"))
-        if (profile_button_found) {
+        LogMessage("- Profile popup detected: " (profile_popup_detected ? "Yes" : "No"))
+        if (profile_popup_detected) {
             LogMessage("- Sympathies sum: " sympathies_sum)
             LogMessage("- Too many sympathies: " (too_many_sympathies ? "Yes" : "No"))
             LogMessage("- Three+ medals found: " (three_plus_medals_found ? "Yes" : "No"))
@@ -428,8 +441,8 @@ ProcessPlayersGridMethod() {
         shouldContinue := true
         
         ; Early skip conditions (in optimized order)
-        if (!profile_button_found) {
-            LogMessage("No profile button found, skipping player")
+        if (!profile_popup_detected) {
+            LogMessage("No profile popup detected, skipping player")
             shouldContinue := false
         } else if (too_many_sympathies) {
             LogMessage("Player has too many sympathies (" sympathies_sum " > 100), skipping player")
@@ -438,7 +451,7 @@ ProcessPlayersGridMethod() {
             LogMessage("Unwanted medals found, skipping player")
             shouldContinue := false
         } else if (!three_plus_medals_found) {
-            LogMessage("Less than 4 medals found, skipping player")
+            LogMessage("Less than 3 medals found, skipping player")
             shouldContinue := false
         }
         
@@ -494,6 +507,13 @@ ProcessPlayersGridMethod() {
             followUpResult := RunPythonDetector("analyze_profile " currentX " " currentY)
             
             ; Update the state variables that might change
+            profile_popup_detected := InStr(followUpResult, "PROFILE_POPUP_DETECTED=1")
+            if (!profile_popup_detected) {
+                LogMessage("Profile popup no longer detected after arrow click!")
+                shouldContinue := false
+                break
+            }
+            
             if (!five_year_medal_found)
                 five_year_medal_found := InStr(followUpResult, "FIVE_YEAR_MEDAL_FOUND=1")
                 
@@ -561,7 +581,7 @@ ProcessPlayersGridMethod() {
                     LogMessage("Profile #" profilesFound " processed successfully with URL: " steamProfileUrl)
                 }
             } else {
-                LogMessage("Player has 4+ medals but no 5-year coin, skipping profile")
+                LogMessage("Player has 3+ medals but no 5-year coin, skipping profile")
                 
                 ; Need to close profile details in this case
                 LogMessage("Clicking again to close profile details")

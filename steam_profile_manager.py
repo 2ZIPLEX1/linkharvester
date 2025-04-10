@@ -26,9 +26,6 @@ logging.basicConfig(
     filemode='a'
 )
 
-# Replace with your actual API key
-API_KEY = "CFBC4A70290D1647D771A3016F59EAC7"
-
 class _CheckHandlers:
     """Static methods for handling specific check types"""
     
@@ -124,7 +121,8 @@ class _CheckHandlers:
     def steam_level(manager, steam_id):
         """Handle Steam level check (passes if level <= 13)"""
         try:
-            url = f"https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key={API_KEY}&steamid={steam_id}"
+            api_key = manager.api_key
+            url = f"https://api.steampowered.com/IPlayerService/GetSteamLevel/v1/?key={api_key}&steamid={steam_id}"
             logging.info(f"Checking Steam level for {steam_id}")
             req = urllib.request.Request(url)
             response = urllib.request.urlopen(req, timeout=5)
@@ -163,7 +161,8 @@ class _CheckHandlers:
     def friends(manager, steam_id):
         """Handle friends count check (passes if <= 60 friends)"""
         try:
-            url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={API_KEY}&steamid={steam_id}&relationship=friend"
+            api_key = manager.api_key
+            url = f"https://api.steampowered.com/ISteamUser/GetFriendList/v0001/?key={api_key}&steamid={steam_id}&relationship=friend"
             logging.info(f"Checking friends count for {steam_id}")
             req = urllib.request.Request(url)
             response = urllib.request.urlopen(req, timeout=5)
@@ -298,19 +297,56 @@ class _CheckConfig:
     }
 
 class SteamProfileManager:
-    def __init__(self, data_folder="steam_data"):
+    def __init__(self, data_folder="steam_data", config_path="config.json"):
         self.data_folder = data_folder
+        self.config_path = config_path
         self.queue_file = os.path.join(data_folder, "profiles_queue.json")
         self.filtered_file = os.path.join(data_folder, "filtered_steamids.txt")
         self.profiles_queue = []
         self.processing_thread = None
         self.is_processing = False
+        self.api_key = None
         
         # Create data folder if it doesn't exist
         os.makedirs(data_folder, exist_ok=True)
         
+        # Load API key from config file
+        self.load_config()
+        
         # Load existing queue
         self.load_queue()
+    
+    def load_config(self):
+        """Load API key from configuration file."""
+        try:
+            if not os.path.exists(self.config_path):
+                # Create default configuration file if it doesn't exist
+                default_config = {
+                    "tradebot_api_key": "",
+                    "steam_api_key": "",
+                    "username": ""
+                }
+                with open(self.config_path, 'w') as f:
+                    json.dump(default_config, f, indent=4)
+                logging.warning(f"Created default configuration file at {self.config_path}")
+                logging.warning("Please update with valid API key and username")
+                return False
+                
+            with open(self.config_path, 'r') as f:
+                config = json.load(f)
+                
+            self.api_key = config.get("steam_api_key", "")
+            
+            if not self.api_key:
+                logging.error(f"API key not found in configuration file: {self.config_path}")
+                return False
+                
+            logging.info("API key loaded successfully from config.json")
+            return True
+            
+        except Exception as e:
+            logging.error(f"Error loading configuration: {e}")
+            return False
     
     def _log_check_error(self, check_name, steam_id, error):
         """Centralized error logging for checks"""
@@ -415,6 +451,12 @@ class SteamProfileManager:
         
         try:
             logging.info(f"Starting queue processing with {len(self.profiles_queue)} profiles")
+            
+            # Ensure we have a valid API key for checks that need it
+            if not self.api_key:
+                logging.error("No API key available. Please update config.json")
+                self.is_processing = False
+                return
             
             # Counter to track profiles processed
             profiles_processed = 0
@@ -527,8 +569,11 @@ class SteamProfileManager:
     def resolve_vanity_url(self, vanity_id):
         """Resolve a vanity URL to a Steam ID"""
         try:
-            url = f"http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={API_KEY}&vanityurl={vanity_id}"
-            logging.info(f"Calling vanity URL resolution API: {url}")
+            if not self.api_key:
+                return {"success": False, "error": "No API key available. Please update config.json"}
+                
+            url = f"http://api.steampowered.com/ISteamUser/ResolveVanityURL/v0001/?key={self.api_key}&vanityurl={vanity_id}"
+            logging.info(f"Calling vanity URL resolution API")
             
             # Create a request with timeout (5 seconds)
             req = urllib.request.Request(url)
@@ -576,69 +621,6 @@ class SteamProfileManager:
             logging.error(traceback.format_exc())
             return {"success": False, "error": str(e)}
     
-    def check_animated_avatar(self, steam_id):
-        """Check if a Steam profile has an animated avatar"""
-        try:
-            url = f"https://api.steampowered.com/IPlayerService/GetAnimatedAvatar/v1/?steamid={steam_id}"
-            logging.info(f"Calling animated avatar API: {url}")
-            
-            response = urllib.request.urlopen(url)
-            data = json.loads(response.read().decode('utf-8'))
-            
-            if 'response' in data and 'avatar' in data['response']:
-                has_animated_avatar = len(data['response']['avatar']) > 0
-                
-                return {
-                    "success": True,
-                    "passed": not has_animated_avatar,
-                    "details": data['response'] if has_animated_avatar else {}
-                }
-            else:
-                return {"success": False, "error": "Unexpected API response format", "data": data}
-        except HTTPError as e:
-            logging.error(f"HTTP Error in check_animated_avatar: {e.code} - {e.reason}")
-            return {"success": False, "error": f"HTTP Error: {e.code} - {e.reason}"}
-        except Exception as e:
-            logging.error(f"Exception in check_animated_avatar: {str(e)}")
-            logging.error(traceback.format_exc())
-            return {"success": False, "error": str(e)}
-    
-    def check_avatar_frame(self, steam_id):
-        """Check if a Steam profile has an avatar frame"""
-        try:
-            url = f"https://api.steampowered.com/IPlayerService/GetAvatarFrame/v1/?steamid={steam_id}"
-            logging.info(f"Calling avatar frame API: {url}")
-            
-            # Create a request with timeout (5 seconds)
-            req = urllib.request.Request(url)
-            response = urllib.request.urlopen(req, timeout=5)
-            
-            data = json.loads(response.read().decode('utf-8'))
-            
-            if 'response' in data and 'avatar_frame' in data['response']:
-                has_avatar_frame = bool(data['response']['avatar_frame'])
-                
-                return {
-                    "success": True,
-                    "passed": not has_avatar_frame,
-                    "details": data['response'] if has_avatar_frame else {}
-                }
-            else:
-                return {"success": False, "error": "Unexpected API response format", "data": data}
-        except HTTPError as e:
-            logging.error(f"HTTP Error in check_avatar_frame: {e.code} - {e.reason}")
-            return {"success": False, "error": f"HTTP Error: {e.code} - {e.reason}"}
-        except socket.timeout:
-            logging.error("Socket timeout while checking avatar frame")
-            return {"success": False, "error": "API call timed out (socket)"}
-        except TimeoutError:
-            logging.error("Timeout error while checking avatar frame")
-            return {"success": False, "error": "API call timed out"}
-        except Exception as e:
-            logging.error(f"Exception in check_avatar_frame: {str(e)}")
-            logging.error(traceback.format_exc())
-            return {"success": False, "error": str(e)}
-
     def save_to_filtered_list(self, steam_id):
         """Save a Steam ID to the filtered list"""
         try:
