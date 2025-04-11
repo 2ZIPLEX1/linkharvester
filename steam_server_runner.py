@@ -22,7 +22,7 @@ def get_utc_now():
 class SteamServerRunner:
     """
     Manages the process of running AHK script against Steam servers
-    in priority order based on time slots
+    in priority order based on time slots 
     """
     
     def __init__(self, 
@@ -143,7 +143,7 @@ class SteamServerRunner:
         
         try:
             # Command to run AHK script
-            ahk_exe = "AutoHotkey64.exe"  # Update this path if needed
+            ahk_exe = "C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey.exe"
             cmd = [ahk_exe, self.ahk_script_path]
             
             # Run the process and capture output

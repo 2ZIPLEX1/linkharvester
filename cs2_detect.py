@@ -519,6 +519,244 @@ def detect_profile_button(region_x=None, region_y=None, region_width=None, regio
         print("PROFILE_BUTTON_RESULT=0")
         print(f"PROFILE_BUTTON_ERROR={str(e)}")
 
+def draw_detection_visualization(img, x_plus_coords, x_coords, search_roi_x, search_roi_y, timestamp):
+    """
+    Draw visualization showing detection results for tab close button
+    
+    Args:
+        img: Original screenshot image
+        x_plus_coords: Coordinates of x-plus detection (relative to search ROI)
+        x_coords: Coordinates of x-button detection (absolute, or None if not found)
+        search_roi_x, search_roi_y: Search ROI origin coordinates
+        timestamp: Timestamp for filenames
+    
+    Returns:
+        dict: Paths to created visualization images
+    """
+    debug_paths = {}
+    
+    try:
+        # Create debug directory if it doesn't exist
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        
+        # Calculate absolute coordinates for x-plus
+        xplus_abs_x = search_roi_x + x_plus_coords[0]
+        xplus_abs_y = search_roi_y + x_plus_coords[1]
+        
+        # Create a final visualization showing both matches
+        final_vis = img.copy()
+        
+        # Draw the x-plus match
+        cv2.circle(final_vis, (xplus_abs_x, xplus_abs_y), 8, (255, 0, 0), -1)  # Blue
+        cv2.putText(final_vis, "x-plus center", 
+                   (xplus_abs_x + 10, xplus_abs_y),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
+        
+        # Draw where the offset click would be
+        offset_x = xplus_abs_x - 13
+        offset_y = xplus_abs_y
+        cv2.circle(final_vis, (offset_x, offset_y), 8, (0, 255, 255), -1)  # Yellow
+        cv2.putText(final_vis, "-13px offset", 
+                   (offset_x + 10, offset_y),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+        
+        # Draw the precise x match if found
+        if x_coords is not None:
+            x_abs_x, x_abs_y = x_coords
+            cv2.circle(final_vis, (x_abs_x, x_abs_y), 8, (0, 255, 0), -1)  # Green
+            cv2.putText(final_vis, "precise x center", 
+                       (x_abs_x + 10, x_abs_y),
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        
+        # Save the final visualization
+        # final_vis_path = os.path.join(debug_dir, f"tab_close_final_{timestamp}.png")
+        # cv2.imwrite(final_vis_path, final_vis)
+        # logging.info(f"Saved final tab close visualization to: {final_vis_path}")
+        # debug_paths["final"] = final_vis_path
+        
+        return debug_paths
+        
+    except Exception as e:
+        logging.error(f"Error creating detection visualization: {str(e)}")
+        logging.error(traceback.format_exc())
+        return debug_paths
+
+def detect_tab_close_button_precise(img, search_roi_x, search_roi_y, search_roi_width, search_roi_height):
+    """
+    Two-stage template matching for precise tab close button detection
+    
+    Args:
+        img: Screenshot image as numpy array
+        search_roi_x, search_roi_y, search_roi_width, search_roi_height: Search region
+        
+    Returns:
+        dict: Result with detection status and coordinates
+    """
+    try:
+        # Create debug directory if it doesn't exist
+        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        os.makedirs(debug_dir, exist_ok=True)
+        timestamp = int(time.time())
+        
+        result = {
+            "found": False,
+            "is_precise": False,
+            "coords": None
+        }
+        
+        # Ensure the search ROI is within image bounds
+        img_height, img_width = img.shape[:2]
+        if (search_roi_x >= img_width or search_roi_y >= img_height or 
+            search_roi_x + search_roi_width > img_width or search_roi_y + search_roi_height > img_height):
+            logging.error(f"Search ROI outside image bounds: {search_roi_x},{search_roi_y},{search_roi_width},{search_roi_height}")
+            return result
+        
+        # Extract the search region for x-plus detection
+        search_region = img[search_roi_y:search_roi_y+search_roi_height, search_roi_x:search_roi_x+search_roi_width]
+        
+        # Save the search region for debugging
+        # search_region_path = os.path.join(debug_dir, f"tab_close_search_region_{timestamp}.png")
+        # cv2.imwrite(search_region_path, search_region)
+        # logging.info(f"Saved tab close search region to: {search_region_path}")
+        
+        # First stage: Find the x-plus template within the search region
+        x_plus_found, x_plus_coords = detect_template(search_region, "x-plus", threshold=0.7)
+        
+        if not x_plus_found:
+            # Try with a lower threshold if not found initially
+            x_plus_found, x_plus_coords = detect_template(search_region, "x-plus", threshold=0.6)
+            
+            if not x_plus_found:
+                logging.warning("X-plus icon not found in search region")
+                return result
+        
+        # Save visualization of first stage (x-plus detection)
+        # x_plus_vis = search_region.copy()
+        # cv2.circle(x_plus_vis, x_plus_coords, 5, (0, 0, 255), -1)  # Red dot at center
+        # x_plus_vis_path = os.path.join(debug_dir, f"x_plus_detection_{timestamp}.png")
+        # cv2.imwrite(x_plus_vis_path, x_plus_vis)
+        
+        # Second stage: Define a smaller ROI around where the 'x' part should be
+        x_roi_x = max(0, x_plus_coords[0] - 25)  # Move left to capture the 'x' part
+        x_roi_y = max(0, x_plus_coords[1] - 15)  # Some margin above
+        x_roi_width = 40  # Wide enough for the 'x'
+        x_roi_height = 30  # Tall enough for the 'x'
+        
+        # Ensure ROI is within search region bounds
+        x_roi_width = min(x_roi_width, search_region.shape[1] - x_roi_x)
+        x_roi_height = min(x_roi_height, search_region.shape[0] - x_roi_y)
+        
+        if x_roi_width <= 0 or x_roi_height <= 0:
+            logging.error(f"Invalid ROI for X button: {x_roi_x},{x_roi_y},{x_roi_width},{x_roi_height}")
+            
+            # Return x-plus coordinates as fallback
+            result["found"] = True
+            result["coords"] = (search_roi_x + x_plus_coords[0], search_roi_y + x_plus_coords[1])
+            result["is_precise"] = False
+            
+            # Create visualization with just the x-plus detection
+            draw_detection_visualization(img, x_plus_coords, None, search_roi_x, search_roi_y, timestamp)
+            return result
+        
+        # Extract the ROI for the 'x' button
+        x_roi = search_region[x_roi_y:x_roi_y+x_roi_height, x_roi_x:x_roi_x+x_roi_width]
+        
+        # Save the x ROI for debugging
+        # x_roi_path = os.path.join(debug_dir, f"x_button_roi_{timestamp}.png")
+        # cv2.imwrite(x_roi_path, x_roi)
+        # logging.info(f"Saved x button ROI to: {x_roi_path}")
+        
+        # Check if we have an x-button.jpg template
+        x_button_path = os.path.join(TEMPLATES_PATH, "x-button.jpg")
+        if not os.path.exists(x_button_path):
+            logging.warning(f"x-button template not found at: {x_button_path}")
+            
+            # Return x-plus coordinates as fallback
+            result["found"] = True
+            result["coords"] = (search_roi_x + x_plus_coords[0], search_roi_y + x_plus_coords[1])
+            result["is_precise"] = False
+            
+            # Create visualization with just the x-plus detection
+            draw_detection_visualization(img, x_plus_coords, None, search_roi_x, search_roi_y, timestamp)
+            return result
+            
+        # Run template matching on the x ROI
+        x_template = cv2.imread(x_button_path)
+        
+        # Convert to grayscale for template matching
+        x_roi_gray = cv2.cvtColor(x_roi, cv2.COLOR_BGR2GRAY)
+        x_template_gray = cv2.cvtColor(x_template, cv2.COLOR_BGR2GRAY)
+        
+        # Ensure template fits in ROI
+        if x_template_gray.shape[0] > x_roi_gray.shape[0] or x_template_gray.shape[1] > x_roi_gray.shape[1]:
+            logging.error(f"X button template too large for ROI")
+            
+            # Return x-plus coordinates as fallback
+            result["found"] = True
+            result["coords"] = (search_roi_x + x_plus_coords[0], search_roi_y + x_plus_coords[1])
+            result["is_precise"] = False
+            
+            # Create visualization with just the x-plus detection
+            draw_detection_visualization(img, x_plus_coords, None, search_roi_x, search_roi_y, timestamp)
+            return result
+        
+        # Perform template matching
+        result_img = cv2.matchTemplate(x_roi_gray, x_template_gray, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result_img)
+        
+        # Save match result visualization
+        x_template_h, x_template_w = x_template.shape[:2]
+        x_vis = x_roi.copy()
+        
+        # Draw template match location on visualization
+        cv2.rectangle(x_vis, max_loc, 
+                     (max_loc[0] + x_template_w, max_loc[1] + x_template_h),
+                     (0, 255, 0), 2)
+        
+        x_center_x = max_loc[0] + x_template_w // 2
+        x_center_y = max_loc[1] + x_template_h // 2
+        
+        cv2.circle(x_vis, (x_center_x, x_center_y), 3, (0, 0, 255), -1)
+        cv2.putText(x_vis, f"match: {max_val:.2f}", 
+                   (max_loc[0], max_loc[1] - 5),
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
+        
+        # Save the x button match visualization
+        x_vis_path = os.path.join(debug_dir, f"x_button_match_{timestamp}_{max_val:.2f}.png")
+        cv2.imwrite(x_vis_path, x_vis)
+        logging.info(f"Saved x button match visualization to: {x_vis_path}")
+        
+        # Check if match is good enough
+        if max_val >= 0.7:
+            # Calculate final coordinates relative to original image
+            x_abs_x = search_roi_x + x_roi_x + x_center_x
+            x_abs_y = search_roi_y + x_roi_y + x_center_y
+            
+            # Create final visualization
+            draw_detection_visualization(img, x_plus_coords, (x_abs_x, x_abs_y), search_roi_x, search_roi_y, timestamp)
+            
+            result["found"] = True
+            result["coords"] = (x_abs_x, x_abs_y)
+            result["is_precise"] = True
+            return result
+        else:
+            logging.info(f"X button match not strong enough: {max_val:.2f} < 0.7")
+            
+            # Return x-plus coordinates as fallback
+            result["found"] = True
+            result["coords"] = (search_roi_x + x_plus_coords[0], search_roi_y + x_plus_coords[1])
+            result["is_precise"] = False
+            
+            # Create visualization with just the x-plus detection
+            draw_detection_visualization(img, x_plus_coords, None, search_roi_x, search_roi_y, timestamp)
+            return result
+            
+    except Exception as e:
+        logging.error(f"Error in precise tab close detection: {str(e)}")
+        logging.error(traceback.format_exc())
+        return {"found": False, "is_precise": False, "coords": None}
+
 def extract_and_process_steam_url():
     """
     Extract Steam profile URL from the Steam browser using OCR, then process it directly 
@@ -561,19 +799,22 @@ def extract_and_process_steam_url():
         # Extract the search region
         search_region = img[search_roi_y:search_roi_y+search_roi_height, search_roi_x:search_roi_x+search_roi_width]
         
-        # Find the lock icon within the search region
-        lock_found, lock_coords = detect_template(search_region, "lock-icon", threshold=0.7)
-        
-        # Find the tab close button (x-plus pattern)
-        tab_close_found, tab_close_coords = detect_template(search_region, "x-plus", threshold=0.7)
-        
-        if tab_close_found:
-            # Calculate absolute coordinates
-            tab_close_x = search_roi_x + tab_close_coords[0]
-            tab_close_y = search_roi_y + tab_close_coords[1]
-            logging.info(f"Tab close button found at coordinates: {tab_close_x},{tab_close_y}")
+        # Use our new two-stage detection
+        tab_close_result = detect_tab_close_button_precise(img, 
+                                                          search_roi_x, 
+                                                          search_roi_y, 
+                                                          search_roi_width, 
+                                                          search_roi_height)
+
+        if tab_close_result["found"]:
+            # Get coordinates
+            tab_close_x, tab_close_y = tab_close_result["coords"]
+            is_precise = tab_close_result["is_precise"]
+            
+            logging.info(f"Tab close button found at coordinates: {tab_close_x},{tab_close_y} (precise: {is_precise})")
             print(f"TAB_CLOSE_BUTTON_FOUND=1")
             print(f"TAB_CLOSE_COORDS={tab_close_x},{tab_close_y}")
+            print(f"PRECISE_X_FOUND={1 if is_precise else 0}")
         else:
             # Try with a lower threshold if not found initially
             tab_close_found, tab_close_coords = detect_template(search_region, "x-plus", threshold=0.6)
@@ -584,9 +825,13 @@ def extract_and_process_steam_url():
                 logging.info(f"Tab close button found at coordinates: {tab_close_x},{tab_close_y}")
                 print(f"TAB_CLOSE_BUTTON_FOUND=1")
                 print(f"TAB_CLOSE_COORDS={tab_close_x},{tab_close_y}")
+                print(f"PRECISE_X_FOUND=0")
             else:
                 logging.warning("Tab close button not found")
                 print("TAB_CLOSE_BUTTON_FOUND=0")
+        
+        # Find the lock icon within the search region
+        lock_found, lock_coords = detect_template(search_region, "lock-icon", threshold=0.7)
         
         if not lock_found:
             # Try with a lower threshold if not found initially

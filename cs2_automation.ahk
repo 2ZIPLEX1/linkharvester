@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 1 {
+    Loop 3 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -84,7 +84,7 @@ Main() {
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
     mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    ; mapKeys := ["Delta"]
+    ; mapKeys := ["DustII"]
     
     ; Process each map in order
     for mapKey in mapKeys {

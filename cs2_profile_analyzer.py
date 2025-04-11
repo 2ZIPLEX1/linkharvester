@@ -1216,8 +1216,8 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
             print(f"MEDAL_DETECTED={medal_name}")
         
         # Save debug visualization with all detections
-        debug_path = os.path.join(debug_dir, f"profile_complete_analysis_{timestamp}.png")
-        cv2.imwrite(debug_path, visualization)
+        # debug_path = os.path.join(debug_dir, f"profile_complete_analysis_{timestamp}.png")
+        # cv2.imwrite(debug_path, visualization)
         
         logging.info(f"Profile analysis complete: {result['medal_count']} medals, " +
                      f"5-year coin: {result['five_year_medal_found']}, " +

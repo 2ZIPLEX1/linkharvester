@@ -1,548 +1,65 @@
-2025-04-11 11:33:10,853 - INFO - Loaded timezone map with 28 servers
-2025-04-11 11:33:10,854 - INFO - Server history file server_history.json not found, creating new
-2025-04-11 11:33:10,854 - ERROR - All servers file not found: all_servers.json
-2025-04-11 11:33:10,854 - INFO - Starting continuous server operation
-2025-04-11 11:33:10,854 - INFO - Starting server cycle #1
-2025-04-11 11:33:10,854 - INFO - Time changed from day -1, hour -1 to day 4, hour 9, updating server list
-2025-04-11 11:33:10,854 - INFO - Top 10 servers:
-2025-04-11 11:33:10,854 - INFO -   Sydney (Australia) (syd) - Priority: 1, Local: Friday 19:00
-2025-04-11 11:33:10,855 - INFO -   Tokyo Koto City (Japan) (tyo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:33:10,855 - INFO -   Seoul (South Korea) (seo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:33:10,855 - INFO -   Hong Kong (hkg) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:33:10,855 - INFO -   Singapore (sgp) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:33:10,855 - INFO -   Stockholm - Kista (Sweden) (sto) - Priority: 999, Local: Friday 11:00
-2025-04-11 11:33:10,855 - INFO -   Warsaw (Poland) (waw) - Priority: 999, Local: Friday 11:00
-2025-04-11 11:33:10,855 - INFO -   Dallas (Texas) (dfw) - Priority: 999, Local: Friday 4:00
-2025-04-11 11:33:10,855 - INFO -   Santiago (Chile) (scl) - Priority: 999, Local: Friday 5:00
-2025-04-11 11:33:10,855 - INFO -   Atlanta (Georgia) (atl) - Priority: 999, Local: Friday 5:00
-2025-04-11 11:33:10,856 - INFO - Wrote 28 servers to preferred_servers.txt
-2025-04-11 11:33:10,856 - INFO - Loaded 28 preferred servers
-2025-04-11 11:33:10,859 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:33:10,859 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:33:10,859 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:33:10,860 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:33:10,860 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:33:10,860 - INFO - Completed cycle #1, pausing before next cycle
-2025-04-11 11:42:20,623 - INFO - Loaded timezone map with 28 servers
-2025-04-11 11:42:20,623 - INFO - Server history file server_history.json not found, creating new
-2025-04-11 11:42:20,623 - ERROR - All servers file not found: all_servers.json
-2025-04-11 11:42:20,623 - INFO - Starting continuous server operation
-2025-04-11 11:42:20,623 - INFO - Starting server cycle #1
-2025-04-11 11:42:20,623 - INFO - Time changed from day -1, hour -1 to day 4, hour 9, updating server list
-2025-04-11 11:42:20,623 - INFO - Top 10 servers:
-2025-04-11 11:42:20,624 - INFO -   Sydney (Australia) (syd) - Priority: 1, Local: Friday 19:00
-2025-04-11 11:42:20,624 - INFO -   Tokyo Koto City (Japan) (tyo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:42:20,624 - INFO -   Seoul (South Korea) (seo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:42:20,624 - INFO -   Singapore (sgp) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:42:20,624 - INFO -   Hong Kong (hkg) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:42:20,624 - INFO -   Chennai - Ambattur (India) (maa2) - Priority: 999, Local: Friday 15:00
-2025-04-11 11:42:20,624 - INFO -   Mumbai (India) (bom2) - Priority: 999, Local: Friday 15:00
-2025-04-11 11:42:20,624 - INFO -   Dallas (Texas) (dfw) - Priority: 999, Local: Friday 4:00
-2025-04-11 11:42:20,624 - INFO -   Sterling (Virginia) (iad) - Priority: 999, Local: Friday 5:00
-2025-04-11 11:42:20,624 - INFO -   Buenos Aires (Argentina) (eze) - Priority: 999, Local: Friday 6:00
-2025-04-11 11:42:20,624 - INFO - Wrote 28 servers to preferred_servers.txt
-2025-04-11 11:42:20,625 - INFO - Loaded 28 preferred servers
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:42:20,628 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:42:20,628 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:42:20,629 - INFO - Completed cycle #1, pausing before next cycle
-2025-04-11 11:42:50,629 - INFO - Starting server cycle #2
-2025-04-11 11:42:50,629 - INFO - Loaded 28 preferred servers
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:42:50,629 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:42:50,630 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:42:50,630 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:42:50,630 - INFO - Completed cycle #2, pausing before next cycle
-2025-04-11 11:43:02,564 - INFO - Loaded timezone map with 28 servers
-2025-04-11 11:43:02,564 - INFO - Server history file server_history.json not found, creating new
-2025-04-11 11:43:02,565 - ERROR - All servers file not found: all_servers.json
-2025-04-11 11:43:02,565 - INFO - Starting continuous server operation
-2025-04-11 11:43:02,565 - INFO - Starting server cycle #1
-2025-04-11 11:43:02,565 - INFO - Time changed from day -1, hour -1 to day 4, hour 9, updating server list
-2025-04-11 11:43:02,565 - INFO - Top 10 servers:
-2025-04-11 11:43:02,565 - INFO -   Sydney (Australia) (syd) - Priority: 1, Local: Friday 19:00
-2025-04-11 11:43:02,565 - INFO -   Tokyo Koto City (Japan) (tyo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:43:02,565 - INFO -   Seoul (South Korea) (seo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:43:02,565 - INFO -   Singapore (sgp) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:43:02,565 - INFO -   Hong Kong (hkg) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:43:02,565 - INFO -   Vienna (Austria) (vie) - Priority: 999, Local: Friday 11:00
-2025-04-11 11:43:02,565 - INFO -   Seattle (Washington) (sea) - Priority: 999, Local: Friday 2:00
-2025-04-11 11:43:02,565 - INFO -   Mumbai (India) (bom2) - Priority: 999, Local: Friday 15:00
-2025-04-11 11:43:02,565 - INFO -   Madrid (Spain) (mad) - Priority: 999, Local: Friday 11:00
-2025-04-11 11:43:02,565 - INFO -   Buenos Aires (Argentina) (eze) - Priority: 999, Local: Friday 6:00
-2025-04-11 11:43:02,566 - INFO - Wrote 28 servers to preferred_servers.txt
-2025-04-11 11:43:02,566 - INFO - Loaded 28 preferred servers
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:43:02,566 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:43:02,567 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:43:02,567 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:43:02,567 - INFO - Completed cycle #1, pausing before next cycle
-2025-04-11 11:43:20,631 - INFO - Starting server cycle #3
-2025-04-11 11:43:20,631 - INFO - Loaded 28 preferred servers
-2025-04-11 11:43:20,631 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:43:20,631 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:43:20,631 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:43:20,632 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:43:20,632 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:43:20,632 - INFO - Completed cycle #3, pausing before next cycle
-2025-04-11 11:43:50,632 - INFO - Starting server cycle #4
-2025-04-11 11:43:50,633 - INFO - Loaded 28 preferred servers
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:43:50,633 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:43:50,634 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:43:50,634 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:43:50,634 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:43:50,634 - INFO - Completed cycle #4, pausing before next cycle
-2025-04-11 11:44:20,634 - INFO - Starting server cycle #5
-2025-04-11 11:44:20,634 - INFO - Loaded 28 preferred servers
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:44:20,634 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:44:20,635 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:44:20,635 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:44:20,635 - INFO - Completed cycle #5, pausing before next cycle
-2025-04-11 11:44:50,635 - INFO - Starting server cycle #6
-2025-04-11 11:44:50,636 - INFO - Loaded 28 preferred servers
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:44:50,636 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:44:50,637 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:44:50,637 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:44:50,637 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:44:50,637 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:44:50,637 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:44:50,637 - INFO - Completed cycle #6, pausing before next cycle
-2025-04-11 11:45:20,637 - INFO - Starting server cycle #7
-2025-04-11 11:45:20,638 - INFO - Loaded 28 preferred servers
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:45:20,638 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:45:20,639 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:45:20,639 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:45:20,639 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:45:20,639 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:45:20,639 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:45:20,639 - INFO - Completed cycle #7, pausing before next cycle
-2025-04-11 11:45:50,639 - INFO - Starting server cycle #8
-2025-04-11 11:45:50,639 - INFO - Loaded 28 preferred servers
-2025-04-11 11:45:50,639 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:45:50,639 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:45:50,640 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:45:50,640 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:45:50,640 - INFO - Completed cycle #8, pausing before next cycle
-2025-04-11 11:46:01,600 - INFO - Loaded timezone map with 28 servers
-2025-04-11 11:46:01,600 - INFO - Server history file server_history.json not found, creating new
-2025-04-11 11:46:01,600 - ERROR - All servers file not found: all_servers.json
-2025-04-11 11:46:01,600 - INFO - Starting continuous server operation
-2025-04-11 11:46:01,600 - INFO - Starting server cycle #1
-2025-04-11 11:46:01,600 - INFO - Time changed from day -1, hour -1 to day 4, hour 9, updating server list
-2025-04-11 11:46:01,601 - INFO - Top 10 servers:
-2025-04-11 11:46:01,601 - INFO -   Sydney (Australia) (syd) - Priority: 1, Local: Friday 19:00
-2025-04-11 11:46:01,601 - INFO -   Tokyo Koto City (Japan) (tyo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:46:01,601 - INFO -   Seoul (South Korea) (seo) - Priority: 8, Local: Friday 18:00
-2025-04-11 11:46:01,601 - INFO -   Singapore (sgp) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:46:01,601 - INFO -   Hong Kong (hkg) - Priority: 9, Local: Friday 17:00
-2025-04-11 11:46:01,601 - INFO -   Mumbai (India) (bom2) - Priority: 999, Local: Friday 15:00
-2025-04-11 11:46:01,601 - INFO -   Frankfurt (Germany) (fra) - Priority: 999, Local: Friday 11:00
-2025-04-11 11:46:01,601 - INFO -   Paris (France) (par) - Priority: 999, Local: Friday 11:00
-2025-04-11 11:46:01,601 - INFO -   Lima (Peru) (lim) - Priority: 999, Local: Friday 4:00
-2025-04-11 11:46:01,601 - INFO -   Sterling (Virginia) (iad) - Priority: 999, Local: Friday 5:00
-2025-04-11 11:46:01,602 - INFO - Wrote 28 servers to preferred_servers.txt
-2025-04-11 11:46:01,602 - INFO - Loaded 28 preferred servers
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:46:01,602 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:46:01,603 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:46:01,603 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:46:01,603 - INFO - Completed cycle #1, pausing before next cycle
-2025-04-11 11:46:20,640 - INFO - Starting server cycle #9
-2025-04-11 11:46:20,641 - INFO - Loaded 28 preferred servers
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:46:20,641 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:46:20,642 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:46:20,642 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:46:20,642 - INFO - Completed cycle #9, pausing before next cycle
-2025-04-11 11:46:50,642 - INFO - Starting server cycle #10
-2025-04-11 11:46:50,642 - INFO - Loaded 28 preferred servers
-2025-04-11 11:46:50,642 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:46:50,642 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:46:50,643 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:46:50,643 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:46:50,643 - INFO - Completed cycle #10, pausing before next cycle
-2025-04-11 11:47:20,644 - INFO - Starting server cycle #11
-2025-04-11 11:47:20,644 - INFO - Loaded 28 preferred servers
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:47:20,644 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:47:20,645 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:47:20,645 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:47:20,645 - INFO - Completed cycle #11, pausing before next cycle
-2025-04-11 11:47:50,645 - INFO - Starting server cycle #12
-2025-04-11 11:47:50,646 - INFO - Loaded 28 preferred servers
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Sydney (Australia) (syd)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Tokyo Koto City (Japan) (tyo)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Seoul (South Korea) (seo)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Singapore (sgp)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Hong Kong (hkg)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Mumbai (India) (bom2)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Frankfurt (Germany) (fra)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Paris (France) (par)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Lima (Peru) (lim)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Sterling (Virginia) (iad)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Vienna (Austria) (vie)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Dallas (Texas) (dfw)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Atlanta (Georgia) (atl)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Amsterdam (Netherlands) (ams)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: London (England) (lhr)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Madrid (Spain) (mad)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Los Angeles (California) (lax)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Johannesburg (South Africa) (jnb)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Stockholm - Kista (Sweden) (sto)
-2025-04-11 11:47:50,646 - WARNING - Server not found in all_servers: Dubai (United Arab Emirates) (dxb)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Santiago (Chile) (scl)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Chicago (Illinois) (ord)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Chennai - Ambattur (India) (maa2)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Warsaw (Poland) (waw)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Stockholm - Bromma (Sweden) (sto2)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Seattle (Washington) (sea)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Sao Paulo (Brazil) (gru)
-2025-04-11 11:47:50,647 - WARNING - Server not found in all_servers: Buenos Aires (Argentina) (eze)
-2025-04-11 11:47:50,647 - INFO - Completed server cycle, harvested 0 profiles in total
-2025-04-11 11:47:50,647 - INFO - Completed cycle #12, pausing before next cycle
+2025-04-11 12:44:39,456 - INFO - Loaded timezone map with 28 servers
+2025-04-11 12:44:39,456 - INFO - Loaded server history with 1 entries
+2025-04-11 12:44:39,457 - INFO - Starting continuous server operation
+2025-04-11 12:44:39,457 - INFO - Starting server cycle #1
+2025-04-11 12:44:39,457 - INFO - Time changed from day -1, hour -1 to day 4, hour 10, updating server list
+2025-04-11 12:44:39,457 - INFO - Skipping recently used server: Amsterdam (Netherlands) (ams)
+2025-04-11 12:44:39,457 - INFO - Top 10 servers:
+2025-04-11 12:44:39,457 - INFO -   Seoul (South Korea) (seo) - Priority: 1, Local: Friday 19:00
+2025-04-11 12:44:39,457 - INFO -   Tokyo Koto City (Japan) (tyo) - Priority: 1, Local: Friday 19:00
+2025-04-11 12:44:39,457 - INFO -   Sydney (Australia) (syd) - Priority: 5, Local: Friday 20:00
+2025-04-11 12:44:39,457 - INFO -   Hong Kong (hkg) - Priority: 8, Local: Friday 18:00
+2025-04-11 12:44:39,457 - INFO -   Singapore (sgp) - Priority: 8, Local: Friday 18:00
+2025-04-11 12:44:39,457 - INFO -   Frankfurt (Germany) (fra) - Priority: 999, Local: Friday 12:00
+2025-04-11 12:44:39,457 - INFO -   Paris (France) (par) - Priority: 999, Local: Friday 12:00
+2025-04-11 12:44:39,457 - INFO -   Lima (Peru) (lim) - Priority: 999, Local: Friday 5:00
+2025-04-11 12:44:39,457 - INFO -   Stockholm - Kista (Sweden) (sto) - Priority: 999, Local: Friday 12:00
+2025-04-11 12:44:39,457 - INFO -   Dallas (Texas) (dfw) - Priority: 999, Local: Friday 5:00
+2025-04-11 12:44:39,458 - INFO - Wrote 27 servers to preferred_servers.txt
+2025-04-11 12:44:39,459 - INFO - Loaded 27 preferred servers
+2025-04-11 12:44:39,459 - INFO - Running server: Seoul (South Korea) (seo)
+2025-04-11 12:44:39,459 - INFO - Updated server blocklist, unblocked: Seoul (South Korea) (seo)
+2025-04-11 12:44:39,459 - INFO - Starting AHK script: cs2_automation.ahk
+2025-04-11 12:45:58,545 - WARNING - Could not parse harvest results from AHK output
+2025-04-11 12:45:58,545 - INFO - AHK script completed successfully, harvested 0 profiles
+2025-04-11 12:45:58,545 - INFO - Server performance: {"server": "Seoul (South Korea) (seo)", "utc_start": "2025-04-11 12:44:39", "utc_end": "2025-04-11 12:45:58", "local_time": "19:00-20:00 (Friday)", "duration_minutes": 1.3, "profiles_harvested": 0, "harvest_rate": 0.0}
+2025-04-11 12:45:58,546 - INFO - Saved server history with 2 entries
+2025-04-11 12:45:58,546 - INFO - Running server: Tokyo Koto City (Japan) (tyo)
+2025-04-11 12:45:58,546 - INFO - Updated server blocklist, unblocked: Tokyo Koto City (Japan) (tyo)
+2025-04-11 12:45:58,546 - INFO - Starting AHK script: cs2_automation.ahk
+2025-04-11 12:47:08,746 - WARNING - Could not parse harvest results from AHK output
+2025-04-11 12:47:08,747 - INFO - AHK script completed successfully, harvested 0 profiles
+2025-04-11 12:47:08,747 - INFO - Server performance: {"server": "Tokyo Koto City (Japan) (tyo)", "utc_start": "2025-04-11 12:45:58", "utc_end": "2025-04-11 12:47:08", "local_time": "19:00-20:00 (Friday)", "duration_minutes": 1.2, "profiles_harvested": 0, "harvest_rate": 0.0}
+2025-04-11 12:47:08,748 - INFO - Saved server history with 3 entries
+2025-04-11 12:47:08,748 - INFO - Running server: Sydney (Australia) (syd)
+2025-04-11 12:47:08,748 - INFO - Updated server blocklist, unblocked: Sydney (Australia) (syd)
+2025-04-11 12:47:08,748 - INFO - Starting AHK script: cs2_automation.ahk
+2025-04-11 12:48:39,619 - WARNING - Could not parse harvest results from AHK output
+2025-04-11 12:48:39,619 - INFO - AHK script completed successfully, harvested 0 profiles
+2025-04-11 12:48:39,619 - INFO - Server performance: {"server": "Sydney (Australia) (syd)", "utc_start": "2025-04-11 12:47:08", "utc_end": "2025-04-11 12:48:39", "local_time": "20:00-21:00 (Friday)", "duration_minutes": 1.5, "profiles_harvested": 0, "harvest_rate": 0.0}
+2025-04-11 12:48:39,620 - INFO - Saved server history with 4 entries
+2025-04-11 12:48:39,620 - INFO - Running server: Hong Kong (hkg)
+2025-04-11 12:48:39,620 - INFO - Updated server blocklist, unblocked: Hong Kong (hkg)
+2025-04-11 12:48:39,620 - INFO - Starting AHK script: cs2_automation.ahk
+2025-04-11 12:54:53,851 - INFO - Loaded timezone map with 28 servers
+2025-04-11 12:54:53,852 - INFO - Loaded server history with 1 entries
+2025-04-11 12:54:53,853 - INFO - Starting continuous server operation
+2025-04-11 12:54:53,853 - INFO - Starting server cycle #1
+2025-04-11 12:54:53,853 - INFO - Time changed from day -1, hour -1 to day 4, hour 10, updating server list
+2025-04-11 12:54:53,853 - INFO - Skipping recently used server: Sydney (Australia) (syd)
+2025-04-11 12:54:53,853 - INFO - Top 10 servers:
+2025-04-11 12:54:53,853 - INFO -   Tokyo Koto City (Japan) (tyo) - Priority: 1, Local: Friday 19:00
+2025-04-11 12:54:53,853 - INFO -   Seoul (South Korea) (seo) - Priority: 1, Local: Friday 19:00
+2025-04-11 12:54:53,853 - INFO -   Hong Kong (hkg) - Priority: 8, Local: Friday 18:00
+2025-04-11 12:54:53,853 - INFO -   Singapore (sgp) - Priority: 8, Local: Friday 18:00
+2025-04-11 12:54:53,853 - INFO -   Dubai (United Arab Emirates) (dxb) - Priority: 999, Local: Friday 14:00
+2025-04-11 12:54:53,853 - INFO -   Buenos Aires (Argentina) (eze) - Priority: 999, Local: Friday 7:00
+2025-04-11 12:54:53,853 - INFO -   Dallas (Texas) (dfw) - Priority: 999, Local: Friday 5:00
+2025-04-11 12:54:53,853 - INFO -   London (England) (lhr) - Priority: 999, Local: Friday 11:00
+2025-04-11 12:54:53,853 - INFO -   Sterling (Virginia) (iad) - Priority: 999, Local: Friday 6:00
+2025-04-11 12:54:53,853 - INFO -   Madrid (Spain) (mad) - Priority: 999, Local: Friday 12:00
+2025-04-11 12:54:53,854 - INFO - Wrote 27 servers to preferred_servers.txt
+2025-04-11 12:54:53,855 - INFO - Loaded 27 preferred servers
+2025-04-11 12:54:53,855 - INFO - Running server: Tokyo Koto City (Japan) (tyo)
+2025-04-11 12:54:53,856 - INFO - Updated server blocklist, unblocked: Tokyo Koto City (Japan) (tyo)
+2025-04-11 12:54:53,856 - INFO - Starting AHK script: cs2_automation.ahk

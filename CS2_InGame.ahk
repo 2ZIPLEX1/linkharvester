@@ -143,6 +143,7 @@ CloseTabAndOverlay(urlResult) {
     tabCloseX := 0
     tabCloseY := 0
     tabCloseFound := false
+    isPreciseX := false
     
     if InStr(urlResult, "TAB_CLOSE_BUTTON_FOUND=1") {
         if RegExMatch(urlResult, "TAB_CLOSE_COORDS=(\d+),(\d+)", &coordMatch) {
@@ -150,14 +151,26 @@ CloseTabAndOverlay(urlResult) {
             tabCloseY := Integer(coordMatch[2])
             tabCloseFound := true
             LogMessage("Tab close button found at: " tabCloseX "," tabCloseY)
+            
+            ; Check if this is a precise X coordinate
+            isPreciseX := InStr(urlResult, "PRECISE_X_FOUND=1")
+            if (isPreciseX)
+                LogMessage("Precise X button coordinates available - no offset needed")
         }
     }
     
     ; Close the tabs and overlay using clicks
     if (tabCloseFound) {
-        ; First click the tab close button (adjusted X to target the 'x' specifically)
-        LogMessage("Clicking tab close button at: " tabCloseX-13 "," tabCloseY)
-        Click tabCloseX-13, tabCloseY
+        ; Click the tab close button (with or without offset based on precision)
+        if (isPreciseX) {
+            ; Use exact coordinates for precise detection
+            LogMessage("Clicking precise tab close button at: " tabCloseX "," tabCloseY)
+            Click tabCloseX, tabCloseY
+        } else {
+            ; Use offset for x-plus based detection
+            LogMessage("Clicking tab close button with offset at: " tabCloseX-13 "," tabCloseY)
+            Click tabCloseX-13, tabCloseY
+        }
         Sleep 500  ; Wait for tab to close
         
         ; Then click the overlay close button
