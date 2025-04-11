@@ -13,5 +13,20 @@
       "friends": "passed",
       "csgo_inventory": "to_check"
     }
+  },
+  {
+    "url": "https://steamcommunity.com/id/KissShot/",
+    "timestamp": 1744355750.4697301,
+    "vanity_id": "KissShot",
+    "steam_id": "76561198021173440",
+    "checks": {
+      "animated_avatar": "passed",
+      "avatar_frame": "passed",
+      "mini_profile_background": "passed",
+      "profile_background": "passed",
+      "steam_level": "passed",
+      "friends": "passed",
+      "csgo_inventory": "to_check"
+    }
   }
 ]

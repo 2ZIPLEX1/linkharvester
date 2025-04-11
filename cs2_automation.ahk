@@ -83,8 +83,8 @@ Main() {
 
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
-    ; mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    mapKeys := ["Sigma"]
+    mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
+    ; mapKeys := ["Delta"]
     
     ; Process each map in order
     for mapKey in mapKeys {

@@ -260,7 +260,7 @@ class CS2TestServerManager:
             print("6. View the player list (after a short delay)")
             print("\nMake sure CS2 is already running to avoid anti-cheat issues.")
             
-            # Proceed without confirmation
+            # Proceed without confirmation 
             ahk_executable = "C:\\Program Files\\AutoHotkey\\v2\\AutoHotkey.exe"
             print("\nLaunching AHK script...")
             

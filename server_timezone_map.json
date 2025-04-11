@@ -1,0 +1,40 @@
+{
+    "London (England) (lhr)": "UTC+1",
+    
+    "Amsterdam (Netherlands) (ams)": "UTC+2",
+    "Frankfurt (Germany) (fra)": "UTC+2",
+    "Johannesburg (South Africa) (jnb)": "UTC+2",
+    "Madrid (Spain) (mad)": "UTC+2",
+    "Paris (France) (par)": "UTC+2",
+    "Stockholm - Kista (Sweden) (sto)": "UTC+2",
+    "Stockholm - Bromma (Sweden) (sto2)": "UTC+2",
+    "Vienna (Austria) (vie)": "UTC+2",
+    "Warsaw (Poland) (waw)": "UTC+2",
+    
+    "Dubai (United Arab Emirates) (dxb)": "UTC+4",
+    
+    "Mumbai (India) (bom2)": "UTC+5:30",
+    "Chennai - Ambattur (India) (maa2)": "UTC+5:30",
+    
+    "Hong Kong (hkg)": "UTC+8",
+    "Singapore (sgp)": "UTC+8",
+    
+    "Seoul (South Korea) (seo)": "UTC+9",
+    "Tokyo Koto City (Japan) (tyo)": "UTC+9",
+    
+    "Sydney (Australia) (syd)": "UTC+10",
+    
+    "Buenos Aires (Argentina) (eze)": "UTC-3",
+    "Sao Paulo (Brazil) (gru)": "UTC-3",
+    
+    "Atlanta (Georgia) (atl)": "UTC-4",
+    "Santiago (Chile) (scl)": "UTC-4",
+    "Sterling (Virginia) (iad)": "UTC-4",
+    
+    "Chicago (Illinois) (ord)": "UTC-5",
+    "Dallas (Texas) (dfw)": "UTC-5",
+    "Lima (Peru) (lim)": "UTC-5",
+    
+    "Los Angeles (California) (lax)": "UTC-7",
+    "Seattle (Washington) (sea)": "UTC-7"
+  }

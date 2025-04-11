@@ -1,0 +1,33 @@
+# Auto-generated preferred servers list based on day/time priority
+# Generated on: 2025-04-11 11:46:01
+# Day of week: Friday
+# Use the exact server names as they appear in all_servers.json
+
+Sydney (Australia) (syd)
+Tokyo Koto City (Japan) (tyo)
+Seoul (South Korea) (seo)
+Singapore (sgp)
+Hong Kong (hkg)
+Mumbai (India) (bom2)
+Frankfurt (Germany) (fra)
+Paris (France) (par)
+Lima (Peru) (lim)
+Sterling (Virginia) (iad)
+Vienna (Austria) (vie)
+Dallas (Texas) (dfw)
+Atlanta (Georgia) (atl)
+Amsterdam (Netherlands) (ams)
+London (England) (lhr)
+Madrid (Spain) (mad)
+Los Angeles (California) (lax)
+Johannesburg (South Africa) (jnb)
+Stockholm - Kista (Sweden) (sto)
+Dubai (United Arab Emirates) (dxb)
+Santiago (Chile) (scl)
+Chicago (Illinois) (ord)
+Chennai - Ambattur (India) (maa2)
+Warsaw (Poland) (waw)
+Stockholm - Bromma (Sweden) (sto2)
+Seattle (Washington) (sea)
+Sao Paulo (Brazil) (gru)
+Buenos Aires (Argentina) (eze)

@@ -1,0 +1,3267 @@
+2025-04-11 11:48:56 - === CS2 Automation Script Started ===
+2025-04-11 11:48:56 - AHK Version: 2.0.19
+2025-04-11 11:48:56 - Script Path: C:\LinkHarvesterScript\cs2_automation.ahk
+2025-04-11 11:48:56 - Log File: C:\LinkHarvesterScript\logs\cs2_automation.log
+2025-04-11 11:48:56 - Clearing URL cache for new server round...
+2025-04-11 11:48:56 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py clear_url_cache
+2025-04-11 11:48:57 - URL cache cleared: 0 URLs removed
+2025-04-11 11:48:57 - Processing any previously saved Steam IDs on startup...
+2025-04-11 11:48:57 - Submitting filtered Steam IDs to API...
+2025-04-11 11:48:57 - API submission result: 
+Processing results:
+Total IDs: 0
+Successfully processed: 0
+Errors: 0
+Skipped (already exists or invalid): 0
+Remaining in fallback file: 0
+
+2025-04-11 11:48:57 - Successfully processed saved IDs on startup
+2025-04-11 11:48:57 - Checking if CS2 is running...
+2025-04-11 11:48:57 - CS2 is already running. Window activated.
+2025-04-11 11:48:58 - Starting round 1 of 3
+2025-04-11 11:48:58 - Ensuring we're at the main menu...
+2025-04-11 11:48:58 - Checking if we're at the main menu...
+2025-04-11 11:48:58 - Taking Steam screenshot
+2025-04-11 11:49:00 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 198 12 40 40
+2025-04-11 11:49:00 - At main menu: yes
+2025-04-11 11:49:00 - Checking for voted-off error dialog...
+2025-04-11 11:49:00 - Taking Steam screenshot
+2025-04-11 11:49:01 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py check_voted_off_error_dialog
+2025-04-11 11:49:02 - Voted-off error dialog detection result: VOTED_OFF_ERROR_DIALOG_DETECTED=0
+
+2025-04-11 11:49:02 - Already at main menu
+2025-04-11 11:49:02 - Round 1: Starting map Sigma
+2025-04-11 11:49:02 - Starting Sigma match automation
+2025-04-11 11:49:02 - Selecting map: Sigma
+2025-04-11 11:49:03 - Clicking Play button at coordinates: 985,30
+2025-04-11 11:49:04 - Selecting matchmaking mode at coordinates: 813,85
+2025-04-11 11:49:04 - Selecting casual league at coordinates: 906,130
+2025-04-11 11:49:05 - Selecting Sigma map at coordinates: 502,570
+2025-04-11 11:49:05 - Clicking Accept Match at coordinates: 1695,1030
+2025-04-11 11:49:05 - Map selection sequence completed for: Sigma
+2025-04-11 11:49:05 - Map Sigma selected, now waiting for match to be found and joined...
+2025-04-11 11:49:05 - Waiting for match outcome (success or failure)...
+2025-04-11 11:49:05 - Match detection timeout set to 90.0 seconds
+2025-04-11 11:49:05 - Will wait 1.0 seconds after Cancel Search disappears before checking for errors
+2025-04-11 11:49:05 - Search phase ended, now in connecting/loading phase after 0.014999999999999999 seconds
+2025-04-11 11:49:05 - Returned to searching state, resetting phase
+2025-04-11 11:49:05 - Still searching for match... 0.60899999999999999 seconds elapsed
+2025-04-11 11:49:05 - Still searching for match... 0.67100000000000004 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 0.73399999999999999 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 0.81200000000000006 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 0.875 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 0.95299999999999996 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.0149999999999999 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.093 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.1559999999999999 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.234 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.296 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.375 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.4370000000000001 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.5 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.5780000000000001 seconds elapsed
+2025-04-11 11:49:06 - Still searching for match... 1.6399999999999999 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 1.718 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 1.7809999999999999 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 1.859 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 1.921 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 1.984 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.0619999999999998 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.125 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.2029999999999998 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.2650000000000001 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.343 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.4060000000000001 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.484 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.5459999999999998 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.609 seconds elapsed
+2025-04-11 11:49:07 - Still searching for match... 2.6869999999999998 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 2.75 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 2.8279999999999998 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 2.8900000000000001 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 2.968 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.0310000000000001 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.109 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.1709999999999998 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.234 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.3119999999999998 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.375 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.4529999999999998 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.5150000000000001 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.593 seconds elapsed
+2025-04-11 11:49:08 - Still searching for match... 3.6560000000000001 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 3.734 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 3.7959999999999998 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 3.875 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 3.9369999999999998 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.0 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.0780000000000003 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.1399999999999997 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.218 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.2809999999999997 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.359 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.4210000000000003 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.5 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.5620000000000003 seconds elapsed
+2025-04-11 11:49:09 - Still searching for match... 4.625 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 4.7030000000000003 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 4.7649999999999997 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 4.843 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 4.9059999999999997 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 4.984 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.0460000000000003 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.109 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.1870000000000003 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.25 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.3280000000000003 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.3899999999999997 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.468 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.5309999999999997 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.609 seconds elapsed
+2025-04-11 11:49:10 - Still searching for match... 5.6710000000000003 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 5.75 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 5.8120000000000003 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 5.875 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 5.9530000000000003 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.0149999999999997 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.093 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.1559999999999997 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.234 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.2960000000000003 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.359 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.4370000000000003 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.5 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.5780000000000003 seconds elapsed
+2025-04-11 11:49:11 - Still searching for match... 6.6399999999999997 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 6.718 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 6.7809999999999997 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 6.859 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 6.9210000000000003 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.0 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.0620000000000003 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.125 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.2030000000000003 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.2649999999999997 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.343 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.4059999999999997 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.484 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.5460000000000003 seconds elapsed
+2025-04-11 11:49:12 - Still searching for match... 7.609 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 7.6870000000000003 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 7.75 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 7.8280000000000003 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 7.8899999999999997 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 7.968 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.0310000000000006 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.109 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.1709999999999994 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.234 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.3119999999999994 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.375 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.4529999999999994 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.5150000000000006 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.593 seconds elapsed
+2025-04-11 11:49:13 - Still searching for match... 8.6560000000000006 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 8.734 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 8.7959999999999994 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 8.875 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 8.9369999999999994 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.0 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.0779999999999994 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.1400000000000006 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.218 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.2810000000000006 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.359 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.4209999999999994 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.484 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.5619999999999994 seconds elapsed
+2025-04-11 11:49:14 - Still searching for match... 9.625 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 9.7029999999999994 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 9.7650000000000006 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 9.843 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 9.9060000000000006 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 9.984 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.045999999999999 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.125 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.186999999999999 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.25 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.327999999999999 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.390000000000001 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.468 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.531000000000001 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.609 seconds elapsed
+2025-04-11 11:49:15 - Still searching for match... 10.670999999999999 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 10.734 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 10.811999999999999 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 10.875 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 10.952999999999999 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.015000000000001 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.093 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.156000000000001 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.234 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.295999999999999 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.375 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.436999999999999 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.5 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.577999999999999 seconds elapsed
+2025-04-11 11:49:16 - Still searching for match... 11.640000000000001 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 11.718 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 11.781000000000001 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 11.859 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 11.920999999999999 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 11.984 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.061999999999999 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.125 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.202999999999999 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.265000000000001 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.343 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.406000000000001 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.484 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.545999999999999 seconds elapsed
+2025-04-11 11:49:17 - Still searching for match... 12.609 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 12.686999999999999 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 12.75 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 12.827999999999999 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 12.890000000000001 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 12.968 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.031000000000001 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.109 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.170999999999999 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.234 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.311999999999999 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.375 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.452999999999999 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.515000000000001 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.593 seconds elapsed
+2025-04-11 11:49:18 - Still searching for match... 13.656000000000001 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 13.734 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 13.795999999999999 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 13.859 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 13.936999999999999 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.0 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.077999999999999 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.140000000000001 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.218 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.281000000000001 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.359 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.420999999999999 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.484 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.561999999999999 seconds elapsed
+2025-04-11 11:49:19 - Still searching for match... 14.625 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 14.702999999999999 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 14.765000000000001 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 14.843 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 14.906000000000001 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 14.984 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.045999999999999 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.109 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.186999999999999 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.25 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.327999999999999 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.390000000000001 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.468 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.531000000000001 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.609 seconds elapsed
+2025-04-11 11:49:20 - Still searching for match... 15.670999999999999 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 15.734 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 15.811999999999999 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 15.875 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 15.952999999999999 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.015000000000001 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.093 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.155999999999999 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.234000000000002 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.295999999999999 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.359000000000002 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.437000000000001 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.5 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.577999999999999 seconds elapsed
+2025-04-11 11:49:21 - Still searching for match... 16.640000000000001 seconds elapsed
+2025-04-11 11:49:22 - Still searching for match... 16.718 seconds elapsed
+2025-04-11 11:49:22 - Search phase ended, now in connecting/loading phase after 16.734000000000002 seconds
+2025-04-11 11:49:23 - In loading phase... 1.0620000000000001 seconds elapsed since search ended
+2025-04-11 11:49:25 - Taking screenshot to check for error dialog...
+2025-04-11 11:49:25 - Taking Steam screenshot
+2025-04-11 11:49:26 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py error
+2025-04-11 11:49:27 - Error detection result: ERROR_DETECTION_RESULT=0
+ERROR_DETECTION_RESULT=0
+
+2025-04-11 11:49:27 - No error dialog found. Consecutive error checks: 1/6
+2025-04-11 11:49:27 - Successfully joined match! Spectate button detected via pixel color method
+2025-04-11 11:49:27 - Clicking spectator button at 1596, 1032
+2025-04-11 11:49:28 - Match outcome for Sigma: success
+2025-04-11 11:49:28 - Successfully joined Sigma match!
+2025-04-11 11:49:28 - Processing match...
+2025-04-11 11:49:29 - Processing players using grid method with improved profile popup detection...
+2025-04-11 11:49:29 - Opening scoreboard with Escape key...
+2025-04-11 11:49:30 - Searching for attention icons...
+2025-04-11 11:49:30 - Taking Steam screenshot
+2025-04-11 11:49:31 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py find_first_attention_icon 1358 290 38 450
+2025-04-11 11:49:32 - First icon search result: ATTENTION_ICON_FOUND=1
+ATTENTION_ICON_COORDS=1377,406
+PLAYER_CLICK_COORDS=739,406
+
+2025-04-11 11:49:32 - Found first attention icon! Starting at: X=739, Y=406
+2025-04-11 11:49:32 - Checking player at coordinates: 739,406
+2025-04-11 11:49:32 - Taking Steam screenshot
+2025-04-11 11:49:34 - Performing profile analysis with dual-button detection...
+2025-04-11 11:49:34 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 406
+2025-04-11 11:49:36 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,444
+NEXT_CLICK_COORDS=739,444
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,552
+SYMPATHIES_SUM=9
+SMILE_VALUE=0
+TEACH_VALUE=5
+CROWN_VALUE=4
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=6
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+MEDAL_DETECTED=bloodhound-operation
+
+2025-04-11 11:49:36 - Found next player position at: 739,444 (from attention icon)
+2025-04-11 11:49:36 - Profile button found at coordinates: 814,552
+2025-04-11 11:49:36 - Analysis summary:
+2025-04-11 11:49:36 - - Profile popup detected: Yes
+2025-04-11 11:49:36 - - Sympathies sum: 9
+2025-04-11 11:49:36 - - Too many sympathies: No
+2025-04-11 11:49:36 - - Three+ medals found: Yes
+2025-04-11 11:49:36 - - 5-year veteran coin found: Yes
+2025-04-11 11:49:36 - - Unwanted medals found: No
+2025-04-11 11:49:36 - - More medals available: No
+2025-04-11 11:49:36 - - Medal count: 6
+2025-04-11 11:49:36 - - Next player position from icon: Yes
+2025-04-11 11:49:36 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:49:36 - Clicking profile button at exact coordinates: 814,552
+2025-04-11 11:49:38 - Taking Steam screenshot
+2025-04-11 11:49:39 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:49:39 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:49:42 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198003940186/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:49:42 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198003940186/
+2025-04-11 11:49:42 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:49:42 - Tab close button found at: 429,195
+2025-04-11 11:49:42 - Clicking tab close button at: 416,195
+2025-04-11 11:49:43 - Clicking overlay close button at: 1874,48
+2025-04-11 11:49:43 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198003940186/
+2025-04-11 11:49:43 - Processing success: 0
+2025-04-11 11:49:43 - API submission: Failed
+2025-04-11 11:49:43 - Saved to fallback: No
+2025-04-11 11:49:43 - Tab close success: 1
+2025-04-11 11:49:43 - Profile #1 processed successfully with URL: https://steamcommunity.com/profiles/76561198003940186/
+2025-04-11 11:49:43 - Moving to next player using attention icon coordinates: 739,444
+2025-04-11 11:49:43 - Checking player at coordinates: 739,444
+2025-04-11 11:49:44 - Taking Steam screenshot
+2025-04-11 11:49:45 - Performing profile analysis with dual-button detection...
+2025-04-11 11:49:45 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 444
+2025-04-11 11:49:47 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,470
+NEXT_CLICK_COORDS=739,470
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,590
+SYMPATHIES_SUM=6
+SMILE_VALUE=2
+TEACH_VALUE=2
+CROWN_VALUE=2
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:49:47 - Found next player position at: 739,470 (from attention icon)
+2025-04-11 11:49:47 - Profile button found at coordinates: 814,590
+2025-04-11 11:49:47 - Analysis summary:
+2025-04-11 11:49:47 - - Profile popup detected: Yes
+2025-04-11 11:49:47 - - Sympathies sum: 6
+2025-04-11 11:49:47 - - Too many sympathies: No
+2025-04-11 11:49:47 - - Three+ medals found: No
+2025-04-11 11:49:47 - - 5-year veteran coin found: No
+2025-04-11 11:49:47 - - Unwanted medals found: No
+2025-04-11 11:49:47 - - More medals available: No
+2025-04-11 11:49:47 - - Medal count: 1
+2025-04-11 11:49:47 - - Next player position from icon: Yes
+2025-04-11 11:49:47 - Less than 3 medals found, skipping player
+2025-04-11 11:49:47 - Clicking again to close profile details
+2025-04-11 11:49:47 - Moving to next player using attention icon coordinates: 739,470
+2025-04-11 11:49:47 - Checking player at coordinates: 739,470
+2025-04-11 11:49:48 - Taking Steam screenshot
+2025-04-11 11:49:49 - Performing profile analysis with dual-button detection...
+2025-04-11 11:49:49 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 470
+2025-04-11 11:49:50 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,496
+NEXT_CLICK_COORDS=739,496
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,616
+SYMPATHIES_SUM=4
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=2
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:49:50 - Found next player position at: 739,496 (from attention icon)
+2025-04-11 11:49:50 - Profile button found at coordinates: 814,616
+2025-04-11 11:49:50 - Analysis summary:
+2025-04-11 11:49:50 - - Profile popup detected: Yes
+2025-04-11 11:49:50 - - Sympathies sum: 4
+2025-04-11 11:49:50 - - Too many sympathies: No
+2025-04-11 11:49:50 - - Three+ medals found: No
+2025-04-11 11:49:50 - - 5-year veteran coin found: No
+2025-04-11 11:49:50 - - Unwanted medals found: No
+2025-04-11 11:49:50 - - More medals available: No
+2025-04-11 11:49:50 - - Medal count: 0
+2025-04-11 11:49:50 - - Next player position from icon: Yes
+2025-04-11 11:49:50 - Less than 3 medals found, skipping player
+2025-04-11 11:49:50 - Clicking again to close profile details
+2025-04-11 11:49:51 - Moving to next player using attention icon coordinates: 739,496
+2025-04-11 11:49:51 - Checking player at coordinates: 739,496
+2025-04-11 11:49:52 - Taking Steam screenshot
+2025-04-11 11:49:53 - Performing profile analysis with dual-button detection...
+2025-04-11 11:49:53 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 496
+2025-04-11 11:49:54 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,536
+NEXT_CLICK_COORDS=739,536
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,642
+SYMPATHIES_SUM=47
+SMILE_VALUE=14
+TEACH_VALUE=14
+CROWN_VALUE=19
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=454
+ARROW_COORDS=1129,454
+MEDAL_COUNT=6
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:49:54 - Found next player position at: 739,536 (from attention icon)
+2025-04-11 11:49:54 - Profile button found at coordinates: 814,642
+2025-04-11 11:49:54 - Analysis summary:
+2025-04-11 11:49:54 - - Profile popup detected: Yes
+2025-04-11 11:49:54 - - Sympathies sum: 47
+2025-04-11 11:49:54 - - Too many sympathies: No
+2025-04-11 11:49:54 - - Three+ medals found: Yes
+2025-04-11 11:49:54 - - 5-year veteran coin found: Yes
+2025-04-11 11:49:54 - - Unwanted medals found: No
+2025-04-11 11:49:54 - - More medals available: Yes
+2025-04-11 11:49:54 - - Medal count: 6
+2025-04-11 11:49:54 - - Next player position from icon: Yes
+2025-04-11 11:49:54 - Clicking medal arrow at: 1134,461
+2025-04-11 11:49:55 - Taking Steam screenshot
+2025-04-11 11:49:56 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:49:56 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 496
+2025-04-11 11:49:57 - Updated next player position: 739,536
+2025-04-11 11:49:57 - After arrow click 1:
+2025-04-11 11:49:57 - - 5-year veteran coin found: Yes
+2025-04-11 11:49:57 - - Unwanted medals found: No
+2025-04-11 11:49:57 - - More medals available: No
+2025-04-11 11:49:57 - - Medal count: 5
+2025-04-11 11:49:57 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:49:57 - Clicking profile button at exact coordinates: 814,642
+2025-04-11 11:49:59 - Taking Steam screenshot
+2025-04-11 11:50:01 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:50:01 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:50:05 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198433922544/
+URL_PROCESSING_RESULT=1
+URL_PROCESSING_STATUS=SUCCESS
+API_SUBMISSION=SUCCESS
+
+2025-04-11 11:50:05 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198433922544/
+2025-04-11 11:50:05 - URL processing was successful
+2025-04-11 11:50:05 - Successfully submitted to API endpoint
+2025-04-11 11:50:05 - Tab close button found at: 429,195
+2025-04-11 11:50:05 - Clicking tab close button at: 416,195
+2025-04-11 11:50:06 - Clicking overlay close button at: 1874,48
+2025-04-11 11:50:06 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198433922544/
+2025-04-11 11:50:06 - Processing success: 1
+2025-04-11 11:50:06 - API submission: Successful
+2025-04-11 11:50:06 - Saved to fallback: No
+2025-04-11 11:50:06 - Tab close success: 1
+2025-04-11 11:50:06 - Profile #2 processed successfully with URL: https://steamcommunity.com/profiles/76561198433922544/
+2025-04-11 11:50:06 - Moving to next player using attention icon coordinates: 739,536
+2025-04-11 11:50:06 - Checking player at coordinates: 739,536
+2025-04-11 11:50:07 - Taking Steam screenshot
+2025-04-11 11:50:09 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:09 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 536
+2025-04-11 11:50:10 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,562
+NEXT_CLICK_COORDS=739,562
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,682
+SYMPATHIES_SUM=4
+SMILE_VALUE=1
+TEACH_VALUE=2
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:50:10 - Found next player position at: 739,562 (from attention icon)
+2025-04-11 11:50:10 - Profile button found at coordinates: 814,682
+2025-04-11 11:50:10 - Analysis summary:
+2025-04-11 11:50:10 - - Profile popup detected: Yes
+2025-04-11 11:50:10 - - Sympathies sum: 4
+2025-04-11 11:50:10 - - Too many sympathies: No
+2025-04-11 11:50:10 - - Three+ medals found: No
+2025-04-11 11:50:10 - - 5-year veteran coin found: No
+2025-04-11 11:50:10 - - Unwanted medals found: No
+2025-04-11 11:50:10 - - More medals available: No
+2025-04-11 11:50:10 - - Medal count: 0
+2025-04-11 11:50:10 - - Next player position from icon: Yes
+2025-04-11 11:50:10 - Less than 3 medals found, skipping player
+2025-04-11 11:50:10 - Clicking again to close profile details
+2025-04-11 11:50:10 - Moving to next player using attention icon coordinates: 739,562
+2025-04-11 11:50:10 - Checking player at coordinates: 739,562
+2025-04-11 11:50:11 - Taking Steam screenshot
+2025-04-11 11:50:12 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:12 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 562
+2025-04-11 11:50:14 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,612
+NEXT_CLICK_COORDS=739,612
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,708
+SYMPATHIES_SUM=5
+SMILE_VALUE=2
+TEACH_VALUE=2
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+
+2025-04-11 11:50:14 - Found next player position at: 739,612 (from attention icon)
+2025-04-11 11:50:14 - Profile button found at coordinates: 814,708
+2025-04-11 11:50:14 - Analysis summary:
+2025-04-11 11:50:14 - - Profile popup detected: Yes
+2025-04-11 11:50:14 - - Sympathies sum: 5
+2025-04-11 11:50:14 - - Too many sympathies: No
+2025-04-11 11:50:14 - - Three+ medals found: Yes
+2025-04-11 11:50:14 - - 5-year veteran coin found: Yes
+2025-04-11 11:50:14 - - Unwanted medals found: No
+2025-04-11 11:50:14 - - More medals available: No
+2025-04-11 11:50:14 - - Medal count: 3
+2025-04-11 11:50:14 - - Next player position from icon: Yes
+2025-04-11 11:50:14 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:50:14 - Clicking profile button at exact coordinates: 814,708
+2025-04-11 11:50:16 - Taking Steam screenshot
+2025-04-11 11:50:17 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:50:17 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:50:22 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561197999387895/
+URL_PROCESSING_RESULT=1
+URL_PROCESSING_STATUS=SUCCESS
+API_SUBMISSION=SUCCESS
+
+2025-04-11 11:50:22 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561197999387895/
+2025-04-11 11:50:22 - URL processing was successful
+2025-04-11 11:50:22 - Successfully submitted to API endpoint
+2025-04-11 11:50:22 - Tab close button found at: 429,195
+2025-04-11 11:50:22 - Clicking tab close button at: 416,195
+2025-04-11 11:50:22 - Clicking overlay close button at: 1874,48
+2025-04-11 11:50:23 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561197999387895/
+2025-04-11 11:50:23 - Processing success: 1
+2025-04-11 11:50:23 - API submission: Successful
+2025-04-11 11:50:23 - Saved to fallback: No
+2025-04-11 11:50:23 - Tab close success: 1
+2025-04-11 11:50:23 - Profile #3 processed successfully with URL: https://steamcommunity.com/profiles/76561197999387895/
+2025-04-11 11:50:23 - Moving to next player using attention icon coordinates: 739,612
+2025-04-11 11:50:23 - Checking player at coordinates: 739,612
+2025-04-11 11:50:24 - Taking Steam screenshot
+2025-04-11 11:50:25 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:25 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 612
+2025-04-11 11:50:26 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,650
+NEXT_CLICK_COORDS=739,650
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,758
+SYMPATHIES_SUM=12
+SMILE_VALUE=4
+TEACH_VALUE=4
+CROWN_VALUE=4
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=5
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:50:26 - Found next player position at: 739,650 (from attention icon)
+2025-04-11 11:50:26 - Profile button found at coordinates: 814,758
+2025-04-11 11:50:26 - Analysis summary:
+2025-04-11 11:50:26 - - Profile popup detected: Yes
+2025-04-11 11:50:26 - - Sympathies sum: 12
+2025-04-11 11:50:26 - - Too many sympathies: No
+2025-04-11 11:50:26 - - Three+ medals found: Yes
+2025-04-11 11:50:26 - - 5-year veteran coin found: No
+2025-04-11 11:50:26 - - Unwanted medals found: No
+2025-04-11 11:50:26 - - More medals available: No
+2025-04-11 11:50:26 - - Medal count: 5
+2025-04-11 11:50:26 - - Next player position from icon: Yes
+2025-04-11 11:50:26 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:50:26 - Clicking again to close profile details
+2025-04-11 11:50:26 - Moving to next player using attention icon coordinates: 739,650
+2025-04-11 11:50:26 - Checking player at coordinates: 739,650
+2025-04-11 11:50:27 - Taking Steam screenshot
+2025-04-11 11:50:29 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:29 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 650
+2025-04-11 11:50:30 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,688
+NEXT_CLICK_COORDS=739,688
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,796
+SYMPATHIES_SUM=3
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:50:30 - Found next player position at: 739,688 (from attention icon)
+2025-04-11 11:50:30 - Profile button found at coordinates: 814,796
+2025-04-11 11:50:30 - Analysis summary:
+2025-04-11 11:50:30 - - Profile popup detected: Yes
+2025-04-11 11:50:30 - - Sympathies sum: 3
+2025-04-11 11:50:30 - - Too many sympathies: No
+2025-04-11 11:50:30 - - Three+ medals found: No
+2025-04-11 11:50:30 - - 5-year veteran coin found: No
+2025-04-11 11:50:30 - - Unwanted medals found: No
+2025-04-11 11:50:30 - - More medals available: No
+2025-04-11 11:50:30 - - Medal count: 0
+2025-04-11 11:50:30 - - Next player position from icon: Yes
+2025-04-11 11:50:30 - Less than 3 medals found, skipping player
+2025-04-11 11:50:30 - Clicking again to close profile details
+2025-04-11 11:50:30 - Moving to next player using attention icon coordinates: 739,688
+2025-04-11 11:50:30 - Checking player at coordinates: 739,688
+2025-04-11 11:50:31 - Taking Steam screenshot
+2025-04-11 11:50:32 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:32 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 688
+2025-04-11 11:50:34 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,728
+NEXT_CLICK_COORDS=739,728
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,834
+SYMPATHIES_SUM=12
+SMILE_VALUE=4
+TEACH_VALUE=4
+CROWN_VALUE=4
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:50:34 - Found next player position at: 739,728 (from attention icon)
+2025-04-11 11:50:34 - Profile button found at coordinates: 814,834
+2025-04-11 11:50:34 - Analysis summary:
+2025-04-11 11:50:34 - - Profile popup detected: Yes
+2025-04-11 11:50:34 - - Sympathies sum: 12
+2025-04-11 11:50:34 - - Too many sympathies: No
+2025-04-11 11:50:34 - - Three+ medals found: No
+2025-04-11 11:50:34 - - 5-year veteran coin found: No
+2025-04-11 11:50:34 - - Unwanted medals found: No
+2025-04-11 11:50:34 - - More medals available: No
+2025-04-11 11:50:34 - - Medal count: 1
+2025-04-11 11:50:34 - - Next player position from icon: Yes
+2025-04-11 11:50:34 - Less than 3 medals found, skipping player
+2025-04-11 11:50:34 - Clicking again to close profile details
+2025-04-11 11:50:34 - Moving to next player using attention icon coordinates: 739,728
+2025-04-11 11:50:34 - Checking player at coordinates: 739,728
+2025-04-11 11:50:35 - Taking Steam screenshot
+2025-04-11 11:50:36 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:36 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 728
+2025-04-11 11:50:37 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,754
+NEXT_CLICK_COORDS=739,754
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,874
+SYMPATHIES_SUM=39
+SMILE_VALUE=15
+TEACH_VALUE=12
+CROWN_VALUE=12
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=686
+ARROW_COORDS=1129,686
+MEDAL_COUNT=6
+MEDAL_DETECTED=10-year-veteran-coin
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:50:37 - Found next player position at: 739,754 (from attention icon)
+2025-04-11 11:50:37 - Profile button found at coordinates: 814,874
+2025-04-11 11:50:37 - Analysis summary:
+2025-04-11 11:50:37 - - Profile popup detected: Yes
+2025-04-11 11:50:37 - - Sympathies sum: 39
+2025-04-11 11:50:37 - - Too many sympathies: No
+2025-04-11 11:50:37 - - Three+ medals found: Yes
+2025-04-11 11:50:37 - - 5-year veteran coin found: No
+2025-04-11 11:50:37 - - Unwanted medals found: No
+2025-04-11 11:50:37 - - More medals available: Yes
+2025-04-11 11:50:37 - - Medal count: 6
+2025-04-11 11:50:37 - - Next player position from icon: Yes
+2025-04-11 11:50:37 - Clicking medal arrow at: 1134,693
+2025-04-11 11:50:38 - Taking Steam screenshot
+2025-04-11 11:50:39 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:50:39 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 728
+2025-04-11 11:50:40 - Updated next player position: 739,754
+2025-04-11 11:50:40 - After arrow click 1:
+2025-04-11 11:50:40 - - 5-year veteran coin found: No
+2025-04-11 11:50:40 - - Unwanted medals found: Yes
+2025-04-11 11:50:40 - - More medals available: No
+2025-04-11 11:50:40 - - Medal count: 6
+2025-04-11 11:50:40 - Unwanted medals found after viewing more medals, skipping player
+2025-04-11 11:50:40 - Clicking again to close profile details
+2025-04-11 11:50:41 - Moving to next player using attention icon coordinates: 739,754
+2025-04-11 11:50:41 - Checking player at coordinates: 739,754
+2025-04-11 11:50:42 - Taking Steam screenshot
+2025-04-11 11:50:43 - Performing profile analysis with dual-button detection...
+2025-04-11 11:50:43 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 754
+2025-04-11 11:50:44 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=0
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,900
+SYMPATHIES_SUM=22
+SMILE_VALUE=22
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=712
+ARROW_COORDS=1129,712
+MEDAL_COUNT=6
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=assorted-medals-01
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:50:44 - Profile button found at coordinates: 814,900
+2025-04-11 11:50:44 - Analysis summary:
+2025-04-11 11:50:44 - - Profile popup detected: Yes
+2025-04-11 11:50:44 - - Sympathies sum: 22
+2025-04-11 11:50:44 - - Too many sympathies: No
+2025-04-11 11:50:44 - - Three+ medals found: Yes
+2025-04-11 11:50:44 - - 5-year veteran coin found: No
+2025-04-11 11:50:44 - - Unwanted medals found: No
+2025-04-11 11:50:44 - - More medals available: Yes
+2025-04-11 11:50:44 - - Medal count: 6
+2025-04-11 11:50:44 - - Next player position from icon: No
+2025-04-11 11:50:44 - Clicking medal arrow at: 1134,719
+2025-04-11 11:50:45 - Taking Steam screenshot
+2025-04-11 11:50:46 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:50:46 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 754
+2025-04-11 11:50:47 - After arrow click 1:
+2025-04-11 11:50:47 - - 5-year veteran coin found: No
+2025-04-11 11:50:47 - - Unwanted medals found: No
+2025-04-11 11:50:47 - - More medals available: No
+2025-04-11 11:50:47 - - Medal count: 4
+2025-04-11 11:50:47 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:50:47 - Clicking again to close profile details
+2025-04-11 11:50:48 - No more attention icons found - we've reached the end of human players in this match
+2025-04-11 11:50:48 - Disconnecting from match to save time...
+2025-04-11 11:50:48 - Disconnecting from match (strategy 1: direct exit button click)...
+2025-04-11 11:50:48 - Clicking 'Exit to main menu' button at 1155,125
+2025-04-11 11:50:49 - Clicking 'Yes' confirmation button at 1100,600
+2025-04-11 11:50:51 - Taking Steam screenshot
+2025-04-11 11:50:52 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 202 17 31 30
+2025-04-11 11:50:52 - Main menu detection result: MAIN_MENU_DETECTED=0
+CONFIDENCE=0.6464
+
+2025-04-11 11:50:52 - Disconnecting from match (strategy 2: Escape key + exit button)...
+2025-04-11 11:50:52 - Pressing Escape key to bring up scoreboard
+2025-04-11 11:50:53 - Clicking 'Exit to main menu' button at 1155,125
+2025-04-11 11:50:54 - Clicking 'Yes' confirmation button at 1100,600
+2025-04-11 11:50:56 - Taking Steam screenshot
+2025-04-11 11:50:57 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 202 17 31 30
+2025-04-11 11:50:58 - Main menu detection result: MAIN_MENU_DETECTED=1
+CONFIDENCE=0.9969
+
+2025-04-11 11:50:58 - Successfully disconnected using strategy 2
+2025-04-11 11:50:58 - Returning to main menu by leaving match...
+2025-04-11 11:50:58 - Clicking Leave Match button at 1170,130
+2025-04-11 11:50:59 - Clicking OK to confirm at 1100,600
+2025-04-11 11:50:59 - Cleaning up CS2 screenshots...
+2025-04-11 11:50:59 - Cleaning up CS2 screenshot thumbnails...
+2025-04-11 11:50:59 - Screenshot cleanup completed
+2025-04-11 11:50:59 - Match processing completed successfully
+2025-04-11 11:50:59 - Finished with Sigma match
+2025-04-11 11:50:59 - Round 1: Successfully completed map Sigma
+2025-04-11 11:50:59 - Ensuring we're at the main menu...
+2025-04-11 11:50:59 - Checking if we're at the main menu...
+2025-04-11 11:50:59 - Taking Steam screenshot
+2025-04-11 11:51:01 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 198 12 40 40
+2025-04-11 11:51:01 - At main menu: yes
+2025-04-11 11:51:01 - Checking for voted-off error dialog...
+2025-04-11 11:51:01 - Taking Steam screenshot
+2025-04-11 11:51:02 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py check_voted_off_error_dialog
+2025-04-11 11:51:03 - Voted-off error dialog detection result: VOTED_OFF_ERROR_DIALOG_DETECTED=0
+
+2025-04-11 11:51:03 - Already at main menu
+2025-04-11 11:51:03 - Round 1: Starting map Delta
+2025-04-11 11:51:03 - Starting Delta match automation
+2025-04-11 11:51:03 - Selecting map: Delta
+2025-04-11 11:51:04 - Clicking Play button at coordinates: 985,30
+2025-04-11 11:51:05 - Selecting matchmaking mode at coordinates: 813,85
+2025-04-11 11:51:05 - Selecting casual league at coordinates: 906,130
+2025-04-11 11:51:06 - Selecting Delta map at coordinates: 868,570
+2025-04-11 11:51:06 - Clicking Accept Match at coordinates: 1695,1030
+2025-04-11 11:51:06 - Map selection sequence completed for: Delta
+2025-04-11 11:51:06 - Map Delta selected, now waiting for match to be found and joined...
+2025-04-11 11:51:06 - Waiting for match outcome (success or failure)...
+2025-04-11 11:51:06 - Match detection timeout set to 90.0 seconds
+2025-04-11 11:51:06 - Will wait 1.0 seconds after Cancel Search disappears before checking for errors
+2025-04-11 11:51:06 - Search phase ended, now in connecting/loading phase after 0.0 seconds
+2025-04-11 11:51:06 - Returned to searching state, resetting phase
+2025-04-11 11:51:06 - Still searching for match... 0.59299999999999997 seconds elapsed
+2025-04-11 11:51:06 - Still searching for match... 0.65600000000000003 seconds elapsed
+2025-04-11 11:51:06 - Still searching for match... 0.73399999999999999 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 0.79700000000000004 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 0.85899999999999999 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 0.93700000000000006 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.0 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.0780000000000001 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.1399999999999999 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.218 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.2809999999999999 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.359 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.4219999999999999 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.484 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.5620000000000001 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.625 seconds elapsed
+2025-04-11 11:51:07 - Still searching for match... 1.7030000000000001 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 1.7649999999999999 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 1.843 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 1.9059999999999999 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 1.984 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.0470000000000002 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.109 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.1869999999999998 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.25 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.3279999999999998 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.3900000000000001 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.468 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.5310000000000001 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.609 seconds elapsed
+2025-04-11 11:51:08 - Still searching for match... 2.6720000000000002 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 2.734 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 2.8119999999999998 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 2.875 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 2.9529999999999998 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.0150000000000001 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.093 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.1560000000000001 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.234 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.2970000000000002 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.359 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.4369999999999998 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.5 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.5779999999999998 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.6400000000000001 seconds elapsed
+2025-04-11 11:51:09 - Still searching for match... 3.718 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 3.7810000000000001 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 3.859 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 3.9220000000000002 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 3.984 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.0620000000000003 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.125 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.2030000000000003 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.2649999999999997 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.343 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.4059999999999997 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.484 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.5469999999999997 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.609 seconds elapsed
+2025-04-11 11:51:10 - Still searching for match... 4.6870000000000003 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 4.75 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 4.8280000000000003 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 4.8899999999999997 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 4.968 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.0309999999999997 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.109 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.1719999999999997 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.234 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.3120000000000003 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.375 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.4530000000000003 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.5149999999999997 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.593 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.6559999999999997 seconds elapsed
+2025-04-11 11:51:11 - Still searching for match... 5.734 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 5.7969999999999997 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 5.859 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 5.9370000000000003 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.0 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.0780000000000003 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.1399999999999997 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.218 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.2809999999999997 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.343 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.4219999999999997 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.484 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.5620000000000003 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.625 seconds elapsed
+2025-04-11 11:51:12 - Still searching for match... 6.7030000000000003 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 6.7649999999999997 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 6.843 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 6.9059999999999997 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 6.968 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.0469999999999997 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.109 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.1870000000000003 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.25 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.3280000000000003 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.3899999999999997 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.468 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.5309999999999997 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.609 seconds elapsed
+2025-04-11 11:51:13 - Still searching for match... 7.6719999999999997 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 7.734 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 7.8120000000000003 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 7.875 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 7.9530000000000003 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.0150000000000006 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.093 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.1560000000000006 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.234 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.2970000000000006 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.359 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.4369999999999994 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.5 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.5779999999999994 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.6400000000000006 seconds elapsed
+2025-04-11 11:51:14 - Still searching for match... 8.718 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 8.7810000000000006 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 8.843 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 8.9220000000000006 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 8.984 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.0619999999999994 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.125 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.2029999999999994 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.2650000000000006 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.343 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.4060000000000006 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.484 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.5470000000000006 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.609 seconds elapsed
+2025-04-11 11:51:15 - Still searching for match... 9.6869999999999994 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 9.75 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 9.8279999999999994 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 9.9060000000000006 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 9.968 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.047000000000001 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.109 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.172000000000001 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.25 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.311999999999999 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.390000000000001 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.452999999999999 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.531000000000001 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.593 seconds elapsed
+2025-04-11 11:51:16 - Still searching for match... 10.672000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 10.734 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 10.797000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 10.875 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 10.936999999999999 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.015000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.077999999999999 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.156000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.218 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.297000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.359 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.422000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.5 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.561999999999999 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.640000000000001 seconds elapsed
+2025-04-11 11:51:17 - Still searching for match... 11.702999999999999 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 11.781000000000001 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 11.843 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 11.906000000000001 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 11.984 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.047000000000001 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.125 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.186999999999999 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.265000000000001 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.327999999999999 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.406000000000001 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.468 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.547000000000001 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.609 seconds elapsed
+2025-04-11 11:51:18 - Still searching for match... 12.672000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 12.75 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 12.811999999999999 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 12.890000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 12.952999999999999 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.031000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.093 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.172000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.234 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.297000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.375 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.436999999999999 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.515000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.577999999999999 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.656000000000001 seconds elapsed
+2025-04-11 11:51:19 - Still searching for match... 13.718 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 13.797000000000001 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 13.859 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 13.922000000000001 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.0 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.061999999999999 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.140000000000001 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.202999999999999 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.281000000000001 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.343 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.422000000000001 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.484 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.547000000000001 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.625 seconds elapsed
+2025-04-11 11:51:20 - Still searching for match... 14.686999999999999 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 14.765000000000001 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 14.827999999999999 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 14.906000000000001 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 14.968 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.047000000000001 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.109 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.172000000000001 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.25 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.311999999999999 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.390000000000001 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.452999999999999 seconds elapsed
+2025-04-11 11:51:21 - Still searching for match... 15.531000000000001 seconds elapsed
+2025-04-11 11:51:21 - Search phase ended, now in connecting/loading phase after 15.547000000000001 seconds
+2025-04-11 11:51:22 - In loading phase... 1.0780000000000001 seconds elapsed since search ended
+2025-04-11 11:51:24 - Taking screenshot to check for error dialog...
+2025-04-11 11:51:24 - Taking Steam screenshot
+2025-04-11 11:51:26 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py error
+2025-04-11 11:51:26 - Error detection result: ERROR_DETECTION_RESULT=0
+ERROR_DETECTION_RESULT=0
+
+2025-04-11 11:51:26 - No error dialog found. Consecutive error checks: 1/6
+2025-04-11 11:51:27 - Successfully joined match! Spectate button detected via pixel color method
+2025-04-11 11:51:27 - Clicking spectator button at 1596, 1032
+2025-04-11 11:51:28 - Match outcome for Delta: success
+2025-04-11 11:51:28 - Successfully joined Delta match!
+2025-04-11 11:51:28 - Processing match...
+2025-04-11 11:51:28 - Processing players using grid method with improved profile popup detection...
+2025-04-11 11:51:28 - Opening scoreboard with Escape key...
+2025-04-11 11:51:29 - Searching for attention icons...
+2025-04-11 11:51:29 - Taking Steam screenshot
+2025-04-11 11:51:31 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py find_first_attention_icon 1358 290 38 450
+2025-04-11 11:51:31 - First icon search result: ATTENTION_ICON_FOUND=1
+ATTENTION_ICON_COORDS=1377,406
+PLAYER_CLICK_COORDS=739,406
+
+2025-04-11 11:51:31 - Found first attention icon! Starting at: X=739, Y=406
+2025-04-11 11:51:31 - Checking player at coordinates: 739,406
+2025-04-11 11:51:32 - Taking Steam screenshot
+2025-04-11 11:51:33 - Performing profile analysis with dual-button detection...
+2025-04-11 11:51:33 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 406
+2025-04-11 11:51:34 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,432
+NEXT_CLICK_COORDS=739,432
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,552
+SYMPATHIES_SUM=2
+SMILE_VALUE=2
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=1
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+UNWANTED_MEDAL_DETECTED=unwanted-paris-2023-coin
+
+2025-04-11 11:51:34 - Found next player position at: 739,432 (from attention icon)
+2025-04-11 11:51:34 - Profile button found at coordinates: 814,552
+2025-04-11 11:51:34 - Analysis summary:
+2025-04-11 11:51:34 - - Profile popup detected: Yes
+2025-04-11 11:51:34 - - Sympathies sum: 2
+2025-04-11 11:51:34 - - Too many sympathies: No
+2025-04-11 11:51:34 - - Three+ medals found: No
+2025-04-11 11:51:34 - - 5-year veteran coin found: No
+2025-04-11 11:51:34 - - Unwanted medals found: Yes
+2025-04-11 11:51:34 - - More medals available: No
+2025-04-11 11:51:34 - - Medal count: 0
+2025-04-11 11:51:34 - - Next player position from icon: Yes
+2025-04-11 11:51:34 - Unwanted medals found, skipping player
+2025-04-11 11:51:34 - Clicking again to close profile details
+2025-04-11 11:51:34 - Moving to next player using attention icon coordinates: 739,432
+2025-04-11 11:51:34 - Checking player at coordinates: 739,432
+2025-04-11 11:51:35 - Taking Steam screenshot
+2025-04-11 11:51:37 - Performing profile analysis with dual-button detection...
+2025-04-11 11:51:37 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 432
+2025-04-11 11:51:38 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,458
+NEXT_CLICK_COORDS=739,458
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,578
+SYMPATHIES_SUM=28
+SMILE_VALUE=14
+TEACH_VALUE=3
+CROWN_VALUE=11
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=390
+ARROW_COORDS=1129,390
+MEDAL_COUNT=6
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=assorted-medals-03
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:51:38 - Found next player position at: 739,458 (from attention icon)
+2025-04-11 11:51:38 - Profile button found at coordinates: 814,578
+2025-04-11 11:51:38 - Analysis summary:
+2025-04-11 11:51:38 - - Profile popup detected: Yes
+2025-04-11 11:51:38 - - Sympathies sum: 28
+2025-04-11 11:51:38 - - Too many sympathies: No
+2025-04-11 11:51:38 - - Three+ medals found: Yes
+2025-04-11 11:51:38 - - 5-year veteran coin found: No
+2025-04-11 11:51:38 - - Unwanted medals found: No
+2025-04-11 11:51:38 - - More medals available: Yes
+2025-04-11 11:51:38 - - Medal count: 6
+2025-04-11 11:51:38 - - Next player position from icon: Yes
+2025-04-11 11:51:38 - Clicking medal arrow at: 1134,397
+2025-04-11 11:51:39 - Taking Steam screenshot
+2025-04-11 11:51:40 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:51:40 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 432
+2025-04-11 11:51:41 - Updated next player position: 739,458
+2025-04-11 11:51:41 - After arrow click 1:
+2025-04-11 11:51:41 - - 5-year veteran coin found: No
+2025-04-11 11:51:41 - - Unwanted medals found: No
+2025-04-11 11:51:41 - - More medals available: No
+2025-04-11 11:51:41 - - Medal count: 6
+2025-04-11 11:51:41 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:51:41 - Clicking again to close profile details
+2025-04-11 11:51:42 - Moving to next player using attention icon coordinates: 739,458
+2025-04-11 11:51:42 - Checking player at coordinates: 739,458
+2025-04-11 11:51:42 - Taking Steam screenshot
+2025-04-11 11:51:44 - Performing profile analysis with dual-button detection...
+2025-04-11 11:51:44 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 458
+2025-04-11 11:51:45 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,484
+NEXT_CLICK_COORDS=739,484
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,604
+SYMPATHIES_SUM=24
+SMILE_VALUE=11
+TEACH_VALUE=3
+CROWN_VALUE=10
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=416
+ARROW_COORDS=1129,416
+MEDAL_COUNT=5
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:51:45 - Found next player position at: 739,484 (from attention icon)
+2025-04-11 11:51:45 - Profile button found at coordinates: 814,604
+2025-04-11 11:51:45 - Analysis summary:
+2025-04-11 11:51:45 - - Profile popup detected: Yes
+2025-04-11 11:51:45 - - Sympathies sum: 24
+2025-04-11 11:51:45 - - Too many sympathies: No
+2025-04-11 11:51:45 - - Three+ medals found: Yes
+2025-04-11 11:51:45 - - 5-year veteran coin found: Yes
+2025-04-11 11:51:45 - - Unwanted medals found: No
+2025-04-11 11:51:45 - - More medals available: Yes
+2025-04-11 11:51:45 - - Medal count: 5
+2025-04-11 11:51:45 - - Next player position from icon: Yes
+2025-04-11 11:51:45 - Clicking medal arrow at: 1134,423
+2025-04-11 11:51:46 - Taking Steam screenshot
+2025-04-11 11:51:47 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:51:47 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 458
+2025-04-11 11:51:48 - Updated next player position: 739,484
+2025-04-11 11:51:48 - After arrow click 1:
+2025-04-11 11:51:48 - - 5-year veteran coin found: Yes
+2025-04-11 11:51:48 - - Unwanted medals found: No
+2025-04-11 11:51:48 - - More medals available: No
+2025-04-11 11:51:48 - - Medal count: 4
+2025-04-11 11:51:48 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:51:48 - Clicking profile button at exact coordinates: 814,604
+2025-04-11 11:51:50 - Taking Steam screenshot
+2025-04-11 11:51:52 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:51:52 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:51:53 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/id/alucineO8/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:51:53 - Successfully extracted Steam profile URL: https://steamcommunity.com/id/alucineO8/
+2025-04-11 11:51:53 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:51:53 - Tab close button found at: 429,195
+2025-04-11 11:51:53 - Clicking tab close button at: 416,195
+2025-04-11 11:51:54 - Clicking overlay close button at: 1874,48
+2025-04-11 11:51:54 - URL extraction complete - URL: https://steamcommunity.com/id/alucineO8/
+2025-04-11 11:51:54 - Processing success: 0
+2025-04-11 11:51:54 - API submission: Failed
+2025-04-11 11:51:54 - Saved to fallback: No
+2025-04-11 11:51:54 - Tab close success: 1
+2025-04-11 11:51:54 - Profile #1 processed successfully with URL: https://steamcommunity.com/id/alucineO8/
+2025-04-11 11:51:54 - Moving to next player using attention icon coordinates: 739,484
+2025-04-11 11:51:54 - Checking player at coordinates: 739,484
+2025-04-11 11:51:55 - Taking Steam screenshot
+2025-04-11 11:51:56 - Performing profile analysis with dual-button detection...
+2025-04-11 11:51:56 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 484
+2025-04-11 11:51:57 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,510
+NEXT_CLICK_COORDS=739,510
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,622
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:51:57 - Found next player position at: 739,510 (from attention icon)
+2025-04-11 11:51:57 - Profile button found at coordinates: 814,622
+2025-04-11 11:51:57 - Analysis summary:
+2025-04-11 11:51:57 - - Profile popup detected: Yes
+2025-04-11 11:51:57 - - Sympathies sum: 0
+2025-04-11 11:51:57 - - Too many sympathies: No
+2025-04-11 11:51:57 - - Three+ medals found: No
+2025-04-11 11:51:57 - - 5-year veteran coin found: No
+2025-04-11 11:51:57 - - Unwanted medals found: No
+2025-04-11 11:51:57 - - More medals available: No
+2025-04-11 11:51:57 - - Medal count: 1
+2025-04-11 11:51:57 - - Next player position from icon: Yes
+2025-04-11 11:51:57 - Less than 3 medals found, skipping player
+2025-04-11 11:51:57 - Clicking again to close profile details
+2025-04-11 11:51:58 - Moving to next player using attention icon coordinates: 739,510
+2025-04-11 11:51:58 - Checking player at coordinates: 739,510
+2025-04-11 11:51:58 - Taking Steam screenshot
+2025-04-11 11:52:00 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:00 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 510
+2025-04-11 11:52:01 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,548
+NEXT_CLICK_COORDS=739,548
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,648
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:52:01 - Found next player position at: 739,548 (from attention icon)
+2025-04-11 11:52:01 - Profile button found at coordinates: 814,648
+2025-04-11 11:52:01 - Analysis summary:
+2025-04-11 11:52:01 - - Profile popup detected: Yes
+2025-04-11 11:52:01 - - Sympathies sum: 0
+2025-04-11 11:52:01 - - Too many sympathies: No
+2025-04-11 11:52:01 - - Three+ medals found: No
+2025-04-11 11:52:01 - - 5-year veteran coin found: No
+2025-04-11 11:52:01 - - Unwanted medals found: No
+2025-04-11 11:52:01 - - More medals available: No
+2025-04-11 11:52:01 - - Medal count: 1
+2025-04-11 11:52:01 - - Next player position from icon: Yes
+2025-04-11 11:52:01 - Less than 3 medals found, skipping player
+2025-04-11 11:52:01 - Clicking again to close profile details
+2025-04-11 11:52:01 - Moving to next player using attention icon coordinates: 739,548
+2025-04-11 11:52:01 - Checking player at coordinates: 739,548
+2025-04-11 11:52:02 - Taking Steam screenshot
+2025-04-11 11:52:03 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:03 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 548
+2025-04-11 11:52:05 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,598
+NEXT_CLICK_COORDS=739,598
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,694
+SYMPATHIES_SUM=11
+SMILE_VALUE=3
+TEACH_VALUE=1
+CROWN_VALUE=7
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=506
+ARROW_COORDS=1129,506
+MEDAL_COUNT=6
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:52:05 - Found next player position at: 739,598 (from attention icon)
+2025-04-11 11:52:05 - Profile button found at coordinates: 814,694
+2025-04-11 11:52:05 - Analysis summary:
+2025-04-11 11:52:05 - - Profile popup detected: Yes
+2025-04-11 11:52:05 - - Sympathies sum: 11
+2025-04-11 11:52:05 - - Too many sympathies: No
+2025-04-11 11:52:05 - - Three+ medals found: Yes
+2025-04-11 11:52:05 - - 5-year veteran coin found: No
+2025-04-11 11:52:05 - - Unwanted medals found: No
+2025-04-11 11:52:05 - - More medals available: Yes
+2025-04-11 11:52:05 - - Medal count: 6
+2025-04-11 11:52:05 - - Next player position from icon: Yes
+2025-04-11 11:52:05 - Clicking medal arrow at: 1134,513
+2025-04-11 11:52:05 - Taking Steam screenshot
+2025-04-11 11:52:07 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:52:07 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 548
+2025-04-11 11:52:08 - Updated next player position: 739,598
+2025-04-11 11:52:08 - After arrow click 1:
+2025-04-11 11:52:08 - - 5-year veteran coin found: Yes
+2025-04-11 11:52:08 - - Unwanted medals found: No
+2025-04-11 11:52:08 - - More medals available: Yes
+2025-04-11 11:52:08 - - Medal count: 7
+2025-04-11 11:52:08 - Clicking medal arrow at: 1134,513
+2025-04-11 11:52:09 - Taking Steam screenshot
+2025-04-11 11:52:10 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:52:10 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 548
+2025-04-11 11:52:11 - Updated next player position: 739,598
+2025-04-11 11:52:11 - After arrow click 2:
+2025-04-11 11:52:11 - - 5-year veteran coin found: Yes
+2025-04-11 11:52:11 - - Unwanted medals found: No
+2025-04-11 11:52:11 - - More medals available: No
+2025-04-11 11:52:11 - - Medal count: 7
+2025-04-11 11:52:11 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:52:11 - Clicking profile button at exact coordinates: 814,694
+2025-04-11 11:52:13 - Taking Steam screenshot
+2025-04-11 11:52:15 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:52:15 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:52:17 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198140819912/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:52:17 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198140819912/
+2025-04-11 11:52:17 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:52:17 - Tab close button found at: 429,195
+2025-04-11 11:52:17 - Clicking tab close button at: 416,195
+2025-04-11 11:52:18 - Clicking overlay close button at: 1874,48
+2025-04-11 11:52:18 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198140819912/
+2025-04-11 11:52:18 - Processing success: 0
+2025-04-11 11:52:18 - API submission: Failed
+2025-04-11 11:52:18 - Saved to fallback: No
+2025-04-11 11:52:18 - Tab close success: 1
+2025-04-11 11:52:18 - Profile #2 processed successfully with URL: https://steamcommunity.com/profiles/76561198140819912/
+2025-04-11 11:52:18 - Moving to next player using attention icon coordinates: 739,598
+2025-04-11 11:52:18 - Checking player at coordinates: 739,598
+2025-04-11 11:52:19 - Taking Steam screenshot
+2025-04-11 11:52:21 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:21 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 598
+2025-04-11 11:52:21 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,624
+NEXT_CLICK_COORDS=739,624
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,736
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:52:21 - Found next player position at: 739,624 (from attention icon)
+2025-04-11 11:52:21 - Profile button found at coordinates: 814,736
+2025-04-11 11:52:21 - Analysis summary:
+2025-04-11 11:52:21 - - Profile popup detected: Yes
+2025-04-11 11:52:21 - - Sympathies sum: 0
+2025-04-11 11:52:21 - - Too many sympathies: No
+2025-04-11 11:52:21 - - Three+ medals found: No
+2025-04-11 11:52:21 - - 5-year veteran coin found: No
+2025-04-11 11:52:21 - - Unwanted medals found: No
+2025-04-11 11:52:21 - - More medals available: No
+2025-04-11 11:52:21 - - Medal count: 0
+2025-04-11 11:52:21 - - Next player position from icon: Yes
+2025-04-11 11:52:21 - Less than 3 medals found, skipping player
+2025-04-11 11:52:21 - Clicking again to close profile details
+2025-04-11 11:52:22 - Moving to next player using attention icon coordinates: 739,624
+2025-04-11 11:52:22 - Checking player at coordinates: 739,624
+2025-04-11 11:52:23 - Taking Steam screenshot
+2025-04-11 11:52:24 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:24 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 624
+2025-04-11 11:52:25 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,650
+NEXT_CLICK_COORDS=739,650
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,770
+SYMPATHIES_SUM=3
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:52:25 - Found next player position at: 739,650 (from attention icon)
+2025-04-11 11:52:25 - Profile button found at coordinates: 814,770
+2025-04-11 11:52:25 - Analysis summary:
+2025-04-11 11:52:25 - - Profile popup detected: Yes
+2025-04-11 11:52:25 - - Sympathies sum: 3
+2025-04-11 11:52:25 - - Too many sympathies: No
+2025-04-11 11:52:25 - - Three+ medals found: No
+2025-04-11 11:52:25 - - 5-year veteran coin found: No
+2025-04-11 11:52:25 - - Unwanted medals found: No
+2025-04-11 11:52:25 - - More medals available: No
+2025-04-11 11:52:25 - - Medal count: 0
+2025-04-11 11:52:25 - - Next player position from icon: Yes
+2025-04-11 11:52:25 - Less than 3 medals found, skipping player
+2025-04-11 11:52:25 - Clicking again to close profile details
+2025-04-11 11:52:26 - Moving to next player using attention icon coordinates: 739,650
+2025-04-11 11:52:26 - Checking player at coordinates: 739,650
+2025-04-11 11:52:26 - Taking Steam screenshot
+2025-04-11 11:52:28 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:28 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 650
+2025-04-11 11:52:29 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,676
+NEXT_CLICK_COORDS=739,676
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,796
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:52:29 - Found next player position at: 739,676 (from attention icon)
+2025-04-11 11:52:29 - Profile button found at coordinates: 814,796
+2025-04-11 11:52:29 - Analysis summary:
+2025-04-11 11:52:29 - - Profile popup detected: Yes
+2025-04-11 11:52:29 - - Sympathies sum: 0
+2025-04-11 11:52:29 - - Too many sympathies: No
+2025-04-11 11:52:29 - - Three+ medals found: No
+2025-04-11 11:52:29 - - 5-year veteran coin found: No
+2025-04-11 11:52:29 - - Unwanted medals found: No
+2025-04-11 11:52:29 - - More medals available: No
+2025-04-11 11:52:29 - - Medal count: 0
+2025-04-11 11:52:29 - - Next player position from icon: Yes
+2025-04-11 11:52:29 - Less than 3 medals found, skipping player
+2025-04-11 11:52:29 - Clicking again to close profile details
+2025-04-11 11:52:29 - Moving to next player using attention icon coordinates: 739,676
+2025-04-11 11:52:29 - Checking player at coordinates: 739,676
+2025-04-11 11:52:30 - Taking Steam screenshot
+2025-04-11 11:52:31 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:31 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 676
+2025-04-11 11:52:33 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,702
+NEXT_CLICK_COORDS=739,702
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,822
+SYMPATHIES_SUM=40
+SMILE_VALUE=20
+TEACH_VALUE=10
+CROWN_VALUE=10
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=634
+ARROW_COORDS=1129,634
+MEDAL_COUNT=5
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=assorted-medals-03
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:52:33 - Found next player position at: 739,702 (from attention icon)
+2025-04-11 11:52:33 - Profile button found at coordinates: 814,822
+2025-04-11 11:52:33 - Analysis summary:
+2025-04-11 11:52:33 - - Profile popup detected: Yes
+2025-04-11 11:52:33 - - Sympathies sum: 40
+2025-04-11 11:52:33 - - Too many sympathies: No
+2025-04-11 11:52:33 - - Three+ medals found: Yes
+2025-04-11 11:52:33 - - 5-year veteran coin found: No
+2025-04-11 11:52:33 - - Unwanted medals found: No
+2025-04-11 11:52:33 - - More medals available: Yes
+2025-04-11 11:52:33 - - Medal count: 5
+2025-04-11 11:52:33 - - Next player position from icon: Yes
+2025-04-11 11:52:33 - Clicking medal arrow at: 1134,641
+2025-04-11 11:52:33 - Taking Steam screenshot
+2025-04-11 11:52:35 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:52:35 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 676
+2025-04-11 11:52:36 - Updated next player position: 739,702
+2025-04-11 11:52:36 - After arrow click 1:
+2025-04-11 11:52:36 - - 5-year veteran coin found: No
+2025-04-11 11:52:36 - - Unwanted medals found: No
+2025-04-11 11:52:36 - - More medals available: No
+2025-04-11 11:52:36 - - Medal count: 2
+2025-04-11 11:52:36 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:52:36 - Clicking again to close profile details
+2025-04-11 11:52:36 - Moving to next player using attention icon coordinates: 739,702
+2025-04-11 11:52:36 - Checking player at coordinates: 739,702
+2025-04-11 11:52:37 - Taking Steam screenshot
+2025-04-11 11:52:39 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:39 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 702
+2025-04-11 11:52:40 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,728
+NEXT_CLICK_COORDS=739,728
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,848
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=5
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+
+2025-04-11 11:52:40 - Found next player position at: 739,728 (from attention icon)
+2025-04-11 11:52:40 - Profile button found at coordinates: 814,848
+2025-04-11 11:52:40 - Analysis summary:
+2025-04-11 11:52:40 - - Profile popup detected: Yes
+2025-04-11 11:52:40 - - Sympathies sum: 0
+2025-04-11 11:52:40 - - Too many sympathies: No
+2025-04-11 11:52:40 - - Three+ medals found: Yes
+2025-04-11 11:52:40 - - 5-year veteran coin found: Yes
+2025-04-11 11:52:40 - - Unwanted medals found: No
+2025-04-11 11:52:40 - - More medals available: No
+2025-04-11 11:52:40 - - Medal count: 5
+2025-04-11 11:52:40 - - Next player position from icon: Yes
+2025-04-11 11:52:40 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:52:40 - Clicking profile button at exact coordinates: 814,848
+2025-04-11 11:52:42 - Taking Steam screenshot
+2025-04-11 11:52:43 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:52:43 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:52:45 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/id/AthotlasO2320/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:52:45 - Successfully extracted Steam profile URL: https://steamcommunity.com/id/AthotlasO2320/
+2025-04-11 11:52:45 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:52:45 - Tab close button found at: 429,195
+2025-04-11 11:52:45 - Clicking tab close button at: 416,195
+2025-04-11 11:52:46 - Clicking overlay close button at: 1874,48
+2025-04-11 11:52:46 - URL extraction complete - URL: https://steamcommunity.com/id/AthotlasO2320/
+2025-04-11 11:52:46 - Processing success: 0
+2025-04-11 11:52:46 - API submission: Failed
+2025-04-11 11:52:46 - Saved to fallback: No
+2025-04-11 11:52:46 - Tab close success: 1
+2025-04-11 11:52:46 - Profile #3 processed successfully with URL: https://steamcommunity.com/id/AthotlasO2320/
+2025-04-11 11:52:46 - Moving to next player using attention icon coordinates: 739,728
+2025-04-11 11:52:46 - Checking player at coordinates: 739,728
+2025-04-11 11:52:47 - Taking Steam screenshot
+2025-04-11 11:52:48 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:48 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 728
+2025-04-11 11:52:49 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,754
+NEXT_CLICK_COORDS=739,754
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,866
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:52:49 - Found next player position at: 739,754 (from attention icon)
+2025-04-11 11:52:49 - Profile button found at coordinates: 814,866
+2025-04-11 11:52:49 - Analysis summary:
+2025-04-11 11:52:49 - - Profile popup detected: Yes
+2025-04-11 11:52:49 - - Sympathies sum: 0
+2025-04-11 11:52:49 - - Too many sympathies: No
+2025-04-11 11:52:49 - - Three+ medals found: No
+2025-04-11 11:52:49 - - 5-year veteran coin found: No
+2025-04-11 11:52:49 - - Unwanted medals found: No
+2025-04-11 11:52:49 - - More medals available: No
+2025-04-11 11:52:49 - - Medal count: 2
+2025-04-11 11:52:49 - - Next player position from icon: Yes
+2025-04-11 11:52:49 - Less than 3 medals found, skipping player
+2025-04-11 11:52:49 - Clicking again to close profile details
+2025-04-11 11:52:49 - Moving to next player using attention icon coordinates: 739,754
+2025-04-11 11:52:49 - Checking player at coordinates: 739,754
+2025-04-11 11:52:50 - Taking Steam screenshot
+2025-04-11 11:52:52 - Performing profile analysis with dual-button detection...
+2025-04-11 11:52:52 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 754
+2025-04-11 11:52:53 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=0
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,900
+SYMPATHIES_SUM=3
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+
+2025-04-11 11:52:53 - Profile button found at coordinates: 814,900
+2025-04-11 11:52:53 - Analysis summary:
+2025-04-11 11:52:53 - - Profile popup detected: Yes
+2025-04-11 11:52:53 - - Sympathies sum: 3
+2025-04-11 11:52:53 - - Too many sympathies: No
+2025-04-11 11:52:53 - - Three+ medals found: Yes
+2025-04-11 11:52:53 - - 5-year veteran coin found: Yes
+2025-04-11 11:52:53 - - Unwanted medals found: No
+2025-04-11 11:52:53 - - More medals available: No
+2025-04-11 11:52:53 - - Medal count: 3
+2025-04-11 11:52:53 - - Next player position from icon: No
+2025-04-11 11:52:53 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:52:53 - Clicking profile button at exact coordinates: 814,900
+2025-04-11 11:52:55 - Taking Steam screenshot
+2025-04-11 11:52:56 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:52:56 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:53:01 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198255995523/
+URL_PROCESSING_RESULT=1
+URL_PROCESSING_STATUS=SUCCESS
+API_SUBMISSION=SUCCESS
+
+2025-04-11 11:53:01 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198255995523/
+2025-04-11 11:53:01 - URL processing was successful
+2025-04-11 11:53:01 - Successfully submitted to API endpoint
+2025-04-11 11:53:01 - Tab close button found at: 429,195
+2025-04-11 11:53:01 - Clicking tab close button at: 416,195
+2025-04-11 11:53:02 - Clicking overlay close button at: 1874,48
+2025-04-11 11:53:02 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198255995523/
+2025-04-11 11:53:02 - Processing success: 1
+2025-04-11 11:53:02 - API submission: Successful
+2025-04-11 11:53:02 - Saved to fallback: No
+2025-04-11 11:53:02 - Tab close success: 1
+2025-04-11 11:53:02 - Profile #4 processed successfully with URL: https://steamcommunity.com/profiles/76561198255995523/
+2025-04-11 11:53:02 - No more attention icons found - we've reached the end of human players in this match
+2025-04-11 11:53:02 - Disconnecting from match to save time...
+2025-04-11 11:53:02 - Disconnecting from match (strategy 1: direct exit button click)...
+2025-04-11 11:53:02 - Clicking 'Exit to main menu' button at 1155,125
+2025-04-11 11:53:03 - Clicking 'Yes' confirmation button at 1100,600
+2025-04-11 11:53:05 - Taking Steam screenshot
+2025-04-11 11:53:06 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 202 17 31 30
+2025-04-11 11:53:06 - Main menu detection result: MAIN_MENU_DETECTED=1
+CONFIDENCE=0.9883
+
+2025-04-11 11:53:06 - Successfully disconnected using strategy 1
+2025-04-11 11:53:06 - Returning to main menu by leaving match...
+2025-04-11 11:53:06 - Clicking Leave Match button at 1170,130
+2025-04-11 11:53:08 - Clicking OK to confirm at 1100,600
+2025-04-11 11:53:08 - Cleaning up CS2 screenshots...
+2025-04-11 11:53:08 - Cleaning up CS2 screenshot thumbnails...
+2025-04-11 11:53:08 - Screenshot cleanup completed
+2025-04-11 11:53:08 - Match processing completed successfully
+2025-04-11 11:53:08 - Finished with Delta match
+2025-04-11 11:53:08 - Round 1: Successfully completed map Delta
+2025-04-11 11:53:08 - Ensuring we're at the main menu...
+2025-04-11 11:53:08 - Checking if we're at the main menu...
+2025-04-11 11:53:08 - Taking Steam screenshot
+2025-04-11 11:53:09 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 198 12 40 40
+2025-04-11 11:53:10 - At main menu: yes
+2025-04-11 11:53:10 - Checking for voted-off error dialog...
+2025-04-11 11:53:10 - Taking Steam screenshot
+2025-04-11 11:53:11 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py check_voted_off_error_dialog
+2025-04-11 11:53:11 - Voted-off error dialog detection result: VOTED_OFF_ERROR_DIALOG_DETECTED=0
+
+2025-04-11 11:53:11 - Already at main menu
+2025-04-11 11:53:11 - Round 1: Starting map Dust II
+2025-04-11 11:53:11 - Starting Dust II match automation
+2025-04-11 11:53:11 - Selecting map: Dust II
+2025-04-11 11:53:13 - Clicking Play button at coordinates: 985,30
+2025-04-11 11:53:14 - Selecting matchmaking mode at coordinates: 813,85
+2025-04-11 11:53:14 - Selecting casual league at coordinates: 906,130
+2025-04-11 11:53:14 - Selecting Dust II map at coordinates: 1230,570
+2025-04-11 11:53:14 - Clicking Accept Match at coordinates: 1695,1030
+2025-04-11 11:53:14 - Map selection sequence completed for: Dust II
+2025-04-11 11:53:14 - Map Dust II selected, now waiting for match to be found and joined...
+2025-04-11 11:53:14 - Waiting for match outcome (success or failure)...
+2025-04-11 11:53:14 - Match detection timeout set to 90.0 seconds
+2025-04-11 11:53:14 - Will wait 1.0 seconds after Cancel Search disappears before checking for errors
+2025-04-11 11:53:14 - Search phase ended, now in connecting/loading phase after 0.0 seconds
+2025-04-11 11:53:15 - Returned to searching state, resetting phase
+2025-04-11 11:53:15 - Still searching for match... 0.56299999999999994 seconds elapsed
+2025-04-11 11:53:15 - Still searching for match... 0.64100000000000001 seconds elapsed
+2025-04-11 11:53:15 - Still searching for match... 0.70399999999999996 seconds elapsed
+2025-04-11 11:53:15 - Still searching for match... 0.76600000000000001 seconds elapsed
+2025-04-11 11:53:15 - Still searching for match... 0.84399999999999997 seconds elapsed
+2025-04-11 11:53:15 - Still searching for match... 0.90700000000000003 seconds elapsed
+2025-04-11 11:53:15 - Still searching for match... 0.98499999999999999 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.0469999999999999 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.125 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.1879999999999999 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.266 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.329 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.391 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.4690000000000001 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.532 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.6100000000000001 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.6719999999999999 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.75 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.8129999999999999 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.891 seconds elapsed
+2025-04-11 11:53:16 - Still searching for match... 1.954 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.016 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.0939999999999999 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.157 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.2349999999999999 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.2970000000000002 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.375 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.4380000000000002 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.516 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.5790000000000002 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.641 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.7189999999999999 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.782 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.8599999999999999 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 2.9220000000000002 seconds elapsed
+2025-04-11 11:53:17 - Still searching for match... 3.0 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.0630000000000002 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.141 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.2040000000000002 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.266 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.3439999999999999 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.407 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.4849999999999999 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.5470000000000002 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.625 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.6880000000000002 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.766 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.8290000000000002 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.891 seconds elapsed
+2025-04-11 11:53:18 - Still searching for match... 3.9689999999999999 seconds elapsed
+2025-04-11 11:53:19 - Still searching for match... 4.032 seconds elapsed
+2025-04-11 11:53:19 - Still searching for match... 4.1100000000000003 seconds elapsed
+2025-04-11 11:53:19 - Search phase ended, now in connecting/loading phase after 4.4850000000000003 seconds
+2025-04-11 11:53:20 - Returned to searching state, resetting phase
+2025-04-11 11:53:20 - Still searching for match... 5.407 seconds elapsed
+2025-04-11 11:53:21 - Still searching for match... 6.1879999999999997 seconds elapsed
+2025-04-11 11:53:22 - Still searching for match... 6.9539999999999997 seconds elapsed
+2025-04-11 11:53:22 - Still searching for match... 7.7350000000000003 seconds elapsed
+2025-04-11 11:53:23 - Still searching for match... 8.5 seconds elapsed
+2025-04-11 11:53:24 - Still searching for match... 9.282 seconds elapsed
+2025-04-11 11:53:25 - Still searching for match... 10.063000000000001 seconds elapsed
+2025-04-11 11:53:25 - Still searching for match... 10.843999999999999 seconds elapsed
+2025-04-11 11:53:26 - Still searching for match... 11.625 seconds elapsed
+2025-04-11 11:53:27 - Still searching for match... 12.407 seconds elapsed
+2025-04-11 11:53:28 - Still searching for match... 13.172000000000001 seconds elapsed
+2025-04-11 11:53:29 - Still searching for match... 13.954000000000001 seconds elapsed
+2025-04-11 11:53:29 - Still searching for match... 14.734999999999999 seconds elapsed
+2025-04-11 11:53:30 - Still searching for match... 15.516 seconds elapsed
+2025-04-11 11:53:31 - Still searching for match... 16.297000000000001 seconds elapsed
+2025-04-11 11:53:32 - Still searching for match... 17.079000000000001 seconds elapsed
+2025-04-11 11:53:32 - Still searching for match... 17.844000000000001 seconds elapsed
+2025-04-11 11:53:33 - Still searching for match... 18.625 seconds elapsed
+2025-04-11 11:53:33 - Search phase ended, now in connecting/loading phase after 18.859999999999999 seconds
+2025-04-11 11:53:36 - In loading phase... 2.625 seconds elapsed since search ended
+2025-04-11 11:53:37 - Taking screenshot to check for error dialog...
+2025-04-11 11:53:37 - Taking Steam screenshot
+2025-04-11 11:53:38 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py error
+2025-04-11 11:53:39 - Error detection result: ERROR_DETECTION_RESULT=0
+ERROR_DETECTION_RESULT=0
+
+2025-04-11 11:53:39 - No error dialog found. Consecutive error checks: 1/6
+2025-04-11 11:53:39 - Successfully joined match! Spectate button detected via pixel color method
+2025-04-11 11:53:39 - Clicking spectator button at 1596, 1032
+2025-04-11 11:53:40 - Match outcome for Dust II: success
+2025-04-11 11:53:40 - Successfully joined Dust II match!
+2025-04-11 11:53:40 - Processing match...
+2025-04-11 11:53:41 - Processing players using grid method with improved profile popup detection...
+2025-04-11 11:53:41 - Opening scoreboard with Escape key...
+2025-04-11 11:53:42 - Searching for attention icons...
+2025-04-11 11:53:42 - Taking Steam screenshot
+2025-04-11 11:53:43 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py find_first_attention_icon 1358 290 38 450
+2025-04-11 11:53:44 - First icon search result: ATTENTION_ICON_FOUND=1
+ATTENTION_ICON_COORDS=1377,328
+PLAYER_CLICK_COORDS=739,328
+
+2025-04-11 11:53:44 - Found first attention icon! Starting at: X=739, Y=328
+2025-04-11 11:53:44 - Checking player at coordinates: 739,328
+2025-04-11 11:53:45 - Taking Steam screenshot
+2025-04-11 11:53:46 - Performing profile analysis with dual-button detection...
+2025-04-11 11:53:46 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 328
+2025-04-11 11:53:47 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,354
+NEXT_CLICK_COORDS=739,354
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,474
+SYMPATHIES_SUM=48
+SMILE_VALUE=17
+TEACH_VALUE=14
+CROWN_VALUE=17
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=286
+ARROW_COORDS=1129,286
+MEDAL_COUNT=6
+MEDAL_DETECTED=10-year-veteran-coin
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2019-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:53:47 - Found next player position at: 739,354 (from attention icon)
+2025-04-11 11:53:47 - Profile button found at coordinates: 814,474
+2025-04-11 11:53:47 - Analysis summary:
+2025-04-11 11:53:47 - - Profile popup detected: Yes
+2025-04-11 11:53:47 - - Sympathies sum: 48
+2025-04-11 11:53:47 - - Too many sympathies: No
+2025-04-11 11:53:47 - - Three+ medals found: Yes
+2025-04-11 11:53:47 - - 5-year veteran coin found: No
+2025-04-11 11:53:47 - - Unwanted medals found: No
+2025-04-11 11:53:47 - - More medals available: Yes
+2025-04-11 11:53:47 - - Medal count: 6
+2025-04-11 11:53:47 - - Next player position from icon: Yes
+2025-04-11 11:53:47 - Clicking medal arrow at: 1134,293
+2025-04-11 11:53:48 - Taking Steam screenshot
+2025-04-11 11:53:49 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:53:49 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 328
+2025-04-11 11:53:51 - Updated next player position: 739,354
+2025-04-11 11:53:51 - After arrow click 1:
+2025-04-11 11:53:51 - - 5-year veteran coin found: Yes
+2025-04-11 11:53:51 - - Unwanted medals found: No
+2025-04-11 11:53:51 - - More medals available: No
+2025-04-11 11:53:51 - - Medal count: 4
+2025-04-11 11:53:51 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:53:51 - Clicking profile button at exact coordinates: 814,474
+2025-04-11 11:53:53 - Taking Steam screenshot
+2025-04-11 11:53:54 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:53:54 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:53:56 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561197967921627/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:53:56 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561197967921627/
+2025-04-11 11:53:56 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:53:56 - Tab close button found at: 429,195
+2025-04-11 11:53:56 - Clicking tab close button at: 416,195
+2025-04-11 11:53:56 - Clicking overlay close button at: 1874,48
+2025-04-11 11:53:57 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561197967921627/
+2025-04-11 11:53:57 - Processing success: 0
+2025-04-11 11:53:57 - API submission: Failed
+2025-04-11 11:53:57 - Saved to fallback: No
+2025-04-11 11:53:57 - Tab close success: 1
+2025-04-11 11:53:57 - Profile #1 processed successfully with URL: https://steamcommunity.com/profiles/76561197967921627/
+2025-04-11 11:53:57 - Moving to next player using attention icon coordinates: 739,354
+2025-04-11 11:53:57 - Checking player at coordinates: 739,354
+2025-04-11 11:53:58 - Taking Steam screenshot
+2025-04-11 11:53:59 - Performing profile analysis with dual-button detection...
+2025-04-11 11:53:59 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 354
+2025-04-11 11:54:00 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,380
+NEXT_CLICK_COORDS=739,380
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,500
+SYMPATHIES_SUM=2
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=2
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=2
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:54:00 - Found next player position at: 739,380 (from attention icon)
+2025-04-11 11:54:00 - Profile button found at coordinates: 814,500
+2025-04-11 11:54:00 - Analysis summary:
+2025-04-11 11:54:00 - - Profile popup detected: Yes
+2025-04-11 11:54:00 - - Sympathies sum: 2
+2025-04-11 11:54:00 - - Too many sympathies: No
+2025-04-11 11:54:00 - - Three+ medals found: No
+2025-04-11 11:54:00 - - 5-year veteran coin found: No
+2025-04-11 11:54:00 - - Unwanted medals found: No
+2025-04-11 11:54:00 - - More medals available: No
+2025-04-11 11:54:00 - - Medal count: 2
+2025-04-11 11:54:00 - - Next player position from icon: Yes
+2025-04-11 11:54:00 - Less than 3 medals found, skipping player
+2025-04-11 11:54:00 - Clicking again to close profile details
+2025-04-11 11:54:00 - Moving to next player using attention icon coordinates: 739,380
+2025-04-11 11:54:00 - Checking player at coordinates: 739,380
+2025-04-11 11:54:01 - Taking Steam screenshot
+2025-04-11 11:54:03 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:03 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 380
+2025-04-11 11:54:04 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,418
+NEXT_CLICK_COORDS=739,418
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,518
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+
+2025-04-11 11:54:04 - Found next player position at: 739,418 (from attention icon)
+2025-04-11 11:54:04 - Profile button found at coordinates: 814,518
+2025-04-11 11:54:04 - Analysis summary:
+2025-04-11 11:54:04 - - Profile popup detected: Yes
+2025-04-11 11:54:04 - - Sympathies sum: 0
+2025-04-11 11:54:04 - - Too many sympathies: No
+2025-04-11 11:54:04 - - Three+ medals found: Yes
+2025-04-11 11:54:04 - - 5-year veteran coin found: Yes
+2025-04-11 11:54:04 - - Unwanted medals found: No
+2025-04-11 11:54:04 - - More medals available: No
+2025-04-11 11:54:04 - - Medal count: 3
+2025-04-11 11:54:04 - - Next player position from icon: Yes
+2025-04-11 11:54:04 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:54:04 - Clicking profile button at exact coordinates: 814,518
+2025-04-11 11:54:06 - Taking Steam screenshot
+2025-04-11 11:54:07 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:54:07 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:54:11 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/id/TehHutt/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:54:11 - Successfully extracted Steam profile URL: https://steamcommunity.com/id/TehHutt/
+2025-04-11 11:54:11 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:54:11 - Tab close button found at: 429,195
+2025-04-11 11:54:11 - Clicking tab close button at: 416,195
+2025-04-11 11:54:11 - Clicking overlay close button at: 1874,48
+2025-04-11 11:54:12 - URL extraction complete - URL: https://steamcommunity.com/id/TehHutt/
+2025-04-11 11:54:12 - Processing success: 0
+2025-04-11 11:54:12 - API submission: Failed
+2025-04-11 11:54:12 - Saved to fallback: No
+2025-04-11 11:54:12 - Tab close success: 1
+2025-04-11 11:54:12 - Profile #2 processed successfully with URL: https://steamcommunity.com/id/TehHutt/
+2025-04-11 11:54:12 - Moving to next player using attention icon coordinates: 739,418
+2025-04-11 11:54:12 - Checking player at coordinates: 739,418
+2025-04-11 11:54:13 - Taking Steam screenshot
+2025-04-11 11:54:14 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:14 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 418
+2025-04-11 11:54:15 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,444
+NEXT_CLICK_COORDS=739,444
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,564
+SYMPATHIES_SUM=44
+SMILE_VALUE=40
+TEACH_VALUE=1
+CROWN_VALUE=3
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=376
+ARROW_COORDS=1129,376
+MEDAL_COUNT=5
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=assorted-medals-01
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:54:15 - Found next player position at: 739,444 (from attention icon)
+2025-04-11 11:54:15 - Profile button found at coordinates: 814,564
+2025-04-11 11:54:15 - Analysis summary:
+2025-04-11 11:54:15 - - Profile popup detected: Yes
+2025-04-11 11:54:15 - - Sympathies sum: 44
+2025-04-11 11:54:15 - - Too many sympathies: No
+2025-04-11 11:54:15 - - Three+ medals found: Yes
+2025-04-11 11:54:15 - - 5-year veteran coin found: No
+2025-04-11 11:54:15 - - Unwanted medals found: No
+2025-04-11 11:54:15 - - More medals available: Yes
+2025-04-11 11:54:15 - - Medal count: 5
+2025-04-11 11:54:15 - - Next player position from icon: Yes
+2025-04-11 11:54:15 - Clicking medal arrow at: 1134,383
+2025-04-11 11:54:16 - Taking Steam screenshot
+2025-04-11 11:54:17 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:54:17 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 418
+2025-04-11 11:54:18 - Updated next player position: 739,444
+2025-04-11 11:54:18 - After arrow click 1:
+2025-04-11 11:54:18 - - 5-year veteran coin found: No
+2025-04-11 11:54:18 - - Unwanted medals found: No
+2025-04-11 11:54:18 - - More medals available: No
+2025-04-11 11:54:18 - - Medal count: 4
+2025-04-11 11:54:18 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:54:18 - Clicking again to close profile details
+2025-04-11 11:54:19 - Moving to next player using attention icon coordinates: 739,444
+2025-04-11 11:54:19 - Checking player at coordinates: 739,444
+2025-04-11 11:54:20 - Taking Steam screenshot
+2025-04-11 11:54:21 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:21 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 444
+2025-04-11 11:54:22 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,470
+NEXT_CLICK_COORDS=739,470
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,582
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:54:22 - Found next player position at: 739,470 (from attention icon)
+2025-04-11 11:54:22 - Profile button found at coordinates: 814,582
+2025-04-11 11:54:22 - Analysis summary:
+2025-04-11 11:54:22 - - Profile popup detected: Yes
+2025-04-11 11:54:22 - - Sympathies sum: 0
+2025-04-11 11:54:22 - - Too many sympathies: No
+2025-04-11 11:54:22 - - Three+ medals found: No
+2025-04-11 11:54:22 - - 5-year veteran coin found: No
+2025-04-11 11:54:22 - - Unwanted medals found: No
+2025-04-11 11:54:22 - - More medals available: No
+2025-04-11 11:54:22 - - Medal count: 0
+2025-04-11 11:54:22 - - Next player position from icon: Yes
+2025-04-11 11:54:22 - Less than 3 medals found, skipping player
+2025-04-11 11:54:22 - Clicking again to close profile details
+2025-04-11 11:54:22 - Moving to next player using attention icon coordinates: 739,470
+2025-04-11 11:54:22 - Checking player at coordinates: 739,470
+2025-04-11 11:54:23 - Taking Steam screenshot
+2025-04-11 11:54:24 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:24 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 470
+2025-04-11 11:54:26 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,496
+NEXT_CLICK_COORDS=739,496
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,616
+SYMPATHIES_SUM=6
+SMILE_VALUE=2
+TEACH_VALUE=2
+CROWN_VALUE=2
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=2024-service-medal
+
+2025-04-11 11:54:26 - Found next player position at: 739,496 (from attention icon)
+2025-04-11 11:54:26 - Profile button found at coordinates: 814,616
+2025-04-11 11:54:26 - Analysis summary:
+2025-04-11 11:54:26 - - Profile popup detected: Yes
+2025-04-11 11:54:26 - - Sympathies sum: 6
+2025-04-11 11:54:26 - - Too many sympathies: No
+2025-04-11 11:54:26 - - Three+ medals found: No
+2025-04-11 11:54:26 - - 5-year veteran coin found: No
+2025-04-11 11:54:26 - - Unwanted medals found: No
+2025-04-11 11:54:26 - - More medals available: No
+2025-04-11 11:54:26 - - Medal count: 1
+2025-04-11 11:54:26 - - Next player position from icon: Yes
+2025-04-11 11:54:26 - Less than 3 medals found, skipping player
+2025-04-11 11:54:26 - Clicking again to close profile details
+2025-04-11 11:54:26 - Moving to next player using attention icon coordinates: 739,496
+2025-04-11 11:54:26 - Checking player at coordinates: 739,496
+2025-04-11 11:54:27 - Taking Steam screenshot
+2025-04-11 11:54:28 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:28 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 496
+2025-04-11 11:54:29 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,522
+NEXT_CLICK_COORDS=739,522
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,642
+SYMPATHIES_SUM=11
+SMILE_VALUE=5
+TEACH_VALUE=2
+CROWN_VALUE=4
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=4
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=assorted-medals-04
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:54:29 - Found next player position at: 739,522 (from attention icon)
+2025-04-11 11:54:29 - Profile button found at coordinates: 814,642
+2025-04-11 11:54:29 - Analysis summary:
+2025-04-11 11:54:29 - - Profile popup detected: Yes
+2025-04-11 11:54:29 - - Sympathies sum: 11
+2025-04-11 11:54:29 - - Too many sympathies: No
+2025-04-11 11:54:29 - - Three+ medals found: Yes
+2025-04-11 11:54:29 - - 5-year veteran coin found: No
+2025-04-11 11:54:30 - - Unwanted medals found: No
+2025-04-11 11:54:30 - - More medals available: No
+2025-04-11 11:54:30 - - Medal count: 4
+2025-04-11 11:54:30 - - Next player position from icon: Yes
+2025-04-11 11:54:30 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:54:30 - Clicking again to close profile details
+2025-04-11 11:54:30 - Moving to next player using attention icon coordinates: 739,522
+2025-04-11 11:54:30 - Checking player at coordinates: 739,522
+2025-04-11 11:54:31 - Taking Steam screenshot
+2025-04-11 11:54:32 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:32 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 522
+2025-04-11 11:54:33 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,548
+NEXT_CLICK_COORDS=739,548
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,660
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:54:33 - Found next player position at: 739,548 (from attention icon)
+2025-04-11 11:54:33 - Profile button found at coordinates: 814,660
+2025-04-11 11:54:33 - Analysis summary:
+2025-04-11 11:54:33 - - Profile popup detected: Yes
+2025-04-11 11:54:33 - - Sympathies sum: 0
+2025-04-11 11:54:33 - - Too many sympathies: No
+2025-04-11 11:54:33 - - Three+ medals found: No
+2025-04-11 11:54:33 - - 5-year veteran coin found: No
+2025-04-11 11:54:33 - - Unwanted medals found: No
+2025-04-11 11:54:33 - - More medals available: No
+2025-04-11 11:54:33 - - Medal count: 0
+2025-04-11 11:54:33 - - Next player position from icon: Yes
+2025-04-11 11:54:33 - Less than 3 medals found, skipping player
+2025-04-11 11:54:33 - Clicking again to close profile details
+2025-04-11 11:54:33 - Moving to next player using attention icon coordinates: 739,548
+2025-04-11 11:54:33 - Checking player at coordinates: 739,548
+2025-04-11 11:54:34 - Taking Steam screenshot
+2025-04-11 11:54:36 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:36 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 548
+2025-04-11 11:54:37 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,574
+NEXT_CLICK_COORDS=739,574
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,694
+SYMPATHIES_SUM=4
+SMILE_VALUE=4
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+
+2025-04-11 11:54:37 - Found next player position at: 739,574 (from attention icon)
+2025-04-11 11:54:37 - Profile button found at coordinates: 814,694
+2025-04-11 11:54:37 - Analysis summary:
+2025-04-11 11:54:37 - - Profile popup detected: Yes
+2025-04-11 11:54:37 - - Sympathies sum: 4
+2025-04-11 11:54:37 - - Too many sympathies: No
+2025-04-11 11:54:37 - - Three+ medals found: Yes
+2025-04-11 11:54:37 - - 5-year veteran coin found: Yes
+2025-04-11 11:54:37 - - Unwanted medals found: No
+2025-04-11 11:54:37 - - More medals available: No
+2025-04-11 11:54:37 - - Medal count: 3
+2025-04-11 11:54:37 - - Next player position from icon: Yes
+2025-04-11 11:54:37 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:54:37 - Clicking profile button at exact coordinates: 814,694
+2025-04-11 11:54:39 - Taking Steam screenshot
+2025-04-11 11:54:40 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:54:40 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:54:43 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/id/maddkiller69/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:54:43 - Successfully extracted Steam profile URL: https://steamcommunity.com/id/maddkiller69/
+2025-04-11 11:54:43 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:54:43 - Tab close button found at: 429,195
+2025-04-11 11:54:43 - Clicking tab close button at: 416,195
+2025-04-11 11:54:43 - Clicking overlay close button at: 1874,48
+2025-04-11 11:54:44 - URL extraction complete - URL: https://steamcommunity.com/id/maddkiller69/
+2025-04-11 11:54:44 - Processing success: 0
+2025-04-11 11:54:44 - API submission: Failed
+2025-04-11 11:54:44 - Saved to fallback: No
+2025-04-11 11:54:44 - Tab close success: 1
+2025-04-11 11:54:44 - Profile #3 processed successfully with URL: https://steamcommunity.com/id/maddkiller69/
+2025-04-11 11:54:44 - Moving to next player using attention icon coordinates: 739,574
+2025-04-11 11:54:44 - Checking player at coordinates: 739,574
+2025-04-11 11:54:45 - Taking Steam screenshot
+2025-04-11 11:54:46 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:46 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 574
+2025-04-11 11:54:48 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,612
+NEXT_CLICK_COORDS=739,612
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,720
+SYMPATHIES_SUM=3
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:54:48 - Found next player position at: 739,612 (from attention icon)
+2025-04-11 11:54:48 - Profile button found at coordinates: 814,720
+2025-04-11 11:54:48 - Analysis summary:
+2025-04-11 11:54:48 - - Profile popup detected: Yes
+2025-04-11 11:54:48 - - Sympathies sum: 3
+2025-04-11 11:54:48 - - Too many sympathies: No
+2025-04-11 11:54:48 - - Three+ medals found: No
+2025-04-11 11:54:48 - - 5-year veteran coin found: No
+2025-04-11 11:54:48 - - Unwanted medals found: No
+2025-04-11 11:54:48 - - More medals available: No
+2025-04-11 11:54:48 - - Medal count: 0
+2025-04-11 11:54:48 - - Next player position from icon: Yes
+2025-04-11 11:54:48 - Less than 3 medals found, skipping player
+2025-04-11 11:54:48 - Clicking again to close profile details
+2025-04-11 11:54:48 - Moving to next player using attention icon coordinates: 739,612
+2025-04-11 11:54:48 - Checking player at coordinates: 739,612
+2025-04-11 11:54:49 - Taking Steam screenshot
+2025-04-11 11:54:50 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:50 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 612
+2025-04-11 11:54:51 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,638
+NEXT_CLICK_COORDS=739,638
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,758
+SYMPATHIES_SUM=15
+SMILE_VALUE=15
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=3
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:54:51 - Found next player position at: 739,638 (from attention icon)
+2025-04-11 11:54:51 - Profile button found at coordinates: 814,758
+2025-04-11 11:54:51 - Analysis summary:
+2025-04-11 11:54:51 - - Profile popup detected: Yes
+2025-04-11 11:54:51 - - Sympathies sum: 15
+2025-04-11 11:54:51 - - Too many sympathies: No
+2025-04-11 11:54:51 - - Three+ medals found: Yes
+2025-04-11 11:54:51 - - 5-year veteran coin found: No
+2025-04-11 11:54:51 - - Unwanted medals found: No
+2025-04-11 11:54:51 - - More medals available: No
+2025-04-11 11:54:51 - - Medal count: 3
+2025-04-11 11:54:51 - - Next player position from icon: Yes
+2025-04-11 11:54:51 - Player has 3+ medals but no 5-year coin, skipping profile
+2025-04-11 11:54:51 - Clicking again to close profile details
+2025-04-11 11:54:52 - Moving to next player using attention icon coordinates: 739,638
+2025-04-11 11:54:52 - Checking player at coordinates: 739,638
+2025-04-11 11:54:53 - Taking Steam screenshot
+2025-04-11 11:54:54 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:54 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 638
+2025-04-11 11:54:55 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,664
+NEXT_CLICK_COORDS=739,664
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,784
+SYMPATHIES_SUM=5
+SMILE_VALUE=1
+TEACH_VALUE=2
+CROWN_VALUE=2
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:54:55 - Found next player position at: 739,664 (from attention icon)
+2025-04-11 11:54:55 - Profile button found at coordinates: 814,784
+2025-04-11 11:54:55 - Analysis summary:
+2025-04-11 11:54:55 - - Profile popup detected: Yes
+2025-04-11 11:54:55 - - Sympathies sum: 5
+2025-04-11 11:54:55 - - Too many sympathies: No
+2025-04-11 11:54:55 - - Three+ medals found: No
+2025-04-11 11:54:55 - - 5-year veteran coin found: No
+2025-04-11 11:54:55 - - Unwanted medals found: No
+2025-04-11 11:54:55 - - More medals available: No
+2025-04-11 11:54:55 - - Medal count: 1
+2025-04-11 11:54:55 - - Next player position from icon: Yes
+2025-04-11 11:54:55 - Less than 3 medals found, skipping player
+2025-04-11 11:54:55 - Clicking again to close profile details
+2025-04-11 11:54:56 - Moving to next player using attention icon coordinates: 739,664
+2025-04-11 11:54:56 - Checking player at coordinates: 739,664
+2025-04-11 11:54:56 - Taking Steam screenshot
+2025-04-11 11:54:58 - Performing profile analysis with dual-button detection...
+2025-04-11 11:54:58 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 664
+2025-04-11 11:54:59 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,690
+NEXT_CLICK_COORDS=739,690
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,810
+SYMPATHIES_SUM=130
+SMILE_VALUE=7
+TEACH_VALUE=61
+CROWN_VALUE=62
+TOO_MANY_SYMPATHIES=1
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+
+2025-04-11 11:54:59 - Found next player position at: 739,690 (from attention icon)
+2025-04-11 11:54:59 - Profile button found at coordinates: 814,810
+2025-04-11 11:54:59 - Analysis summary:
+2025-04-11 11:54:59 - - Profile popup detected: Yes
+2025-04-11 11:54:59 - - Sympathies sum: 130
+2025-04-11 11:54:59 - - Too many sympathies: Yes
+2025-04-11 11:54:59 - - Three+ medals found: No
+2025-04-11 11:54:59 - - 5-year veteran coin found: No
+2025-04-11 11:54:59 - - Unwanted medals found: No
+2025-04-11 11:54:59 - - More medals available: No
+2025-04-11 11:54:59 - - Medal count: 0
+2025-04-11 11:54:59 - - Next player position from icon: Yes
+2025-04-11 11:54:59 - Player has too many sympathies (130 > 100), skipping player
+2025-04-11 11:54:59 - Clicking again to close profile details
+2025-04-11 11:54:59 - Moving to next player using attention icon coordinates: 739,690
+2025-04-11 11:54:59 - Checking player at coordinates: 739,690
+2025-04-11 11:55:00 - Taking Steam screenshot
+2025-04-11 11:55:01 - Performing profile analysis with dual-button detection...
+2025-04-11 11:55:01 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 690
+2025-04-11 11:55:02 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,716
+NEXT_CLICK_COORDS=739,716
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,836
+SYMPATHIES_SUM=48
+SMILE_VALUE=20
+TEACH_VALUE=14
+CROWN_VALUE=14
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=648
+ARROW_COORDS=1129,648
+MEDAL_COUNT=6
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=assorted-medals-01
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:55:02 - Found next player position at: 739,716 (from attention icon)
+2025-04-11 11:55:02 - Profile button found at coordinates: 814,836
+2025-04-11 11:55:02 - Analysis summary:
+2025-04-11 11:55:02 - - Profile popup detected: Yes
+2025-04-11 11:55:02 - - Sympathies sum: 48
+2025-04-11 11:55:02 - - Too many sympathies: No
+2025-04-11 11:55:02 - - Three+ medals found: Yes
+2025-04-11 11:55:02 - - 5-year veteran coin found: Yes
+2025-04-11 11:55:02 - - Unwanted medals found: No
+2025-04-11 11:55:02 - - More medals available: Yes
+2025-04-11 11:55:02 - - Medal count: 6
+2025-04-11 11:55:02 - - Next player position from icon: Yes
+2025-04-11 11:55:02 - Clicking medal arrow at: 1134,655
+2025-04-11 11:55:03 - Taking Steam screenshot
+2025-04-11 11:55:04 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:55:04 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 690
+2025-04-11 11:55:06 - Updated next player position: 739,716
+2025-04-11 11:55:06 - After arrow click 1:
+2025-04-11 11:55:06 - - 5-year veteran coin found: Yes
+2025-04-11 11:55:06 - - Unwanted medals found: No
+2025-04-11 11:55:06 - - More medals available: No
+2025-04-11 11:55:06 - - Medal count: 4
+2025-04-11 11:55:06 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:55:06 - Clicking profile button at exact coordinates: 814,836
+2025-04-11 11:55:08 - Taking Steam screenshot
+2025-04-11 11:55:09 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:55:09 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:55:12 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198837079988/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:55:12 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198837079988/
+2025-04-11 11:55:12 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:55:12 - Tab close button found at: 429,195
+2025-04-11 11:55:12 - Clicking tab close button at: 416,195
+2025-04-11 11:55:12 - Clicking overlay close button at: 1874,48
+2025-04-11 11:55:13 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198837079988/
+2025-04-11 11:55:13 - Processing success: 0
+2025-04-11 11:55:13 - API submission: Failed
+2025-04-11 11:55:13 - Saved to fallback: No
+2025-04-11 11:55:13 - Tab close success: 1
+2025-04-11 11:55:13 - Profile #4 processed successfully with URL: https://steamcommunity.com/profiles/76561198837079988/
+2025-04-11 11:55:13 - Moving to next player using attention icon coordinates: 739,716
+2025-04-11 11:55:13 - Checking player at coordinates: 739,716
+2025-04-11 11:55:14 - Taking Steam screenshot
+2025-04-11 11:55:15 - Performing profile analysis with dual-button detection...
+2025-04-11 11:55:15 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 716
+2025-04-11 11:55:17 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,742
+NEXT_CLICK_COORDS=739,742
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,862
+SYMPATHIES_SUM=4
+SMILE_VALUE=2
+TEACH_VALUE=1
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=674
+ARROW_COORDS=1129,674
+MEDAL_COUNT=5
+MEDAL_DETECTED=10-year-veteran-coin
+MEDAL_DETECTED=2023-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=loyalty-badge
+
+2025-04-11 11:55:17 - Found next player position at: 739,742 (from attention icon)
+2025-04-11 11:55:17 - Profile button found at coordinates: 814,862
+2025-04-11 11:55:17 - Analysis summary:
+2025-04-11 11:55:17 - - Profile popup detected: Yes
+2025-04-11 11:55:17 - - Sympathies sum: 4
+2025-04-11 11:55:17 - - Too many sympathies: No
+2025-04-11 11:55:17 - - Three+ medals found: Yes
+2025-04-11 11:55:17 - - 5-year veteran coin found: Yes
+2025-04-11 11:55:17 - - Unwanted medals found: No
+2025-04-11 11:55:17 - - More medals available: Yes
+2025-04-11 11:55:17 - - Medal count: 5
+2025-04-11 11:55:17 - - Next player position from icon: Yes
+2025-04-11 11:55:17 - Clicking medal arrow at: 1134,681
+2025-04-11 11:55:17 - Taking Steam screenshot
+2025-04-11 11:55:19 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:55:19 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 716
+2025-04-11 11:55:20 - Updated next player position: 739,742
+2025-04-11 11:55:20 - After arrow click 1:
+2025-04-11 11:55:20 - - 5-year veteran coin found: Yes
+2025-04-11 11:55:20 - - Unwanted medals found: No
+2025-04-11 11:55:20 - - More medals available: No
+2025-04-11 11:55:20 - - Medal count: 1
+2025-04-11 11:55:20 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:55:20 - Clicking profile button at exact coordinates: 814,862
+2025-04-11 11:55:22 - Taking Steam screenshot
+2025-04-11 11:55:23 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:55:23 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:55:28 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198080685017/
+URL_PROCESSING_RESULT=1
+URL_PROCESSING_STATUS=SUCCESS
+API_SUBMISSION=SUCCESS
+
+2025-04-11 11:55:28 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198080685017/
+2025-04-11 11:55:28 - URL processing was successful
+2025-04-11 11:55:28 - Successfully submitted to API endpoint
+2025-04-11 11:55:28 - Tab close button found at: 429,195
+2025-04-11 11:55:28 - Clicking tab close button at: 416,195
+2025-04-11 11:55:29 - Clicking overlay close button at: 1874,48
+2025-04-11 11:55:29 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198080685017/
+2025-04-11 11:55:29 - Processing success: 1
+2025-04-11 11:55:29 - API submission: Successful
+2025-04-11 11:55:29 - Saved to fallback: No
+2025-04-11 11:55:29 - Tab close success: 1
+2025-04-11 11:55:29 - Profile #5 processed successfully with URL: https://steamcommunity.com/profiles/76561198080685017/
+2025-04-11 11:55:29 - Moving to next player using attention icon coordinates: 739,742
+2025-04-11 11:55:29 - Checking player at coordinates: 739,742
+2025-04-11 11:55:30 - Taking Steam screenshot
+2025-04-11 11:55:31 - Performing profile analysis with dual-button detection...
+2025-04-11 11:55:31 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 742
+2025-04-11 11:55:32 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,768
+NEXT_CLICK_COORDS=739,768
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,880
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:55:32 - Found next player position at: 739,768 (from attention icon)
+2025-04-11 11:55:32 - Profile button found at coordinates: 814,880
+2025-04-11 11:55:32 - Analysis summary:
+2025-04-11 11:55:32 - - Profile popup detected: Yes
+2025-04-11 11:55:32 - - Sympathies sum: 0
+2025-04-11 11:55:32 - - Too many sympathies: No
+2025-04-11 11:55:32 - - Three+ medals found: No
+2025-04-11 11:55:32 - - 5-year veteran coin found: No
+2025-04-11 11:55:32 - - Unwanted medals found: No
+2025-04-11 11:55:32 - - More medals available: No
+2025-04-11 11:55:32 - - Medal count: 0
+2025-04-11 11:55:32 - - Next player position from icon: Yes
+2025-04-11 11:55:32 - Less than 3 medals found, skipping player
+2025-04-11 11:55:32 - Clicking again to close profile details
+2025-04-11 11:55:33 - Moving to next player using attention icon coordinates: 739,768
+2025-04-11 11:55:33 - Checking player at coordinates: 739,768
+2025-04-11 11:55:34 - Taking Steam screenshot
+2025-04-11 11:55:35 - Performing profile analysis with dual-button detection...
+2025-04-11 11:55:35 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 768
+2025-04-11 11:55:36 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,794
+NEXT_CLICK_COORDS=739,794
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,906
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:55:36 - Found next player position at: 739,794 (from attention icon)
+2025-04-11 11:55:36 - Profile button found at coordinates: 814,906
+2025-04-11 11:55:36 - Analysis summary:
+2025-04-11 11:55:36 - - Profile popup detected: Yes
+2025-04-11 11:55:36 - - Sympathies sum: 0
+2025-04-11 11:55:36 - - Too many sympathies: No
+2025-04-11 11:55:36 - - Three+ medals found: No
+2025-04-11 11:55:36 - - 5-year veteran coin found: No
+2025-04-11 11:55:36 - - Unwanted medals found: No
+2025-04-11 11:55:36 - - More medals available: No
+2025-04-11 11:55:36 - - Medal count: 0
+2025-04-11 11:55:36 - - Next player position from icon: Yes
+2025-04-11 11:55:36 - Less than 3 medals found, skipping player
+2025-04-11 11:55:36 - Clicking again to close profile details
+2025-04-11 11:55:36 - Moving to next player using attention icon coordinates: 739,794
+2025-04-11 11:55:36 - Checking player at coordinates: 739,794
+2025-04-11 11:55:37 - Taking Steam screenshot
+2025-04-11 11:55:38 - Performing profile analysis with dual-button detection...
+2025-04-11 11:55:38 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 794
+2025-04-11 11:55:40 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,820
+NEXT_CLICK_COORDS=739,820
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,940
+SYMPATHIES_SUM=2
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:55:40 - Found next player position at: 739,820 (from attention icon)
+2025-04-11 11:55:40 - Profile button found at coordinates: 814,940
+2025-04-11 11:55:40 - Analysis summary:
+2025-04-11 11:55:40 - - Profile popup detected: Yes
+2025-04-11 11:55:40 - - Sympathies sum: 2
+2025-04-11 11:55:40 - - Too many sympathies: No
+2025-04-11 11:55:40 - - Three+ medals found: No
+2025-04-11 11:55:40 - - 5-year veteran coin found: No
+2025-04-11 11:55:40 - - Unwanted medals found: No
+2025-04-11 11:55:40 - - More medals available: No
+2025-04-11 11:55:40 - - Medal count: 1
+2025-04-11 11:55:40 - - Next player position from icon: Yes
+2025-04-11 11:55:40 - Less than 3 medals found, skipping player
+2025-04-11 11:55:40 - Clicking again to close profile details
+2025-04-11 11:55:40 - Moving to next player using attention icon coordinates: 739,820
+2025-04-11 11:55:40 - Checking player at coordinates: 739,820
+2025-04-11 11:55:41 - Taking Steam screenshot
+2025-04-11 11:55:42 - Performing profile analysis with dual-button detection...
+2025-04-11 11:55:42 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 820
+2025-04-11 11:55:44 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=0
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,966
+SYMPATHIES_SUM=0
+SMILE_VALUE=0
+TEACH_VALUE=0
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=1
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=778
+ARROW_COORDS=1129,778
+MEDAL_COUNT=5
+MEDAL_DETECTED=2024-service-medal
+MEDAL_DETECTED=5-year-veteran-coin
+MEDAL_DETECTED=assorted-medals-01
+MEDAL_DETECTED=global-offensive-badge
+MEDAL_DETECTED=premier-season-one-medal
+
+2025-04-11 11:55:44 - Profile button found at coordinates: 814,966
+2025-04-11 11:55:44 - Analysis summary:
+2025-04-11 11:55:44 - - Profile popup detected: Yes
+2025-04-11 11:55:44 - - Sympathies sum: 0
+2025-04-11 11:55:44 - - Too many sympathies: No
+2025-04-11 11:55:44 - - Three+ medals found: Yes
+2025-04-11 11:55:44 - - 5-year veteran coin found: Yes
+2025-04-11 11:55:44 - - Unwanted medals found: No
+2025-04-11 11:55:44 - - More medals available: Yes
+2025-04-11 11:55:44 - - Medal count: 5
+2025-04-11 11:55:44 - - Next player position from icon: No
+2025-04-11 11:55:44 - Clicking medal arrow at: 1134,785
+2025-04-11 11:55:45 - Taking Steam screenshot
+2025-04-11 11:55:46 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:55:46 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 820
+2025-04-11 11:55:47 - After arrow click 1:
+2025-04-11 11:55:47 - - 5-year veteran coin found: Yes
+2025-04-11 11:55:47 - - Unwanted medals found: No
+2025-04-11 11:55:47 - - More medals available: No
+2025-04-11 11:55:47 - - Medal count: 2
+2025-04-11 11:55:47 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:55:47 - Clicking profile button at exact coordinates: 814,966
+2025-04-11 11:55:49 - Taking Steam screenshot
+2025-04-11 11:55:51 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:55:51 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:55:53 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/id/cagoendioseh/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:55:53 - Successfully extracted Steam profile URL: https://steamcommunity.com/id/cagoendioseh/
+2025-04-11 11:55:53 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:55:53 - Tab close button found at: 429,195
+2025-04-11 11:55:53 - Clicking tab close button at: 416,195
+2025-04-11 11:55:53 - Clicking overlay close button at: 1874,48
+2025-04-11 11:55:54 - URL extraction complete - URL: https://steamcommunity.com/id/cagoendioseh/
+2025-04-11 11:55:54 - Processing success: 0
+2025-04-11 11:55:54 - API submission: Failed
+2025-04-11 11:55:54 - Saved to fallback: No
+2025-04-11 11:55:54 - Tab close success: 1
+2025-04-11 11:55:54 - Profile #6 processed successfully with URL: https://steamcommunity.com/id/cagoendioseh/
+2025-04-11 11:55:54 - No more attention icons found - we've reached the end of human players in this match
+2025-04-11 11:55:54 - Disconnecting from match to save time...
+2025-04-11 11:55:54 - Disconnecting from match (strategy 1: direct exit button click)...
+2025-04-11 11:55:54 - Clicking 'Exit to main menu' button at 1155,125
+2025-04-11 11:55:55 - Clicking 'Yes' confirmation button at 1100,600
+2025-04-11 11:55:57 - Taking Steam screenshot
+2025-04-11 11:55:58 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 202 17 31 30
+2025-04-11 11:55:59 - Main menu detection result: MAIN_MENU_DETECTED=1
+CONFIDENCE=0.9584
+
+2025-04-11 11:55:59 - Successfully disconnected using strategy 1
+2025-04-11 11:55:59 - Returning to main menu by leaving match...
+2025-04-11 11:55:59 - Clicking Leave Match button at 1170,130
+2025-04-11 11:56:00 - Clicking OK to confirm at 1100,600
+2025-04-11 11:56:00 - Cleaning up CS2 screenshots...
+2025-04-11 11:56:00 - Cleaning up CS2 screenshot thumbnails...
+2025-04-11 11:56:00 - Screenshot cleanup completed
+2025-04-11 11:56:00 - Match processing completed successfully
+2025-04-11 11:56:00 - Finished with Dust II match
+2025-04-11 11:56:00 - Round 1: Successfully completed map Dust II
+2025-04-11 11:56:00 - Ensuring we're at the main menu...
+2025-04-11 11:56:00 - Checking if we're at the main menu...
+2025-04-11 11:56:00 - Taking Steam screenshot
+2025-04-11 11:56:01 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 198 12 40 40
+2025-04-11 11:56:02 - At main menu: yes
+2025-04-11 11:56:02 - Checking for voted-off error dialog...
+2025-04-11 11:56:02 - Taking Steam screenshot
+2025-04-11 11:56:03 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py check_voted_off_error_dialog
+2025-04-11 11:56:03 - Voted-off error dialog detection result: VOTED_OFF_ERROR_DIALOG_DETECTED=0
+
+2025-04-11 11:56:03 - Already at main menu
+2025-04-11 11:56:03 - Round 1: Starting map Hostage Group
+2025-04-11 11:56:03 - Starting Hostage Group match automation
+2025-04-11 11:56:03 - Selecting map: Hostage Group
+2025-04-11 11:56:05 - Clicking Play button at coordinates: 985,30
+2025-04-11 11:56:06 - Selecting matchmaking mode at coordinates: 813,85
+2025-04-11 11:56:06 - Selecting casual league at coordinates: 906,130
+2025-04-11 11:56:07 - Selecting Hostage Group map at coordinates: 1596,570
+2025-04-11 11:56:07 - Clicking Accept Match at coordinates: 1695,1030
+2025-04-11 11:56:07 - Map selection sequence completed for: Hostage Group
+2025-04-11 11:56:07 - Map Hostage Group selected, now waiting for match to be found and joined...
+2025-04-11 11:56:07 - Waiting for match outcome (success or failure)...
+2025-04-11 11:56:07 - Match detection timeout set to 90.0 seconds
+2025-04-11 11:56:07 - Will wait 1.0 seconds after Cancel Search disappears before checking for errors
+2025-04-11 11:56:07 - Search phase ended, now in connecting/loading phase after 0.078 seconds
+2025-04-11 11:56:08 - Returned to searching state, resetting phase
+2025-04-11 11:56:08 - Still searching for match... 1.4059999999999999 seconds elapsed
+2025-04-11 11:56:09 - Still searching for match... 2.1880000000000002 seconds elapsed
+2025-04-11 11:56:10 - Still searching for match... 2.9529999999999998 seconds elapsed
+2025-04-11 11:56:11 - Still searching for match... 3.7349999999999999 seconds elapsed
+2025-04-11 11:56:11 - Still searching for match... 4.516 seconds elapsed
+2025-04-11 11:56:12 - Still searching for match... 5.2969999999999997 seconds elapsed
+2025-04-11 11:56:13 - Still searching for match... 6.0780000000000003 seconds elapsed
+2025-04-11 11:56:14 - Still searching for match... 6.8600000000000003 seconds elapsed
+2025-04-11 11:56:14 - Still searching for match... 7.641 seconds elapsed
+2025-04-11 11:56:15 - Still searching for match... 8.4060000000000006 seconds elapsed
+2025-04-11 11:56:16 - Still searching for match... 9.1880000000000006 seconds elapsed
+2025-04-11 11:56:17 - Still searching for match... 9.9689999999999994 seconds elapsed
+2025-04-11 11:56:18 - Still searching for match... 10.75 seconds elapsed
+2025-04-11 11:56:18 - Still searching for match... 11.531000000000001 seconds elapsed
+2025-04-11 11:56:19 - Still searching for match... 12.297000000000001 seconds elapsed
+2025-04-11 11:56:20 - Still searching for match... 13.077999999999999 seconds elapsed
+2025-04-11 11:56:21 - Still searching for match... 13.859999999999999 seconds elapsed
+2025-04-11 11:56:21 - Search phase ended, now in connecting/loading phase after 14.718999999999999 seconds
+2025-04-11 11:56:22 - In loading phase... 0.23400000000000001 seconds elapsed since search ended
+2025-04-11 11:56:25 - Taking screenshot to check for error dialog...
+2025-04-11 11:56:25 - Taking Steam screenshot
+2025-04-11 11:56:26 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py error
+2025-04-11 11:56:27 - Error detection result: ERROR_DETECTION_RESULT=0
+ERROR_DETECTION_RESULT=0
+
+2025-04-11 11:56:27 - No error dialog found. Consecutive error checks: 1/6
+2025-04-11 11:56:27 - Successfully joined match! Spectate button detected via pixel color method
+2025-04-11 11:56:27 - Clicking spectator button at 1596, 1032
+2025-04-11 11:56:29 - Match outcome for Hostage Group: success
+2025-04-11 11:56:29 - Successfully joined Hostage Group match!
+2025-04-11 11:56:29 - Processing match...
+2025-04-11 11:56:29 - Processing players using grid method with improved profile popup detection...
+2025-04-11 11:56:29 - Opening scoreboard with Escape key...
+2025-04-11 11:56:30 - Searching for attention icons...
+2025-04-11 11:56:30 - Taking Steam screenshot
+2025-04-11 11:56:31 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py find_first_attention_icon 1358 290 38 450
+2025-04-11 11:56:32 - First icon search result: ATTENTION_ICON_FOUND=1
+ATTENTION_ICON_COORDS=1377,598
+PLAYER_CLICK_COORDS=739,598
+
+2025-04-11 11:56:32 - Found first attention icon! Starting at: X=739, Y=598
+2025-04-11 11:56:32 - Checking player at coordinates: 739,598
+2025-04-11 11:56:33 - Taking Steam screenshot
+2025-04-11 11:56:34 - Performing profile analysis with dual-button detection...
+2025-04-11 11:56:34 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 598
+2025-04-11 11:56:35 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,636
+NEXT_CLICK_COORDS=739,636
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,744
+SYMPATHIES_SUM=5
+SMILE_VALUE=0
+TEACH_VALUE=5
+CROWN_VALUE=0
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=1
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+UNWANTED_MEDAL_DETECTED=unwanted-assorted-medals-10
+
+2025-04-11 11:56:35 - Found next player position at: 739,636 (from attention icon)
+2025-04-11 11:56:35 - Profile button found at coordinates: 814,744
+2025-04-11 11:56:35 - Analysis summary:
+2025-04-11 11:56:35 - - Profile popup detected: Yes
+2025-04-11 11:56:35 - - Sympathies sum: 5
+2025-04-11 11:56:35 - - Too many sympathies: No
+2025-04-11 11:56:35 - - Three+ medals found: No
+2025-04-11 11:56:35 - - 5-year veteran coin found: No
+2025-04-11 11:56:35 - - Unwanted medals found: Yes
+2025-04-11 11:56:35 - - More medals available: No
+2025-04-11 11:56:35 - - Medal count: 0
+2025-04-11 11:56:35 - - Next player position from icon: Yes
+2025-04-11 11:56:35 - Unwanted medals found, skipping player
+2025-04-11 11:56:35 - Clicking again to close profile details
+2025-04-11 11:56:35 - Moving to next player using attention icon coordinates: 739,636
+2025-04-11 11:56:35 - Checking player at coordinates: 739,636
+2025-04-11 11:56:36 - Taking Steam screenshot
+2025-04-11 11:56:38 - Performing profile analysis with dual-button detection...
+2025-04-11 11:56:38 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 636
+2025-04-11 11:56:39 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,662
+NEXT_CLICK_COORDS=739,662
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,714
+SYMPATHIES_SUM=26
+SMILE_VALUE=14
+TEACH_VALUE=1
+CROWN_VALUE=11
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=1
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=1
+ARROW_COORDS_X=1129
+ARROW_COORDS_Y=526
+ARROW_COORDS=1129,526
+MEDAL_COUNT=6
+MEDAL_DETECTED=10-year-birthday-coin
+MEDAL_DETECTED=2018-service-medal-gold
+MEDAL_DETECTED=2020-service-medal
+MEDAL_DETECTED=2025-service-medal
+MEDAL_DETECTED=assorted-medals-04
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:56:39 - Found next player position at: 739,662 (from attention icon)
+2025-04-11 11:56:39 - Profile button found at coordinates: 814,714
+2025-04-11 11:56:39 - Analysis summary:
+2025-04-11 11:56:39 - - Profile popup detected: Yes
+2025-04-11 11:56:39 - - Sympathies sum: 26
+2025-04-11 11:56:39 - - Too many sympathies: No
+2025-04-11 11:56:39 - - Three+ medals found: Yes
+2025-04-11 11:56:39 - - 5-year veteran coin found: No
+2025-04-11 11:56:39 - - Unwanted medals found: No
+2025-04-11 11:56:39 - - More medals available: Yes
+2025-04-11 11:56:39 - - Medal count: 6
+2025-04-11 11:56:39 - - Next player position from icon: Yes
+2025-04-11 11:56:39 - Clicking medal arrow at: 1134,533
+2025-04-11 11:56:40 - Taking Steam screenshot
+2025-04-11 11:56:41 - Performing follow-up profile analysis after arrow click...
+2025-04-11 11:56:41 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 636
+2025-04-11 11:56:42 - Updated next player position: 739,662
+2025-04-11 11:56:42 - After arrow click 1:
+2025-04-11 11:56:42 - - 5-year veteran coin found: Yes
+2025-04-11 11:56:42 - - Unwanted medals found: No
+2025-04-11 11:56:42 - - More medals available: No
+2025-04-11 11:56:42 - - Medal count: 3
+2025-04-11 11:56:42 - Player meets all criteria, proceeding to view Steam profile
+2025-04-11 11:56:42 - Clicking profile button at exact coordinates: 814,714
+2025-04-11 11:56:44 - Taking Steam screenshot
+2025-04-11 11:56:46 - Extracting and processing Steam profile URL directly in Python...
+2025-04-11 11:56:46 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py extract_and_process_url
+2025-04-11 11:56:47 - Direct Python URL extraction and processing result: TAB_CLOSE_BUTTON_FOUND=1
+TAB_CLOSE_COORDS=429,195
+URL_EXTRACTION_RESULT=1
+URL=https://steamcommunity.com/profiles/76561198011016893/
+URL_PROCESSING_RESULT=0
+URL_PROCESSING_STATUS=FAILED
+URL_PROCESSING_ERROR=Profile failed checks and was removed from queue, but not added to filtered list
+
+2025-04-11 11:56:47 - Successfully extracted Steam profile URL: https://steamcommunity.com/profiles/76561198011016893/
+2025-04-11 11:56:47 - URL processing failed: Profile failed checks and was removed from queue, but not added to filtered list
+2025-04-11 11:56:47 - Tab close button found at: 429,195
+2025-04-11 11:56:47 - Clicking tab close button at: 416,195
+2025-04-11 11:56:48 - Clicking overlay close button at: 1874,48
+2025-04-11 11:56:48 - URL extraction complete - URL: https://steamcommunity.com/profiles/76561198011016893/
+2025-04-11 11:56:48 - Processing success: 0
+2025-04-11 11:56:48 - API submission: Failed
+2025-04-11 11:56:48 - Saved to fallback: No
+2025-04-11 11:56:48 - Tab close success: 1
+2025-04-11 11:56:48 - Profile #1 processed successfully with URL: https://steamcommunity.com/profiles/76561198011016893/
+2025-04-11 11:56:48 - Moving to next player using attention icon coordinates: 739,662
+2025-04-11 11:56:48 - Checking player at coordinates: 739,662
+2025-04-11 11:56:49 - Taking Steam screenshot
+2025-04-11 11:56:51 - Performing profile analysis with dual-button detection...
+2025-04-11 11:56:51 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 662
+2025-04-11 11:56:52 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,688
+NEXT_CLICK_COORDS=739,688
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,808
+SYMPATHIES_SUM=4
+SMILE_VALUE=1
+TEACH_VALUE=2
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=1
+MEDAL_DETECTED=global-offensive-badge
+
+2025-04-11 11:56:52 - Found next player position at: 739,688 (from attention icon)
+2025-04-11 11:56:52 - Profile button found at coordinates: 814,808
+2025-04-11 11:56:52 - Analysis summary:
+2025-04-11 11:56:52 - - Profile popup detected: Yes
+2025-04-11 11:56:52 - - Sympathies sum: 4
+2025-04-11 11:56:52 - - Too many sympathies: No
+2025-04-11 11:56:52 - - Three+ medals found: No
+2025-04-11 11:56:52 - - 5-year veteran coin found: No
+2025-04-11 11:56:52 - - Unwanted medals found: No
+2025-04-11 11:56:52 - - More medals available: No
+2025-04-11 11:56:52 - - Medal count: 1
+2025-04-11 11:56:52 - - Next player position from icon: Yes
+2025-04-11 11:56:52 - Less than 3 medals found, skipping player
+2025-04-11 11:56:52 - Clicking again to close profile details
+2025-04-11 11:56:52 - Moving to next player using attention icon coordinates: 739,688
+2025-04-11 11:56:52 - Checking player at coordinates: 739,688
+2025-04-11 11:56:53 - Taking Steam screenshot
+2025-04-11 11:56:55 - Performing profile analysis with dual-button detection...
+2025-04-11 11:56:55 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 688
+2025-04-11 11:56:56 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=1
+NEXT_ATTENTION_ICON_COORDS=1377,714
+NEXT_CLICK_COORDS=739,714
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,834
+SYMPATHIES_SUM=5
+SMILE_VALUE=2
+TEACH_VALUE=2
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:56:56 - Found next player position at: 739,714 (from attention icon)
+2025-04-11 11:56:56 - Profile button found at coordinates: 814,834
+2025-04-11 11:56:56 - Analysis summary:
+2025-04-11 11:56:56 - - Profile popup detected: Yes
+2025-04-11 11:56:56 - - Sympathies sum: 5
+2025-04-11 11:56:56 - - Too many sympathies: No
+2025-04-11 11:56:56 - - Three+ medals found: No
+2025-04-11 11:56:56 - - 5-year veteran coin found: No
+2025-04-11 11:56:56 - - Unwanted medals found: No
+2025-04-11 11:56:56 - - More medals available: No
+2025-04-11 11:56:56 - - Medal count: 0
+2025-04-11 11:56:56 - - Next player position from icon: Yes
+2025-04-11 11:56:56 - Less than 3 medals found, skipping player
+2025-04-11 11:56:56 - Clicking again to close profile details
+2025-04-11 11:56:56 - Moving to next player using attention icon coordinates: 739,714
+2025-04-11 11:56:56 - Checking player at coordinates: 739,714
+2025-04-11 11:56:57 - Taking Steam screenshot
+2025-04-11 11:56:58 - Performing profile analysis with dual-button detection...
+2025-04-11 11:56:58 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py analyze_profile 739 714
+2025-04-11 11:56:59 - Profile analysis result: NEXT_ATTENTION_ICON_FOUND=0
+PROFILE_ANALYSIS_RESULT=1
+PROFILE_POPUP_DETECTED=1
+PROFILE_BUTTON_FOUND=1
+MESSAGE_BUTTON_FOUND=1
+PROFILE_BUTTON_COORDS=814,860
+SYMPATHIES_SUM=3
+SMILE_VALUE=1
+TEACH_VALUE=1
+CROWN_VALUE=1
+TOO_MANY_SYMPATHIES=0
+UNWANTED_MEDALS_FOUND=0
+THREE_PLUS_MEDALS_FOUND=0
+FIVE_YEAR_MEDAL_FOUND=0
+CLICK_TO_SEE_MORE_MEDALS=0
+MEDAL_COUNT=0
+
+2025-04-11 11:56:59 - Profile button found at coordinates: 814,860
+2025-04-11 11:56:59 - Analysis summary:
+2025-04-11 11:56:59 - - Profile popup detected: Yes
+2025-04-11 11:56:59 - - Sympathies sum: 3
+2025-04-11 11:56:59 - - Too many sympathies: No
+2025-04-11 11:56:59 - - Three+ medals found: No
+2025-04-11 11:56:59 - - 5-year veteran coin found: No
+2025-04-11 11:56:59 - - Unwanted medals found: No
+2025-04-11 11:56:59 - - More medals available: No
+2025-04-11 11:56:59 - - Medal count: 0
+2025-04-11 11:56:59 - - Next player position from icon: No
+2025-04-11 11:56:59 - Less than 3 medals found, skipping player
+2025-04-11 11:56:59 - Clicking again to close profile details
+2025-04-11 11:57:00 - No more attention icons found - we've reached the end of human players in this match
+2025-04-11 11:57:00 - Disconnecting from match to save time...
+2025-04-11 11:57:00 - Disconnecting from match (strategy 1: direct exit button click)...
+2025-04-11 11:57:00 - Clicking 'Exit to main menu' button at 1155,125
+2025-04-11 11:57:01 - Clicking 'Yes' confirmation button at 1100,600
+2025-04-11 11:57:03 - Taking Steam screenshot
+2025-04-11 11:57:04 - Executing command: C:\WINDOWS\system32\cmd.exe /c python C:\LinkHarvesterScript\cs2_detect.py main_menu 202 17 31 30
+2025-04-11 11:57:04 - Main menu detection result: MAIN_MENU_DETECTED=1
+CONFIDENCE=0.9927
+
+2025-04-11 11:57:04 - Successfully disconnected using strategy 1
+2025-04-11 11:57:04 - Returning to main menu by leaving match...
+2025-04-11 11:57:04 - Clicking Leave Match button at 1170,130
+2025-04-11 11:57:05 - Clicking OK to confirm at 1100,600
+2025-04-11 11:57:06 - Cleaning up CS2 screenshots...
+2025-04-11 11:57:06 - Cleaning up CS2 screenshot thumbnails...
+2025-04-11 11:57:06 - Screenshot cleanup completed
+2025-04-11 11:57:06 - Match processing completed successfully
+2025-04-11 11:57:06 - Finished with Hostage Group match
+2025-04-11 11:57:06 - Round 1: Successfully completed map Hostage Group
+2025-04-11 11:57:06 - Completed round 1 of 3
+2025-04-11 11:57:06 - All rounds completed!
+2025-04-11 11:57:06 - All tasks completed. Exiting AHK...
