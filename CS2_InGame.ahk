@@ -713,17 +713,38 @@ IsProfileButtonVisible(x, y) {
 ProcessMatch() {
     LogMessage("Processing match...")
     
+    ; Set up timeout for match processing - 5 minutes (300,000 ms)
+    startTime := A_TickCount
+    timeout := 300000  ; 5 minutes in milliseconds
+    
     ; Wait a few seconds for the match to fully load
     Sleep 500
     
-    ; Process players using the simplified grid method
-    success := ProcessPlayersGridMethod()
+    ; Store the global timeout start time for access in other functions
+    Global MATCH_PROCESS_START_TIME := startTime
+    Global MATCH_PROCESS_TIMEOUT := timeout
     
-    ; Return to main menu using ESC
-    ReturnToMainMenu()
+    ; Create a timer that will check for timeout regularly
+    SetTimer CheckMatchTimeout, 10000  ; Check every 10 seconds
+    
+    ; Track if processing is successful
+    success := false
+    
+    try {
+        ; Process players using the simplified grid method
+        success := ProcessPlayersGridMethod()
+    } catch Error as e {
+        LogMessage("Error in match processing: " e.Message)
+    } finally {
+        ; Stop the timeout timer
+        SetTimer CheckMatchTimeout, 0
+        
+        ; Return to main menu using ESC regardless of outcome
+        ReturnToMainMenu()
 
-    ; Clean up screenshots that are no longer needed
-    CleanupScreenshots()
+        ; Clean up screenshots that are no longer needed
+        CleanupScreenshots()
+    }
     
     if (success) {
         LogMessage("Match processing completed successfully")
@@ -731,6 +752,25 @@ ProcessMatch() {
     } else {
         LogMessage("Match processing completed but no profiles were found")
         return false
+    }
+}
+
+; Separate function to check for timeout, runs on timer
+CheckMatchTimeout() {
+    currentTime := A_TickCount
+    elapsedTime := currentTime - MATCH_PROCESS_START_TIME
+    
+    if (elapsedTime > MATCH_PROCESS_TIMEOUT) {
+        ; Log the timeout
+        LogMessage("TIMEOUT: Match processing exceeded " MATCH_PROCESS_TIMEOUT/1000 " seconds limit")
+        
+        ; Kill the timer to prevent duplicate calls
+        SetTimer CheckMatchTimeout, 0
+        
+        ; Kill CS2 and exit
+        LogMessage("Processing timeout detected - killing CS2 and exiting script")
+        KillCS2Process()
+        ExitApp
     }
 }
 

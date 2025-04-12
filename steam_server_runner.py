@@ -7,6 +7,7 @@ from datetime import datetime, timezone
 from steam_server_time_manager import SteamServerTimeManager
 import re
 import argparse
+import sys
 
 # Configure logging
 logging.basicConfig(
@@ -65,9 +66,11 @@ class SteamServerRunner:
                     return json.load(f)
             else:
                 logging.error(f"All servers file not found: {self.all_servers_path}")
+                print(f"Error: All servers file not found: {self.all_servers_path}")
                 return {}
         except Exception as e:
             logging.error(f"Error loading all servers: {str(e)}")
+            print(f"Error loading all servers: {str(e)}")
             return {}
     
     def load_preferred_servers(self):
@@ -83,10 +86,13 @@ class SteamServerRunner:
                         if line and not line.startswith('#'):
                             preferred_servers.append(line)
                 logging.info(f"Loaded {len(preferred_servers)} preferred servers")
+                print(f"Loaded {len(preferred_servers)} preferred servers")
             else:
                 logging.warning(f"Preferred servers file not found: {self.server_list_path}")
+                print(f"Warning: Preferred servers file not found: {self.server_list_path}")
         except Exception as e:
             logging.error(f"Error loading preferred servers: {str(e)}")
+            print(f"Error loading preferred servers: {str(e)}")
         
         return preferred_servers
     
@@ -104,6 +110,7 @@ class SteamServerRunner:
             # Skip if all_servers is empty
             if not self.all_servers:
                 logging.error("Cannot update blocklist: all_servers is empty")
+                print("Error: Cannot update blocklist: all_servers is empty")
                 return False
             
             # Create the blocklist content
@@ -127,9 +134,11 @@ class SteamServerRunner:
                 f.write(blocklist_content)
             
             logging.info(f"Updated server blocklist, unblocked: {server_to_unblock}")
+            print(f"Updated server blocklist, unblocked: {server_to_unblock}")
             return True
         except Exception as e:
             logging.error(f"Error updating server blocklist: {str(e)}")
+            print(f"Error updating server blocklist: {str(e)}")
             return False
     
     def run_ahk_script(self):
@@ -140,6 +149,8 @@ class SteamServerRunner:
             tuple: (success, profiles_harvested)
         """
         logging.info(f"Starting AHK script: {self.ahk_script_path}")
+        print(f"\nStarting AHK script: {self.ahk_script_path}")
+        print("Running CS2 automation. Please wait...")
         
         try:
             # Command to run AHK script
@@ -168,13 +179,16 @@ class SteamServerRunner:
             # Check return code
             if process.returncode == 0:
                 logging.info(f"AHK script completed successfully, harvested {profiles_harvested} profiles")
+                print(f"AHK script completed successfully, harvested {profiles_harvested} profiles")
                 return True, profiles_harvested
             else:
                 logging.error(f"AHK script failed with return code {process.returncode}")
+                print(f"AHK script failed with return code {process.returncode}")
                 return False, profiles_harvested
                 
         except Exception as e:
             logging.error(f"Error running AHK script: {str(e)}")
+            print(f"Error running AHK script: {str(e)}")
             return False, 0
     
     def parse_harvest_results(self, output):
@@ -224,10 +238,12 @@ class SteamServerRunner:
         
         # Log the server we're about to use
         logging.info(f"Running server: {server_name}")
+        print(f"\n=== Testing server: {server_name} ===")
         
         # Update the blocklist to unblock only this server
         if not self.update_server_blocklist(server_name):
             logging.error(f"Failed to update blocklist for server: {server_name}")
+            print(f"Failed to update blocklist for server: {server_name}")
             return False, 0
         
         # Run the AHK script
@@ -261,6 +277,7 @@ class SteamServerRunner:
         
         if not preferred_servers:
             logging.error("No preferred servers available")
+            print("Error: No preferred servers available")
             return False
         
         # Track overall success
@@ -268,14 +285,17 @@ class SteamServerRunner:
         total_profiles = 0
         
         # Process each server
-        for server_name in preferred_servers:
+        for i, server_name in enumerate(preferred_servers):
             # Get current hour before starting
             current_hour = get_utc_now().hour
             
             # Skip if not in all_servers
             if server_name not in self.all_servers:
                 logging.warning(f"Server not found in all_servers: {server_name}")
+                print(f"Warning: Server not found in all_servers: {server_name}")
                 continue
+            
+            print(f"\nTesting server {i+1}/{len(preferred_servers)}: {server_name}")
             
             # Run this server
             success, profiles = self.run_server(server_name)
@@ -283,21 +303,40 @@ class SteamServerRunner:
             
             if not success:
                 logging.warning(f"Failed to run server: {server_name}")
+                print(f"Failed to run server: {server_name}")
                 overall_success = False
             
             # Check if the hour has changed after processing this server
             new_hour = get_utc_now().hour
             if new_hour != current_hour:
                 logging.info(f"Hour changed from {current_hour} to {new_hour}, updating server list")
+                print(f"Hour changed from {current_hour} to {new_hour}, updating server list")
                 self.server_manager.update_preferred_servers_list()
                 break  # Exit the loop to start with the new prioritized list
+            
+            # If not the last server, give a short pause between tests and show status
+            if i < len(preferred_servers) - 1:
+                pause_time = 5  # seconds
+                print(f"\nPausing for {pause_time} seconds before next server test...")
+                print(f"Progress: {i+1}/{len(preferred_servers)} servers tested")
+                time.sleep(pause_time)
         
         logging.info(f"Completed server cycle, harvested {total_profiles} profiles in total")
+        print(f"\nCompleted server cycle, harvested {total_profiles} profiles in total")
         return overall_success
     
     def run_continuous(self):
         """Run continuously, cycling through servers and updating based on time"""
         logging.info("Starting continuous server operation")
+        print("\n=== CS2 Day-Aware Server Manager ===")
+        print(f"Current time: {datetime.now()}")
+        print("\nStarting continuous server operation...")
+        print("Press Ctrl+C to interrupt the script at any time.")
+        print("\nThe script will:")
+        print("1. Prioritize servers based on local peak times")
+        print("2. Test each server in priority order")
+        print("3. Update server priorities based on time of day")
+        print("4. Continuously cycle through servers until stopped")
         
         cycle_count = 0
         total_profiles = 0
@@ -306,27 +345,51 @@ class SteamServerRunner:
             while True:
                 cycle_count += 1
                 logging.info(f"Starting server cycle #{cycle_count}")
+                print(f"\n=== Starting server cycle #{cycle_count} ===")
                 
                 # Run a cycle of servers
                 success = self.run_server_cycle()
                 
                 if not success:
                     logging.warning(f"Cycle #{cycle_count} encountered some failures")
+                    print(f"Cycle #{cycle_count} encountered some failures")
                 
                 # Brief pause between cycles
                 logging.info(f"Completed cycle #{cycle_count}, pausing before next cycle")
+                print(f"\nCompleted cycle #{cycle_count}, pausing before next cycle")
+                print("Press Ctrl+C now if you want to stop the Python script")
+                print("Remember: Ctrl+Alt+X for emergency AHK exit, Ctrl+Alt+P to pause/resume AHK")
                 time.sleep(30)  # 30 second pause
                 
         except KeyboardInterrupt:
             logging.info("Received keyboard interrupt, exiting")
+            print("\n\nReceived keyboard interrupt. Exiting gracefully...")
+            print("Thank you for using CS2 Day-Aware Server Manager!")
+            
+            # Unblock all servers before exiting
+            print("Unblocking all servers before exit...")
+            for server in self.all_servers:
+                self.update_server_blocklist(server)
+                break  # Just unblock one to reset the state
+            
+            return True
+            
         except Exception as e:
             logging.error(f"Error in continuous operation: {str(e)}")
+            print(f"\nError in continuous operation: {str(e)}")
             return False
         
         return True
 
 
 if __name__ == "__main__":
+    print("=== CS2 Day-Aware Server Manager ===")
+    print(f"Current time: {datetime.now()}")
+    print(f"Log file: steam_server_runner.log")
+    print("\nThis script will automatically test CS2 servers based on optimal time zones.")
+    print("The servers are prioritized based on their local peak times.")
+    print("Press Ctrl+C at any time to gracefully exit the script.")
+    
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Steam Server Runner")
     parser.add_argument("--ahk", default="cs2_automation.ahk", help="Path to AHK script")
@@ -336,13 +399,24 @@ if __name__ == "__main__":
     
     args = parser.parse_args()
     
-    # Create and run the server runner
-    runner = SteamServerRunner(
-        ahk_script_path=args.ahk,
-        server_list_path=args.servers,
-        all_servers_path=args.allservers,
-        server_blocklist_path=args.blocklist
-    )
+    try:
+        # Create and run the server runner
+        print("\nInitializing server runner...")
+        runner = SteamServerRunner(
+            ahk_script_path=args.ahk,
+            server_list_path=args.servers,
+            all_servers_path=args.allservers,
+            server_blocklist_path=args.blocklist
+        )
+        
+        # Run continuously
+        print("\nStarting continuous operation...")
+        runner.run_continuous()
+        
+    except Exception as e:
+        print(f"\nUnhandled exception: {e}")
+        logging.error(f"Unhandled exception: {e}", exc_info=True)
+        sys.exit(1)
     
-    # Run continuously
-    runner.run_continuous()
+    print("\nScript completed. Press Enter to exit...")
+    input()

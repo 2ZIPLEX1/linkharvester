@@ -18,12 +18,16 @@ LogMessage(message) {
 
 ; Load configuration from file
 LoadConfiguration() {
-    configDir := "C:\LinkHarvesterScript\data"
-    configFile := configDir "\config.txt"
+    rootConfigFile := A_ScriptDir "\config.txt"
+    dataConfigFile := "C:\LinkHarvesterScript\data\config.txt"
+    
     config := Map(
         ; Default values
         "cs2_executable", "D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe",
         "steam_executable", "C:\Program Files (x86)\Steam\steam.exe",
+        "launch_timeout", 60,
+        "max_launch_retries", 3,
+        "launch_retry_delay", 5000,
         "wait_between_clicks", 1500,
         "max_wait_for_match", 120,
         "color_tolerance", 20,
@@ -50,28 +54,88 @@ LoadConfiguration() {
         "error_popup_ok_y", 603
     )
     
-    ; Try to load from file
-    if FileExist(configFile) {
+    ; Try to load from root config file first (takes precedence)
+    if FileExist(rootConfigFile) {
         try {
-            FileContent := FileRead(configFile)
-            Loop Parse, FileContent, "`n", "`r" {
-                if InStr(A_LoopField, "=") {
-                    parts := StrSplit(A_LoopField, "=", , 2)
-                    if parts.Length = 2
-                        config[Trim(parts[1])] := Trim(parts[2])
-                }
-            }
+            LogMessage("Loading configuration from root config file: " rootConfigFile)
+            FileContent := FileRead(rootConfigFile)
+            LoadConfigFromContent(config, FileContent)
         } catch Error as e {
-            ; Just log the error and continue with defaults
-            LogMessage("Error loading configuration: " e.Message)
+            LogMessage("Error loading root configuration: " e.Message)
+        }
+    }
+    
+    ; Then load from data directory config file for any missing settings
+    if FileExist(dataConfigFile) {
+        try {
+            LogMessage("Loading additional configuration from data directory: " dataConfigFile)
+            FileContent := FileRead(dataConfigFile)
+            LoadConfigFromContent(config, FileContent)
+        } catch Error as e {
+            LogMessage("Error loading data directory configuration: " e.Message)
         }
     }
     
     ; If critical dirs don't exist, create them
+    configDir := "C:\LinkHarvesterScript\data"
     if !DirExist(configDir)
         DirCreate configDir
     
     return config
+}
+
+; Helper function to load config values from text content
+LoadConfigFromContent(config, content) {
+    Loop Parse, content, "`n", "`r" {
+        if InStr(A_LoopField, "=") {
+            parts := StrSplit(A_LoopField, "=", , 2)
+            if parts.Length = 2 {
+                key := Trim(parts[1])
+                value := Trim(parts[2])
+                
+                ; Try to convert numeric values automatically
+                if RegExMatch(value, "^\d+$")
+                    value := Integer(value)
+                else if RegExMatch(value, "^\d+\.\d+$")
+                    value := Float(value)
+                ; Handle boolean values
+                else if (value = "true" || value = "True")
+                    value := true
+                else if (value = "false" || value = "False")
+                    value := false
+                
+                config[key] := value
+                LogMessage("Loaded configuration: " key " = " value)
+            }
+        }
+    }
+    return config
+}
+
+; Find the CS2 process and return its PID (or 0 if not found)
+FindCS2Process() {
+    pid := ProcessExist("cs2.exe")
+    if (!pid)
+        pid := ProcessExist("Counter-Strike 2.exe")
+    return pid
+}
+
+; Kill the CS2 process, using force if necessary
+KillCS2Process() {
+    pid := FindCS2Process()
+    if (pid) {
+        ; Try graceful termination first
+        if (ProcessClose(pid)) {
+            LogMessage("Successfully terminated CS2 process")
+            return true
+        }
+        ; If graceful fails, use forced kill
+        LogMessage("Attempting forced termination of CS2 process...")
+        Run "taskkill /F /PID " pid
+        Sleep 2000
+        return !ProcessExist(pid)
+    }
+    return false  ; No process found to kill
 }
 
 ; Check if CS2 is running and launch it if necessary
@@ -83,15 +147,18 @@ EnsureCS2Running() {
             LogMessage("CS2 is already running. Window activated.")
             WinActivate "Counter-Strike"
             Sleep 1000
+            
+            ; Verify main menu can be reached
+            if (!EnsureAtMainMenu()) {
+                LogMessage("CS2 is running but main menu not accessible - restarting game")
+                KillCS2Process()
+                return LaunchCS2()
+            }
+            
             return true
         } else {
-            LogMessage("CS2 is not running. Please launch CS2 manually to avoid potential anti-cheat issues.")
-            if (MsgBox("CS2 is not running. It's recommended to launch CS2 manually first to avoid anti-cheat issues.`n`nLaunch CS2 now?", "CS2 Not Running", 4) = "Yes") {
-                return LaunchCS2()
-            } else {
-                LogMessage("User chose not to launch CS2. Exiting script.")
-                return false
-            }
+            LogMessage("CS2 is not running. Launching automatically...")
+            return LaunchCS2()
         }
     } catch Error as e {
         LogMessage("Error checking CS2 status: " e.Message)
@@ -99,30 +166,32 @@ EnsureCS2Running() {
     }
 }
 
-; Launch CS2
-LaunchCS2() {
-    Global CONFIG
+LaunchCS2(retryCount := 0) {
+    maxRetries := CONFIG.HasOwnProp("max_launch_retries") ? CONFIG["max_launch_retries"] : 3
+    retryDelay := CONFIG.HasOwnProp("launch_retry_delay") ? CONFIG["launch_retry_delay"] : 5000
+    launchTimeout := CONFIG.HasOwnProp("launch_timeout") ? CONFIG["launch_timeout"] : 60
     
-    ; Set default paths if CONFIG doesn't have them
-    cs2_path := "D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe"
+    ; Get the game initialization wait time from config
+    fullLoadWaitTime := CONFIG.HasOwnProp("cs2_load_wait_time") ? CONFIG["cs2_load_wait_time"] : 20000
+    
+    if (retryCount > maxRetries) {
+        LogMessage("Exceeded maximum retry attempts (" maxRetries ") for launching CS2")
+        return false
+    }
+
+    ; Kill any existing CS2 process that might be hung
+    if (FindCS2Process()) {
+        LogMessage("Found existing CS2 process before launch, terminating it")
+        KillCS2Process()
+        Sleep 2000  ; Give system time to clean up
+    }
+
+    ; Get Steam path from config
     steam_path := "C:\Program Files (x86)\Steam\steam.exe"
-    
-    ; Use CONFIG values if they exist
-    if (IsObject(CONFIG) && CONFIG.HasOwnProp("cs2_executable"))
-        cs2_path := CONFIG.cs2_executable
-        
     if (IsObject(CONFIG) && CONFIG.HasOwnProp("steam_executable"))
         steam_path := CONFIG.steam_executable
     
-    LogMessage("Attempting to launch CS2...")
-    LogMessage("CS2 Executable: " cs2_path)
-    
-    ; Check if CS2 executable exists
-    if !FileExist(cs2_path) {
-        LogMessage("Error: CS2 executable not found at: " cs2_path)
-        MsgBox("CS2 executable not found at: " cs2_path "`n`nPlease update the configuration file.", "Error", "Icon!")
-        return false
-    }
+    LogMessage("Attempting to launch CS2 via Steam protocol...")
     
     ; Check if Steam is running
     If !ProcessExist("steam.exe") {
@@ -132,23 +201,48 @@ LaunchCS2() {
         Sleep 10000  ; Wait for Steam to initialize
     }
     
-    ; Launch CS2
-    LogMessage("Launching CS2...")
-    Run cs2_path
+    ; Launch CS2 using Steam protocol URL
+    LogMessage("Launching CS2 via steam://rungameid/730...")
+    Run "steam://rungameid/730"
     
-    ; Wait for CS2 to launch
+    ; Wait for CS2 to launch with the configured timeout
     try {
-        WinWait "Counter-Strike", , 60
+        WinWait "Counter-Strike", , launchTimeout
     } catch {
-        LogMessage("Error: Timed out waiting for CS2 to launch")
-        return false
+        LogMessage("Error: Timed out waiting for CS2 to launch after " launchTimeout " seconds")
+        
+        ; Check if process exists but window didn't appear (possibly hung)
+        if (FindCS2Process()) {
+            LogMessage("CS2 process exists but window didn't appear - killing process")
+            KillCS2Process()
+        }
+        
+        ; Retry after a delay
+        LogMessage("Retrying launch (attempt " retryCount+1 " of " maxRetries ")")
+        Sleep retryDelay
+        return LaunchCS2(retryCount + 1)
     }
     
     ; Activate CS2 window
     WinActivate "Counter-Strike"
     LogMessage("CS2 launched and activated")
-    Sleep 1000  ; Wait for the game to fully load
-    return true
+    
+    ; Wait for game to fully load to main menu - no interaction during this time
+    LogMessage("Waiting " fullLoadWaitTime/1000 " seconds for game to fully initialize...")
+    Sleep fullLoadWaitTime
+    
+    ; After the full wait, do a single check for the main menu
+    LogMessage("Checking if main menu is active...")
+    if (EnsureAtMainMenu(2)) {  ; 2 attempts within the function
+        LogMessage("CS2 successfully launched and main menu detected")
+        return true
+    } else {
+        LogMessage("Main menu not detected after full wait - possible hang")
+        KillCS2Process()
+        Sleep 5000
+        LogMessage("Retrying launch (attempt " retryCount+1 " of " maxRetries ")")
+        return LaunchCS2(retryCount + 1)
+    }
 }
 
 CaptureScreenshot() {

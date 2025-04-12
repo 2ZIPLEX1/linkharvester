@@ -83,8 +83,8 @@ Main() {
 
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
-    mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    ; mapKeys := ["DustII"]
+    ; mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
+    mapKeys := ["DustII"]
     
     ; Process each map in order
     for mapKey in mapKeys {
@@ -205,16 +205,19 @@ RunMap(mapKey) {
         LogMessage("Finished with " mapInfo.name " match")
         return true
     }
-    else if (matchOutcome = "fatal_error") {
-        LogMessage("Fatal server error detected. Signaling for script termination.")
-        return "fatal_error"  ; Special return value for fatal errors
-    }
     else if (matchOutcome = "failure" || matchOutcome = "timeout") {
         LogMessage("Failed to join " mapInfo.name " match: " matchOutcome)
         
-        ; Try to return to main menu to recover
-        Send "{Escape}"
-        Sleep 1000
+        ; Add CS2 termination for timeout scenario
+        if (matchOutcome = "timeout") {
+            LogMessage("Match timeout detected - killing CS2 process and exiting script...")
+            KillCS2Process()
+            ExitApp  ; Exit script immediately after killing the process
+        } else {
+            ; Try to return to main menu to recover for non-timeout failures
+            Send "{Escape}"
+            Sleep 1000
+        }
         return false
     }
     

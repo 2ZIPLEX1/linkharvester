@@ -28,5 +28,20 @@
       "friends": "passed",
       "csgo_inventory": "to_check"
     }
+  },
+  {
+    "url": "https://steamcommunity.com/id/ArJay/",
+    "timestamp": 1744452144.2445667,
+    "vanity_id": "ArJay",
+    "steam_id": "76561198004465420",
+    "checks": {
+      "animated_avatar": "passed",
+      "avatar_frame": "passed",
+      "mini_profile_background": "passed",
+      "profile_background": "passed",
+      "steam_level": "passed",
+      "friends": "passed",
+      "csgo_inventory": "to_check"
+    }
   }
 ]

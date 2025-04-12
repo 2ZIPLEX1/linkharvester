@@ -1,0 +1,6 @@
+cs2_executable=D:\SteamLibrary\steamapps\common\Counter-Strike Global Offensive\game\bin\win64\cs2.exe
+steam_executable=C:\Program Files (x86)\Steam\steam.exe
+launch_timeout=60
+max_launch_retries=3
+launch_retry_delay=5000
+cs2_load_wait_time=20000

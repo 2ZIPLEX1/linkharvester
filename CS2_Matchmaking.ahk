@@ -149,7 +149,7 @@ WaitForMatchOutcome() {
     
     ; Store start time to enforce timeout
     startTime := A_TickCount
-    timeout := 90000  ; 10 minutes in milliseconds
+    timeout := 90000  ; 1.5 minutes in milliseconds
     
     ; Time to wait before starting error checks (allowing time for match loading)
     initialErrorWait := 1000  ; 10 seconds
