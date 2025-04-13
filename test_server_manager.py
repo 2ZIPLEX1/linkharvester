@@ -7,11 +7,11 @@ import logging
 import time
 from datetime import datetime
 from collections import deque
-from api_service import APIService
+from python_services.api_service import APIService
 
 # Setup logging to OneDrive Documents folder
 home_dir = os.path.expanduser("~")
-log_directory = "C:\\LinkHarvesterScript\logs"
+log_directory = "C:\\LinkHarvesterScript\\logs"
 os.makedirs(log_directory, exist_ok=True)
 data_directory = "C:\\LinkHarvesterScript\\data"
 os.makedirs(data_directory, exist_ok=True)
@@ -22,7 +22,7 @@ logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
     filename=log_file,
-    filemode='a'  # Append mode
+    filemode='a'  # Append mode 
 )
 logging.info("=== CS2 Test Server Manager Started ===")
 
@@ -32,7 +32,7 @@ class CS2TestServerManager:
         self.servers_data = {}
         self.preferred_servers = []
         self.netsh_path = os.path.join(os.environ["SystemRoot"], "System32", "netsh.exe")
-        self.ahk_script_path = os.path.join(os.getcwd(), "cs2_automation.ahk")
+        self.ahk_script_path = os.path.join(os.getcwd(), "ahk", "automation.ahk")
         
         # Set up data directories
         self.data_directory = data_directory
@@ -316,7 +316,7 @@ class CS2TestServerManager:
         }
         
         start_time = time.time()
-        ahk_log_file = "C:\\LinkHarvesterScript\\cs2_automation.log"
+        ahk_log_file = "C:\\LinkHarvesterScript\\automation.log"
         completion_marker = "All rounds completed!"
         check_interval = 10  # Check log and process status every 10 seconds
         
@@ -448,7 +448,7 @@ class CS2TestServerManager:
             print("\nRunning emergency disconnect script to exit CS2 to main menu...")
             
             # Path to the emergency disconnect script
-            emergency_script_path = os.path.join(os.getcwd(), "emergency_disconnect.ahk")
+            emergency_script_path = os.path.join(os.getcwd(), "ahk", "emergency_disconnect.ahk")
             
             # Check if the script exists
             if not os.path.exists(emergency_script_path):

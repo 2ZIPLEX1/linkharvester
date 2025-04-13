@@ -3,7 +3,7 @@
 #Requires AutoHotkey v2.0
 
 ; Include only the minimal required helper file
-#Include "CS2_Helpers.ahk"
+#Include "Helpers.ahk"
 
 ; Initialize a minimal CONFIG map to prevent errors
 Global CONFIG := Map(

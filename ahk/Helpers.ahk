@@ -9,7 +9,7 @@ LogMessage(message) {
     } catch Error as e {
         ; If logging fails, try to create a fallback log
         try {
-            fallbackLog := A_ScriptDir "\cs2_automation_fallback.log"
+            fallbackLog := A_ScriptDir "\automation_fallback.log"
             FileAppend timestamp " - ERROR LOGGING: " e.Message "`n", fallbackLog
             FileAppend timestamp " - " message "`n", fallbackLog
         }
@@ -18,7 +18,7 @@ LogMessage(message) {
 
 ; Load configuration from file
 LoadConfiguration() {
-    rootConfigFile := A_ScriptDir "\config.txt"
+    rootConfigFile := A_ScriptDir "\..\config.txt"
     dataConfigFile := "C:\LinkHarvesterScript\data\config.txt"
     
     config := Map(
@@ -146,14 +146,14 @@ EnsureCS2Running() {
         if WinExist("Counter-Strike") {
             LogMessage("CS2 is already running. Window activated.")
             WinActivate "Counter-Strike"
-            Sleep 1000
+            Sleep 500
             
             ; Verify main menu can be reached
-            if (!EnsureAtMainMenu()) {
-                LogMessage("CS2 is running but main menu not accessible - restarting game")
-                KillCS2Process()
-                return LaunchCS2()
-            }
+            ;if (!EnsureAtMainMenu()) {
+            ;    LogMessage("CS2 is running but main menu not accessible - restarting game")
+            ;    KillCS2Process()
+            ;    return LaunchCS2()
+            ;}
             
             return true
         } else {
@@ -408,7 +408,7 @@ IsSimilarColor(color1, color2, tolerance := 30) {
 ; Updated function for AHK v2
 RunPythonDetector(command) {
     try {
-        scriptPath := A_ScriptDir "\cs2_detect.py"
+        scriptPath := A_ScriptDir "\..\python_services\cs2_detect.py"
         fullCommand := A_ComSpec " /c python " . scriptPath . " " . command
         
         LogMessage("Executing command: " . fullCommand)
@@ -629,38 +629,155 @@ VerifyBackInLobby() {
     }
 }
 
-; Check for and dismiss voted-off error dialog
-DismissVotedOffErrorDialog() {
-    LogMessage("Checking for voted-off error dialog...")
+EnsureAtMainMenu(maxAttempts := 2) {
+    LogMessage("Ensuring we're at the main menu...")
     
-    ; Take a screenshot
+    ; Use combined detection for efficiency
     CaptureScreenshot()
-    Sleep 800  ; Wait for screenshot to be saved
+    Sleep 800
+    result := RunPythonDetector("combined_detection")
     
-    ; Run Python detector
-    result := RunPythonDetector("check_voted_off_error_dialog")
-    LogMessage("Voted-off error dialog detection result: " result)
+    ; Parse the result to get both main menu and error dialog status
+    atMainMenu := InStr(result, "MAIN_MENU_DETECTED=1")
+    errorDialogFound := InStr(result, "ERROR_DIALOG_DETECTED=1")
     
-    ; Check if error dialog was detected
-    if InStr(result, "VOTED_OFF_ERROR_DIALOG_DETECTED=1") {
-        LogMessage("Voted-off error dialog detected!")
+    ; Log the results
+    mainMenuStr := atMainMenu ? "yes" : "no"
+    LogMessage("Combined detection - At main menu: " mainMenuStr)
+    
+    ; If we found an error dialog, dismiss it
+    if (errorDialogFound) {
+        LogMessage("Voted-off error dialog detected in combined check")
         
-        ; Try to extract coordinates from result
+        ; Extract OK button coordinates if available
+        okButtonX := 1160  ; Default X
+        okButtonY := 600   ; Default Y
+        
         if RegExMatch(result, "OK_BUTTON_COORDS=(\d+),(\d+)", &coordMatch) {
             okButtonX := Integer(coordMatch[1])
             okButtonY := Integer(coordMatch[2])
-            
-            LogMessage("Clicking OK button at coordinates: " okButtonX "," okButtonY)
-            Click okButtonX, okButtonY
-        } else {
-            ; Fallback coordinates if detection didn't provide them
-            LogMessage("Using fallback coordinates for OK button")
-            Click 1160, 600
         }
         
+        ; Click the OK button
+        LogMessage("Clicking OK button at coordinates: " okButtonX "," okButtonY)
+        Click okButtonX, okButtonY
         Sleep 500
+        
+        ; Check if we're at main menu after dismissing dialog
+        CaptureScreenshot()
+        Sleep 800
+        mainMenuResult := RunPythonDetector("main_menu 198 12 40 40")
+        atMainMenu := InStr(mainMenuResult, "MAIN_MENU_DETECTED=1")
+        
+        if (atMainMenu) {
+            LogMessage("Successfully returned to main menu after dismissing voted-off error dialog")
+            return true
+        }
+    }
+    
+    ; Return true if we're already at the main menu
+    if (atMainMenu) {
+        LogMessage("Already at main menu")
         return true
     }
     
+    ; First attempt: Try to get back to main menu by clicking in the corner
+    LogMessage("Attempting to return to main menu (attempt 1)")
+    Click 31, 31
+    Sleep 1000
+    
+    ; Use combined detection again after first attempt
+    CaptureScreenshot()
+    Sleep 800
+    result := RunPythonDetector("combined_detection")
+    
+    atMainMenu := InStr(result, "MAIN_MENU_DETECTED=1")
+    errorDialogFound := InStr(result, "ERROR_DIALOG_DETECTED=1")
+    
+    ; If error dialog appeared after first attempt, dismiss it
+    if (errorDialogFound) {
+        LogMessage("Voted-off error dialog detected after first attempt")
+        
+        ; Extract OK button coordinates if available
+        okButtonX := 1160  ; Default X
+        okButtonY := 600   ; Default Y
+        
+        if RegExMatch(result, "OK_BUTTON_COORDS=(\d+),(\d+)", &coordMatch) {
+            okButtonX := Integer(coordMatch[1])
+            okButtonY := Integer(coordMatch[2])
+        }
+        
+        ; Click the OK button
+        LogMessage("Clicking OK button at coordinates: " okButtonX "," okButtonY)
+        Click okButtonX, okButtonY
+        Sleep 500
+        
+        ; Check if we're at main menu after dismissing dialog
+        CaptureScreenshot()
+        Sleep 800
+        mainMenuResult := RunPythonDetector("main_menu 198 12 40 40")
+        
+        if InStr(mainMenuResult, "MAIN_MENU_DETECTED=1") {
+            LogMessage("Successfully returned to main menu after dismissing voted-off error dialog")
+            return true
+        }
+    }
+    
+    ; If main menu detected after first attempt
+    if (atMainMenu) {
+        LogMessage("Successfully returned to main menu after attempt 1")
+        return true
+    }
+    
+    ; Final attempt: Try to disconnect from match (more aggressive approach)
+    LogMessage("Basic attempts failed, trying DisconnectFromMatch function")
+    if (DisconnectFromMatch()) {
+        Sleep 3000  ; Give it more time to return to menu after disconnect
+        
+        ; Final combined check
+        CaptureScreenshot()
+        Sleep 800
+        result := RunPythonDetector("combined_detection")
+        
+        atMainMenu := InStr(result, "MAIN_MENU_DETECTED=1")
+        errorDialogFound := InStr(result, "ERROR_DIALOG_DETECTED=1")
+        
+        ; If error dialog appeared after disconnect, dismiss it
+        if (errorDialogFound) {
+            LogMessage("Voted-off error dialog detected after disconnect")
+            
+            ; Extract OK button coordinates if available
+            okButtonX := 1160  ; Default X
+            okButtonY := 600   ; Default Y
+            
+            if RegExMatch(result, "OK_BUTTON_COORDS=(\d+),(\d+)", &coordMatch) {
+                okButtonX := Integer(coordMatch[1])
+                okButtonY := Integer(coordMatch[2])
+            }
+            
+            ; Click the OK button
+            LogMessage("Clicking OK button at coordinates: " okButtonX "," okButtonY)
+            Click okButtonX, okButtonY
+            Sleep 500
+            
+            ; Final main menu check
+            CaptureScreenshot()
+            Sleep 800
+            mainMenuResult := RunPythonDetector("main_menu 198 12 40 40")
+            
+            if InStr(mainMenuResult, "MAIN_MENU_DETECTED=1") {
+                LogMessage("Successfully returned to main menu after dismissing voted-off error dialog")
+                return true
+            }
+        }
+        
+        ; Final check
+        if (atMainMenu) {
+            LogMessage("Successfully returned to main menu after disconnecting")
+            return true
+        }
+    }
+    
+    LogMessage("Failed to return to main menu after all attempts")
     return false
 }

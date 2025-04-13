@@ -10,12 +10,13 @@ import traceback
 import pytesseract
 
 # Configure paths
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
 SYMPATHIES_PATH = os.path.join(TEMPLATES_PATH, 'sympathies')
 
 # Configure logging
-logs_dir = os.path.join(PROJECT_PATH, 'logs')
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logs_dir = os.path.join(root_dir, 'logs')
 os.makedirs(logs_dir, exist_ok=True)
 LOG_FILE = os.path.join(logs_dir, 'image_recognition.log')
 
@@ -25,7 +26,8 @@ pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
 
 def ensure_logs_directory():
     """Ensure the logs directory exists."""
-    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(root_dir, 'logs')
     os.makedirs(logs_dir, exist_ok=True)
     return logs_dir
 

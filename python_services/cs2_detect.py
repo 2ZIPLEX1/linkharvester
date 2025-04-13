@@ -9,7 +9,7 @@ import pytesseract
 import traceback
 
 # Configure paths
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
 STEAM_SCREENSHOTS_PATH = r'C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots'
 
@@ -18,7 +18,8 @@ TESSERACT_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
 pytesseract.pytesseract.tesseract_cmd = TESSERACT_PATH
 
 # Configure logging 
-logs_dir = os.path.join(PROJECT_PATH, 'logs')
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logs_dir = os.path.join(root_dir, 'logs')
 os.makedirs(logs_dir, exist_ok=True)
 LOG_FILE = os.path.join(logs_dir, 'image_recognition.log')
 logging.basicConfig(
@@ -37,7 +38,8 @@ URL_CACHE_FILE = os.path.join(PROJECT_PATH, "url_cache.tmp")
 
 def ensure_logs_directory():
     """Ensure the logs directory exists."""
-    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(root_dir, 'logs')
     os.makedirs(logs_dir, exist_ok=True)
     return logs_dir
 
@@ -262,6 +264,83 @@ def detect_error_dialog():
     print("ERROR_DETECTION_RESULT=0")
     return False, None
 
+def detect_main_menu_and_error_dialog():
+    """
+    Detect both main menu and voted-off error dialog in a single screenshot.
+    This optimizes the process by avoiding taking multiple screenshots.
+    """
+    try:
+        # Get the latest screenshot
+        screenshot_path = get_latest_screenshot()
+        if not screenshot_path:
+            print("COMBINED_DETECTION_RESULT=0")
+            print("COMBINED_DETECTION_ERROR=No recent screenshot found")
+            return False, False, None
+        
+        # Read the screenshot
+        img = cv2.imread(screenshot_path)
+        if img is None:
+            print("COMBINED_DETECTION_RESULT=0")
+            print("COMBINED_DETECTION_ERROR=Could not read screenshot")
+            return False, False, None
+        
+        # --- Check for main menu ---
+        main_menu_roi_x = 198
+        main_menu_roi_y = 12
+        main_menu_roi_width = 40
+        main_menu_roi_height = 40
+        
+        # Extract main menu ROI
+        main_menu_roi = img[main_menu_roi_y:main_menu_roi_y+main_menu_roi_height, 
+                         main_menu_roi_x:main_menu_roi_x+main_menu_roi_width]
+        
+        # Detect the shut-down-icon in the ROI
+        template_path = os.path.join(TEMPLATES_PATH, "shut-down-icon.jpg")
+        template = cv2.imread(template_path)
+        
+        # Convert to grayscale for template matching
+        main_menu_roi_gray = cv2.cvtColor(main_menu_roi, cv2.COLOR_BGR2GRAY)
+        template_gray = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        
+        # Perform template matching
+        result = cv2.matchTemplate(main_menu_roi_gray, template_gray, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
+        
+        # Check if main menu is detected
+        at_main_menu = max_val >= 0.9
+        main_menu_confidence = max_val
+        
+        # --- Check for voted-off error dialog ---
+        # Detect the voted-off-error-dialog template
+        error_found, error_coords = detect_template(img, "voted-off-error-dialog", threshold=0.7)
+        
+        # Default OK button coordinates (if dialog found but coords not detected)
+        ok_button_coords = (1160, 600)
+        
+        # Print combined results
+        print("COMBINED_DETECTION_RESULT=1")
+        print(f"MAIN_MENU_DETECTED={1 if at_main_menu else 0}")
+        print(f"MAIN_MENU_CONFIDENCE={main_menu_confidence:.4f}")
+        print(f"ERROR_DIALOG_DETECTED={1 if error_found else 0}")
+        
+        if error_found and error_coords:
+            # Calculate OK button coordinates based on error dialog position
+            # (adjust if your OK button is at a fixed offset from the dialog)
+            ok_button_coords = (1160, 600)  # Using default values
+            print(f"OK_BUTTON_COORDS={ok_button_coords[0]},{ok_button_coords[1]}")
+        
+        # Log the results
+        logging.info(f"Combined detection: Main menu: {at_main_menu} (conf: {main_menu_confidence:.4f}), Error dialog: {error_found}")
+        
+        return at_main_menu, error_found, ok_button_coords
+        
+    except Exception as e:
+        logging.error(f"Error in combined detection: {str(e)}")
+        logging.error(traceback.format_exc())
+        print("COMBINED_DETECTION_RESULT=0")
+        print(f"COMBINED_DETECTION_ERROR={str(e)}")
+        return False, False, None
+
 def detect_spectate_button():
     """Detect spectate button in the latest screenshot"""
     screenshot = get_latest_screenshot()
@@ -361,7 +440,8 @@ def find_attention_icon_in_region(img, base_y):
         roi_height = min(roi_height, img_height - roi_y)
         
         # Create debug directory
-        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        debug_dir = os.path.join(root_dir, "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
         timestamp = int(time.time())
         
@@ -483,7 +563,8 @@ def detect_profile_button(region_x=None, region_y=None, region_width=None, regio
             
             # Save the region for debugging with a unique timestamp
             timestamp = int(time.time())
-            debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+            root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+            debug_dir = os.path.join(root_dir, "debug_regions")
             os.makedirs(debug_dir, exist_ok=True)
             debug_path = os.path.join(debug_dir, f"profile_button_region_{timestamp}_{region_x}_{region_y}.png")
             cv2.imwrite(debug_path, roi)
@@ -537,7 +618,8 @@ def draw_detection_visualization(img, x_plus_coords, x_coords, search_roi_x, sea
     
     try:
         # Create debug directory if it doesn't exist
-        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        debug_dir = os.path.join(root_dir, "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
         
         # Calculate absolute coordinates for x-plus
@@ -595,7 +677,8 @@ def detect_tab_close_button_precise(img, search_roi_x, search_roi_y, search_roi_
     """
     try:
         # Create debug directory if it doesn't exist
-        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        debug_dir = os.path.join(root_dir, "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
         timestamp = int(time.time())
         
@@ -723,9 +806,9 @@ def detect_tab_close_button_precise(img, search_roi_x, search_roi_y, search_roi_
                    cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 1)
         
         # Save the x button match visualization
-        x_vis_path = os.path.join(debug_dir, f"x_button_match_{timestamp}_{max_val:.2f}.png")
-        cv2.imwrite(x_vis_path, x_vis)
-        logging.info(f"Saved x button match visualization to: {x_vis_path}")
+        # x_vis_path = os.path.join(debug_dir, f"x_button_match_{timestamp}_{max_val:.2f}.png")
+        # cv2.imwrite(x_vis_path, x_vis)
+        # logging.info(f"Saved x button match visualization to: {x_vis_path}")
         
         # Check if match is good enough
         if max_val >= 0.7:
@@ -1036,7 +1119,7 @@ def process_steam_url(url):
         after_queue_length = after_status.get("queue_length", 0)
         
         # Check if the filtered_steamids.txt file has been updated
-        filtered_file = os.path.join("steam_data", "filtered_steamids.txt")
+        filtered_file = os.path.join("..", "steam_data", "filtered_steamids.txt")
         filtered_id_found = False
         steam_id = ""
         
@@ -1490,7 +1573,8 @@ if __name__ == "__main__":
                 
                 # Save the extracted region for debugging
                 timestamp = int(time.time())
-                debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+                root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+                debug_dir = os.path.join(root_dir, "debug_regions")
                 os.makedirs(debug_dir, exist_ok=True)
                 
                 # Save the full screenshot with ROI rectangle drawn
@@ -1540,42 +1624,9 @@ if __name__ == "__main__":
             logging.error(f"Error checking attention icon: {str(e)}")
             logging.error(traceback.format_exc())
 
-    elif command == "check_voted_off_error_dialog":
-        try:
-            # Get the latest screenshot
-            screenshot_path = get_latest_screenshot()
-            if not screenshot_path:
-                print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
-                print("ERROR=No recent screenshot found")
-                sys.exit(1)
-            
-            # Read the screenshot
-            img = cv2.imread(screenshot_path)
-            if img is None:
-                print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
-                print("ERROR=Could not read screenshot")
-                sys.exit(1)
-            
-            # Detect the voted-off-error-dialog.jpg template
-            found, coords = detect_template(img, "voted-off-error-dialog", threshold=0.7)
-            
-            if found:
-                print("VOTED_OFF_ERROR_DIALOG_DETECTED=1")
-                
-                # The OK button is typically at a position relative to the dialog
-                # Using your suggested coordinates
-                ok_button_x = 1160
-                ok_button_y = 600
-                
-                print(f"OK_BUTTON_COORDS={ok_button_x},{ok_button_y}")
-            else:
-                print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
-        except Exception as e:
-            print("VOTED_OFF_ERROR_DIALOG_DETECTED=0")
-            print(f"ERROR={str(e)}")
-            logging.error(f"Error checking voted-off error dialog: {str(e)}")
-            logging.error(traceback.format_exc())
-
+    elif command == "combined_detection":
+        at_main_menu, error_found, ok_button_coords = detect_main_menu_and_error_dialog()
+    
     else:
         print(f"Unknown command: {command}")
         print("Use 'python cs2_detect.py' without arguments to see available commands.")

@@ -17,7 +17,8 @@ logging.basicConfig(
 )
 
 # Configure logging
-logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logs_dir = os.path.join(root_dir, 'logs')
 os.makedirs(logs_dir, exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
@@ -240,13 +241,14 @@ class _CheckHandlers:
             }
             
         except urllib.error.HTTPError as e:
-            if e.code == 403:
-                # Private inventory - treat as passed
-                logging.info(f"CS:GO inventory check for {steam_id}: Private inventory - automatically passing")
+            if e.code in [401, 403]:
+                # Private inventory or unauthorized - treat as passed
+                error_type = "Unauthorized" if e.code == 401 else "Private inventory"
+                logging.info(f"CS:GO inventory check for {steam_id}: {error_type} - automatically passing")
                 return {
                     "success": True,
                     "passed": True,
-                    "details": {"error": "Private inventory - cannot check"}
+                    "details": {"error": f"{error_type} - cannot check"}
                 }
             manager._log_check_error("csgo_inventory", steam_id, e)
             return {"success": False, "error": str(e)}
@@ -297,7 +299,7 @@ class _CheckConfig:
     }
 
 class SteamProfileManager:
-    def __init__(self, data_folder="steam_data", config_path="config.json"):
+    def __init__(self, data_folder="../steam_data", config_path="../config.json"):
         self.data_folder = data_folder
         self.config_path = config_path
         self.queue_file = os.path.join(data_folder, "profiles_queue.json")

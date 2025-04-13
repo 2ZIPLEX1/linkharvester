@@ -20,7 +20,7 @@ powershell -Command "Start-Process cmd -ArgumentList '/c cd /d \"C:\LinkHarveste
 
 echo Script launched.
 echo.
-echo Check logs in: C:\LinkHarvesterScript\
+echo Check logs in: C:\LinkHarvesterScript\logs
 echo Check data in: C:\LinkHarvesterScript\data\
 echo Check reports in: C:\LinkHarvesterScript\reports\
 echo.

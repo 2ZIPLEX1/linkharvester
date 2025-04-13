@@ -14,6 +14,11 @@
       "timestamp": 1744453935.031901,
       "datetime": "2025-04-12 12:32:15",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744530048.049816,
+      "datetime": "2025-04-13 09:40:48",
+      "profiles_harvested": 0
     }
   ],
   "Singapore (sgp)": [
@@ -25,6 +30,11 @@
     {
       "timestamp": 1744451416.922236,
       "datetime": "2025-04-12 11:50:16",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541284.582733,
+      "datetime": "2025-04-13 12:48:04",
       "profiles_harvested": 0
     }
   ],
@@ -50,6 +60,11 @@
       "timestamp": 1744399855.465797,
       "datetime": "2025-04-11 21:30:55",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744530347.795555,
+      "datetime": "2025-04-13 09:45:47",
+      "profiles_harvested": 0
     }
   ],
   "Warsaw (Poland) (waw)": [
@@ -74,6 +89,11 @@
       "timestamp": 1744451423.040742,
       "datetime": "2025-04-12 11:50:23",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541254.272649,
+      "datetime": "2025-04-13 12:47:34",
+      "profiles_harvested": 0
     }
   ],
   "Chennai - Ambattur (India) (maa2)": [
@@ -95,12 +115,32 @@
       "timestamp": 1744398343.020724,
       "datetime": "2025-04-11 21:05:43",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744528816.75897,
+      "datetime": "2025-04-13 09:20:16",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541616.721911,
+      "datetime": "2025-04-13 12:53:36",
+      "profiles_harvested": 0
     }
   ],
   "Vienna (Austria) (vie)": [
     {
       "timestamp": 1744398948.377133,
       "datetime": "2025-04-11 21:15:48",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744532946.7836,
+      "datetime": "2025-04-13 10:29:06",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541767.03768,
+      "datetime": "2025-04-13 12:56:07",
       "profiles_harvested": 0
     }
   ],
@@ -109,6 +149,16 @@
       "timestamp": 1744399250.696671,
       "datetime": "2025-04-11 21:20:50",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744531193.008086,
+      "datetime": "2025-04-13 09:59:53",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541985.344033,
+      "datetime": "2025-04-13 12:59:45",
+      "profiles_harvested": 0
     }
   ],
   "Johannesburg (South Africa) (jnb)": [
@@ -116,12 +166,22 @@
       "timestamp": 1744400158.112471,
       "datetime": "2025-04-11 21:35:58",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744563592.331843,
+      "datetime": "2025-04-13 18:59:52",
+      "profiles_harvested": 0
     }
   ],
   "Madrid (Spain) (mad)": [
     {
       "timestamp": 1744400460.691122,
       "datetime": "2025-04-11 21:41:00",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744531521.431535,
+      "datetime": "2025-04-13 10:05:21",
       "profiles_harvested": 0
     }
   ],
@@ -142,6 +202,11 @@
       "timestamp": 1744452670.404102,
       "datetime": "2025-04-12 12:11:10",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541268.976616,
+      "datetime": "2025-04-13 12:47:48",
+      "profiles_harvested": 0
     }
   ],
   "Tokyo Koto City (Japan) (tyo)": [
@@ -154,12 +219,76 @@
       "timestamp": 1744452762.456198,
       "datetime": "2025-04-12 12:12:42",
       "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541261.561561,
+      "datetime": "2025-04-13 12:47:41",
+      "profiles_harvested": 0
     }
   ],
   "Hong Kong (hkg)": [
     {
       "timestamp": 1744450241.139324,
       "datetime": "2025-04-12 11:30:41",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541302.397467,
+      "datetime": "2025-04-13 12:48:22",
+      "profiles_harvested": 0
+    }
+  ],
+  "Seattle (Washington) (sea)": [
+    {
+      "timestamp": 1744529209.948096,
+      "datetime": "2025-04-13 09:26:49",
+      "profiles_harvested": 0
+    }
+  ],
+  "Los Angeles (California) (lax)": [
+    {
+      "timestamp": 1744529559.648393,
+      "datetime": "2025-04-13 09:32:39",
+      "profiles_harvested": 0
+    },
+    {
+      "timestamp": 1744541310.282206,
+      "datetime": "2025-04-13 12:48:30",
+      "profiles_harvested": 0
+    }
+  ],
+  "Stockholm - Kista (Sweden) (sto)": [
+    {
+      "timestamp": 1744530759.322677,
+      "datetime": "2025-04-13 09:52:39",
+      "profiles_harvested": 0
+    }
+  ],
+  "Sao Paulo (Brazil) (gru)": [
+    {
+      "timestamp": 1744541815.882911,
+      "datetime": "2025-04-13 12:56:55",
+      "profiles_harvested": 0
+    }
+  ],
+  "Dallas (Texas) (dfw)": [
+    {
+      "timestamp": 1744563389.109019,
+      "datetime": "2025-04-13 18:56:29",
+      "profiles_harvested": 0
+    }
+  ],
+  "Chicago (Illinois) (ord)": [
+    {
+      "timestamp": 1744563562.937491,
+      "datetime": "2025-04-13 18:59:22",
+      "profiles_harvested": 0
+    }
+  ],
+  "Lima (Peru) (lim)": [
+    {
+      "timestamp": 1744563584.720063,
+      "datetime": "2025-04-13 18:59:44",
       "profiles_harvested": 0
     }
   ]

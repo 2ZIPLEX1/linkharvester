@@ -3,14 +3,14 @@
 #Requires AutoHotkey v2.0
 
 ; Include helper and module files
-#Include "CS2_Helpers.ahk"
-#Include "CS2_Matchmaking.ahk"
-#Include "CS2_InGame.ahk"
-#Include "CS2_Hotkeys.ahk"
-#Include "CS2_API_Integration.ahk"
+#Include "Helpers.ahk"
+#Include "Matchmaking.ahk"
+#Include "InGame.ahk"
+#Include "Hotkeys.ahk"
+#Include "API_Integration.ahk"
 
 ; Initialize globals and setup
-Global LOG_FILE := "C:\LinkHarvesterScript\logs\cs2_automation.log"
+Global LOG_FILE := "C:\LinkHarvesterScript\logs\automation.log"
 
 ; Make sure log directory exists
 If !DirExist(A_MyDocuments "\AutoHotkey")
@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 3 {
+    Loop 1 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -84,7 +84,7 @@ Main() {
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
     ; mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    mapKeys := ["DustII"]
+    mapKeys := ["Sigma"]
     
     ; Process each map in order
     for mapKey in mapKeys {
@@ -115,60 +115,6 @@ RunAllMaps(roundNumber) {
             LogMessage("Round " roundNumber ": Failed or skipped map " mapInfo.name)
         }
     }
-}
-
-IsAtMainMenu() {
-    LogMessage("Checking if we're at the main menu...")
-    CaptureScreenshot()
-    Sleep 800
-    result := RunPythonDetector("main_menu 198 12 40 40")
-    logResult := InStr(result, "MAIN_MENU_DETECTED=1") ? "yes" : "no"
-    LogMessage("At main menu: " logResult)
-    return InStr(result, "MAIN_MENU_DETECTED=1")
-}
-
-EnsureAtMainMenu(maxAttempts := 2) {
-    LogMessage("Ensuring we're at the main menu...")
-    
-    ; First check if we're already at the main menu
-    if (IsAtMainMenu()) {
-        ; Even if we're at main menu, check for and dismiss voted-off error dialog
-        DismissVotedOffErrorDialog()
-        LogMessage("Already at main menu")
-        return true
-    }
-    
-    ; First attempt: Try to get back to main menu by clicking in the corner
-    LogMessage("Attempting to return to main menu (attempt 1)")
-    Click 31, 31
-    Sleep 1000
-    
-    ; Check for voted-off error dialog after first attempt
-    if (DismissVotedOffErrorDialog()) {
-        Sleep 500
-        if (IsAtMainMenu()) {
-            LogMessage("Successfully returned to main menu after dismissing voted-off error dialog")
-            return true
-        }
-    }
-    
-    ; Final attempt: Try to disconnect from match (more aggressive approach)
-    LogMessage("Basic attempts failed, trying DisconnectFromMatch function")
-    if (DisconnectFromMatch()) {
-        Sleep 3000  ; Give it more time to return to menu after disconnect
-        
-        ; Check for voted-off error dialog after disconnect
-        DismissVotedOffErrorDialog()
-        
-        ; Final check
-        if (IsAtMainMenu()) {
-            LogMessage("Successfully returned to main menu after disconnecting")
-            return true
-        }
-    }
-    
-    LogMessage("Failed to return to main menu after all attempts")
-    return false
 }
 
 RunMap(mapKey) {

@@ -5,10 +5,15 @@ import os
 from datetime import datetime, timezone, timedelta
 
 # Configure logging
+# Ensure logs directory exists
+logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+os.makedirs(logs_dir, exist_ok=True)
+
+# Set up logging to the logs directory
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
-    filename='server_priority.log',
+    filename=os.path.join(logs_dir, 'server_priority.log'),
     filemode='a'
 )
 

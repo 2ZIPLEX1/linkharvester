@@ -7,7 +7,8 @@ import time
 from typing import Dict, List, Tuple, Any
 
 # Configure logging 
-logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logs_dir = os.path.join(root_dir, 'logs')
 os.makedirs(logs_dir, exist_ok=True)
 logging.basicConfig(
     level=logging.INFO,
@@ -18,7 +19,9 @@ logging.basicConfig(
 
 def ensure_logs_directory():
     """Ensure the logs directory exists."""
-    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    # Go up one level to place logs in root directory
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(root_dir, 'logs')
     os.makedirs(logs_dir, exist_ok=True)
     return logs_dir
 
@@ -28,7 +31,7 @@ class APIService:
     Manages sending Steam IDs and handling responses.
     """
     
-    def __init__(self, config_path: str = "config.json"):
+    def __init__(self, config_path: str = "../config.json"):
         """
         Initialize the API service.
         
@@ -36,13 +39,13 @@ class APIService:
             config_path: Path to the configuration file with API key and username
         """
         self.config_path = config_path
-        self.filtered_file = os.path.join("steam_data", "filtered_steamids.txt")
+        self.filtered_file = os.path.join("..", "steam_data", "filtered_steamids.txt")
         self.api_key = None
         self.username = None
         self.api_endpoint = "https://ziplex2.pythonanywhere.com/links/api/add-link/"
         
         # Ensure necessary directories exist
-        os.makedirs("steam_data", exist_ok=True)
+        os.makedirs(os.path.join("..", "steam_data"), exist_ok=True)
         
         # Load configuration
         self.load_config()

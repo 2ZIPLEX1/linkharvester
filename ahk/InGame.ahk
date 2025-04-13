@@ -1,7 +1,7 @@
 ; CS2 Automation - Refactored In-Game Module
 ; Handles actions once a match has been successfully joined
 
-#Include "CS2_Helpers.ahk"
+#Include "Helpers.ahk"
 
 ; Find the base position for a team (CT or T)
 FindTeamPosition(team, &baseX, &baseY) {

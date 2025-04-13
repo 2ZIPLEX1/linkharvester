@@ -17,7 +17,7 @@ import glob
 from detect_sympathies import detect_sympathy_template, extract_sympathy_number
 
 # Configure logging
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
 MEDALS_PATH = os.path.join(TEMPLATES_PATH, 'medals')
 UNWANTED_MEDALS_PATH = os.path.join(MEDALS_PATH, 'unwanted')
@@ -1008,7 +1008,8 @@ def analyze_profile(click_x, click_y, screenshot_path=None):
     """
     try:
         # Create debug directory if it doesn't exist
-        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        debug_dir = os.path.join(root_dir, "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
         
         # Default result structure

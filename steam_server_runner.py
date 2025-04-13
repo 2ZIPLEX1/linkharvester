@@ -27,7 +27,7 @@ class SteamServerRunner:
     """
     
     def __init__(self, 
-                 ahk_script_path="cs2_automation.ahk",
+                 ahk_script_path="ahk/automation.ahk",
                  server_list_path="preferred_servers.txt",
                  all_servers_path="all_servers.json",
                  server_blocklist_path="steam_servers.conf"):
@@ -392,7 +392,7 @@ if __name__ == "__main__":
     
     # Parse command line arguments
     parser = argparse.ArgumentParser(description="Steam Server Runner")
-    parser.add_argument("--ahk", default="cs2_automation.ahk", help="Path to AHK script")
+    parser.add_argument("--ahk", default="ahk/automation.ahk", help="Path to AHK script")
     parser.add_argument("--servers", default="preferred_servers.txt", help="Path to preferred servers file")
     parser.add_argument("--allservers", default="all_servers.json", help="Path to all servers JSON file")
     parser.add_argument("--blocklist", default="steam_servers.conf", help="Path to server blocklist file")

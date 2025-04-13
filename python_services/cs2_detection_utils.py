@@ -17,11 +17,12 @@ import traceback
 TESTING_MODE = False  # Set to False to disable testing mode
 
 # Configure paths
-PROJECT_PATH = os.path.dirname(os.path.abspath(__file__))
+PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
 
 # Configure logging 
-logs_dir = os.path.join(PROJECT_PATH, 'logs')
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+logs_dir = os.path.join(root_dir, 'logs')
 os.makedirs(logs_dir, exist_ok=True)
 LOG_FILE = os.path.join(logs_dir, 'image_recognition.log')
 logging.basicConfig(
@@ -33,7 +34,8 @@ logging.basicConfig(
 
 def ensure_logs_directory():
     """Ensure the logs directory exists."""
-    logs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'logs')
+    root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    logs_dir = os.path.join(root_dir, 'logs')
     os.makedirs(logs_dir, exist_ok=True)
     return logs_dir
 
@@ -583,7 +585,8 @@ def detect_medal_arrow_in_roi(profile_roi, visualization):
     
     try:
         # Create debug directory if it doesn't exist
-        debug_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "debug_regions")
+        root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        debug_dir = os.path.join(root_dir, "debug_regions")
         os.makedirs(debug_dir, exist_ok=True)
         
         # Convert to grayscale once

@@ -1,4 +1,4 @@
-; CS2_API_Integration_Revised.ahk
+; API_Integration_Revised.ahk
 ; Functions to integrate with the API service
 
 ; Leverages your existing steam_profile_manager.py for filtering
@@ -77,7 +77,7 @@ SubmitFilteredIDsToAPI() {
         LogMessage("Submitting filtered Steam IDs to API...")
         
         ; Run api_service.py to process filtered_steamids.txt
-        output := ExecuteCommand("python api_service.py")
+        output := ExecuteCommand("python ..\python_services\api_service.py")
         
         ; Log the result
         LogMessage("API submission result: " output)

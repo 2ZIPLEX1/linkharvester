@@ -3,7 +3,7 @@
 #Requires AutoHotkey v2.0
 
 ; Include helpers
-#Include "CS2_Helpers.ahk"
+#Include "Helpers.ahk"
 
 class PythonIntegration {
     ; Configuration for file paths
