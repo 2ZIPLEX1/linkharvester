@@ -31,6 +31,8 @@ LoadConfiguration() {
         "wait_between_clicks", 1500,
         "max_wait_for_match", 120,
         "color_tolerance", 20,
+        "screenshot_save_wait_time", 800,
+        "steam_user_id", "1249018443",
         
         ; UI Coordinates
         "play_button_x", 985,
@@ -143,22 +145,17 @@ EnsureCS2Running() {
     LogMessage("Checking if CS2 is running...")
     
     try {
-        if WinExist("Counter-Strike") {
-            LogMessage("CS2 is already running. Window activated.")
-            WinActivate "Counter-Strike"
-            Sleep 500
-            
-            ; Verify main menu can be reached
-            ;if (!EnsureAtMainMenu()) {
-            ;    LogMessage("CS2 is running but main menu not accessible - restarting game")
-            ;    KillCS2Process()
-            ;    return LaunchCS2()
-            ;}
-            
-            return true
-        } else {
-            LogMessage("CS2 is not running. Launching automatically...")
+        ; Check if window exists without attempting relaunch
+        activateResult := ActivateCS2Window(false)
+        
+        if (activateResult = 0) {
+            ; Window doesn't exist or couldn't be activated
+            LogMessage("CS2 is not running or window can't be activated. Launching automatically...")
             return LaunchCS2()
+        } else {
+            ; Window was already active (1) or was activated successfully (2)
+            LogMessage("CS2 is already running and window activated.")
+            return true
         }
     } catch Error as e {
         LogMessage("Error checking CS2 status: " e.Message)
@@ -224,8 +221,23 @@ LaunchCS2(retryCount := 0) {
     }
     
     ; Activate CS2 window
-    WinActivate "Counter-Strike"
-    LogMessage("CS2 launched and activated")
+    try {
+        WinActivate "Counter-Strike"
+        LogMessage("CS2 launched and activated")
+    } catch Error as e {
+        LogMessage("Error activating CS2 window after launch: " e.Message)
+        
+        ; Check if process exists but window didn't appear (possibly hung)
+        if (FindCS2Process()) {
+            LogMessage("CS2 process exists but window couldn't be activated - killing process")
+            KillCS2Process()
+        }
+        
+        ; Retry after a delay
+        LogMessage("Retrying launch (attempt " retryCount+1 " of " maxRetries ")")
+        Sleep retryDelay
+        return LaunchCS2(retryCount + 1)
+    }
     
     ; Wait for game to fully load to main menu - no interaction during this time
     LogMessage("Waiting " fullLoadWaitTime/1000 " seconds for game to fully initialize...")
@@ -245,11 +257,29 @@ LaunchCS2(retryCount := 0) {
     }
 }
 
-CaptureScreenshot() {
+; Improved CaptureScreenshot function with configurable sleep time
+CaptureScreenshot(waitAfterCapture := -1) {
     try {
         LogMessage("Taking Steam screenshot")
         Send "{F12}"
-        Sleep 500
+        
+        ; Determine how long to sleep - use parameter if provided, otherwise use config or default
+        sleepTime := waitAfterCapture
+        
+        if (sleepTime < 0) {  ; If no valid time was specified in the parameter
+            ; Try to get from CONFIG
+            if (IsObject(CONFIG) && CONFIG.HasOwnProp("screenshot_save_wait_time"))
+                sleepTime := CONFIG.screenshot_save_wait_time
+            else
+                sleepTime := 800  ; Default fallback if not in CONFIG
+        }
+        
+        ; Sleep the appropriate amount of time
+        if (sleepTime > 0) {
+            LogMessage("Waiting " sleepTime "ms for screenshot to be saved")
+            Sleep sleepTime
+        }
+        
         return true
     } catch Error as e {
         LogMessage("Error capturing screenshot: " e.Message)
@@ -443,7 +473,7 @@ IsAttentionIconVisible(x, y) {
     
     ; Take a screenshot
     CaptureScreenshot()
-    Sleep 800  ; Wait for screenshot to be saved
+    ; Sleep 800  ; Wait for screenshot to be saved
     
     ; Run Python detector
     result := RunPythonDetector("check_attention_icon " iconRoiX " " iconRoiY " " iconRoiWidth " " iconRoiHeight)
@@ -475,15 +505,21 @@ ClearUrlCache() {
 ; Function to clean up screenshots that are no longer needed
 CleanupScreenshots() {
     try {
-        screenshotsPath := "C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots"
+        ; Get Steam user ID from config or use default
+        steamUserId := CONFIG.HasOwnProp("steam_user_id") ? CONFIG.steam_user_id : "1249018443"
+        
+        ; Construct paths using the configurable user ID
+        screenshotsPath := "C:\Program Files (x86)\Steam\userdata\" steamUserId "\760\remote\730\screenshots"
         thumbnailsPath := screenshotsPath "\thumbnails"
         
+        ; Log the paths we're cleaning up
+        LogMessage("Cleaning up CS2 screenshots from path: " screenshotsPath)
+        
         ; Delete all screenshots
-        LogMessage("Cleaning up CS2 screenshots...")
         FileDelete screenshotsPath "\*.jpg"
         
         ; Delete all thumbnails
-        LogMessage("Cleaning up CS2 screenshot thumbnails...")
+        LogMessage("Cleaning up CS2 screenshot thumbnails from path: " thumbnailsPath)
         FileDelete thumbnailsPath "\*.jpg"
         
         LogMessage("Screenshot cleanup completed")
@@ -610,7 +646,7 @@ DisconnectFromMatch(maxAttempts := 3) {
 VerifyBackInLobby() {
     try {
         CaptureScreenshot()
-        Sleep 800
+        ; Sleep 800
         
         ; Check for the shut-down icon in the header area of the main menu
         iconRoiX := 202  ; Approximate X coordinate of the shut-down icon
@@ -634,7 +670,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
     
     ; Use combined detection for efficiency
     CaptureScreenshot()
-    Sleep 800
+    ; Sleep 800
     result := RunPythonDetector("combined_detection")
     
     ; Parse the result to get both main menu and error dialog status
@@ -665,7 +701,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
         
         ; Check if we're at main menu after dismissing dialog
         CaptureScreenshot()
-        Sleep 800
+        ; Sleep 800
         mainMenuResult := RunPythonDetector("main_menu 198 12 40 40")
         atMainMenu := InStr(mainMenuResult, "MAIN_MENU_DETECTED=1")
         
@@ -688,7 +724,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
     
     ; Use combined detection again after first attempt
     CaptureScreenshot()
-    Sleep 800
+    ; Sleep 800
     result := RunPythonDetector("combined_detection")
     
     atMainMenu := InStr(result, "MAIN_MENU_DETECTED=1")
@@ -714,7 +750,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
         
         ; Check if we're at main menu after dismissing dialog
         CaptureScreenshot()
-        Sleep 800
+        ; Sleep 800
         mainMenuResult := RunPythonDetector("main_menu 198 12 40 40")
         
         if InStr(mainMenuResult, "MAIN_MENU_DETECTED=1") {
@@ -736,7 +772,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
         
         ; Final combined check
         CaptureScreenshot()
-        Sleep 800
+        ; Sleep 800
         result := RunPythonDetector("combined_detection")
         
         atMainMenu := InStr(result, "MAIN_MENU_DETECTED=1")
@@ -762,7 +798,7 @@ EnsureAtMainMenu(maxAttempts := 2) {
             
             ; Final main menu check
             CaptureScreenshot()
-            Sleep 800
+            ; Sleep 800
             mainMenuResult := RunPythonDetector("main_menu 198 12 40 40")
             
             if InStr(mainMenuResult, "MAIN_MENU_DETECTED=1") {
@@ -780,4 +816,72 @@ EnsureAtMainMenu(maxAttempts := 2) {
     
     LogMessage("Failed to return to main menu after all attempts")
     return false
+}
+
+; Add this to Helpers.ahk
+ActivateCS2Window(attemptRelaunch := true) {
+    LogMessage("Attempting to activate CS2 window...")
+    
+    ; Define return status codes
+    ; 0 = Failed completely
+    ; 1 = Window was already active
+    ; 2 = Window existed and was activated
+    ; 3 = Game was relaunched and window activated
+    
+    ; Check if window is already active
+    if WinActive("Counter-Strike") {
+        LogMessage("CS2 window is already active")
+        return 1
+    }
+    
+    ; Check if window exists but isn't active
+    if WinExist("Counter-Strike") {
+        try {
+            WinActivate "Counter-Strike"
+            Sleep 500
+            
+            if WinActive("Counter-Strike") {
+                LogMessage("CS2 window successfully activated")
+                return 2
+            } else {
+                LogMessage("WinActivate succeeded but window is still not active - possible window state issue")
+            }
+        } catch Error as e {
+            LogMessage("Error activating existing CS2 window: " e.Message)
+        }
+    } else {
+        LogMessage("CS2 window does not exist")
+    }
+    
+    ; If we reached here, we couldn't activate an existing window
+    ; Check if we should attempt relaunch
+    if !attemptRelaunch {
+        LogMessage("CS2 window activation failed and relaunch not attempted")
+        return 0
+    }
+    
+    ; Check if process is running (but window is inaccessible)
+    if FindCS2Process() {
+        LogMessage("CS2 process exists but window cannot be activated - killing process")
+        KillCS2Process()
+        Sleep 2000
+    }
+    
+    ; Try to relaunch
+    LogMessage("Attempting to relaunch CS2...")
+    if EnsureCS2Running() {
+        LogMessage("Successfully relaunched CS2")
+        Sleep 5000  ; Give game time to fully initialize
+        
+        if WinActive("Counter-Strike") {
+            LogMessage("CS2 window successfully activated after relaunch")
+            return 3
+        } else {
+            LogMessage("CS2 was relaunched but window still not active - possible deeper issue")
+            return 0
+        }
+    } else {
+        LogMessage("Failed to relaunch CS2")
+        return 0
+    }
 }

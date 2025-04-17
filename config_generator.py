@@ -38,7 +38,7 @@ config = {
 
     # Screenshot configuration
     "use_steam_screenshots": True,     # Whether to try F12 Steam screenshots
-    "steam_user_id": "1067368752",     # Your Steam user ID for screenshot path
+    "steam_user_id": "1249018443",     # Your Steam user ID for screenshot path
     "game_display_mode": "Fullscreen", # Game display mode - "Fullscreen" or "Windowed"
 
     # Extended timeouts

@@ -15,6 +15,7 @@ import numpy as np
 import glob
 
 from detect_sympathies import detect_sympathy_template, extract_sympathy_number
+from screenshot_service import get_latest_screenshot
 
 # Configure logging
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,39 +30,6 @@ logging.basicConfig(
     filename=LOG_FILE,
     filemode='a'
 )
-
-def get_latest_screenshot(screenshot_path=None):
-    """
-    Get the most recent screenshot from Steam's screenshot folder or use provided path.
-    """
-    try:
-        if screenshot_path:
-            # Use the provided screenshot path
-            if os.path.exists(screenshot_path):
-                return screenshot_path
-            else:
-                logging.error(f"Provided screenshot does not exist: {screenshot_path}")
-                return None
-                
-        # Default Steam screenshots path
-        STEAM_SCREENSHOTS_PATH = r'C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots'
-        screenshots = glob.glob(os.path.join(STEAM_SCREENSHOTS_PATH, '*.jpg'))
-        
-        if not screenshots:
-            logging.warning("No screenshots found")
-            return None
-            
-        latest_screenshot = max(screenshots, key=os.path.getmtime)
-        
-        # Only use if it's less than 30 seconds old
-        if time.time() - os.path.getmtime(latest_screenshot) > 30:
-            logging.warning("No recent screenshots found")
-            return None
-            
-        return latest_screenshot
-    except Exception as e:
-        logging.error(f"Error getting screenshot: {str(e)}")
-        return None
 
 def get_profile_roi(click_x, click_y, screenshot_path=None):
     """

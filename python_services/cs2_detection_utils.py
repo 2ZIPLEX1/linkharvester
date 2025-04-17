@@ -13,6 +13,7 @@ import time
 import logging
 import numpy as np
 import traceback
+from screenshot_service import get_latest_screenshot
 
 TESTING_MODE = False  # Set to False to disable testing mode
 
@@ -38,40 +39,6 @@ def ensure_logs_directory():
     logs_dir = os.path.join(root_dir, 'logs')
     os.makedirs(logs_dir, exist_ok=True)
     return logs_dir
-
-def get_latest_screenshot(screenshot_path=None):
-    """
-    Get the most recent screenshot from Steam's screenshot folder or use provided path.
-    Extracted from the original code to be reused across detection functions.
-    """
-    try:
-        if screenshot_path:
-            # Use the provided screenshot path
-            if os.path.exists(screenshot_path):
-                return screenshot_path
-            else:
-                logging.error(f"Provided screenshot does not exist: {screenshot_path}")
-                return None
-                
-        # Default Steam screenshots path
-        STEAM_SCREENSHOTS_PATH = r'C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots'
-        screenshots = glob.glob(os.path.join(STEAM_SCREENSHOTS_PATH, '*.jpg'))
-        
-        if not screenshots:
-            logging.warning("No screenshots found")
-            return None
-            
-        latest_screenshot = max(screenshots, key=os.path.getmtime)
-        
-        # Only use if it's less than 30 seconds old
-        if time.time() - os.path.getmtime(latest_screenshot) > 30:
-            logging.warning("No recent screenshots found")
-            return None
-            
-        return latest_screenshot
-    except Exception as e:
-        logging.error(f"Error getting screenshot: {str(e)}")
-        return None
 
 def detect_template(image_input, template_name, threshold=None, roi=None):
     """

@@ -7,11 +7,11 @@ import logging
 import numpy as np
 import pytesseract
 import traceback
+from screenshot_service import get_latest_screenshot
 
 # Configure paths
 PROJECT_PATH = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEMPLATES_PATH = os.path.join(PROJECT_PATH, 'recognition', 'templates')
-STEAM_SCREENSHOTS_PATH = r'C:\Program Files (x86)\Steam\userdata\1067368752\760\remote\730\screenshots'
 
 # Configure Tesseract path
 TESSERACT_PATH = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
@@ -91,27 +91,6 @@ def clear_url_cache():
             logging.error(f"Error deleting URL cache file: {str(e)}")
     
     return url_count
-
-def get_latest_screenshot():
-    """Get the most recent screenshot from Steam's screenshot folder"""
-    try:
-        screenshots = glob.glob(os.path.join(STEAM_SCREENSHOTS_PATH, '*.jpg'))
-        
-        if not screenshots:
-            logging.warning("No screenshots found")
-            return None
-            
-        latest_screenshot = max(screenshots, key=os.path.getmtime)
-        
-        # Only use if it's less than 5 seconds old
-        if time.time() - os.path.getmtime(latest_screenshot) > 30:
-            logging.warning("No recent screenshots found")
-            return None
-            
-        return latest_screenshot
-    except Exception as e:
-        logging.error(f"Error getting screenshot: {str(e)}")
-        return None
 
 def detect_template(image_input, template_name, threshold=None, roi=None):
     """Detect a template in an image
@@ -866,7 +845,7 @@ def extract_and_process_steam_url():
         search_roi_x = 300
         search_roi_y = 150
         search_roi_width = 550
-        search_roi_height = 300
+        search_roi_height = 200
         
         # Get image dimensions
         img_height, img_width = img.shape[:2]

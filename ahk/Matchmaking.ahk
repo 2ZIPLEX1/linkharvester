@@ -1,6 +1,8 @@
 ; CS2 Automation - Optimized Matchmaking Module
 ; Handles waiting for match to be found and loaded
 
+#Include "Helpers.ahk"
+
 ; Check if we're still searching for a match (CANCEL SEARCH button visible)
 IsSearching() {
     ; Check for red CANCEL SEARCH button at bottom right
@@ -27,7 +29,7 @@ IsSearching() {
     return false
 }
 
-; Existing function, modified to return "fatal" when a fatal error is detected
+; Existing function, modified to return "fatal" when a fatal error is detected 
 CheckForMatchmakingFailure() {
     
     try {
@@ -193,8 +195,47 @@ WaitForMatchOutcome() {
         ; Make sure CS2 window is active
         if !WinActive("Counter-Strike") {
             LogMessage("CS2 window is no longer active")
-            WinActivate "Counter-Strike"
-            Sleep 1000
+            
+            ; Check if the process is still running
+            if !FindCS2Process() {
+                LogMessage("CS2 process not found - game has crashed or exited")
+                
+                ; Attempt to relaunch CS2
+                if (EnsureCS2Running()) {
+                    LogMessage("Successfully relaunched CS2 after crash")
+                    Sleep 5000  ; Give the game some time to fully initialize
+                    
+                    ; Return to main menu (should happen automatically on fresh launch)
+                    if (EnsureAtMainMenu()) {
+                        LogMessage("Returned to main menu after crash recovery")
+                        return "crashed_recovered"  ; Add a new outcome for this scenario
+                    } else {
+                        LogMessage("Failed to return to main menu after crash recovery")
+                        return "crashed_unrecovered"  ; Another new outcome to handle
+                    }
+                } else {
+                    LogMessage("Failed to relaunch CS2 after crash")
+                    return "crashed_unrecovered"
+                }
+            }
+            
+            ; If we get here, the process exists but window isn't active
+            activateResult := ActivateCS2Window()
+
+            if (activateResult = 0) {
+                LogMessage("Failed to activate CS2 window in WaitForMatchOutcome - cannot continue")
+                return "crashed_unrecovered"
+            } else if (activateResult = 3) {
+                LogMessage("CS2 was relaunched during matchmaking")
+                
+                if (EnsureAtMainMenu()) {
+                    LogMessage("Returned to main menu after crash recovery")
+                    return "crashed_recovered"
+                } else {
+                    LogMessage("Failed to return to main menu after crash recovery")
+                    return "crashed_unrecovered"
+                }
+            }
         }
         
         ; Check if we're in searching state
@@ -253,7 +294,7 @@ WaitForMatchOutcome() {
             if (timeInLoadingPhase > initialErrorWait && currentTime - lastErrorCheckTime > errorCheckInterval) {
                 LogMessage("Taking screenshot to check for error dialog...")
                 CaptureScreenshot()
-                Sleep 800  ; Wait for screenshot to be saved
+                ; Sleep 800  ; Wait for screenshot to be saved
                 lastErrorCheckTime := currentTime
                 
                 ; Check for failure dialog

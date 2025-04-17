@@ -63,7 +63,7 @@ Main() {
     }
     
     ; Run three complete rounds
-    Loop 1 {
+    Loop 3 {
         roundNumber := A_Index
         LogMessage("Starting round " roundNumber " of 3")
         
@@ -83,15 +83,19 @@ Main() {
 
 RunAllMaps(roundNumber) {
     ; Get all map keys in the desired order
-    ; mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
-    mapKeys := ["Sigma"]
+    mapKeys := ["Sigma", "Delta", "DustII", "Hostage"]
+    ; mapKeys := ["Sigma"]
     
     ; Process each map in order
-    for mapKey in mapKeys {
+    mapIndex := 1
+    while (mapIndex <= mapKeys.Length) {
+        mapKey := mapKeys[mapIndex]
+        
         ; Ensure we're at the main menu first
         if (!EnsureAtMainMenu()) {
             LogMessage("Failed to return to main menu before starting " mapKey)
-            continue  ; Skip this map if we can't get to main menu
+            mapIndex++  ; Move to next map
+            continue    ; Skip this map if we can't get to main menu
         }
         
         ; Get map info
@@ -105,8 +109,13 @@ RunAllMaps(roundNumber) {
         ; Check for fatal error
         if (mapResult = "fatal_error") {
             LogMessage("Fatal error detected. Exiting script...")
-            ; MsgBox("A fatal server connection error was detected.`n`nThe script will now exit.", "Fatal Error", 48)
             ExitApp  ; Exit the entire script
+        }
+        
+        ; Check for retry signal
+        if (mapResult = "retry") {
+            LogMessage("Retrying map " mapInfo.name " after crash recovery")
+            continue  ; Keep the same mapIndex to retry the current map
         }
         
         if (mapResult = true) {
@@ -114,6 +123,8 @@ RunAllMaps(roundNumber) {
         } else {
             LogMessage("Round " roundNumber ": Failed or skipped map " mapInfo.name)
         }
+        
+        mapIndex++  ; Move to next map
     }
 }
 
@@ -136,7 +147,7 @@ RunMap(mapKey) {
     ; Log that we're waiting for match
     LogMessage("Map " mapInfo.name " selected, now waiting for match to be found and joined...")
     
-    ; Wait for match outcome
+    ; Wait for match outcome 
     matchOutcome := WaitForMatchOutcome()
     LogMessage("Match outcome for " mapInfo.name ": " matchOutcome)
     
@@ -151,12 +162,16 @@ RunMap(mapKey) {
         LogMessage("Finished with " mapInfo.name " match")
         return true
     }
-    else if (matchOutcome = "failure" || matchOutcome = "timeout") {
+    else if (matchOutcome = "crashed_recovered") {
+        LogMessage("CS2 crashed but was successfully recovered. Restarting map selection.")
+        return "retry"  ; Signal to retry the same map
+    }
+    else if (matchOutcome = "crashed_unrecovered" || matchOutcome = "failure" || matchOutcome = "timeout") {
         LogMessage("Failed to join " mapInfo.name " match: " matchOutcome)
         
-        ; Add CS2 termination for timeout scenario
-        if (matchOutcome = "timeout") {
-            LogMessage("Match timeout detected - killing CS2 process and exiting script...")
+        ; Add CS2 termination for timeout scenario or unrecovered crash
+        if (matchOutcome = "timeout" || matchOutcome = "crashed_unrecovered") {
+            LogMessage("Match timeout or unrecoverable crash detected - killing CS2 process and exiting script...")
             KillCS2Process()
             ExitApp  ; Exit script immediately after killing the process
         } else {
@@ -180,10 +195,21 @@ SelectMap(mapKey) {
     }
     
     LogMessage("Selecting map: " mapInfo.name)
-    
+        
     ; Make sure CS2 is the active window
-    WinActivate "Counter-Strike"
-    Sleep 1000
+    activateResult := ActivateCS2Window()
+    if (activateResult = 0) {
+        LogMessage("Failed to activate CS2 window in SelectMap - cannot continue")
+        return false
+    } else if (activateResult = 3) {
+        LogMessage("CS2 was relaunched in SelectMap - retrying map selection")
+        return SelectMap(mapKey)  ; Retry the map selection from the beginning
+    }
+
+    ; Only add a sleep if the window wasn't already active (status 1)
+    if (activateResult != 1) {
+        Sleep 1000  ; Give UI time to stabilize after activation
+    }
     
     ; 1. Press Play button
     LogMessage("Clicking Play button at coordinates: " CONFIG.play_button_x "," CONFIG.play_button_y)

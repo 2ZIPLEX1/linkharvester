@@ -4,3 +4,5 @@ launch_timeout=60
 max_launch_retries=3
 launch_retry_delay=5000
 cs2_load_wait_time=20000
+screenshot_save_wait_time=800
+steam_user_id=1249018443

@@ -132,7 +132,7 @@ ViewPlayerInGameProfile(clickX, clickY) {
     
     ; Take screenshot of profile
     CaptureScreenshot()
-    Sleep 1000
+    ; Sleep 1000
     
     return true
 }
@@ -165,6 +165,7 @@ CloseTabAndOverlay(urlResult) {
         if (isPreciseX) {
             ; Use exact coordinates for precise detection
             LogMessage("Clicking precise tab close button at: " tabCloseX "," tabCloseY)
+            Sleep 300
             Click tabCloseX, tabCloseY
         } else {
             ; Use offset for x-plus based detection
@@ -282,7 +283,7 @@ AddToSteamProfileQueue(url) {
     }
 }
 
-; Enhanced ProcessPlayersGridMethod with dual-button detection approach
+; Enhanced ProcessPlayersGridMethod with dual-button detection approach and retry logic
 ProcessPlayersGridMethod() {
     LogMessage("Processing players using grid method with improved profile popup detection...")
     
@@ -310,7 +311,7 @@ ProcessPlayersGridMethod() {
     ; Take a screenshot for attention icon detection
     LogMessage("Searching for attention icons...")
     CaptureScreenshot()
-    Sleep 800
+    ; Sleep 800
     
     ; Search in the right side area for attention icons
     firstIconResult := RunPythonDetector("find_first_attention_icon 1358 290 38 450")
@@ -348,7 +349,7 @@ ProcessPlayersGridMethod() {
         
         ; Take a screenshot to check if profile details loaded
         CaptureScreenshot()
-        Sleep 800  ; Wait for screenshot to be saved
+        ; Sleep 800  ; Wait for screenshot to be saved
         
         ; Perform profile analysis (includes dual-button detection, sympathies, medals, and next attention icon check)
         LogMessage("Performing profile analysis with dual-button detection...")
@@ -390,26 +391,71 @@ ProcessPlayersGridMethod() {
                 
             LogMessage("Profile popup not detected: " buttonStatus)
             
-            ; Increment consecutive failures counter
-            consecutiveFailures++
-            LogMessage("No profile popup detected. Consecutive failures: " consecutiveFailures)
+            ; New retry logic: Try clicking again at the same position
+            LogMessage("Attempting retry click at the same position: " currentX "," currentY)
+            Click currentX, currentY
+            Sleep 900  ; Wait for profile window to appear after second click
             
-            ; After 3 consecutive failures, check if we should exit
-            if (consecutiveFailures >= 3) {
-                LogMessage("Three consecutive failures reached. Verifying options...")
+            ; Take another screenshot
+            CaptureScreenshot()
+            ; Sleep 800
+            
+            ; Perform profile analysis again
+            LogMessage("Performing profile analysis after retry click...")
+            retryAnalysisResult := RunPythonDetector("analyze_profile " currentX " " currentY)
+            LogMessage("Retry analysis result: " retryAnalysisResult)
+            
+            ; Check if profile popup is detected after retry
+            profile_popup_detected := InStr(retryAnalysisResult, "PROFILE_POPUP_DETECTED=1")
+            
+            if (profile_popup_detected) {
+                LogMessage("Profile popup detected after retry click! Continuing with analysis.")
                 
-                ; If we have a next position from icon detection, try that before giving up
+                ; Update all flags from retry analysis
+                profile_button_found := InStr(retryAnalysisResult, "PROFILE_BUTTON_FOUND=1")
+                message_button_found := InStr(retryAnalysisResult, "MESSAGE_BUTTON_FOUND=1")
+                three_plus_medals_found := InStr(retryAnalysisResult, "THREE_PLUS_MEDALS_FOUND=1")
+                five_year_medal_found := InStr(retryAnalysisResult, "FIVE_YEAR_MEDAL_FOUND=1")
+                unwanted_medals_found := InStr(retryAnalysisResult, "UNWANTED_MEDALS_FOUND=1")
+                more_medals_available := InStr(retryAnalysisResult, "CLICK_TO_SEE_MORE_MEDALS=1")
+                too_many_sympathies := InStr(retryAnalysisResult, "TOO_MANY_SYMPATHIES=1")
+                
+                ; Update any next attention icon information
+                haveNextIconPosition := InStr(retryAnalysisResult, "NEXT_ATTENTION_ICON_FOUND=1")
                 if (haveNextIconPosition) {
-                    LogMessage("Found next attention icon despite failures. Will try that position.")
-                    consecutiveFailures := 1  ; Reset but not to zero to keep some caution
-                } else {
-                    LogMessage("No next attention icon found after 3 failures. Exiting to lobby...")
+                    if RegExMatch(retryAnalysisResult, "NEXT_CLICK_COORDS=(\d+),(\d+)", &nextCoordMatch) {
+                        nextClickX := Integer(nextCoordMatch[1])
+                        nextClickY := Integer(nextCoordMatch[2])
+                        LogMessage("Found next player position at: " nextClickX "," nextClickY " (from attention icon in retry)")
+                    } else {
+                        haveNextIconPosition := false
+                    }
+                }
+                
+                ; Use the retry analysis result for further processing
+                analysisResult := retryAnalysisResult
+            } else {
+                ; Increment consecutive failures counter since retry also failed
+                consecutiveFailures++
+                LogMessage("Profile popup still not detected after retry. Consecutive failures: " consecutiveFailures)
+                
+                ; After 3 consecutive failures, check if we should exit
+                if (consecutiveFailures >= 3) {
+                    LogMessage("Three consecutive failures reached. Verifying options...")
                     
-                    ; Use console to disconnect from match
-                    DisconnectFromMatch()
-                    
-                    ; Return true to indicate we've finished with this map
-                    return true
+                    ; If we have a next position from icon detection, try that before giving up
+                    if (haveNextIconPosition) {
+                        LogMessage("Found next attention icon despite failures. Will try that position.")
+                        consecutiveFailures := 1  ; Reset but not to zero to keep some caution
+                    } else {
+                        LogMessage("No next attention icon found after 3 failures. Exiting to lobby...")
+                        
+                        ; Use console to disconnect from match
+                        DisconnectFromMatch()
+                        
+                        ; Return true to indicate we've finished with this map
+                        return true
+                    }
                 }
             }
         } else {
@@ -513,7 +559,7 @@ ProcessPlayersGridMethod() {
             
             ; Take a new screenshot after clicking the arrow
             CaptureScreenshot()
-            Sleep 800  ; Wait for screenshot to be saved
+            ; Sleep 800  ; Wait for screenshot to be saved
             
             ; Analyze again with the new screenshot
             LogMessage("Performing follow-up profile analysis after arrow click...")
@@ -582,7 +628,7 @@ ProcessPlayersGridMethod() {
                 
                 ; Take screenshot for URL OCR
                 CaptureScreenshot()
-                Sleep 800  ; Give enough time for screenshot to be saved
+                ; Sleep 800  ; Give enough time for screenshot to be saved
                 
                 ; Extract Steam profile URL
                 steamProfileUrl := ExtractSteamProfileUrl()
@@ -632,10 +678,13 @@ EnsureScoreboardVisible(&iconStartY := 0) {
     LogMessage("Ensuring scoreboard is visible...")
     
     ; Make sure CS2 is the active window
-    if !WinActive("Counter-Strike") {
-        LogMessage("CS2 not active, activating now...")
-        WinActivate "Counter-Strike"
-        Sleep 1000
+    activateResult := ActivateCS2Window()
+    if (activateResult = 0) {
+        LogMessage("Failed to activate CS2 window in EnsureScoreboardVisible - cannot continue")
+        return false
+    } else if (activateResult = 3) {
+        LogMessage("CS2 was relaunched during scoreboard check - aborting current operation")
+        return false
     }
     
     ; Define ROI for scoreboard icon
@@ -653,7 +702,7 @@ EnsureScoreboardVisible(&iconStartY := 0) {
         
         ; Take a screenshot
         CaptureScreenshot()
-        Sleep 800  ; Wait for screenshot to be saved
+        ; Sleep 800  ; Wait for screenshot to be saved
         
         ; Check if scoreboard is visible by looking for valve-cs2-icon.jpg
         LogMessage("Checking for scoreboard icon...")
@@ -712,40 +761,51 @@ IsProfileButtonVisible(x, y) {
 
 ProcessMatch() {
     LogMessage("Processing match...")
-    
+
     ; Set up timeout for match processing - 5 minutes (300,000 ms)
     startTime := A_TickCount
     timeout := 300000  ; 5 minutes in milliseconds
-    
+
     ; Wait a few seconds for the match to fully load
     Sleep 500
-    
+
     ; Store the global timeout start time for access in other functions
     Global MATCH_PROCESS_START_TIME := startTime
     Global MATCH_PROCESS_TIMEOUT := timeout
-    
+
     ; Create a timer that will check for timeout regularly
     SetTimer CheckMatchTimeout, 10000  ; Check every 10 seconds
-    
+
     ; Track if processing is successful
     success := false
-    
+
     try {
+
+        ; LogMessage("Calling Node.js to collect player data...")
+
+        ; exitCode := RunWait("python ..\python_services\bridge_script.py")
+        
+        ; if (exitCode != 0) {
+        ;    LogMessage("Node.js player data collection failed")
+        ;} else {
+        ;    LogMessage("Node.js player data collection successful")
+        ;}
+
         ; Process players using the simplified grid method
         success := ProcessPlayersGridMethod()
+
     } catch Error as e {
         LogMessage("Error in match processing: " e.Message)
     } finally {
         ; Stop the timeout timer
         SetTimer CheckMatchTimeout, 0
-        
+
         ; Return to main menu using ESC regardless of outcome
         ReturnToMainMenu()
-
         ; Clean up screenshots that are no longer needed
         CleanupScreenshots()
     }
-    
+
     if (success) {
         LogMessage("Match processing completed successfully")
         return true

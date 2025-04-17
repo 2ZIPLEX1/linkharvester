@@ -27,10 +27,12 @@ EmergencyDisconnect() {
         LogMessage("Performing emergency disconnect from match...")
         
         ; Make sure CS2 is the active window
-        if !WinActive("Counter-Strike") {
-            LogMessage("CS2 not active, activating now...")
-            WinActivate "Counter-Strike"
-            Sleep 1000
+        activateResult := ActivateCS2Window(false)  ; Pass false to prevent relaunch attempts
+        
+        if (activateResult = 0) {
+            ; Cannot activate window and we're not attempting relaunch
+            LogMessage("CS2 window not available - emergency disconnect not needed")
+            return true  ; Return success since there's no game to disconnect from
         }
         
         ; Call the disconnect function
